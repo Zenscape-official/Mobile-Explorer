@@ -24,7 +24,7 @@ class _TxsState extends State<Txs> {
         elevation: 0,
         title:Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children:[
             Text('TRANSACTIONS',
                 style:kBigTextStyle),
           ],
@@ -85,7 +85,7 @@ class _TxsState extends State<Txs> {
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children:[
-                                      const Text('123456',
+                                      Text('123456',
                                           style:kMediumTextStyle),
                                       Container(
                                         decoration: BoxDecoration (
@@ -125,7 +125,7 @@ class _TxsState extends State<Txs> {
                                 padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children:const [
+                                    children:[
                                       Text('Block Hash',
                                           style:kSmallTextStyle),
                                       Text('cban123..ybg',
@@ -138,7 +138,7 @@ class _TxsState extends State<Txs> {
                                 padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children:const [
+                                    children: [
                                       Text('Proposer',
                                           style:kSmallTextStyle),
                                       Text('AUDIT.one',
@@ -151,7 +151,7 @@ class _TxsState extends State<Txs> {
                                 padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children:const [
+                                    children:[
                                       Text('Transaction',
                                           style:kSmallTextStyle),
                                       Text('0',
@@ -164,7 +164,7 @@ class _TxsState extends State<Txs> {
                                 padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children:const [
+                                    children: [
                                       Text('Time',
                                           style:kSmallTextStyle),
                                       Text('2022-4-12 19:55:26',

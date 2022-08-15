@@ -9,7 +9,7 @@ class Assets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavigationDrawerWidget(),
       appBar: AppBar(
 
         foregroundColor: Colors.black,
@@ -18,7 +18,7 @@ class Assets extends StatelessWidget {
         elevation: 0,
         title:Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text('ASSETS',
                 style:kBigTextStyle),
           ],
@@ -117,10 +117,10 @@ class Assets extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
-                            children: const [
+                            children:  [
                               Text('Chain Value',
                                 style: kMediumTextStyle,),
-                              SizedBox(height: 4,),
+                              const SizedBox(height: 4,),
                               Text('\$,460,560.56',
                                 style: kBigTextStyle,),
                             ],
@@ -152,8 +152,8 @@ class Assets extends StatelessWidget {
                                     Row(
                                       children: [
                                         CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/Kava.png',)),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Text('KAVA ',
                                               style:kMediumTextStyle),
                                         ),],
@@ -179,7 +179,7 @@ class Assets extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children:[
                                     Text('Total Supply',
                                         style:kSmallTextStyle),
                                     Text('CW20 Contract',
@@ -192,7 +192,7 @@ class Assets extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children:[
                                     Text('IBC OUT',
                                         style:kSmallTextStyle),
                                     Text('cmdx..12367s',
@@ -205,7 +205,7 @@ class Assets extends StatelessWidget {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children:[
                                     Text('IN Chain Supply',
                                         style:kSmallTextStyle),
                                     Text('65221',

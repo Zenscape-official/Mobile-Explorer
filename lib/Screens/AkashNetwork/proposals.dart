@@ -17,7 +17,7 @@ class Proposals extends StatelessWidget {
       drawer: NavigationDrawerWidget(),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(title:Row(
-        children: const [
+        children:  [
           Text('PROPOSAL',style:kBigTextStyle),
         ],
       ),
@@ -146,7 +146,7 @@ class ProposalCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children:[
-                  const Text('voting starts',
+                   Text('voting starts',
                     style: kSmallTextStyle,),
                   Text(product.votingStartTime.toString(),
                   style: kSmallTextStyle,),
@@ -158,7 +158,7 @@ class ProposalCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('voting ends',style: kSmallTextStyle,),
+                  Text('voting ends',style: kSmallTextStyle,),
                   Text(product.votingEndTime.toString(),
                     style:kSmallTextStyle,),
                 ],

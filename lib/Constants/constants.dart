@@ -1,27 +1,29 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-const kBigTextStyle= TextStyle(
+var kBigTextStyle= TextStyle(
 fontFamily: 'Montserrat',
   color: Colors.black,
-// fontWeight: FontWeight.w900,
+  fontWeight: Platform.isAndroid ?FontWeight.normal: FontWeight.w900,
 fontSize: 18,
 );
-const kMediumTextStyle= TextStyle(
+var kMediumTextStyle= TextStyle(
   fontFamily: 'Montserrat',
   color: Colors.black,
 
-  //fontWeight: FontWeight.w900,
+  fontWeight: Platform.isAndroid?FontWeight.normal: FontWeight.w900,
   fontSize: 15,
 );
-const kSmallTextStyle= TextStyle(
+var kSmallTextStyle= TextStyle(
   fontFamily: 'Montserrat',
   color: Colors.black,
-  // fontWeight: FontWeight.w900,
+  fontWeight: Platform.isAndroid?FontWeight.normal: FontWeight.w900,
   fontSize: 12,
 );
-const kExtraSmallTextStyle= TextStyle(
+var kExtraSmallTextStyle= TextStyle(
   fontFamily: 'Montserrat',
   color: Colors.black,
-  // fontWeight: FontWeight.w900,
+  fontWeight: Platform.isAndroid?FontWeight.normal: FontWeight.w900,
   fontSize: 10,
 );
 var kGradientColor= LinearGradient(

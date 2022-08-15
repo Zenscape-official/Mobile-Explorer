@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:get/get.dart';
 import '../Constants/constants.dart';
 import '../widgets/Popup_model/hero_dialogue_route.dart';
 import 'AkashNetwork/dashboard.dart';
@@ -136,7 +135,7 @@ class _LandingPageState extends State<LandingPage> {
                                                 color: Colors.black
                                             )),
                                         Column(
-                                          children: const [
+                                          children: [
                                             Text('Crore +',
                                               style:kBigTextStyle),
                                             Text('Investors',
@@ -149,7 +148,7 @@ class _LandingPageState extends State<LandingPage> {
                                   ),
 
 
-                                  Column(children: const [
+                                  Column(children: [
                                     Text('100%',
                                       style:kBigTextStyle),
                                     Text('Transparent',
@@ -169,7 +168,7 @@ class _LandingPageState extends State<LandingPage> {
                                                 color: Colors.black
                                             )),
                                         Column(
-                                          children: const [
+                                          children:  [
                                             Text('Crore +',
                                             style: kBigTextStyle,),
                                             Text('Investors',
@@ -238,7 +237,7 @@ class _NetworkCardState extends State<NetworkCard> {
                       backgroundColor: Colors.white,
                     ),
                   ),
-                  const Text('CMDX \ncomdex',
+                   Text('CMDX \ncomdex',
                   style: kMediumTextStyle),
                 ],
               ),
@@ -253,7 +252,7 @@ class _NetworkCardState extends State<NetworkCard> {
                       children: [
                       Text('APY',
                       style:kExtraSmallTextStyle),
-                      SizedBox(height:2),
+                      const SizedBox(height:2),
                       Text('160%',
                           style:kMediumTextStyle),
                     ],),
@@ -262,7 +261,7 @@ class _NetworkCardState extends State<NetworkCard> {
                       children: [
                         Text('Commission',
                             style:kExtraSmallTextStyle),
-                        SizedBox(height:2),
+                        const SizedBox(height:2),
                         Text('160%',
                             style:kMediumTextStyle),
                       ],)

@@ -14,7 +14,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavigationDrawerWidget(),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -22,7 +22,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
         elevation: 0,
         title:Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text('IBC RELAYERS',
                 style:kBigTextStyle),
           ],
@@ -78,8 +78,8 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                     Row(
                                       children: [
                                         CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/Kava.png',)),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Text('KAVA ',
                                               style:kMediumTextStyle),
                                         ),],
@@ -98,11 +98,11 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                         padding: const EdgeInsets.fromLTRB(8,1.0,8,1),
                                         child: Row(
                                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                          children:const [
-                                            CircleAvatar(backgroundColor: Colors.green,
+                                          children: [
+                                            const CircleAvatar(backgroundColor: Colors.green,
                                               radius: 3,),
                                             Padding(
-                                              padding: EdgeInsets.all(2.0),
+                                              padding: const EdgeInsets.all(2.0),
                                               child: Text('Opened',
                                                 style: kSmallTextStyle,),
                                             ),
@@ -140,7 +140,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
 
 
-                                                children: const [
+                                                children: [
                                                   Text(' Cosmos',
                                                     style: kMediumTextStyle,),
                                                   Text(' channel-227',
@@ -176,7 +176,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                               child: Column(crossAxisAlignment: CrossAxisAlignment.start,
 
 
-                                                children: const [
+                                                children: [
                                                   Text(' Cosmos',
                                                     style: kMediumTextStyle,),
                                                   Text(' channel-227',
@@ -198,7 +198,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children:[
                                     Text('Operational Period',
                                         style:kSmallTextStyle),
                                     Text('184 Days',
@@ -211,7 +211,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('24 Txs',
                                         style:kSmallTextStyle),
                                     Text('110',
@@ -224,7 +224,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('24h Value',
                                         style:kSmallTextStyle),
                                     Text('\$146,987,655',

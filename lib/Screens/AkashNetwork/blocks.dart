@@ -16,7 +16,7 @@ class _BlocksState extends State<Blocks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavigationDrawerWidget(),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -24,7 +24,7 @@ class _BlocksState extends State<Blocks> {
         elevation: 0,
         title:Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text('BLOCKS',
             style:kBigTextStyle),
           ],
@@ -86,7 +86,7 @@ class _BlocksState extends State<Blocks> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:[
-                                  const Text('123456',
+                                 Text('123456',
                                   style:kMediumTextStyle),
                                   Container(
                                     decoration: BoxDecoration (
@@ -126,7 +126,7 @@ class _BlocksState extends State<Blocks> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('Block Hash',
                                         style:kSmallTextStyle),
                                     Text('cban123..ybg',
@@ -139,7 +139,7 @@ class _BlocksState extends State<Blocks> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('Proposer',
                                   style:kSmallTextStyle),
                                     Text('AUDIT.one',
@@ -152,7 +152,7 @@ class _BlocksState extends State<Blocks> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('Transaction',
                                         style:kSmallTextStyle),
                                     Text('0',
@@ -165,7 +165,7 @@ class _BlocksState extends State<Blocks> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children:[
                                     Text('Time',
                                         style:kSmallTextStyle),
                                     Text('2022-4-12 19:55:26',

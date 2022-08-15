@@ -13,7 +13,7 @@ class _ContractsState extends State<Contracts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavigationDrawerWidget(),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -21,7 +21,7 @@ class _ContractsState extends State<Contracts> {
         elevation: 0,
         title:Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children: [
             Text('CONTRACTS',
                 style:kBigTextStyle),
           ],
@@ -59,7 +59,7 @@ class _ContractsState extends State<Contracts> {
             Padding(
               padding: const EdgeInsets.all(18.0),
               child: Row(
-                children: const [
+                children: [
                   Text('Popular Contracts',style: kMediumTextStyle,),
                 ],
               ),
@@ -84,8 +84,8 @@ class _ContractsState extends State<Contracts> {
                                     Row(
                                       children: [
                                         CircleAvatar(radius:10,backgroundColor: Colors.transparent,child: Image.asset('assets/images/neta.png',color: Colors.black,)),
-                                        const Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
                                           child: Text('NETA TOKEN',
                                               style:kMediumTextStyle),
                                         ),],
@@ -111,7 +111,7 @@ class _ContractsState extends State<Contracts> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children:[
                                     Text('Contract',
                                         style:kSmallTextStyle),
                                     Text('CW20 Contract',
@@ -124,7 +124,7 @@ class _ContractsState extends State<Contracts> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('Contract Address',
                                         style:kSmallTextStyle),
                                     Text('cmdx..12367s',
@@ -137,7 +137,7 @@ class _ContractsState extends State<Contracts> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('Executes',
                                         style:kSmallTextStyle),
                                     Text('65221',
@@ -150,7 +150,7 @@ class _ContractsState extends State<Contracts> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:const [
+                                  children: [
                                     Text('Instantiated at',
                                         style:kSmallTextStyle),
                                     Text('2022-4-12 19:55:26',

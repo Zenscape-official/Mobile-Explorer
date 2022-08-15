@@ -21,7 +21,7 @@ class _ValidatorsState extends State<Validators> {
         elevation: 0,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
+          children:  [
             Text('VALIDATORS',
             style:kBigTextStyle),
           ],
@@ -64,7 +64,7 @@ class _ValidatorsState extends State<Validators> {
                         children: [
                           CircleAvatar(child: Image.asset('assets/images/akt.png'),
                             backgroundColor: Colors.transparent,),
-                          const Text('  AUDIT.ONE',
+                          Text('  AUDIT.ONE',
                             style: kBigTextStyle
                           ),
                         ],
@@ -102,7 +102,7 @@ class _ValidatorsState extends State<Validators> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(25.0),
                                     child:Column(
-                                      children: const [
+                                      children: [
                                         Text('\$0.23',
                                             style: kBigTextStyle),
                                         SizedBox(height: 4,),
@@ -134,7 +134,7 @@ class _ValidatorsState extends State<Validators> {
                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
-                          children: const [
+                          children: [
                             Text('Uptime',
                             style: kSmallTextStyle,),
                             Text('100%',
@@ -142,7 +142,7 @@ class _ValidatorsState extends State<Validators> {
                           ],
                         ),
                         Column(
-                          children: const [
+                          children: [
                             Text('Partcipation',
                                 style: kSmallTextStyle
                             ),
@@ -154,7 +154,7 @@ class _ValidatorsState extends State<Validators> {
                         ),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text('Commission',
                               style: kSmallTextStyle,),
                             Text('7%',style: kMediumTextStyle,)
