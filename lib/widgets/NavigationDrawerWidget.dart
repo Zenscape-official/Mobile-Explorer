@@ -38,7 +38,7 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
             buildHeader(
               name: name,
               onClicked: ()
-              => Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=>const LandingPage())),
+              => Navigator.of(context).popUntil((route) => route.isFirst)
 
             ),
             Container(

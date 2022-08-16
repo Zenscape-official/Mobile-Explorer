@@ -19,10 +19,11 @@ class NetworkDashBoard extends StatelessWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
-            Text('AKASH',
+            Text('COMDEX',
             style: TextStyle(
               fontWeight: FontWeight.w900,
-                fontFamily: 'Montserrat'
+                fontFamily: 'Montserrat',
+              fontSize: 20,
             ),),
           ],
         ),
@@ -47,32 +48,34 @@ class NetworkDashBoard extends StatelessWidget {
                           children: [
                             Row(
                               children: [
-                                CircleAvatar(child: Image.asset('assets/images/akt.png'),
+                                CircleAvatar(
+                                    radius:15,
+                                    child: Image.asset('assets/images/cmdx.png'),
                                     backgroundColor: Colors.transparent),
-                                Text(' AKT',
+                                Text(' CMDX',
                                   style: TextStyle(color: Colors.black.withOpacity(1),
-                                      fontSize: 25,
+                                      fontSize: 20,
                                       fontFamily: 'Montserrat'
                                   ),
                                 ),
                               ],
                             ),
-                            Row(
-                              children: [
-                                const Icon(Icons.access_time,
-                                    color:Colors.blue),
-                                const SizedBox(width: 2,),
-                                Text('BLOCK TIME',
-                                    style: TextStyle(color: Colors.black.withOpacity(1),
-                                      fontSize: 11,
-                                    )
+                            Container(
+                              decoration: kBoxBorder,
+                              child: Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Row(
+                                  children: [
+
+                                    Text('BLOCK TIME',
+                                        style: kExtraSmallTextStyle,
+                                    ),
+                                    Text('  6,079ms',
+                                        style: kExtraSmallTextStyle
+                                    ),
+                                  ],
                                 ),
-                                Text('  6,079ms',
-                                    style: TextStyle(color: Colors.black.withOpacity(1),
-                                      fontSize: 12,
-                                    )
-                                ),
-                              ],
+                              ),
                             ),
                           ],
                         ),
@@ -106,7 +109,7 @@ class NetworkDashBoard extends StatelessWidget {
                                   child:Column(
                                     children:  [
                                       Text('\$0.23',
-                                          style: kBigTextStyle),
+                                          style: kBigBoldTextStyle),
                                       const SizedBox(height: 4,),
                                       Text('+4.29%',
                                           style:kSmallTextStyle
@@ -130,25 +133,28 @@ class NetworkDashBoard extends StatelessWidget {
                         const SizedBox(height: 10),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Column(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text('Market Cap',
                                     style: kMediumTextStyle,),
                                   const SizedBox(height: 4,),
                                   Text('\$44,460,560.56',
-                                    style: kMediumTextStyle,)
+                                    style: kMediumBoldTextStyle,)
                                 ],
                               ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
+                             Column(
+                               crossAxisAlignment: CrossAxisAlignment.start,
+
+                               children: [
                                   Text('24h Vol',
                                     style: kMediumTextStyle,),
+                                 const SizedBox(height: 4,),
                                   Text('\$1,478,971.56',
-                                    style: kMediumTextStyle,)
+                                    style: kMediumBoldTextStyle,)
                                 ],
                               ),
                             ],
@@ -211,7 +217,7 @@ class NetworkDashBoard extends StatelessWidget {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text('Blocks',
-                            style: kSmallTextStyle,),
+                            style: kSmallBoldTextStyle,),
                         ),
                       const TextButton(onPressed: null, child: Text('See more'),
                       ),
@@ -231,8 +237,8 @@ class NetworkDashBoard extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:  [
-                                  Text('3446709',style: kSmallTextStyle,),
-                                  Text('10s Ago',style: kSmallTextStyle,)
+                                  Text('3446709',style: kSmallBoldTextStyle,),
+                                  Text('10s Ago',style: kSmallBoldTextStyle,)
                                 ],
                               ),
                               const SizedBox(height: 4,),
@@ -240,7 +246,7 @@ class NetworkDashBoard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Txs',style: kSmallTextStyle,),
-                                  Text('0',style: kSmallTextStyle,)
+                                  Text('0',style: kSmallBoldTextStyle,)
                                 ],
                               ),
                               const SizedBox(height: 4,),
@@ -248,7 +254,7 @@ class NetworkDashBoard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Time',style: kSmallTextStyle,),
-                                  Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
+                                  Text('Yesterday, 12:49 PM',style: kSmallBoldTextStyle,)
                                 ],
                               ),
                             ],
@@ -270,16 +276,16 @@ class NetworkDashBoard extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:  [
-                                  Text('3446709',style: kSmallTextStyle,),
-                                  Text('10s Ago',style: kSmallTextStyle,)
+                                  Text('3446709',style: kSmallBoldTextStyle,),
+                                  Text('10s Ago',style: kSmallBoldTextStyle,)
                                 ],
                               ),
                               const SizedBox(height: 4,),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children:  [
+                                children: [
                                   Text('Txs',style: kSmallTextStyle,),
-                                  Text('0',style: kSmallTextStyle,)
+                                  Text('0',style: kSmallBoldTextStyle,)
                                 ],
                               ),
                               const SizedBox(height: 4,),
@@ -287,7 +293,7 @@ class NetworkDashBoard extends StatelessWidget {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text('Time',style: kSmallTextStyle,),
-                                  Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
+                                  Text('Yesterday, 12:49 PM',style: kSmallBoldTextStyle,)
                                 ],
                               ),
                             ],
@@ -311,7 +317,7 @@ class NetworkDashBoard extends StatelessWidget {
                         children: [
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('Transaction',style: kSmallTextStyle,),
+                            child: Text('Transaction',style: kSmallBoldTextStyle,),
                           ),
                           const TextButton(onPressed: null, child: Text('See more'),
                           ),
@@ -330,17 +336,17 @@ class NetworkDashBoard extends StatelessWidget {
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('3446709',style: kSmallTextStyle,),
-                                    Text('10s Ago',style: kSmallTextStyle,)
+                                  children:  [
+                                    Text('3446709',style: kSmallBoldTextStyle,),
+                                    Text('10s Ago',style: kSmallBoldTextStyle,)
                                   ],
                                 ),
                                 const SizedBox(height: 4,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:  [
+                                  children: [
                                     Text('Txs',style: kSmallTextStyle,),
-                                    Text('0',style: kSmallTextStyle,)
+                                    Text('0',style: kSmallBoldTextStyle,)
                                   ],
                                 ),
                                 const SizedBox(height: 4,),
@@ -348,7 +354,7 @@ class NetworkDashBoard extends StatelessWidget {
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('Time',style: kSmallTextStyle,),
-                                    Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
+                                    Text('Yesterday, 12:49 PM',style: kSmallBoldTextStyle,)
                                   ],
                                 ),
                               ],
@@ -368,25 +374,25 @@ class NetworkDashBoard extends StatelessWidget {
                               children: [
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children:  [
+                                    Text('3446709',style: kSmallBoldTextStyle,),
+                                    Text('10s Ago',style: kSmallBoldTextStyle,)
+                                  ],
+                                ),
+                                const SizedBox(height: 4,),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('3446709',style: kSmallTextStyle,),
-                                    Text('10s Ago',style: kSmallTextStyle,)
-                                  ],
-                                ),
-                                const SizedBox(height: 4,),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:[
                                     Text('Txs',style: kSmallTextStyle,),
-                                    Text('0',style: kSmallTextStyle,)
+                                    Text('0',style: kSmallBoldTextStyle,)
                                   ],
                                 ),
                                 const SizedBox(height: 4,),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:[
+                                  children: [
                                     Text('Time',style: kSmallTextStyle,),
-                                    Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
+                                    Text('Yesterday, 12:49 PM',style: kSmallBoldTextStyle,)
                                   ],
                                 ),
                               ],

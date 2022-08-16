@@ -16,9 +16,8 @@ const double width = 200.0;
 const double height = 30.0;
 const double activeAlign = -1;
 const double inactiveAlign = 1;
-const Color selectedColor = Colors.black;
+const Color selectedColor = Color(0xFF12BFFF);
 const Color normalColor = Colors.black54;
-
 
 class _ToggleButtonState extends State<ToggleButton> {
   double? xAlign;

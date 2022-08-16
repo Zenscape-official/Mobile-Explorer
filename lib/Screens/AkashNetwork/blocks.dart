@@ -3,6 +3,8 @@ import 'package:zenscape_app/widgets/ToggleButton.dart';
 
 import '../../Constants/constants.dart';
 import '../../widgets/NavigationDrawerWidget.dart';
+
+
 class Blocks extends StatefulWidget {
   const Blocks({Key? key}) : super(key: key);
 
@@ -26,7 +28,7 @@ class _BlocksState extends State<Blocks> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text('BLOCKS',
-            style:kBigTextStyle),
+            style:kBigBoldTextStyle),
           ],
         ),
       ),
@@ -48,13 +50,14 @@ class _BlocksState extends State<Blocks> {
                 child: TextField(
                   controller: nameController,
                   decoration: InputDecoration(
+                    contentPadding: EdgeInsets.only(left: 15, right: 15),
                     filled: true,
                     fillColor: Colors.transparent,
                     focusedBorder: InputBorder.none,
                     border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20)
                     ),
-                    hintText: 'Select a chain',
+                   hintText: 'Select a chain',
                     prefixIcon: const Icon(Icons.search),
                   ),
                   onChanged: (text) {
@@ -87,7 +90,7 @@ class _BlocksState extends State<Blocks> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children:[
                                  Text('123456',
-                                  style:kMediumTextStyle),
+                                  style:kMediumBoldTextStyle),
                                   Container(
                                     decoration: BoxDecoration (
                                       border: Border.all(
@@ -129,8 +132,8 @@ class _BlocksState extends State<Blocks> {
                                   children: [
                                     Text('Block Hash',
                                         style:kSmallTextStyle),
-                                    Text('cban123..ybg',
-                                        style:kSmallTextStyle)
+                                    Text('ban123..ybg',
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
 
@@ -143,7 +146,7 @@ class _BlocksState extends State<Blocks> {
                                     Text('Proposer',
                                   style:kSmallTextStyle),
                                     Text('AUDIT.one',
-                                        style:kSmallTextStyle)
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
 
@@ -156,7 +159,7 @@ class _BlocksState extends State<Blocks> {
                                     Text('Transaction',
                                         style:kSmallTextStyle),
                                     Text('0',
-                                        style:kSmallTextStyle)
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
 
@@ -169,7 +172,7 @@ class _BlocksState extends State<Blocks> {
                                     Text('Time',
                                         style:kSmallTextStyle),
                                     Text('2022-4-12 19:55:26',
-                                        style:kSmallTextStyle)
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
 

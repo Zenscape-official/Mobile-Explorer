@@ -171,7 +171,7 @@ class InfoCard extends StatelessWidget {
             style: kSmallTextStyle,),
             SizedBox(height: 4),
             Text(titleValue1!,
-              style: kMediumTextStyle,
+              style: kBigBoldTextStyle,
             ),
           ],
         ),

@@ -27,34 +27,8 @@ class Assets extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Container(
-            //     width: MediaQuery.of(context).size.width/1.1,
-            //     height: 40,
-            //     decoration: kboxdecorationWithGradient,
-            //     margin: const EdgeInsets.all(20),
-            //     child: TextField(
-            //       controller: nameController,
-            //       decoration: InputDecoration(
-            //         filled: true,
-            //         fillColor: Colors.transparent,
-            //         focusedBorder: InputBorder.none,
-            //         border: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(20)
-            //         ),
-            //         hintText: 'Select a chain',
-            //         prefixIcon: const Icon(Icons.search),
-            //       ),
-            //       onChanged: (text) {
-            //         setState(() {
-            //           txHash = text;
-            //           //you can access nameController in its scope to get
-            //           // the value of text entered as shown below
-            //           //fullName = nameController.text;
-            //         });
-            //       },
-            //     )),
+
             SizedBox(
-             // height: MediaQuery.of(context).size.height/3.5,
               width: MediaQuery.of(context).size.width/1,
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -122,7 +96,7 @@ class Assets extends StatelessWidget {
                                 style: kMediumTextStyle,),
                               const SizedBox(height: 4,),
                               Text('\$,460,560.56',
-                                style: kBigTextStyle,),
+                                style: kBigBoldTextStyle,),
                             ],
                           ),
                         ),
@@ -155,19 +129,16 @@ class Assets extends StatelessWidget {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text('KAVA ',
-                                              style:kMediumTextStyle),
+                                              style:kMediumBoldTextStyle),
                                         ),],
                                     ),
 
                                     Container(
                                       decoration: kBoxDecorationWithoutGradient,
-                                      child: const Padding(
+                                      child:  Padding(
                                         padding: EdgeInsets.all(5.0),
                                         child: Text('\$ 9.38',
-                                            style:TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold
-                                            )),
+                                            style:kBigBoldTextStyle,)
                                       ),
                                     )
                                   ]

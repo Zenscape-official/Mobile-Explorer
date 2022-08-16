@@ -23,7 +23,7 @@ class _ValidatorsState extends State<Validators> {
           mainAxisAlignment: MainAxisAlignment.start,
           children:  [
             Text('VALIDATORS',
-            style:kBigTextStyle),
+            style:kBigBoldTextStyle),
           ],
         ),
       ),
@@ -65,7 +65,7 @@ class _ValidatorsState extends State<Validators> {
                           CircleAvatar(child: Image.asset('assets/images/akt.png'),
                             backgroundColor: Colors.transparent,),
                           Text('  AUDIT.ONE',
-                            style: kBigTextStyle
+                            style: kBigBoldTextStyle
                           ),
                         ],
                       ),
@@ -103,8 +103,8 @@ class _ValidatorsState extends State<Validators> {
                                     padding: const EdgeInsets.all(25.0),
                                     child:Column(
                                       children: [
-                                        Text('\$0.23',
-                                            style: kBigTextStyle),
+                                        Text('4407336',
+                                            style: kMediumBoldTextStyle),
                                         SizedBox(height: 4,),
                                         Text('+4.29%',
                                             style:kSmallTextStyle
@@ -120,7 +120,6 @@ class _ValidatorsState extends State<Validators> {
                                     border: Border.all(
                                       color: Colors.lightBlueAccent,
                                       width: 1.0,
-
                                     ),
                                   ),),
                               ),
@@ -128,7 +127,6 @@ class _ValidatorsState extends State<Validators> {
                       ),),],
                   ),
                   const SizedBox(height: 25),
-
                   Padding(
                     padding: const EdgeInsets.fromLTRB(12,4,12,4),
                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,7 +136,7 @@ class _ValidatorsState extends State<Validators> {
                             Text('Uptime',
                             style: kSmallTextStyle,),
                             Text('100%',
-                              style: kMediumTextStyle,)
+                              style: kMediumBoldTextStyle,)
                           ],
                         ),
                         Column(
@@ -147,9 +145,8 @@ class _ValidatorsState extends State<Validators> {
                                 style: kSmallTextStyle
                             ),
                             Text(' 5/7',
-                                style: kMediumTextStyle,
-                                )
-
+                                style: kMediumBoldTextStyle,
+                                ),
                           ],
                         ),
                         Column(
@@ -157,7 +154,7 @@ class _ValidatorsState extends State<Validators> {
                           children: [
                             Text('Commission',
                               style: kSmallTextStyle,),
-                            Text('7%',style: kMediumTextStyle,)
+                            Text('7%',style: kMediumBoldTextStyle,)
                           ],
                         ),
                       ],

@@ -24,39 +24,13 @@ class _IBCRelayersState extends State<IBCRelayers> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text('IBC RELAYERS',
-                style:kBigTextStyle),
+                style:kBigBoldTextStyle),
           ],
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Container(
-            //     width: MediaQuery.of(context).size.width/1.1,
-            //     height: 40,
-            //     decoration: kboxdecorationWithGradient,
-            //     margin: const EdgeInsets.all(20),
-            //     child: TextField(
-            //       controller: nameController,
-            //       decoration: InputDecoration(
-            //         filled: true,
-            //         fillColor: Colors.transparent,
-            //         focusedBorder: InputBorder.none,
-            //         border: OutlineInputBorder(
-            //             borderRadius: BorderRadius.circular(20)
-            //         ),
-            //         hintText: 'Select a chain',
-            //         prefixIcon: const Icon(Icons.search),
-            //       ),
-            //       onChanged: (text) {
-            //         setState(() {
-            //           txHash = text;
-            //           //you can access nameController in its scope to get
-            //           // the value of text entered as shown below
-            //           //fullName = nameController.text;
-            //         });
-            //       },
-            //     )),
 
             ListView.builder(
                 reverse: true,
@@ -81,7 +55,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text('KAVA ',
-                                              style:kMediumTextStyle),
+                                              style:kMediumBoldTextStyle),
                                         ),],
                                     ),
 
@@ -116,119 +90,123 @@ class _IBCRelayersState extends State<IBCRelayers> {
                             ),
                             const SizedBox(height: 5,),
 
-                            Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,
 
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    gradient: kGradientColor,
-                                    borderRadius: const BorderRadius.all(Radius.circular(60.0)),
-                                    border: Border.all(
-                                      color:  Colors.lightBlueAccent,
-                                      width: 1.0,
+                                children: [
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      gradient: kGradientColor,
+                                      borderRadius: const BorderRadius.all(Radius.circular(60.0)),
+                                      border: Border.all(
+                                        color:  Colors.lightBlueAccent,
+                                        width: 1.0,
+                                      ),
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8,1.0,8,1),
-                                    child: Row(
-                                      children:[
-                                        Row(
-                                          children: [
-                                            CircleAvatar(child: Image.asset('assets/images/Kava.png'),),
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(8,1.0,8,1),
+                                      child: Row(
+                                        children:[
+                                          Row(
+                                            children: [
+                                              CircleAvatar(child: Image.asset('assets/images/Kava.png'),),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
 
 
-                                                children: [
-                                                  Text(' Cosmos',
-                                                    style: kMediumTextStyle,),
-                                                  Text(' channel-227',
-                                                    style: kSmallTextStyle,),
-                                                ],
+                                                  children: [
+                                                    Text(' Cosmos',
+                                                      style: kMediumBoldTextStyle,),
+                                                    Text(' channel-227',
+                                                      style: kSmallTextStyle,),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                                const Divider(color: Colors.lightBlueAccent,height: 2,thickness: 2,),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    gradient: kGradientColor,
-                                    borderRadius: const BorderRadius.all(Radius.circular(60.0)),
-                                    border: Border.all(
-                                      color:  Colors.lightBlueAccent,
-                                      width: 1.0,
+                                  const Divider(color: Colors.lightBlueAccent,height: 2,thickness: 2,),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      gradient: kGradientColor,
+                                      borderRadius: const BorderRadius.all(Radius.circular(60.0)),
+                                      border: Border.all(
+                                        color:  Colors.lightBlueAccent,
+                                        width: 1.0,
+                                      ),
                                     ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.fromLTRB(8,1.0,8,1),
-                                    child: Row(
-                                      children:[
-                                        Row(
-                                          children: [
-                                            CircleAvatar(child: Image.asset('assets/images/Kava.png'),),
-                                            Padding(
-                                              padding: const EdgeInsets.all(8.0),
-                                              child: Column(crossAxisAlignment: CrossAxisAlignment.start,
+                                    child: Padding(
+                                      padding: const EdgeInsets.fromLTRB(8,1.0,8,1),
+                                      child: Row(
+                                        children:[
+                                          Row(
+                                            children: [
+                                              CircleAvatar(child: Image.asset('assets/images/Kava.png'),),
+                                              Padding(
+                                                padding: const EdgeInsets.all(8.0),
+                                                child: Column(crossAxisAlignment: CrossAxisAlignment.start,
 
 
-                                                children: [
-                                                  Text(' Cosmos',
-                                                    style: kMediumTextStyle,),
-                                                  Text(' channel-227',
-                                                    style: kSmallTextStyle,),
-                                                ],
+                                                  children: [
+                                                    Text(' Cosmos',
+                                                      style: kMediumBoldTextStyle,),
+                                                    Text(' channel-227',
+                                                      style: kSmallTextStyle,),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
+                                            ],
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
 
-                              ],
+                                ],
+                              ),
                             ),
+                            SizedBox(height:10),
 
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                              padding: const EdgeInsets.fromLTRB(8,2,8,2),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children:[
                                     Text('Operational Period',
                                         style:kSmallTextStyle),
                                     Text('184 Days',
-                                        style:kSmallTextStyle)
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
 
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                              padding: const EdgeInsets.fromLTRB(8,2,8,2),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('24 Txs',
                                         style:kSmallTextStyle),
                                     Text('110',
-                                        style:kSmallTextStyle)
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
 
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                              padding: const EdgeInsets.fromLTRB(8,2,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text('24h Value',
                                         style:kSmallTextStyle),
                                     Text('\$146,987,655',
-                                        style:kSmallTextStyle)
+                                        style:kSmallBoldTextStyle)
                                   ]
                               ),
                             ),

@@ -25,13 +25,9 @@ class _LandingPageState extends State<LandingPage> {
         elevation: 0,
         title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
+            Text(
               'Hey there!',
-              style: TextStyle(
-                  color: Colors.black,
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w900
-              ),
+              style: kBigBoldTextStyle,
             ),
 
             Row(
@@ -74,7 +70,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: TextField(
                       controller: nameController,
                       decoration: InputDecoration(
-
+                        contentPadding: EdgeInsets.only(left: 15, right: 15),
                         filled: true,
                         fillColor: Colors.transparent,
                         focusedBorder: InputBorder.none,
@@ -114,17 +110,17 @@ class _LandingPageState extends State<LandingPage> {
                               child: Text('India\'s Most Valued \n Crypto Company' ,
                                   style:TextStyle(
                                     fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.bold,
+                                      fontWeight: FontWeight.w700,
                                       fontSize: 20,
                                   ),),
                             ),
                             Padding(
-                              padding: const EdgeInsets.all(0.0),
+                              padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 30.0),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.fromLTRB(20,3,0,10),
+                                    padding: const EdgeInsets.all(0),
                                     child: Row(
                                       children: [
                                         const Text('1 ',
@@ -137,7 +133,7 @@ class _LandingPageState extends State<LandingPage> {
                                         Column(
                                           children: [
                                             Text('Crore +',
-                                              style:kBigTextStyle),
+                                              style:kMediumBoldTextStyle),
                                             Text('Investors',
                                               style:kSmallTextStyle),
 
@@ -150,14 +146,14 @@ class _LandingPageState extends State<LandingPage> {
 
                                   Column(children: [
                                     Text('100%',
-                                      style:kBigTextStyle),
+                                        style:kMediumBoldTextStyle),
                                     Text('Transparent',
                                       style:kSmallTextStyle),
 
 
                                   ],),
                                   Padding(
-                                    padding: const EdgeInsets.all(8.0),
+                                    padding: const EdgeInsets.all(0),
                                     child: Row(
                                       children: [
                                         const Text('1 ',
@@ -168,11 +164,13 @@ class _LandingPageState extends State<LandingPage> {
                                                 color: Colors.black
                                             )),
                                         Column(
-                                          children:  [
+                                          children: [
                                             Text('Crore +',
-                                            style: kBigTextStyle,),
+                                                style:kMediumBoldTextStyle),
                                             Text('Investors',
-                                              style:kSmallTextStyle),
+                                                style:kSmallTextStyle),
+
+
                                           ],),
                                       ],
                                     ),
@@ -238,7 +236,7 @@ class _NetworkCardState extends State<NetworkCard> {
                     ),
                   ),
                    Text('CMDX \ncomdex',
-                  style: kMediumTextStyle),
+                  style: kMediumBoldTextStyle),
                 ],
               ),
               const SizedBox(height: 10),
@@ -254,7 +252,7 @@ class _NetworkCardState extends State<NetworkCard> {
                       style:kExtraSmallTextStyle),
                       const SizedBox(height:2),
                       Text('160%',
-                          style:kMediumTextStyle),
+                          style:kMediumBoldTextStyle),
                     ],),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +261,7 @@ class _NetworkCardState extends State<NetworkCard> {
                             style:kExtraSmallTextStyle),
                         const SizedBox(height:2),
                         Text('160%',
-                            style:kMediumTextStyle),
+                            style:kMediumBoldTextStyle),
                       ],)
                   ],
                 ),
