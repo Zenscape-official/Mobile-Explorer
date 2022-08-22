@@ -1,25 +1,42 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Controller/product_controller.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/proposalDetails.dart';
+import 'package:zenscape_app/widgets/filterTab.dart';
+import '../../Controller/dropDownController.dart';
 import '../../backend files/akashproposals.dart';
 import '../../widgets/NavigationDrawerWidget.dart';
 
-class Proposals extends StatelessWidget {
- //final Proposal product=Proposal();
+class Proposals extends StatefulWidget {
+
+  Proposals({Key? key}) : super(key: key);
+
+  @override
+  State<Proposals> createState() => _ProposalsState();
+}
+
+class _ProposalsState extends State<Proposals> {
   final ProductController productController= Get.put(ProductController());
 
-
+  BookController bookcontroller = BookController();
+  TextEditingController nameController=TextEditingController();
+  String fullName = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: NavigationDrawerWidget(),
+      drawer: const NavDraw(),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(title:Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children:  [
-          Text('PROPOSAL',style:kBigBoldTextStyle),
+          Text('Proposals',style:kBigBoldTextStyle),
+          CircleAvatar(
+              radius:15,
+              child: Image.asset('assets/images/cmdx.png'),
+              backgroundColor: Colors.transparent),
         ],
       ),
         backgroundColor: Colors.transparent,
@@ -29,22 +46,66 @@ class Proposals extends StatelessWidget {
       const Center(child: CircularProgressIndicator(),):
       Column(
         children: [
-          SingleChildScrollView(
+          Container(
+              width: MediaQuery.of(context).size.width/1.1,
+              height: 40,
+              decoration: kBoxDecorationWithoutGradient,
+              margin: const EdgeInsets.all(20),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(15),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    focusedBorder: InputBorder.none,
+                    border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                        borderRadius: BorderRadius.circular(20)
+                    ),
+                    hintText: 'Select a chain',
+                    prefixIcon: const Icon(Icons.search),
+                  ),
+                  onChanged: (text) {
+                    setState(() {
+                      fullName = text;
+                      //you can access nameController in its scope to get
+                      // the value of text entered as shown below
+                      //fullName = nameController.text;
+                    });
+                  },
+                ),
+              )),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: const [
+              Filter(),
+            ],
+          ),
+         SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height/1.2,
-              child:Obx(()=> ListView.builder(
-                reverse: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: ProductController.productList.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return
-                      ProposalCard(ProductController.productList[index]);
-                  }),
+              height: MediaQuery.of(context).size.height/1.4,
+              child:Obx(()=> CupertinoScrollbar(
+                child: ListView.builder(
+                  reverse: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: ProductController.productList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return
+                        ProposalCard(ProductController.productList[index]);
+                    }),
+              ),
             ),
           ),
-          )],
+          ),
+
+        ],
       )
       ,
     );
@@ -54,7 +115,7 @@ class Proposals extends StatelessWidget {
 class ProposalCard extends StatelessWidget {
 
   final Proposal product;
-   ProposalCard(this.product, {Key? key}) : super(key: key);
+  ProposalCard(this.product, {Key? key}) : super(key: key);
   var status='';
   bool ispassed=true;
   void fun(){
@@ -70,7 +131,7 @@ class ProposalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     fun();
     return InkWell(
-      onTap: ()=> Get.to(() => ProposalDetails()),
+      onTap: ()=> Get.to(() => const ProposalDetails()),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -149,7 +210,7 @@ class ProposalCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children:[
-                     Text('voting starts',
+                     Text('Voting Starts',
                       style: kSmallTextStyle,),
                     Text(product.votingStartTime.toString(),
                     style: kSmallTextStyle,),
@@ -161,7 +222,7 @@ class ProposalCard extends StatelessWidget {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('voting ends',style: kSmallTextStyle,),
+                    Text('Voting Ends',style: kSmallTextStyle,),
                     Text(product.votingEndTime.toString(),
                       style:kSmallTextStyle,),
                   ],

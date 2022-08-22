@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../Constants/constants.dart';
-import '../../widgets/ToggleButton.dart';
+import '../../widgets/onboardingwidgets/ToggleButton.dart';
 
 class ProposalDetails extends StatefulWidget {
   const ProposalDetails({Key? key}) : super(key: key);

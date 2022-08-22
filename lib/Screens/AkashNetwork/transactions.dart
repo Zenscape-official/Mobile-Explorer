@@ -4,7 +4,7 @@ import 'package:zenscape_app/Screens/AkashNetwork/transaction_details.dart';
 
 import '../../Constants/constants.dart';
 import '../../widgets/NavigationDrawerWidget.dart';
-import '../../widgets/ToggleButton.dart';
+import '../../widgets/onboardingwidgets/ToggleButton.dart';
 class Txs extends StatefulWidget {
   const Txs({Key? key}) : super(key: key);
 

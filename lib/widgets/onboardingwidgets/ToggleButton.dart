@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class ToggleButton extends StatefulWidget {
   String leftTitle='';
   String rightTitle='';
-  // VoidCallback leftCall;
-  // VoidCallback rightCall;
+  GestureTapCallback? leftCall;
+  GestureTapCallback? rightCall;
 
   @override
-  ToggleButton({Key? key, required this.leftTitle,required this.rightTitle,}) : super(key: key);
+  ToggleButton({Key? key, required this.leftTitle,required this.rightTitle,leftCall,rightCall}) : super(key: key);
   @override
   _ToggleButtonState createState() => _ToggleButtonState();
 }
@@ -64,10 +64,11 @@ class _ToggleButtonState extends State<ToggleButton> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  // widget.leftCall;
+
                   xAlign = activeAlign;
                   leftColor = selectedColor;
                   rightColor = normalColor;
+                  widget.leftCall;
                 });
               },
               child: Align(
@@ -80,8 +81,8 @@ class _ToggleButtonState extends State<ToggleButton> {
                     widget.leftTitle,
                     style: TextStyle(
                       color: leftColor,
-                      fontFamily: 'Montserrat',
-                      fontWeight: FontWeight.bold,
+                      fontFamily: 'MontserratRegular',
+                      //fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
@@ -90,10 +91,10 @@ class _ToggleButtonState extends State<ToggleButton> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  //widget.rightCall;
                   xAlign = inactiveAlign;
                   rightColor = selectedColor;
                   leftColor = normalColor;
+                  widget.rightCall;
                 });
               },
               child: Align(
@@ -105,9 +106,9 @@ class _ToggleButtonState extends State<ToggleButton> {
                   child: Text(
                     widget.rightTitle,
                     style: TextStyle(
-                      fontFamily: 'Montserrat',
+                      fontFamily: 'MontserratRegular',
                       color: rightColor,
-                      fontWeight: FontWeight.bold,
+                      // fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),

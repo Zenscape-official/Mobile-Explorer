@@ -12,10 +12,12 @@ class Parameters extends StatefulWidget {
 }
 
 class _ParametersState extends State<Parameters> {
+  TextEditingController nameController=TextEditingController();
+  String fullName = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawerWidget(),
+      drawer: NavDraw(),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -24,10 +26,10 @@ class _ParametersState extends State<Parameters> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: const [
-            Text('PARAMETERS',
+            Text('Parameters',
               style: TextStyle(
                   fontWeight: FontWeight.w900,
-                  fontFamily: 'Montserrat'
+                  fontFamily: 'MontserratBold'
               ),),
           ],
         ),
@@ -35,138 +37,40 @@ class _ParametersState extends State<Parameters> {
       body: ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
-
-          // SizedBox(
-          //   height: MediaQuery.of(context).size.height/2.4,
-          //   child: Padding(
-          //     padding: const EdgeInsets.all(16.0),
-          //     child: Container(
-          //       decoration: kBoxDecorationWithGradient,
-          //       child: Padding(
-          //         padding: const EdgeInsets.all(16.0),
-          //         child: Column(
-          //           children: [
-          //             Row(
-          //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //               children: [
-          //                 Row(
-          //                   children: [
-          //                     CircleAvatar(child: Image.asset('assets/images/akt.png'),
-          //                         backgroundColor: Colors.transparent),
-          //                     Text(' AKT',
-          //                       style: TextStyle(color: Colors.black.withOpacity(1),
-          //                           fontSize: 25,
-          //                           fontFamily: 'Montserrat'
-          //                       ),
-          //                     ),
-          //                   ],
-          //                 ),
-          //                 Row(
-          //                   children: [
-          //                     const Icon(Icons.access_time,
-          //                         color:Colors.blue),
-          //                     const SizedBox(width: 2,),
-          //                     Text('BLOCK TIME',
-          //                         style: TextStyle(color: Colors.black.withOpacity(1),
-          //                           fontSize: 11,
-          //                         )
-          //                     ),
-          //                     Text('  6,079ms',
-          //                         style: TextStyle(color: Colors.black.withOpacity(1),
-          //                           fontSize: 12,
-          //                         )
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ],
-          //             ),
-          //             const SizedBox(height: 20,),
-          //             Container(
-          //               decoration: BoxDecoration(
-          //                 color: Colors.transparent,
-          //                 borderRadius: const BorderRadius.all(Radius.circular(200.0)),
-          //                 border: Border.all(
-          //                   color: Colors.lightBlueAccent.withOpacity(.3),
-          //                   width: 1.0,
-          //                 ),
-          //               ),
-          //               child:Padding(
-          //                 padding: const EdgeInsets.all(8.0),
-          //                 child: (
-          //                     Container(
-          //                       decoration: BoxDecoration(
-          //                         color: Colors.transparent,
-          //                         borderRadius: const BorderRadius.all(Radius.circular(200.0)),
-          //                         border: Border.all(
-          //                           color: Colors.lightBlueAccent.withOpacity(.5),
-          //                           width: 1.0,
-          //                         ),
-          //                       ),
-          //                       child: Padding(
-          //                         padding: const EdgeInsets.all(8.0),
-          //                         child: Container(
-          //                           child: Padding(
-          //                             padding: const EdgeInsets.all(25.0),
-          //                             child:Column(
-          //                               children: const [
-          //                                 Text('\$0.23',
-          //                                     style: kBigTextStyle),
-          //                                 SizedBox(height: 4,),
-          //                                 Text('+4.29%',
-          //                                     style:kSmallTextStyle
-          //                                 ),
-          //                               ],
-          //                             ),
-          //
-          //                           ),
-          //                           decoration: BoxDecoration(
-          //                             color: Colors.transparent,
-          //
-          //                             borderRadius: const BorderRadius.all(Radius.circular(250.0)),
-          //                             border: Border.all(
-          //                               color: Colors.lightBlueAccent,
-          //                               width: 1.0,
-          //
-          //                             ),
-          //                           ),),
-          //                       ),
-          //                     )),
-          //               ),),
-          //
-          //             const SizedBox(height: 20),
-          //
-          //             Padding(
-          //               padding: const EdgeInsets.all(8.0),
-          //               child: Column(
-          //                 children: [
-          //                   Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                     children: const [
-          //                       Text('Market Cap',
-          //                         style: kMediumTextStyle,),
-          //                       SizedBox(height: 4,),
-          //                       Text('\$44,460,560.56',
-          //                         style: kMediumTextStyle,)
-          //                     ],
-          //                   ),
-          //                   Row(
-          //                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          //                     children: const [
-          //                       Text('24h Vol',
-          //                         style: kMediumTextStyle,),
-          //                       Text('\$1,478,971.56',
-          //                         style: kMediumTextStyle,)
-          //                     ],
-          //                   ),
-          //                 ],
-          //               ),
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
+          Container(
+              width: MediaQuery.of(context).size.width/1.1,
+              height: 40,
+              decoration: kBoxDecorationWithoutGradient,
+              margin: const EdgeInsets.all(20),
+              child: Padding(
+                padding: const EdgeInsets.all(0.0),
+                child: TextField(
+                  controller: nameController,
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.all(15),
+                    filled: true,
+                    fillColor: Colors.transparent,
+                    focusedBorder: InputBorder.none,
+                    border: OutlineInputBorder(
+                        borderSide: const BorderSide(
+                          width: 0,
+                          style: BorderStyle.none,
+                        ),
+                        borderRadius: BorderRadius.circular(20)
+                    ),
+                    hintText: 'Select a chain',
+                    prefixIcon: const Icon(Icons.search),
+                  ),
+                  onChanged: (text) {
+                    setState(() {
+                      fullName = text;
+                      //you can access nameController in its scope to get
+                      // the value of text entered as shown below
+                      //fullName = nameController.text;
+                    });
+                  },
+                ),
+              )),
 
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -176,15 +80,15 @@ class _ParametersState extends State<Parameters> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Minting Parameters',
-                  style:kBigTextStyle),
+                  style:kMediumTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                     itemCount: 4,
                     itemBuilder: (context,index){
                       return InfoCard(title1: 'Height',icon1: Icons.manage_accounts_rounded,titleValue1: '8734872');
@@ -201,15 +105,15 @@ class _ParametersState extends State<Parameters> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Staking Parameters',
-                      style:kBigTextStyle),
+                      style:kMediumTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                     itemCount: 6,
                     itemBuilder: (context,index){
                       return InfoCard(title1: 'Height',icon1: Icons.manage_accounts_rounded,titleValue1: '8734872');
@@ -226,15 +130,15 @@ class _ParametersState extends State<Parameters> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Governance Parameters',
-                      style:kBigTextStyle),
+                      style:kMediumTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                     itemCount: 6,
                     itemBuilder: (context,index){
                       return InfoCard(title1: 'Height',icon1: Icons.manage_accounts_rounded,titleValue1: '8734872');
@@ -251,7 +155,7 @@ class _ParametersState extends State<Parameters> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Distribution Parameters',
-                      style:kBigTextStyle),
+                      style:kMediumTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),

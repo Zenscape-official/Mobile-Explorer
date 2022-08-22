@@ -1,14 +1,14 @@
 import'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
-class Explorer extends StatefulWidget {
-  const Explorer({Key? key}) : super(key: key);
+class Webview extends StatefulWidget {
+  const Webview({Key? key}) : super(key: key);
 
   @override
-  State<Explorer> createState() => _ExplorerState();
+  State<Webview> createState() => _WebviewState();
 }
 
-class _ExplorerState extends State<Explorer> {
+class _WebviewState extends State<Webview> {
 
   @override
   void initState() {

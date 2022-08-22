@@ -1,15 +1,22 @@
 import 'package:flutter/material.dart';
-
 import '../../Constants/constants.dart';
 import '../../widgets/NavigationDrawerWidget.dart';
+import '../../widgets/filterTab.dart';
 
-class Assets extends StatelessWidget {
+class Assets extends StatefulWidget {
   const Assets({Key? key}) : super(key: key);
 
   @override
+  State<Assets> createState() => _AssetsState();
+}
+
+class _AssetsState extends State<Assets> {
+  TextEditingController nameController=TextEditingController();
+  String fullName = '';
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawerWidget(),
+      drawer:  NavDraw(),
       appBar: AppBar(
 
         foregroundColor: Colors.black,
@@ -17,10 +24,14 @@ class Assets extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title:Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('ASSETS',
-                style:kBigTextStyle),
+            Text('Assets',
+                style:kBigBoldTextStyle),
+            CircleAvatar(
+                radius:15,
+                child: Image.asset('assets/images/cmdx.png'),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),
@@ -28,6 +39,46 @@ class Assets extends StatelessWidget {
         child: Column(
           children: [
 
+            Container(
+                width: MediaQuery.of(context).size.width/1.1,
+                height: 40,
+                decoration: kBoxDecorationWithoutGradient,
+                margin: const EdgeInsets.all(20),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      focusedBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      hintText: 'Select a chain',
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (text) {
+                      setState(() {
+                        fullName = text;
+                        //you can access nameController in its scope to get
+                        // the value of text entered as shown below
+                        //fullName = nameController.text;
+                      });
+                    },
+                  ),
+                )),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                Filter(),
+              ],
+            ),
             SizedBox(
               width: MediaQuery.of(context).size.width/1,
               child: Padding(
@@ -64,7 +115,7 @@ class Assets extends StatelessWidget {
                                     padding: const EdgeInsets.all(3.0),
                                     child: Container(
                                       child: Padding(
-                                        padding: const EdgeInsets.all(10.0),
+                                        padding: const EdgeInsets.all(6.0),
                                         child:Column(
                                           children: [
                                             CircleAvatar(child: Image.asset('assets/images/cmdx.png',),radius: 15,)
@@ -89,7 +140,7 @@ class Assets extends StatelessWidget {
                         const SizedBox(height: 20),
 
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(4.0),
                           child: Column(
                             children:  [
                               Text('Chain Value',
@@ -136,7 +187,7 @@ class Assets extends StatelessWidget {
                                     Container(
                                       decoration: kBoxDecorationWithoutGradient,
                                       child:  Padding(
-                                        padding: EdgeInsets.all(5.0),
+                                        padding: const EdgeInsets.all(5.0),
                                         child: Text('\$ 9.38',
                                             style:kBigBoldTextStyle,)
                                       ),
@@ -170,7 +221,6 @@ class Assets extends StatelessWidget {
                                         style:kSmallTextStyle)
                                   ]
                               ),
-
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),

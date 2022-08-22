@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:zenscape_app/widgets/ToggleButton.dart';
+import 'package:zenscape_app/Screens/AkashNetwork/transactions.dart';
+import 'package:zenscape_app/widgets/onboardingwidgets/ToggleButton.dart';
 
 import '../../Constants/constants.dart';
 import '../../widgets/NavigationDrawerWidget.dart';
@@ -18,17 +19,21 @@ class _BlocksState extends State<Blocks> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawerWidget(),
+      drawer: NavDraw(),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title:Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('BLOCKS',
+            Text('Blocks',
             style:kBigBoldTextStyle),
+            CircleAvatar(
+                radius:15,
+                child: Image.asset('assets/images/cmdx.png'),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),
@@ -36,39 +41,55 @@ class _BlocksState extends State<Blocks> {
         child: Column(
           children: [
 
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [ToggleButton(leftTitle: 'Blocks',rightTitle: 'Transactions',)],),
-            ),
             Container(
                 width: MediaQuery.of(context).size.width/1.1,
                 height: 40,
-                decoration: kBoxDecorationWithGradient,
+                decoration: kBoxDecorationWithoutGradient,
                 margin: const EdgeInsets.all(20),
-                child: TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    contentPadding: EdgeInsets.only(left: 15, right: 15),
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    focusedBorder: InputBorder.none,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(20)
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      focusedBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      hintText: 'Select a chain',
+                      prefixIcon: const Icon(Icons.search),
                     ),
-                   hintText: 'Select a chain',
-                    prefixIcon: const Icon(Icons.search),
+                    onChanged: (text) {
+                      setState(() {
+                        txHash = text;
+                        //you can access nameController in its scope to get
+                        // the value of text entered as shown below
+                        //fullName = nameController.text;
+                      });
+                    },
                   ),
-                  onChanged: (text) {
-                    setState(() {
-                      txHash = text;
-                      //you can access nameController in its scope to get
-                      // the value of text entered as shown below
-                      //fullName = nameController.text;
-                    });
-                  },
                 )),
+
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [ToggleButton(
+                  leftTitle: 'Blocks',
+                  leftCall: null,
+                  rightTitle: 'Transactions',
+                  rightCall:()=> Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Txs())),
+                ),
+                ]
+              ),
+            ),
+
             ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),

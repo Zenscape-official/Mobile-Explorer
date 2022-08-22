@@ -1,49 +1,47 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 var kBigTextStyle= TextStyle(
-fontFamily: 'Montserrat',
+fontFamily: 'MontserratRegular',
   color: Colors.black,
   fontWeight: Platform.isAndroid ?FontWeight.normal: FontWeight.w900,
-fontSize: 18,
+fontSize: 20,
 );
 var kBigBoldTextStyle= TextStyle(
-  fontFamily: 'Montserrat',
+  fontFamily: 'MontserratBold',
   color: Colors.black,
   fontWeight: Platform.isAndroid ?FontWeight.w700: FontWeight.w900,
-  fontSize: 18,
+  fontSize: 20,
 );
 
 var kMediumTextStyle= TextStyle(
-  fontFamily: 'Montserrat',
+  fontFamily: 'MontserratRegular',
   color: Colors.black,
 
   fontWeight: Platform.isAndroid?FontWeight.normal: FontWeight.w900,
   fontSize: 15,
 );
 var kMediumBoldTextStyle= TextStyle(
-  fontFamily: 'Montserrat',
+  fontFamily: 'MontserratBold',
   color: Colors.black,
-
   fontWeight: Platform.isAndroid?FontWeight.w700: FontWeight.w900,
-  fontSize: 15,
+  fontSize: 17,
 );
 
 var kSmallTextStyle= TextStyle(
-  fontFamily: 'Montserrat',
+  fontFamily: 'MontserratRegular',
   color: Colors.black,
   fontWeight: Platform.isAndroid?FontWeight.normal: FontWeight.w900,
-  fontSize: 12,
+  fontSize: 13,
 );
 var kSmallBoldTextStyle= TextStyle(
-  fontFamily: 'Montserrat',
+  fontFamily: 'MontserratBold',
   color: Colors.black,
   fontWeight: Platform.isAndroid?FontWeight.bold: FontWeight.w900,
   fontSize: 12,
 );
 
 var kExtraSmallTextStyle= TextStyle(
-  fontFamily: 'Montserrat',
+  fontFamily: 'MontserratRegular',
   color: Colors.black,
   fontWeight: Platform.isAndroid?FontWeight.normal: FontWeight.w900,
   fontSize: 10,
@@ -66,7 +64,7 @@ var kBoxDecorationWithGradient=BoxDecoration (
   ),],);
 var kBoxDecorationWithoutGradient=BoxDecoration (
   color: const Color(0xFFD4F1FF).withOpacity(.5),
-  borderRadius: const BorderRadius.all(Radius.circular(15.0),
+  borderRadius: const BorderRadius.all(Radius.circular(12.0),
   ),
   boxShadow: [
     BoxShadow(
@@ -75,14 +73,13 @@ var kBoxDecorationWithoutGradient=BoxDecoration (
       blurRadius: 1,
       offset: const Offset(-2, -2), // changes position of shadow
     ),],);
-var kBoxBorder=BoxDecoration (
+var kBoxBorder = BoxDecoration (
   border: Border.all(
     color: Colors.lightBlueAccent.withOpacity(.5),
     width: 1.0,
   ),
-  color: const Color(0xFF8CDAFF).withOpacity(.5),
+  color: const Color(0xFF8CDAFF).withOpacity(.2),
   borderRadius: const BorderRadius.all(Radius.circular(15.0),
-
   ),
   boxShadow: [
     BoxShadow(
@@ -90,4 +87,6 @@ var kBoxBorder=BoxDecoration (
       spreadRadius: 1,
       blurRadius: 1,
       offset: const Offset(-2, -2), // changes position of shadow
-    ),],);
+    ),
+  ],
+);

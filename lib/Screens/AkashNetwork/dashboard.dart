@@ -3,39 +3,86 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import '../../widgets/NavigationDrawerWidget.dart';
 import '../home_screen.dart';
-class NetworkDashBoard extends StatelessWidget {
-  List<String> par=['Height','Transactions','Bonded Tokens','Community Pools','Inflation','Staking APR'];
+
+class NetworkDashBoard extends StatefulWidget {
 
   NetworkDashBoard({Key? key}) : super(key: key);
+
+  @override
+  State<NetworkDashBoard> createState() => _NetworkDashBoardState();
+}
+
+class _NetworkDashBoardState extends State<NetworkDashBoard> {
+  List<String> par=['Height','Transactions','Bonded Tokens','Community Pools','Inflation','Staking APR'];
+  TextEditingController nameController=TextEditingController();
+  String fullName = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawerWidget(),
+      drawer: NavDraw(),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         foregroundColor: Colors.black,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
-            Text('COMDEX',
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+           const Text('Dashboard',
             style: TextStyle(
-              fontWeight: FontWeight.w900,
-                fontFamily: 'Montserrat',
+              fontWeight: FontWeight.w700,
+                fontFamily: 'MontserratBold',
               fontSize: 20,
             ),),
+            CircleAvatar(
+                radius:15,
+                child: Image.asset('assets/images/cmdx.png'),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),
       body: SingleChildScrollView(
         child: Column(mainAxisSize: MainAxisSize.min,
           children: <Widget>[
+            Container(
+                width: MediaQuery.of(context).size.width/1.1,
+                height: 40,
+                decoration: kBoxDecorationWithoutGradient,
+                margin: const EdgeInsets.all(20),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      focusedBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      hintText: 'Select a chain',
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (text) {
+                      setState(() {
+                        fullName = text;
+                        //you can access nameController in its scope to get
+                        // the value of text entered as shown below
+                        //fullName = nameController.text;
+                      });
+                    },
+                  ),
+                )),
 
             SizedBox(
               height: MediaQuery.of(context).size.height/2.4,
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Container(
                  // height:MediaQuery.of(context).size.height/1.2,
                   decoration: kBoxDecorationWithGradient,
@@ -54,8 +101,9 @@ class NetworkDashBoard extends StatelessWidget {
                                     backgroundColor: Colors.transparent),
                                 Text(' CMDX',
                                   style: TextStyle(color: Colors.black.withOpacity(1),
-                                      fontSize: 20,
-                                      fontFamily: 'Montserrat'
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      fontFamily: 'MontserratRegular'
                                   ),
                                 ),
                               ],
@@ -111,8 +159,10 @@ class NetworkDashBoard extends StatelessWidget {
                                       Text('\$0.23',
                                           style: kBigBoldTextStyle),
                                       const SizedBox(height: 4,),
-                                      Text('+4.29%',
-                                          style:kSmallTextStyle
+                                      const Text('+4.29%',
+                                          style:TextStyle(
+                                            color:Color(0xFF15BE46)
+                                          )
                                       ),
                                     ],
                                   ),
@@ -167,14 +217,14 @@ class NetworkDashBoard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: EdgeInsets.fromLTRB(15.0,10,15,0),
               child: StaggeredGridView.countBuilder(
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   crossAxisCount: 2,
-                  mainAxisSpacing: 10,
-                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 20,
+                  crossAxisSpacing: 20,
                   itemCount: par.length,
                   itemBuilder: (context,index){
                     return InfoCard(title1: par[index],icon1: Icons.manage_accounts_rounded,titleValue1: '8734872');
@@ -226,10 +276,9 @@ class NetworkDashBoard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child:
-                        Card(
-                            color: Colors.blueGrey.shade50,
+                        padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
+                        child: Card(
+                            color: Color(0xFFF9FAFC),
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -265,10 +314,9 @@ class NetworkDashBoard extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child:
-                        Card(
-                            color: Colors.blueGrey.shade50,
+                        padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
+                        child: Card(
+                            color: Color(0xFFF9FAFC),
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -306,7 +354,7 @@ class NetworkDashBoard extends StatelessWidget {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(18.0,0,18,50),
+              padding: const EdgeInsets.fromLTRB(18.0,0,18,80),
               child: Container(
                 decoration: kBoxDecorationWithoutGradient,
 
@@ -326,10 +374,9 @@ class NetworkDashBoard extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child:
-                          Card(
-                              color: Colors.blueGrey.shade50,
+                          padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
+                          child: Card(
+                              color: const Color(0xFFF9FAFC),
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(
@@ -367,7 +414,7 @@ class NetworkDashBoard extends StatelessWidget {
                           padding: const EdgeInsets.all(8.0),
                           child:
                           Card(
-                              color: Colors.blueGrey.shade50,
+                              color: Color(0xFFF9FAFC),
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(

@@ -11,7 +11,7 @@ class ProductController extends GetxController {
   static Future<void> fetchProducts() async{
     var response = await client.get(Uri.parse('https://akash-api.polkachu.com/cosmos/gov/v1beta1/proposals#'));
     if (response.statusCode==200){
-      // print (response.body);
+       // print (response.body);
        var jsonString= jsonDecode((response.body))['proposals'];
 
        ProductController.productList = List.from(jsonString).map((e) => Proposal.fromMap(e)).toList().obs;

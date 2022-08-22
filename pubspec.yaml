@@ -72,9 +72,12 @@ flutter:
     - assets/images/
     - assets/svgfiles/
   fonts:
-    - family: Montserrat
+    - family: MontserratRegular
       fonts:
         - asset: fonts/Montserrat-Regular.ttf
+    - family: MontserratBold
+      fonts:
+        - asset: fonts/Montserrat-Bold.ttf
 
 
     # An image asset can refer to one or more resolution-specific "variants", see

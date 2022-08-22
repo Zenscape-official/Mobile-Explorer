@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import '../Constants/constants.dart';
-import '../widgets/Popup_model/hero_dialogue_route.dart';
 import 'AkashNetwork/dashboard.dart';
-import 'network_list.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -29,31 +27,6 @@ class _LandingPageState extends State<LandingPage> {
               'Hey there!',
               style: kBigBoldTextStyle,
             ),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                ElevatedButton(child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
-                    Text('Networks',
-                      style: TextStyle(color: Colors.white),),
-                    SizedBox(width: 6,),
-                    Icon(Icons.now_widgets_outlined,
-                      color: Colors.white,),
-                  ],
-                ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      HeroDialogRoute( settings: const RouteSettings(),
-                        builder: (context) => const Center(
-                            child: NetworkList()),),);},
-                ),
-                const IconButton(onPressed: null, icon: Icon(Icons.notifications))
-              ],
-            ),
-
-
           ],
         ),
       ),
@@ -63,14 +36,14 @@ class _LandingPageState extends State<LandingPage> {
               Container(
                 width: MediaQuery.of(context).size.width/1.1,
                   height: 40,
-                  decoration: kBoxDecorationWithGradient,
+                  decoration: kBoxDecorationWithoutGradient,
                   margin: const EdgeInsets.all(20),
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.all(0.0),
                     child: TextField(
                       controller: nameController,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.only(left: 15, right: 15),
+                        contentPadding: EdgeInsets.all(15),
                         filled: true,
                         fillColor: Colors.transparent,
                         focusedBorder: InputBorder.none,
@@ -95,7 +68,7 @@ class _LandingPageState extends State<LandingPage> {
                     ),
                   )),
               Container(
-                        margin: const EdgeInsets.only(right: 10,top: 10,left: 10),
+                        margin: const EdgeInsets.only(right: 10,top: 10,left: 10,bottom: 15),
                         height: 199,
                         width: MediaQuery.of(context).size.width/1.1,
                         decoration: kBoxDecorationWithGradient,
@@ -109,13 +82,13 @@ class _LandingPageState extends State<LandingPage> {
                               padding: EdgeInsets.fromLTRB(0,10,0,10),
                               child: Text('India\'s Most Valued \n Crypto Company' ,
                                   style:TextStyle(
-                                    fontFamily: 'Montserrat',
+                                    fontFamily: 'MontserratBold',
                                       fontWeight: FontWeight.w700,
-                                      fontSize: 20,
+                                      fontSize: 18,
                                   ),),
                             ),
                             Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10,horizontal: 30.0),
+                              padding: const EdgeInsets.symmetric(vertical: 20,horizontal: 30.0),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
@@ -125,8 +98,8 @@ class _LandingPageState extends State<LandingPage> {
                                       children: [
                                         const Text('1 ',
                                             style:TextStyle(
-                                                fontFamily: 'Montserrat',
-                                                fontWeight: FontWeight.w900,
+                                                fontFamily: 'MontserratBold',
+                                                fontWeight: FontWeight.w700,
                                                 fontSize: 25,
                                                 color: Colors.black
                                             )),
@@ -136,13 +109,10 @@ class _LandingPageState extends State<LandingPage> {
                                               style:kMediumBoldTextStyle),
                                             Text('Investors',
                                               style:kSmallTextStyle),
-
-
                                           ],),
                                       ],
                                     ),
                                   ),
-
 
                                   Column(children: [
                                     Text('100%',
@@ -178,18 +148,16 @@ class _LandingPageState extends State<LandingPage> {
                                 ],
                               ),
                             ),
-
-
-
-                        ]),
+                        ],
+                        ),
                     ),
               StaggeredGridView.countBuilder(
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   crossAxisCount: 2,
-                  mainAxisSpacing: 0,
-                  crossAxisSpacing: 0,
+                  mainAxisSpacing: 2,
+                  crossAxisSpacing: 2,
                   itemCount: 10,
                   itemBuilder: (context,index){
                     return const NetworkCard();
@@ -235,8 +203,15 @@ class _NetworkCardState extends State<NetworkCard> {
                       backgroundColor: Colors.white,
                     ),
                   ),
-                   Text('CMDX \ncomdex',
+                   Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: [
+                       Text('CMDX',
                   style: kMediumBoldTextStyle),
+                       Text('Comdex',
+                           style: kSmallTextStyle),
+                     ],
+                   ),
                 ],
               ),
               const SizedBox(height: 10),
@@ -260,7 +235,7 @@ class _NetworkCardState extends State<NetworkCard> {
                         Text('Commission',
                             style:kExtraSmallTextStyle),
                         const SizedBox(height:2),
-                        Text('160%',
+                        Text('5%',
                             style:kMediumBoldTextStyle),
                       ],)
                   ],

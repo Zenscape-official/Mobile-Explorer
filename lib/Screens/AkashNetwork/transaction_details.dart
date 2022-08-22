@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenscape_app/widgets/ToggleButton.dart';
+import 'package:zenscape_app/widgets/onboardingwidgets/ToggleButton.dart';
 
 import '../../Constants/constants.dart';
 class TxDetails extends StatefulWidget {
@@ -343,17 +343,17 @@ class _TxDetailsState extends State<TxDetails> {
                     children: [
                     Text('IBC Progress',
                     style:kMediumBoldTextStyle),
-                      SizedBox(height:30),
+                      const SizedBox(height:30),
                     Column(
                       children: [Row(
                         children: [
-                          Text(''),
+                          const Text(''),
 
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children:[
-                              Text('Transfer'),
-                              SizedBox(height:10),
+                              const Text('Transfer'),
+                              const SizedBox(height:10),
                               Container(
                                 decoration: BoxDecoration (
                                   border: Border.all(
@@ -380,21 +380,21 @@ class _TxDetailsState extends State<TxDetails> {
                                       children: [
                                         Text('COMDEX',
                                             style:kMediumBoldTextStyle),
-                                        SizedBox(height: 5,),
+                                        const SizedBox(height: 5,),
                                         Text('CA07HYYGYG12....12334HGGVGG',
-                                            style:kSmallTextStyle),
-                                        SizedBox(height: 5,),
+                                            style:kExtraSmallTextStyle),
+                                        const SizedBox(height: 5,),
 
                                         Text('2h ago (2022-08-10 21:34:42)',
-                                            style:kSmallTextStyle),
+                                            style:kExtraSmallTextStyle),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(height: 20,),
-                              Text('Reciever'),
-                              SizedBox(height:10),
+                              const SizedBox(height: 20,),
+                              const Text('Reciever'),
+                              const SizedBox(height:10),
                               Container(
                                 decoration: BoxDecoration (
                                   border: Border.all(
@@ -421,21 +421,21 @@ class _TxDetailsState extends State<TxDetails> {
                                       children: [
                                         Text('JUNO',
                                             style:kMediumBoldTextStyle),
-                                        SizedBox(height: 5,),
+                                        const SizedBox(height: 5,),
                                         Text('CA07HYYGYG12....12334HGGVGG',
-                                            style:kSmallTextStyle),
-                                        SizedBox(height: 5,),
+                                            style:kExtraSmallTextStyle),
+                                        const SizedBox(height: 5,),
 
                                         Text('2h ago (2022-08-10 21:34:42)',
-                                            style:kSmallTextStyle),
+                                            style:kExtraSmallTextStyle),
                                       ],
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(height:20),
-                              Text('Acknowledgement'),
-                              SizedBox(height:10),
+                              const SizedBox(height:20),
+                              const Text('Acknowledgement'),
+                              const SizedBox(height:10),
                               Container(
                                 decoration: BoxDecoration (
                                   border: Border.all(
@@ -462,12 +462,12 @@ class _TxDetailsState extends State<TxDetails> {
                                       children: [
                                         Text('COMDEX',
                                             style:kMediumBoldTextStyle),
-                                        SizedBox(height: 5,),
+                                        const SizedBox(height: 5,),
                                         Text('CA07HYYGYG12....12334HGGVGG',
-                                            style:kSmallTextStyle),
-                                        SizedBox(height: 5,),
+                                            style:kExtraSmallTextStyle),
+                                        const SizedBox(height: 5,),
                                         Text('2h ago (2022-08-10 21:34:42)',
-                                            style:kSmallTextStyle),
+                                            style:kExtraSmallTextStyle),
                                       ],
                                     ),
                                   ),

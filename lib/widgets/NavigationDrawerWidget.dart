@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/Parameters.dart';
@@ -9,7 +10,6 @@ import 'package:zenscape_app/Screens/AkashNetwork/blocks.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/IBC%20Relayers.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/dashboard.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/proposals.dart';
-import 'package:zenscape_app/Screens/landing_page.dart';
 import '../Controller/product_controller.dart';
 import '../Screens/AkashNetwork/contracts.dart';
 import '../Screens/AkashNetwork/transactions.dart';
@@ -46,27 +46,27 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
               child: Column(
                 children: [
                   buildMenuItem(
-                    text: 'DASHBOARD',
+                    text: 'Dashboard',
                     icon: Icons.people,
                     onClicked: () => selectedItem(context, 0),
                   ),
                   buildMenuItem(
-                    text: 'VALIDATOR',
+                    text: 'Validator',
                     icon: Icons.favorite_border,
                     onClicked: () => selectedItem(context, 1),
                   ),
                   buildMenuItem(
-                    text: 'BLOCKS',
+                    text: 'Blocks',
                     icon: Icons.workspaces_outline,
                     onClicked: () => selectedItem(context, 2),
                   ),
                   buildMenuItem(
-                    text: 'TRANSACTIONS',
+                    text: 'Transactions',
                     icon: Icons.update,
                     onClicked: () => selectedItem(context, 3),
                   ),
                   buildMenuItem(
-                    text: 'PROPOSALS',
+                    text: 'Proposals',
                     icon: Icons.account_tree_outlined,
                     onClicked: () {
                       ProductController.fetchProducts();
@@ -81,22 +81,22 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
                   ),
 
                   buildMenuItem(
-                    text: 'IBC RELAYERS',
+                    text: 'IBC Relayers',
                     icon: Icons.notifications_outlined,
                     onClicked: () => selectedItem(context, 5),
                   ),
                   buildMenuItem(
-                    text: 'ASSETS',
+                    text: 'Assets',
                     icon: Icons.notifications_outlined,
                     onClicked: () => selectedItem(context, 6),
                   ),
                   buildMenuItem(
-                    text: 'CONTRACTS',
+                    text: 'Contracts',
                     icon: Icons.notifications_outlined,
                     onClicked: () => selectedItem(context, 7),
                   ),
                   buildMenuItem(
-                    text: 'PARAMETERS',
+                    text: 'Parameters',
                     icon: Icons.notifications_outlined,
                     onClicked: () => selectedItem(context, 8),
                   ),
@@ -120,12 +120,11 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
           child: Row(
             children: [
                Image.asset('assets/images/img.png'),
-                 // backgroundImage: AssetImage('lib/Symbol.png')),
             ],
           ),
         ),
       );
-//for building a searchtab in the navdrawer
+
   Widget buildSearchField() {
     const color = Colors.white;
 
@@ -213,62 +212,166 @@ class _NavigationDrawerWidgetState extends State<NavigationDrawerWidget> {
     }
   }
 }
-//
-// class NavDrawer extends StatefulWidget {
-//   const NavDrawer({Key? key}) : super(key: key);
-//
-//   @override
-//   State<NavDrawer> createState() => _NavDrawerState();
-// }
-//
-// class _NavDrawerState extends State<NavDrawer> {
-//   List<String> texts = ['first', 'second', 'third','4','5','6','7','8','9'];
-//   List<Widget> routes= [LandingPage(),NetworkDashBoard(),Validators(),Blocks(),Txs(),Proposals(),IBCRelayers(),Assets(),Contracts()];
-//
-//   List<bool> isHighlighted = [false,true, false, false,false, false,false, false,false];
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Drawer(
-//       child: Center(
-//         child: Column(children: <Widget>[
-//           Expanded(
-//             child: ListView.builder(
-//                 itemCount: routes.length,
-//                 itemBuilder: (_, index){
-//                   return GestureDetector(
-//                     onTap: (){
-//
-//                       for(int i = 0; i < isHighlighted.length; i++){
-//                         setState(() {
-//                           if (index == i) {
-//                             isHighlighted[index] = true;
-//                             Navigator.pushReplacement(context, CupertinoPageRoute(builder: (context)=>routes[index]));
-//                           } else {                               //the condition to change the highlighted item
-//                             isHighlighted[i] = false;
-//                           }
-//                         });
-//                       }
-//                     },
-//                     child: Container(
-//                       color: isHighlighted[index] ? Colors.red : Colors.white,
-//                       child: ListTile(                                     //the item
-//                         title: Text(texts[index]),
-//                       ),
-//                     ),
-//                   );
-//                 }),
-//           ),
-//           const Text(
-//             'this is footer',
-//             style: TextStyle(fontSize: 20),
-//           )
-//         ]),
-//       ),
-//     );
-//   }
-// }
 
+class NavDraw extends StatefulWidget {
+  const NavDraw({Key? key}) : super(key: key);
 
-    //here the list where you can change the highlighted item
+  @override
+  _NavDrawState createState() => _NavDrawState();
+}
 
+int selectedIndex = 0;
+
+class _NavDrawState extends State<NavDraw> {
+  @override
+  Widget build(BuildContext context) {
+    return Drawer(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(20)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(18.0),
+        child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+        ),
+          child: ListView(
+            children: <Widget>[
+              InkWell(
+                onTap: ()
+                => Navigator.of(context).popUntil((route) => route.isFirst),
+                child: Container(
+                  height: 100,
+                  color: Colors.transparent,
+                  child: DrawerHeader(
+                    child:Image.asset('assets/images/img.png'),
+                      margin: const EdgeInsets.fromLTRB(0, 0, 140, 0),
+                      padding: EdgeInsets.zero,
+                      decoration: const BoxDecoration()),
+                ),
+              ),
+              _createDrawerItem(
+                  image: 'assets/images/dashbd.png',
+                  text: 'Dashboard',
+                  isSelected: selectedIndex == 0,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 0;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>NetworkDashBoard()));
+                  }),
+              _createDrawerItem(
+                  image: 'assets/images/val.png',
+                  text: 'Validator',
+                  isSelected: selectedIndex == 1,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 1;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Validators()));
+                  }),
+              _createDrawerItem(
+                  image: 'assets/images/blocks.png',
+                  text: 'Blocks',
+                  isSelected: selectedIndex == 2,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 2;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Blocks()));
+                  }),
+              _createDrawerItem(
+                  image: 'assets/images/props.png',
+                  text: 'Proposals',
+                  isSelected: selectedIndex == 3,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 3;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals()));
+                  }),
+              _createDrawerItem(
+                  image: 'assets/images/IBC.png',
+                  text: 'IBC Relayers',
+                  isSelected: selectedIndex == 4,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 4;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const IBCRelayers()));
+                  }),
+              _createDrawerItem(
+                  image: 'assets/images/props.png',
+                  text: 'Assets',
+                  isSelected: selectedIndex == 5,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 5;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Assets()));
+                  }),
+              _createDrawerItem(
+                  image:'assets/images/contracts.png',
+                  text: 'Smart Contracts',
+                  isSelected: selectedIndex == 6,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 6;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Contracts()));
+                  }),
+              _createDrawerItem(
+                  image: 'assets/images/params.png',
+                  text: 'Parameters',
+                  isSelected: selectedIndex == 7,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 7;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Parameters()));
+                  }),
+
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Widget _createDrawerItem(
+    {String? image, String? text, GestureTapCallback? onTap, required bool isSelected}) {
+  return Ink(
+    color: isSelected ? Color(0xFFD4F1FF) : Colors.transparent,
+    child: ClipRRect(
+      borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+      child: ListTile(
+        selected: true,
+        hoverColor: Colors.lightBlueAccent,
+        title: Row(
+          children: <Widget>[
+            SizedBox(
+                height: 20,
+                child: Image.asset(image!,color: isSelected?Colors.black:Colors.grey)),
+            Padding(
+              padding: const EdgeInsets.only(left: 8.0),
+              child: Text(text!,style: isSelected?kSmallBoldTextStyle:kSmallTextStyle,),
+            )
+          ],
+        ),
+        onTap: onTap,
+      ),
+    ),
+  );
+}

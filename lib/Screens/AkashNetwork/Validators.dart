@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zenscape_app/Constants/constants.dart';
-import 'package:zenscape_app/widgets/ToggleButton.dart';
+import 'package:zenscape_app/widgets/NavigationDrawerWidget.dart';
+import 'package:zenscape_app/widgets/onboardingwidgets/ToggleButton.dart';
 
-import '../../widgets/NavigationDrawerInPage.dart';
 class Validators extends StatefulWidget {
   const Validators({Key? key}) : super(key: key);
 
@@ -10,20 +10,26 @@ class Validators extends StatefulWidget {
   State<Validators> createState() => _ValidatorsState();
 }
 class _ValidatorsState extends State<Validators> {
+  TextEditingController nameController=TextEditingController();
+  String fullName = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        drawer: const NavigationDrawerInWidget(),
+        drawer: NavDraw(),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children:  [
-            Text('VALIDATORS',
+            Text('Validators',
             style:kBigBoldTextStyle),
+            CircleAvatar(
+                radius:15,
+                child: Image.asset('assets/images/cmdx.png'),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),
@@ -31,6 +37,40 @@ class _ValidatorsState extends State<Validators> {
         child: Column(
 
           children: [
+            Container(
+                width: MediaQuery.of(context).size.width/1.1,
+                height: 40,
+                decoration: kBoxDecorationWithoutGradient,
+                margin: const EdgeInsets.all(20),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      focusedBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      hintText: 'Select a chain',
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (text) {
+                      setState(() {
+                        fullName = text;
+                        //you can access nameController in its scope to get
+                        // the value of text entered as shown below
+                        //fullName = nameController.text;
+                      });
+                    },
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -69,7 +109,6 @@ class _ValidatorsState extends State<Validators> {
                           ),
                         ],
                       ),
-
                     ],
                   ),
                   const SizedBox(height: 5,),
@@ -111,11 +150,9 @@ class _ValidatorsState extends State<Validators> {
                                         ),
                                       ],
                                     ),
-
                                   ),
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
-
                                     borderRadius: const BorderRadius.all(Radius.circular(250.0)),
                                     border: Border.all(
                                       color: Colors.lightBlueAccent,
@@ -132,29 +169,32 @@ class _ValidatorsState extends State<Validators> {
                     child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Uptime',
                             style: kSmallTextStyle,),
                             Text('100%',
-                              style: kMediumBoldTextStyle,)
+                              style: kSmallBoldTextStyle,)
                           ],
                         ),
                         Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+
                           children: [
                             Text('Partcipation',
                                 style: kSmallTextStyle
                             ),
                             Text(' 5/7',
-                                style: kMediumBoldTextStyle,
+                                style: kSmallBoldTextStyle,
                                 ),
                           ],
                         ),
                         Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text('Commission',
                               style: kSmallTextStyle,),
-                            Text('7%',style: kMediumBoldTextStyle,)
+                            Text('7%',style: kSmallBoldTextStyle,)
                           ],
                         ),
                       ],

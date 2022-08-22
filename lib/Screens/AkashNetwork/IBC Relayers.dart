@@ -13,25 +13,64 @@ class IBCRelayers extends StatefulWidget {
 class _IBCRelayersState extends State<IBCRelayers> {
   @override
   Widget build(BuildContext context) {
+    var nameController;
     return Scaffold(
-      drawer: const NavigationDrawerWidget(),
+      drawer: NavDraw(),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title:Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('IBC RELAYERS',
+            Text('IBC Relayers',
                 style:kBigBoldTextStyle),
+            CircleAvatar(
+                radius:15,
+                child: Image.asset('assets/images/cmdx.png'),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),
       body: SingleChildScrollView(
         child: Column(
-          children: [
 
+
+          children: [
+            Container(
+                width: MediaQuery.of(context).size.width/1.1,
+                height: 40,
+                decoration: kBoxDecorationWithoutGradient,
+                margin: const EdgeInsets.all(20),
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: TextField(
+                    controller: nameController,
+                    decoration: InputDecoration(
+                      contentPadding: EdgeInsets.all(15),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      focusedBorder: InputBorder.none,
+                      border: OutlineInputBorder(
+                          borderSide: const BorderSide(
+                            width: 0,
+                            style: BorderStyle.none,
+                          ),
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      hintText: 'Select a chain',
+                      prefixIcon: const Icon(Icons.search),
+                    ),
+                    onChanged: (text) {
+                      setState(() {
+                        //you can access nameController in its scope to get
+                        // the value of text entered as shown below
+                        //fullName = nameController.text;
+                      });
+                    },
+                  ),
+                )),
             ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -58,7 +97,6 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                               style:kMediumBoldTextStyle),
                                         ),],
                                     ),
-
                                     Container(
                                       decoration: BoxDecoration(
                                         color: Colors.lightGreenAccent.withOpacity(.1),
@@ -199,7 +237,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
 
                             ),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(8,2,8,8),
+                              padding: const EdgeInsets.fromLTRB(8,2,8,15),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
