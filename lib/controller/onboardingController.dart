@@ -16,8 +16,8 @@ class OnboardingController extends GetxController{
 
 
   List<OnboardingInfo> OnboardingPages=[
-    OnboardingInfo('assets/svgfiles/Icon 1.svg','Stake Your Assets','Stake your crypto assets directly from the app...'),
-    OnboardingInfo('assets/svgfiles/icon 2.svg','Auto-Compounding','Enable auto-compounding at just one click to maximize your returns...'),
-    OnboardingInfo('assets/svgfiles/icon 3.svg','Governance Proposal','Vote on the governance proposal and have your say...')
+    OnboardingInfo('assets/svgfiles/icon1.svg','Stake Your Assets','Stake your crypto assets directly from the app...'),
+    OnboardingInfo('assets/svgfiles/icon2.svg','Auto-Compounding','Enable auto-compounding at just one click to maximize your returns...'),
+    OnboardingInfo('assets/svgfiles/icon3.svg','Governance Proposal','Vote on the governance proposal and have your say...')
   ];
 }

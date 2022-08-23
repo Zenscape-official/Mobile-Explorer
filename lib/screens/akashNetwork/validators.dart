@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:zenscape_app/Constants/constants.dart';
-import 'package:zenscape_app/widgets/NavigationDrawerWidget.dart';
-import 'package:zenscape_app/widgets/onboardingwidgets/ToggleButton.dart';
+import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
+import 'package:zenscape_app/widgets/onboardingwidgets/toggleButton.dart';
 
 class Validators extends StatefulWidget {
   const Validators({Key? key}) : super(key: key);

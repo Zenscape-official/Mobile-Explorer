@@ -1,33 +1,37 @@
-import'package:flutter/material.dart';
-
+import 'package:flutter/material.dart';
 import '../../Constants/constants.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
-class Contracts extends StatefulWidget {
-  const Contracts({Key? key}) : super(key: key);
+import '../../widgets/navigationDrawerWidget.dart';
+import '../../widgets/filterTab.dart';
+
+class Assets extends StatefulWidget {
+  const Assets({Key? key}) : super(key: key);
 
   @override
-  State<Contracts> createState() => _ContractsState();
+  State<Assets> createState() => _AssetsState();
 }
 
-class _ContractsState extends State<Contracts> {
-
-
+class _AssetsState extends State<Assets> {
   TextEditingController nameController=TextEditingController();
   String fullName = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:NavDraw(),
+      drawer:  NavDraw(),
       appBar: AppBar(
+
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
         backgroundColor: Colors.transparent,
         elevation: 0,
         title:Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('CONTRACTS',
-                style:kBigTextStyle),
+            Text('Assets',
+                style:kBigBoldTextStyle),
+            CircleAvatar(
+                radius:15,
+                child: Image.asset('assets/images/cmdx.png'),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),
@@ -69,15 +73,91 @@ class _ContractsState extends State<Contracts> {
                     },
                   ),
                 )),
-            Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Row(
-                children: [
-                  Text('Popular Contracts',style: kMediumTextStyle,),
-                ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: const [
+                Filter(),
+              ],
+            ),
+            SizedBox(
+              width: MediaQuery.of(context).size.width/1,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Container(
+                  decoration: kBoxDecorationWithGradient,
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.transparent,
+                            borderRadius: const BorderRadius.all(Radius.circular(200.0)),
+                            border: Border.all(
+                              color: Colors.lightBlueAccent.withOpacity(.3),
+                              width: 1.0,
+                            ),
+                          ),
+                          child:Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child: (
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius: const BorderRadius.all(Radius.circular(200.0)),
+                                    border: Border.all(
+                                      color: Colors.lightBlueAccent.withOpacity(.5),
+                                      width: 1.0,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(3.0),
+                                    child: Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(6.0),
+                                        child:Column(
+                                          children: [
+                                            CircleAvatar(child: Image.asset('assets/images/cmdx.png',),radius: 15,)
+                                          ],
+                                        ),
+
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: Colors.transparent,
+
+                                        borderRadius: const BorderRadius.all(Radius.circular(250.0)),
+                                        border: Border.all(
+                                          color: Colors.lightBlueAccent,
+                                          width: 1.0,
+
+                                        ),
+                                      ),),
+                                  ),
+                                )),
+                          ),),
+
+                        const SizedBox(height: 20),
+
+                        Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Column(
+                            children:  [
+                              Text('Chain Value',
+                                style: kMediumTextStyle,),
+                              const SizedBox(height: 4,),
+                              Text('\$,460,560.56',
+                                style: kBigBoldTextStyle,),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
             ),
-             ListView.builder(
+            ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -96,23 +176,20 @@ class _ContractsState extends State<Contracts> {
                                   children:[
                                     Row(
                                       children: [
-                                        CircleAvatar(radius:10,backgroundColor: Colors.transparent,child: Image.asset('assets/images/neta.png',color: Colors.black,)),
+                                        CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/kava.png',)),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
-                                          child: Text('NETA TOKEN',
-                                              style:kMediumTextStyle),
+                                          child: Text('KAVA ',
+                                              style:kMediumBoldTextStyle),
                                         ),],
                                     ),
 
                                     Container(
                                       decoration: kBoxDecorationWithoutGradient,
-                                      child: Padding(
+                                      child:  Padding(
                                         padding: const EdgeInsets.all(5.0),
-                                        child: Text('10s ago',
-                                            style:TextStyle(
-                                                color: Colors.black.withOpacity(.5),
-                                                fontWeight: FontWeight.bold
-                                            )),
+                                        child: Text('\$ 9.38',
+                                            style:kBigBoldTextStyle,)
                                       ),
                                     )
                                   ]
@@ -125,7 +202,7 @@ class _ContractsState extends State<Contracts> {
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children:[
-                                    Text('Contract',
+                                    Text('Total Supply',
                                         style:kSmallTextStyle),
                                     Text('CW20 Contract',
                                         style:kSmallTextStyle)
@@ -137,42 +214,26 @@ class _ContractsState extends State<Contracts> {
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Contract Address',
+                                  children:[
+                                    Text('IBC OUT',
                                         style:kSmallTextStyle),
                                     Text('cmdx..12367s',
                                         style:kSmallTextStyle)
                                   ]
                               ),
-
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                               child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Executes',
+                                  children:[
+                                    Text('IN Chain Supply',
                                         style:kSmallTextStyle),
                                     Text('65221',
                                         style:kSmallTextStyle)
                                   ]
                               ),
-
                             ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Instantiated at',
-                                        style:kSmallTextStyle),
-                                    Text('2022-4-12 19:55:26',
-                                        style:kSmallTextStyle)
-                                  ]
-                              ),
-
-                            ),
-
                           ]
                       ),
                     );

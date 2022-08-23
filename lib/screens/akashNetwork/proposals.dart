@@ -2,12 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
-import 'package:zenscape_app/Controller/product_controller.dart';
+import 'package:zenscape_app/Controller/productController.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/proposalDetails.dart';
 import 'package:zenscape_app/widgets/filterTab.dart';
 import '../../Controller/dropDownController.dart';
 import '../../backend files/akashproposals.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
+import '../../widgets/navigationDrawerWidget.dart';
 
 class Proposals extends StatefulWidget {
 
@@ -42,8 +42,7 @@ class _ProposalsState extends State<Proposals> {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,),
-      body: isDataLoading?
-      const Center(child: CircularProgressIndicator(),):
+      body:
       Column(
         children: [
           Container(

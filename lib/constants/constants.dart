@@ -90,3 +90,37 @@ var kBoxBorder = BoxDecoration (
     ),
   ],
 );
+class GreenContainer extends StatelessWidget {
+  GreenContainer(this.title);
+  String? title;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.lightGreenAccent.withOpacity(.1),
+        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+        border: Border.all(
+          color: const Color(0xFF6BD68D),
+          width: 1.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children:[
+            const CircleAvatar(backgroundColor:  Colors.green,
+              radius: 3,),
+            SizedBox(width: 2,),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(title!,
+                style: kSmallTextStyle,),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

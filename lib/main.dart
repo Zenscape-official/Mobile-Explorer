@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/dashboard.dart';
 import 'package:zenscape_app/Screens/explorer.dart';
 import 'package:zenscape_app/Screens/onboardingScreen.dart';
-import 'package:zenscape_app/Screens/landing_page.dart';
-import 'Controller/product_controller.dart';
+import 'package:zenscape_app/Screens/landingPage.dart';
+import 'Controller/productController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 dynamic initScreen;
@@ -17,9 +17,6 @@ Future<void> main() async {
   await prefs.setInt("initScreen", 0);
 }
 
-// void main(){
-//   runApp(MyApp());
-// }
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
@@ -53,7 +50,7 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
 
     ProductController.fetchProducts();
-    print(ProductController.productList.length);
+
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         inactiveColor: Colors.grey,

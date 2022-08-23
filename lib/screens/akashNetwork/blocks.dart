@@ -1,9 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/transactions.dart';
-import 'package:zenscape_app/widgets/onboardingwidgets/ToggleButton.dart';
+import 'package:zenscape_app/widgets/onboardingwidgets/toggleButton.dart';
 
 import '../../Constants/constants.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
+import '../../widgets/navigationDrawerWidget.dart';
 
 
 class Blocks extends StatefulWidget {
@@ -81,6 +82,7 @@ class _BlocksState extends State<Blocks> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [ToggleButton(
+                  // cupertinoPageRoute: CupertinoPageRoute(builder: (context) => const Txs()),
                   leftTitle: 'Blocks',
                   leftCall: null,
                   rightTitle: 'Transactions',

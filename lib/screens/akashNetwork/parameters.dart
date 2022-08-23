@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 import '../../Constants/constants.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
-import '../home_screen.dart';
+import '../../widgets/navigationDrawerWidget.dart';
+import '../homeScreen.dart';
 class Parameters extends StatefulWidget {
   const Parameters({Key? key}) : super(key: key);
 

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenscape_app/widgets/onboardingwidgets/ToggleButton.dart';
+import 'package:zenscape_app/widgets/onboardingwidgets/toggleButton.dart';
 
 import '../../Constants/constants.dart';
 class TxDetails extends StatefulWidget {

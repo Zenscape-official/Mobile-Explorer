@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:zenscape_app/Constants/constants.dart';
-import '../Controller/product_controller.dart';
+import '../Controller/productController.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

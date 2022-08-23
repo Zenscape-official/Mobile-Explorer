@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ToggleButton extends StatefulWidget {
@@ -5,9 +6,11 @@ class ToggleButton extends StatefulWidget {
   String rightTitle='';
   GestureTapCallback? leftCall;
   GestureTapCallback? rightCall;
+  final CupertinoPageRoute? cupertinoPageRoute;
 
   @override
-  ToggleButton({Key? key, required this.leftTitle,required this.rightTitle,leftCall,rightCall}) : super(key: key);
+
+  ToggleButton({ required this.leftTitle,required this.rightTitle,this.leftCall,this.rightCall, this.cupertinoPageRoute});
   @override
   _ToggleButtonState createState() => _ToggleButtonState();
 }
@@ -64,7 +67,7 @@ class _ToggleButtonState extends State<ToggleButton> {
             GestureDetector(
               onTap: () {
                 setState(() {
-
+                  Navigator.of(context).push(widget.cupertinoPageRoute!);
                   xAlign = activeAlign;
                   leftColor = selectedColor;
                   rightColor = normalColor;

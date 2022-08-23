@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../Constants/constants.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
+import '../../widgets/navigationDrawerWidget.dart';
 
 class IBCRelayers extends StatefulWidget {
   const IBCRelayers({Key? key}) : super(key: key);
@@ -90,7 +90,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                   children:[
                                     Row(
                                       children: [
-                                        CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/Kava.png',)),
+                                        CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/kava.png',)),
                                         Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text('KAVA ',
@@ -148,7 +148,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                         children:[
                                           Row(
                                             children: [
-                                              CircleAvatar(child: Image.asset('assets/images/Kava.png'),),
+                                              CircleAvatar(child: Image.asset('assets/images/kava.png'),),
                                               Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,
@@ -184,7 +184,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                                         children:[
                                           Row(
                                             children: [
-                                              CircleAvatar(child: Image.asset('assets/images/Kava.png'),),
+                                              CircleAvatar(child: Image.asset('assets/images/kava.png'),),
                                               Padding(
                                                 padding: const EdgeInsets.all(8.0),
                                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start,

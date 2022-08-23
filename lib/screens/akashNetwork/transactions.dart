@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/transaction_details.dart';
+import 'package:zenscape_app/Screens/AkashNetwork/transactionDetails.dart';
 
 import '../../Constants/constants.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
-import '../../widgets/onboardingwidgets/ToggleButton.dart';
+import '../../widgets/navigationDrawerWidget.dart';
+import '../../widgets/onboardingwidgets/toggleButton.dart';
 class Txs extends StatefulWidget {
   const Txs({Key? key}) : super(key: key);
 
@@ -18,7 +18,7 @@ class _TxsState extends State<Txs> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const NavigationDrawerWidget(),
+      drawer: const NavDraw(),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),

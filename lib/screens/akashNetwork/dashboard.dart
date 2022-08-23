@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zenscape_app/Constants/constants.dart';
-import '../../widgets/NavigationDrawerWidget.dart';
-import '../home_screen.dart';
+import '../../widgets/navigationDrawerWidget.dart';
+import '../homeScreen.dart';
 
 class NetworkDashBoard extends StatefulWidget {
 
-  NetworkDashBoard({Key? key}) : super(key: key);
+  const NetworkDashBoard({Key? key}) : super(key: key);
 
   @override
   State<NetworkDashBoard> createState() => _NetworkDashBoardState();
@@ -408,7 +408,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                             ),
                           )),
                         ),
-                      ),Padding(
+                      ),
+                      Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
