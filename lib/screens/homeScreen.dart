@@ -160,7 +160,7 @@ class InfoCard extends StatelessWidget {
     return Container(
       decoration: kBoxDecorationWithoutGradient,
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.fromLTRB(8.0,8,8,9),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,

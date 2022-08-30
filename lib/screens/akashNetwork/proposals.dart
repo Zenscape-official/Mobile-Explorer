@@ -4,30 +4,55 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Controller/productController.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/proposalDetails.dart';
+import 'package:zenscape_app/backend%20files/ProposalsModel.dart';
+import 'package:zenscape_app/backend%20files/networkList.dart';
 import 'package:zenscape_app/widgets/filterTab.dart';
 import '../../Controller/dropDownController.dart';
-import '../../backend files/akashproposals.dart';
+import '../../controller/proposalsFunc.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 
 class Proposals extends StatefulWidget {
-
-  Proposals({Key? key}) : super(key: key);
-
+NetworkList? networkListProposal;
+  Proposals({Key? key, this.networkListProposal}) : super(key: key);
   @override
   State<Proposals> createState() => _ProposalsState();
 }
 
+
 class _ProposalsState extends State<Proposals> {
   final ProductController productController= Get.put(ProductController());
+  final ProposalController _proposalController= Get.put(ProposalController());
+  bool isLoaded=true;
+  RxList<dynamic>? Prop;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async{
+     Prop= await _proposalController.fetchProducts(widget.networkListProposal!.proposal!);
+
+    setState(() {
+      if (Prop!=null){
+        isLoaded==true;
+      }
+      else{
+        isLoaded==false;
+      }
+    });
+  }
 
   BookController bookcontroller = BookController();
   TextEditingController nameController=TextEditingController();
   String fullName = '';
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: const NavDraw(),
+     print("xwdx  "  +(_proposalController.fetchProducts(widget.networkListProposal!.proposal!).toString()));
+
+     return Scaffold(
+      drawer: NavDraw(networkData: widget.networkListProposal),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(title:Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -42,8 +67,7 @@ class _ProposalsState extends State<Proposals> {
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
         elevation: 0,),
-      body:
-      Column(
+      body: Column(
         children: [
           Container(
               width: MediaQuery.of(context).size.width/1.1,
@@ -89,16 +113,20 @@ class _ProposalsState extends State<Proposals> {
             child: SizedBox(
               height: MediaQuery.of(context).size.height/1.4,
               child:Obx(()=> CupertinoScrollbar(
-                child: ListView.builder(
-                  reverse: true,
-                  physics: const AlwaysScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: ProductController.productList.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return
-                        ProposalCard(ProductController.productList[index]);
-                    }),
+                child: Visibility(
+                  visible: isLoaded,
+                  child: ListView.builder(
+                    reverse: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: ProposalController.proposalList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return
+                          ProposalCard(ProposalController.proposalList[index]);
+                      }),
+                  replacement: Center(child:CircularProgressIndicator()),
+                ),
               ),
             ),
           ),
@@ -106,6 +134,7 @@ class _ProposalsState extends State<Proposals> {
 
         ],
       )
+
       ,
     );
   }
@@ -113,7 +142,7 @@ class _ProposalsState extends State<Proposals> {
 
 class ProposalCard extends StatelessWidget {
 
-  final Proposal product;
+  final ProposalProduct product;
   ProposalCard(this.product, {Key? key}) : super(key: key);
   var status='';
   bool ispassed=true;

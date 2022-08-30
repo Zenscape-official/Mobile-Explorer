@@ -75,7 +75,9 @@ class _ValidatorsState extends State<Validators> {
               padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [ToggleButton(leftTitle: 'Active',rightTitle: 'Inactive',)],),
+                children: [
+                  // ToggleButton(leftTitle: 'Active',rightTitle: 'Inactive',)
+                  ],),
             ),
           ListView.builder(
           reverse: true,

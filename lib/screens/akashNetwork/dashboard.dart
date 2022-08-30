@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zenscape_app/Constants/constants.dart';
+import 'package:zenscape_app/backend%20files/networkList.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 import '../homeScreen.dart';
 
 class NetworkDashBoard extends StatefulWidget {
-
-  const NetworkDashBoard({Key? key}) : super(key: key);
+  final NetworkList? networkData;
+  const NetworkDashBoard({this.networkData});
 
   @override
   State<NetworkDashBoard> createState() => _NetworkDashBoardState();
@@ -18,8 +19,9 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   String fullName = '';
   @override
   Widget build(BuildContext context) {
+    print(widget.networkData!.proposal);
     return Scaffold(
-      drawer: NavDraw(),
+      drawer: NavDraw(networkData: widget.networkData),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -54,7 +56,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                   child: TextField(
                     controller: nameController,
                     decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
+                      contentPadding: const EdgeInsets.all(15),
                       filled: true,
                       fillColor: Colors.transparent,
                       focusedBorder: InputBorder.none,
@@ -99,11 +101,14 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                     radius:15,
                                     child: Image.asset('assets/images/cmdx.png'),
                                     backgroundColor: Colors.transparent),
-                                Text(' CMDX',
-                                  style: TextStyle(color: Colors.black.withOpacity(1),
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: 'MontserratRegular'
+                                Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: Text(widget.networkData!.denom!,
+                                    style: TextStyle(color: Colors.black.withOpacity(1),
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w700,
+                                        fontFamily: 'MontserratRegular'
+                                    ),
                                   ),
                                 ),
                               ],
@@ -217,7 +222,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.fromLTRB(15.0,10,15,0),
+              padding: const EdgeInsets.fromLTRB(15.0,10,15,0),
               child: StaggeredGridView.countBuilder(
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -278,7 +283,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
                         child: Card(
-                            color: Color(0xFFF9FAFC),
+                            color: const Color(0xFFF9FAFC),
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -316,7 +321,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
                         child: Card(
-                            color: Color(0xFFF9FAFC),
+                            color: const Color(0xFFF9FAFC),
                             child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -415,7 +420,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                           padding: const EdgeInsets.all(8.0),
                           child:
                           Card(
-                              color: Color(0xFFF9FAFC),
+                              color: const Color(0xFFF9FAFC),
                               child: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Column(

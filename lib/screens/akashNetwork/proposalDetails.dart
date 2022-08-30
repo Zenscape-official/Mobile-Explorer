@@ -70,7 +70,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    ToggleButton(leftTitle: 'Summary',rightTitle: 'JSON',)
+                    // ToggleButton(leftTitle: 'Summary',rightTitle: 'JSON',)
                   ],),
               ),
               Container(

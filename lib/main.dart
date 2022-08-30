@@ -1,12 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/dashboard.dart';
 import 'package:zenscape_app/Screens/explorer.dart';
 import 'package:zenscape_app/Screens/onboardingScreen.dart';
 import 'package:zenscape_app/Screens/landingPage.dart';
+import 'package:zenscape_app/controller/proposalsFunc.dart';
 import 'Controller/productController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'backend files/networkList.dart';
 
 dynamic initScreen;
 Future<void> main() async {
@@ -48,7 +50,6 @@ class _MainAppState extends State<MainApp> {
   @override
 
   Widget build(BuildContext context) {
-
     ProductController.fetchProducts();
 
     return CupertinoTabScaffold(
@@ -80,7 +81,7 @@ class _MainAppState extends State<MainApp> {
             });
           case 1:
             return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: NetworkDashBoard());
+              return CupertinoPageScaffold(child: LandingPage());
             });
           case 2:
             return CupertinoTabView(builder: (context) {

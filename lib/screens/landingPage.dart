@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:zenscape_app/backend%20files/networkList.dart';
 import '../Constants/constants.dart';
+import '../controller/networklistController.dart';
 import 'AkashNetwork/dashboard.dart';
 
 class LandingPage extends StatefulWidget {
@@ -12,6 +16,30 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  final NetworkController networkController =Get.put(NetworkController());
+  var isLoaded=false;
+  static var lists;
+
+  @override
+  void initState(){
+    super.initState();
+    getData();
+    networkController.fetchList();
+  }
+  getData() async{
+   // lists=await NetworkList.fetchList();
+  if (lists != null){
+    setState(() {
+      isLoaded=true;
+       print(lists.runtimeType);
+    });
+  }
+  else{
+    // print(lists);
+  }
+
+  }
+
   TextEditingController nameController=TextEditingController();
   String fullName = '';
   @override
@@ -23,10 +51,8 @@ class _LandingPageState extends State<LandingPage> {
         elevation: 0,
         title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Hey there!',
-              style: kBigBoldTextStyle,
-            ),
+            Text('Hey there!',
+            style: kBigBoldTextStyle,),
           ],
         ),
       ),
@@ -43,7 +69,7 @@ class _LandingPageState extends State<LandingPage> {
                     child: TextField(
                       controller: nameController,
                       decoration: InputDecoration(
-                        contentPadding: EdgeInsets.all(15),
+                        contentPadding: const EdgeInsets.all(15),
                         filled: true,
                         fillColor: Colors.transparent,
                         focusedBorder: InputBorder.none,
@@ -119,9 +145,8 @@ class _LandingPageState extends State<LandingPage> {
                                         style:kMediumBoldTextStyle),
                                     Text('Transparent',
                                       style:kSmallTextStyle),
-
-
                                   ],),
+
                                   Padding(
                                     padding: const EdgeInsets.all(0),
                                     child: Row(
@@ -139,9 +164,8 @@ class _LandingPageState extends State<LandingPage> {
                                                 style:kMediumBoldTextStyle),
                                             Text('Investors',
                                                 style:kSmallTextStyle),
-
-
-                                          ],),
+                                          ],
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -151,18 +175,21 @@ class _LandingPageState extends State<LandingPage> {
                         ],
                         ),
                     ),
-              StaggeredGridView.countBuilder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 2,
-                  crossAxisSpacing: 2,
-                  itemCount: 10,
-                  itemBuilder: (context,index){
-                    return const NetworkCard();
-                  },
-                  staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
+              Obx(() {
+                  return StaggeredGridView.countBuilder(
+                      physics: const NeverScrollableScrollPhysics(),
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      crossAxisCount: 2,
+                      mainAxisSpacing: 2,
+                      crossAxisSpacing: 2,
+                      itemCount: NetworkController.networkList.length,
+                      itemBuilder: (context,index){
+                        return  NetworkCard(NetworkController.networkList[index]);
+                      },
+                      staggeredTileBuilder: (index) => const StaggeredTile.fit(1));
+                }
+              ),
             ],
           ),
 
@@ -172,17 +199,19 @@ class _LandingPageState extends State<LandingPage> {
 }
 
 class NetworkCard extends StatefulWidget {
-  const NetworkCard({Key? key}) : super(key: key);
-
+  final NetworkList networkList;
+  const NetworkCard(this.networkList);
   @override
   State<NetworkCard> createState() => _NetworkCardState();
 }
 
 class _NetworkCardState extends State<NetworkCard> {
+  late var uri=widget.networkList.logoUrl;
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context)=>NetworkDashBoard())),
+      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => NetworkDashBoard(networkData:widget.networkList ))),
       child: Container(
         width:MediaQuery.of(context).size.width/2,
         margin:const EdgeInsets.fromLTRB(15,10,15,10),
@@ -198,7 +227,8 @@ class _NetworkCardState extends State<NetworkCard> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,5,15,5),
                     child: CircleAvatar(
-                      child: Image.asset('assets/images/cmdx.png'),
+                      child: SvgPicture.network(
+                          widget.networkList.logoUrl!) ,
                       radius: 15,
                       backgroundColor: Colors.white,
                     ),
@@ -206,9 +236,9 @@ class _NetworkCardState extends State<NetworkCard> {
                    Column(
                      crossAxisAlignment: CrossAxisAlignment.start,
                      children: [
-                       Text('CMDX',
+                       Text(widget.networkList.denom!,
                   style: kMediumBoldTextStyle),
-                       Text('Comdex',
+                       Text(widget.networkList.name!,
                            style: kSmallTextStyle),
                      ],
                    ),

@@ -4,10 +4,12 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
+  String? ApiUri;
+ProductController({this.ApiUri});
+
   static var productList = <Proposal>[].obs;
-
-
   static var client = http.Client();
+
   static Future<void> fetchProducts() async{
     var response = await client.get(Uri.parse('https://akash-api.polkachu.com/cosmos/gov/v1beta1/proposals#'));
     if (response.statusCode==200){
@@ -20,7 +22,4 @@ class ProductController extends GetxController {
      Get.snackbar('Error','No data fetched from API');
     }
   }
-  //Logic for searchbar
-
-
 }

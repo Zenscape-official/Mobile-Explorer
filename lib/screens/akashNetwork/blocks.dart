@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/transactions.dart';
 import 'package:zenscape_app/widgets/onboardingwidgets/toggleButton.dart';
 
@@ -29,8 +30,8 @@ class _BlocksState extends State<Blocks> {
         title:Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Blocks',
-            style:kBigBoldTextStyle),
+           Text('Blocks',
+    style:kBigBoldTextStyle),
             CircleAvatar(
                 radius:15,
                 child: Image.asset('assets/images/cmdx.png'),
@@ -82,11 +83,12 @@ class _BlocksState extends State<Blocks> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [ToggleButton(
-                  // cupertinoPageRoute: CupertinoPageRoute(builder: (context) => const Txs()),
+                  alignment: 0,
+                  rightcupertinoPageRoute: CupertinoPageRoute(builder: (context) => const Txs()),
                   leftTitle: 'Blocks',
                   leftCall: null,
                   rightTitle: 'Transactions',
-                  rightCall:()=> Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Txs())),
+                  rightCall:() => Navigator.of(context).push(MaterialPageRoute(builder: (context) => const Txs())),
                 ),
                 ]
               ),

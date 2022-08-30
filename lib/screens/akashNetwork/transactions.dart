@@ -1,3 +1,6 @@
+import 'dart:ffi';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/transactionDetails.dart';
@@ -39,7 +42,9 @@ class _TxsState extends State<Txs> {
               padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: [ToggleButton(leftTitle: 'Blocks',rightTitle: 'Transactions',)],),
+                children: [
+                  ToggleButton(leftTitle: 'Blocks',rightTitle: 'Transactions',alignment: 0,)
+                ],),
             ),
             Container(
                 width: MediaQuery.of(context).size.width/1.1,

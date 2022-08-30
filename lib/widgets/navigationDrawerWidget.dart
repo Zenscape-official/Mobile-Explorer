@@ -1,21 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/parameters.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/validators.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/assets.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/blocks.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/ibcRelayers.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/dashboard.dart';
 import 'package:zenscape_app/Screens/AkashNetwork/proposals.dart';
-
+import 'package:zenscape_app/backend%20files/networkList.dart';
 import '../Screens/AkashNetwork/contracts.dart';
-import '../Screens/AkashNetwork/transactions.dart';
-
 
 class NavDraw extends StatefulWidget {
-  const NavDraw({Key? key}) : super(key: key);
+  final NetworkList? networkData;
+  const NavDraw({ this.networkData});
 
   @override
   _NavDrawState createState() => _NavDrawState();
@@ -63,7 +60,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 0;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>NetworkDashBoard()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>Validators()));
                   }),
               _createDrawerItem(
                   image: 'assets/images/val.png',
@@ -96,7 +93,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 3;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals()));
+      Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals(networkListProposal:widget.networkData ,)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/ibc.png',
@@ -142,7 +139,6 @@ class _NavDrawState extends State<NavDraw> {
                     Navigator.of(context).pop();
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Parameters()));
                   }),
-
             ],
           ),
         ),

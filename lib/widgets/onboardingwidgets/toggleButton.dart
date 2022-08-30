@@ -2,15 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ToggleButton extends StatefulWidget {
+  double alignment;
   String leftTitle='';
   String rightTitle='';
   GestureTapCallback? leftCall;
   GestureTapCallback? rightCall;
-  final CupertinoPageRoute? cupertinoPageRoute;
+  final CupertinoPageRoute? rightcupertinoPageRoute;
 
   @override
 
-  ToggleButton({ required this.leftTitle,required this.rightTitle,this.leftCall,this.rightCall, this.cupertinoPageRoute});
+  ToggleButton({Key? key,  required this.leftTitle,required this.rightTitle,this.leftCall,this.rightCall, this.rightcupertinoPageRoute,required this.alignment }) : super(key: key);
   @override
   _ToggleButtonState createState() => _ToggleButtonState();
 }
@@ -37,6 +38,7 @@ class _ToggleButtonState extends State<ToggleButton> {
 
   @override
   Widget build(BuildContext context) {
+    double? left;
     return  Container(
         width: width,
         height: height,
@@ -50,7 +52,7 @@ class _ToggleButtonState extends State<ToggleButton> {
         child: Stack(
           children: [
             AnimatedAlign(
-              alignment: Alignment(xAlign!, 0),
+              alignment: Alignment(xAlign!, widget.alignment),
               duration: const Duration(milliseconds: 200),
               child: Container(
                 width: width * 0.5,
@@ -67,11 +69,11 @@ class _ToggleButtonState extends State<ToggleButton> {
             GestureDetector(
               onTap: () {
                 setState(() {
-                  Navigator.of(context).push(widget.cupertinoPageRoute!);
+                      Navigator.of(context).push(widget.rightcupertinoPageRoute!);
                   xAlign = activeAlign;
                   leftColor = selectedColor;
                   rightColor = normalColor;
-                  widget.leftCall;
+                  // widget.leftCall;
                 });
               },
               child: Align(

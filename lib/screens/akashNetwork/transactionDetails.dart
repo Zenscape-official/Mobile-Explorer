@@ -68,7 +68,7 @@ class _TxDetailsState extends State<TxDetails> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                ToggleButton(leftTitle: 'Summary',rightTitle: 'JSON',)
+                // ToggleButton(leftTitle: 'Summary',rightTitle: 'JSON',)
               ],),
             ),
             Container(
