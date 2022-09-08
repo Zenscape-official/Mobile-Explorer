@@ -3,7 +3,7 @@ import 'dart:ffi';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/transactionDetails.dart';
+import 'package:zenscape_app/Screens/network/transactionDetails.dart';
 
 import '../../Constants/constants.dart';
 import '../../widgets/navigationDrawerWidget.dart';

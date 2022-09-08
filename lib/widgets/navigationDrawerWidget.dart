@@ -1,18 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:zenscape_app/Constants/constants.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/parameters.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/validators.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/assets.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/blocks.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/ibcRelayers.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/proposals.dart';
+import 'package:zenscape_app/Screens/network/parameters.dart';
+import 'package:zenscape_app/Screens/network/validators.dart';
+import 'package:zenscape_app/Screens/network/assets.dart';
+import 'package:zenscape_app/Screens/network/blocks.dart';
+import 'package:zenscape_app/Screens/network/ibcRelayers.dart';
+import 'package:zenscape_app/Screens/network/proposals.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
-import '../Screens/AkashNetwork/contracts.dart';
+import '../Screens/network/contracts.dart';
 
 class NavDraw extends StatefulWidget {
   final NetworkList? networkData;
-  const NavDraw({ this.networkData});
+  final String? logoUrl;
+  const NavDraw({ this.networkData,this.logoUrl});
 
   @override
   _NavDrawState createState() => _NavDrawState();
@@ -60,7 +61,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 0;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>Validators()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>Validators(networkList:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/val.png',
@@ -71,7 +72,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 1;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Validators()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Validators(networkList:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/blocks.png',
@@ -82,7 +83,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 2;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Blocks()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/props.png',

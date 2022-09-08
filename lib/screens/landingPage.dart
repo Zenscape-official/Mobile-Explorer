@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
 import '../Constants/constants.dart';
 import '../controller/networklistController.dart';
-import 'AkashNetwork/dashboard.dart';
+import 'network/dashboard.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
@@ -31,7 +30,6 @@ class _LandingPageState extends State<LandingPage> {
   if (lists != null){
     setState(() {
       isLoaded=true;
-       print(lists.runtimeType);
     });
   }
   else{
@@ -42,6 +40,7 @@ class _LandingPageState extends State<LandingPage> {
 
   TextEditingController nameController=TextEditingController();
   String fullName = '';
+  List<String>? image=[];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,8 +180,8 @@ class _LandingPageState extends State<LandingPage> {
                       scrollDirection: Axis.vertical,
                       shrinkWrap: true,
                       crossAxisCount: 2,
-                      mainAxisSpacing: 2,
-                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 0,
                       itemCount: NetworkController.networkList.length,
                       itemBuilder: (context,index){
                         return  NetworkCard(NetworkController.networkList[index]);
@@ -204,9 +203,7 @@ class NetworkCard extends StatefulWidget {
   @override
   State<NetworkCard> createState() => _NetworkCardState();
 }
-
 class _NetworkCardState extends State<NetworkCard> {
-  late var uri=widget.networkList.logoUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -217,7 +214,7 @@ class _NetworkCardState extends State<NetworkCard> {
         margin:const EdgeInsets.fromLTRB(15,10,15,10),
         decoration: kBoxDecorationWithoutGradient,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10,10,18,10),
+          padding: const EdgeInsets.fromLTRB(10,10,10,10),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -227,8 +224,8 @@ class _NetworkCardState extends State<NetworkCard> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(0,5,15,5),
                     child: CircleAvatar(
-                      child: SvgPicture.network(
-                          widget.networkList.logoUrl!) ,
+                      child: Image.network(
+                          widget.networkList.logoUrl??widget.networkList.logUrl!) ,
                       radius: 15,
                       backgroundColor: Colors.white,
                     ),
@@ -256,7 +253,7 @@ class _NetworkCardState extends State<NetworkCard> {
                       Text('APY',
                       style:kExtraSmallTextStyle),
                       const SizedBox(height:2),
-                      Text('160%',
+                      Text(widget.networkList.apy!,
                           style:kMediumBoldTextStyle),
                     ],),
                     Column(
@@ -265,14 +262,12 @@ class _NetworkCardState extends State<NetworkCard> {
                         Text('Commission',
                             style:kExtraSmallTextStyle),
                         const SizedBox(height:2),
-                        Text('5%',
+                        Text(widget.networkList.commission!,
                             style:kMediumBoldTextStyle),
                       ],)
                   ],
                 ),
               ),
-
-              // const CupertinoButton(onPressed: null, child: Text('Stake'))
             ],
           ),
         ),

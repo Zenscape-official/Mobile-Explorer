@@ -14,14 +14,18 @@ class NetworkDashBoard extends StatefulWidget {
 }
 
 class _NetworkDashBoardState extends State<NetworkDashBoard> {
+
   List<String> par=['Height','Transactions','Bonded Tokens','Community Pools','Inflation','Staking APR'];
+  List<String> details=[];
+
   TextEditingController nameController=TextEditingController();
   String fullName = '';
   @override
   Widget build(BuildContext context) {
-    print(widget.networkData!.proposal);
+
+    details=[widget.networkData!.height!,widget.networkData!.tranaction!,widget.networkData!.bondedTokens!,widget.networkData!.communityPool!,widget.networkData!.inflation!,widget.networkData!.stakingApr!];
     return Scaffold(
-      drawer: NavDraw(networkData: widget.networkData),
+      drawer: NavDraw(networkData: widget.networkData,logoUrl: widget.networkData!.logoUrl??widget.networkData!.logUrl,),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -38,7 +42,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
             ),),
             CircleAvatar(
                 radius:15,
-                child: Image.asset('assets/images/cmdx.png'),
+                child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!),
                 backgroundColor: Colors.transparent),
           ],
         ),
@@ -99,7 +103,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                               children: [
                                 CircleAvatar(
                                     radius:15,
-                                    child: Image.asset('assets/images/cmdx.png'),
+                                    child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!),
                                     backgroundColor: Colors.transparent),
                                 Padding(
                                   padding: const EdgeInsets.all(4.0),
@@ -120,10 +124,10 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                 child: Row(
                                   children: [
 
-                                    Text('BLOCK TIME',
+                                    Text('BLOCK TIME ',
                                         style: kExtraSmallTextStyle,
                                     ),
-                                    Text('  6,079ms',
+                                    Text(widget.networkData!.blocktime!,
                                         style: kExtraSmallTextStyle
                                     ),
                                   ],
@@ -161,7 +165,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                   padding: const EdgeInsets.all(25.0),
                                   child:Column(
                                     children:  [
-                                      Text('\$0.23',
+                                      Text('\$ '+widget.networkData!.price!,
                                           style: kBigBoldTextStyle),
                                       const SizedBox(height: 4,),
                                       const Text('+4.29%',
@@ -197,7 +201,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                   Text('Market Cap',
                                     style: kMediumTextStyle,),
                                   const SizedBox(height: 4,),
-                                  Text('\$44,460,560.56',
+                                  Text(widget.networkData!.marketCap!,
                                     style: kMediumBoldTextStyle,)
                                 ],
                               ),
@@ -208,7 +212,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                   Text('24h Vol',
                                     style: kMediumTextStyle,),
                                  const SizedBox(height: 4,),
-                                  Text('\$1,478,971.56',
+                                  Text(widget.networkData!.the24HrVol!,
                                     style: kMediumBoldTextStyle,)
                                 ],
                               ),
@@ -230,9 +234,9 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                   crossAxisCount: 2,
                   mainAxisSpacing: 20,
                   crossAxisSpacing: 20,
-                  itemCount: par.length,
+                  itemCount: 6,
                   itemBuilder: (context,index){
-                    return InfoCard(title1: par[index],icon1: Icons.manage_accounts_rounded,titleValue1: '8734872');
+                    return InfoCard(title1: par[index],icon1: Icons.manage_accounts_rounded,titleValue1:details[index]);
                   },
                   staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
             ),
@@ -250,7 +254,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                    children:  [
                      const Icon(Icons.how_to_vote_outlined),
                      const SizedBox(height: 6),
-                     Text('Voting Power',
+                     Text('Voting Period',
                        style: kSmallTextStyle,),
                      const SizedBox(height: 3),
                      Text('3/4',

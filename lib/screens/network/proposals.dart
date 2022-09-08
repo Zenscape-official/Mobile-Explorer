@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Controller/productController.dart';
-import 'package:zenscape_app/Screens/AkashNetwork/proposalDetails.dart';
+import 'package:zenscape_app/Screens/network/proposalDetails.dart';
 import 'package:zenscape_app/backend%20files/ProposalsModel.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
 import 'package:zenscape_app/widgets/filterTab.dart';
@@ -12,8 +12,8 @@ import '../../controller/proposalsFunc.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 
 class Proposals extends StatefulWidget {
-NetworkList? networkListProposal;
-  Proposals({Key? key, this.networkListProposal}) : super(key: key);
+final NetworkList? networkListProposal;
+ const Proposals({Key? key, this.networkListProposal}) : super(key: key);
   @override
   State<Proposals> createState() => _ProposalsState();
 }
@@ -32,8 +32,7 @@ class _ProposalsState extends State<Proposals> {
   }
 
   getData() async{
-     Prop= await _proposalController.fetchProducts(widget.networkListProposal!.proposal!);
-
+     Prop= await _proposalController.fetchProducts(widget.networkListProposal!.proposalsUrl!);
     setState(() {
       if (Prop!=null){
         isLoaded==true;
@@ -44,12 +43,11 @@ class _ProposalsState extends State<Proposals> {
     });
   }
 
-  BookController bookcontroller = BookController();
+  BookController bookController = BookController();
   TextEditingController nameController=TextEditingController();
   String fullName = '';
   @override
   Widget build(BuildContext context) {
-     print("xwdx  "  +(_proposalController.fetchProducts(widget.networkListProposal!.proposal!).toString()));
 
      return Scaffold(
       drawer: NavDraw(networkData: widget.networkListProposal),
@@ -60,13 +58,14 @@ class _ProposalsState extends State<Proposals> {
           Text('Proposals',style:kBigBoldTextStyle),
           CircleAvatar(
               radius:15,
-              child: Image.asset('assets/images/cmdx.png'),
+              child: Image.network(widget.networkListProposal!.logoUrl??widget.networkListProposal!.logUrl!),
               backgroundColor: Colors.transparent),
         ],
       ),
         backgroundColor: Colors.transparent,
         foregroundColor: Colors.black,
-        elevation: 0,),
+        elevation: 0,
+      ),
       body: Column(
         children: [
           Container(
@@ -79,7 +78,7 @@ class _ProposalsState extends State<Proposals> {
                 child: TextField(
                   controller: nameController,
                   decoration: InputDecoration(
-                    contentPadding: EdgeInsets.all(15),
+                    contentPadding: const EdgeInsets.all(15),
                     filled: true,
                     fillColor: Colors.transparent,
                     focusedBorder: InputBorder.none,
@@ -105,7 +104,8 @@ class _ProposalsState extends State<Proposals> {
               )),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
+            children:
+            const [
               Filter(),
             ],
           ),
@@ -125,7 +125,7 @@ class _ProposalsState extends State<Proposals> {
                         return
                           ProposalCard(ProposalController.proposalList[index]);
                       }),
-                  replacement: Center(child:CircularProgressIndicator()),
+                  replacement: const Center(child:CircularProgressIndicator()),
                 ),
               ),
             ),
@@ -133,9 +133,7 @@ class _ProposalsState extends State<Proposals> {
           ),
 
         ],
-      )
-
-      ,
+      ),
     );
   }
 }
@@ -202,7 +200,6 @@ class ProposalCard extends StatelessWidget {
                         ),
                       ],
                     ),
-
                     Container(
                       decoration: BoxDecoration(
                         color:ispassed? Colors.lightGreenAccent.withOpacity(.1):Colors.red.shade50,

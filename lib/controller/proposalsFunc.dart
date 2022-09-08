@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'package:zenscape_app/backend%20files/ProposalsModel.dart';
-
-import '../backend files/akashproposals.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
@@ -21,7 +19,6 @@ class ProposalController extends GetxController {
      return proposalList = List.from(jsonString).map((e) => ProposalProduct.fromJson(e)).toList().obs;
     }
     else{
-      print('error hai');
       Get.snackbar('Error','No data fetched from API');
       return proposalList;
     }

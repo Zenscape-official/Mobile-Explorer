@@ -4,8 +4,6 @@ import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
 class ProductController extends GetxController {
-  String? ApiUri;
-ProductController({this.ApiUri});
 
   static var productList = <Proposal>[].obs;
   static var client = http.Client();
