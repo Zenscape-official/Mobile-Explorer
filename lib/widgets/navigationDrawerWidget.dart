@@ -105,7 +105,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 4;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const IBCRelayers()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> IBCRelayers(networkData:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/assets.png',
@@ -116,7 +116,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 5;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Assets()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Assets(networkData:widget.networkData)));
                   }),
               _createDrawerItem(
                   image:'assets/images/contracts.png',

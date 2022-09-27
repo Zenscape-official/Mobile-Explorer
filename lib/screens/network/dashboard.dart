@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
 import '../../widgets/navigationDrawerWidget.dart';
@@ -18,8 +19,11 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   List<String> par=['Height','Transactions','Bonded Tokens','Community Pools','Inflation','Staking APR'];
   List<String> details=[];
 
+
   TextEditingController nameController=TextEditingController();
   String fullName = '';
+
+
   @override
   Widget build(BuildContext context) {
 

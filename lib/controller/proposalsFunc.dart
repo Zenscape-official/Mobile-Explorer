@@ -16,7 +16,7 @@ class ProposalController extends GetxController {
       var jsonString= jsonDecode((response.body))['proposals'];
       print((jsonString).toString());
 
-     return proposalList = List.from(jsonString).map((e) => ProposalProduct.fromJson(e)).toList().obs;
+     return proposalList = List.from(jsonString).map((e) => ProposalProduct.fromJson(e)).toList().reversed.toList().obs;
     }
     else{
       Get.snackbar('Error','No data fetched from API');

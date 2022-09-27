@@ -20,6 +20,7 @@ class _ValidatorsState extends State<Validators> {
   TextEditingController nameController = TextEditingController();
   String fullName = '';
   var validators;
+  bool isLoaded=false;
   @override
   void initState() {
     super.initState();
@@ -29,6 +30,14 @@ class _ValidatorsState extends State<Validators> {
   void valData() async {
     validators =
         await _validatorController.fetchVal(widget.networkList!.validatorsUrl!);
+   setState(() {
+     if(validators!=null){
+       isLoaded=true;
+     }
+     else {
+       isLoaded=false;
+     }
+   });
   }
   @override
   Widget build(BuildContext context) {
@@ -45,13 +54,13 @@ class _ValidatorsState extends State<Validators> {
               Text('Validators', style: kBigBoldTextStyle),
               CircleAvatar(
                   radius: 15,
-                  child: Image.asset('assets/images/cmdx.png'),
+                  child: Image.network(widget.networkList!.logoUrl??widget.networkList!.logUrl!),
                   backgroundColor: Colors.transparent),
             ],
           ),
         ),
         body: SingleChildScrollView(
-          child: Column(children: [
+          child:Column(children: [
             Container(
                 width: MediaQuery.of(context).size.width / 1.1,
                 height: 40,
@@ -112,7 +121,7 @@ class _ValidatorsState extends State<Validators> {
                 ],
               ),
             ),
-            ListView.builder(
+            isLoaded?  ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -120,7 +129,7 @@ class _ValidatorsState extends State<Validators> {
                 itemCount: ValidatorController.validatorsList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ValidatorContainer(validatorModel: ValidatorController.validatorsList[index]);
-                }),
+                }):CircularProgressIndicator()
           ]),
         ));
   }

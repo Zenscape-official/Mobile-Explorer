@@ -27,7 +27,7 @@ class _BlocksState extends State<Blocks> {
   final TxController _txController=Get.put(TxController());
   var blocks;
   var tx;
-  bool? isLoaded;
+  bool isLoaded=false;
   @override
   void initState() {
     super.initState();
@@ -35,14 +35,13 @@ class _BlocksState extends State<Blocks> {
     txData();
   }
   blockData() async{
-    print(widget.networkData);
     blocks= await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
     setState(() {
       if (blocks!=null){
-        isLoaded==true;
+        isLoaded=true;
       }
       else{
-        isLoaded==false;
+        isLoaded=false;
       }
     });
   }
@@ -53,7 +52,7 @@ class _BlocksState extends State<Blocks> {
         isLoaded==true;
       }
       else{
-        isLoaded==false;
+        isLoaded=false;
       }
     });
   }
@@ -85,7 +84,7 @@ class _BlocksState extends State<Blocks> {
                 style: kBigBoldTextStyle,);}),
             CircleAvatar(
                 radius:15,
-                child: Image.asset('assets/images/cmdx.png'),
+                child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!),
                 backgroundColor: Colors.transparent),
           ],
         ),
@@ -155,9 +154,10 @@ class _BlocksState extends State<Blocks> {
                 ]
               ),
             ),
-             GetBuilder<ToggleController>(builder: (blockController){
+            isLoaded?
+            GetBuilder<ToggleController>(builder: (blockController){
                return blockController.isBlockSelected==0?
-               ListView.builder(
+              ( ListView.builder(
                    reverse: true,
                    physics: const NeverScrollableScrollPhysics(),
                    scrollDirection: Axis.vertical,
@@ -167,7 +167,7 @@ class _BlocksState extends State<Blocks> {
                      return
                        BlockContainer(blockModel: BlocksController.blockList[index],);
                    }
-               ):
+               )):
                ListView.builder(
                    reverse: true,
                    physics: const NeverScrollableScrollPhysics(),
@@ -180,7 +180,7 @@ class _BlocksState extends State<Blocks> {
                    }
                    );
              }
-             )
+             ):Center(child: CircularProgressIndicator()),
           ],
         ),
       ),

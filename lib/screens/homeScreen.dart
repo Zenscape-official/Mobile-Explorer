@@ -170,7 +170,7 @@ class InfoCard extends StatelessWidget {
             Text(title1,
             style: kSmallTextStyle,),
             SizedBox(height: 4),
-            Text(titleValue1!,
+            Text(titleValue1!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'),
               style: kBigBoldTextStyle,
             ),
           ],

@@ -18,12 +18,11 @@ final NetworkList? networkListProposal;
   State<Proposals> createState() => _ProposalsState();
 }
 
-
 class _ProposalsState extends State<Proposals> {
   final ProductController productController= Get.put(ProductController());
   final ProposalController _proposalController= Get.put(ProposalController());
-  bool isLoaded=true;
-  RxList<dynamic>? Prop;
+  bool isLoaded=false;
+  var prop;
 
   @override
   void initState() {
@@ -31,14 +30,20 @@ class _ProposalsState extends State<Proposals> {
     getData();
   }
 
+  @override
+  void dispose() {
+    Get.delete<ProposalController>();
+    super.dispose();
+  }
+
   getData() async{
-     Prop= await _proposalController.fetchProducts(widget.networkListProposal!.proposalsUrl!);
+     prop= await _proposalController.fetchProducts(widget.networkListProposal!.proposalsUrl!);
     setState(() {
-      if (Prop!=null){
-        isLoaded==true;
+      if (prop!=null){
+        isLoaded=true;
       }
       else{
-        isLoaded==false;
+        isLoaded=false;
       }
     });
   }
@@ -46,9 +51,9 @@ class _ProposalsState extends State<Proposals> {
   BookController bookController = BookController();
   TextEditingController nameController=TextEditingController();
   String fullName = '';
+
   @override
   Widget build(BuildContext context) {
-
      return Scaffold(
       drawer: NavDraw(networkData: widget.networkListProposal),
       backgroundColor: Colors.grey[100],
@@ -109,29 +114,23 @@ class _ProposalsState extends State<Proposals> {
               Filter(),
             ],
           ),
-         SingleChildScrollView(
+         isLoaded?SingleChildScrollView(
             child: SizedBox(
               height: MediaQuery.of(context).size.height/1.4,
               child:Obx(()=> CupertinoScrollbar(
-                child: Visibility(
-                  visible: isLoaded,
-                  child: ListView.builder(
-                    reverse: true,
-                    physics: const AlwaysScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: ProposalController.proposalList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return
-                          ProposalCard(ProposalController.proposalList[index]);
-                      }),
-                  replacement: const Center(child:CircularProgressIndicator()),
-                ),
+                child: ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: ProposalController.proposalList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return
+                        ProposalCard(ProposalController.proposalList[index]);
+                    })
               ),
             ),
           ),
-          ),
-
+          ):const CircularProgressIndicator(),
         ],
       ),
     );
@@ -139,7 +138,6 @@ class _ProposalsState extends State<Proposals> {
 }
 
 class ProposalCard extends StatelessWidget {
-
   final ProposalProduct product;
   ProposalCard(this.product, {Key? key}) : super(key: key);
   var status='';
@@ -254,9 +252,9 @@ class ProposalCard extends StatelessWidget {
                 ),
               ),
             ],
-          ), //Column
-        ), //SizedBox
-                        ),
+          ),
+        ),
+        ),
       ),
     );
   }
