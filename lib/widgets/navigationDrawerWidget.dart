@@ -8,6 +8,7 @@ import 'package:zenscape_app/Screens/network/blocks.dart';
 import 'package:zenscape_app/Screens/network/ibcRelayers.dart';
 import 'package:zenscape_app/Screens/network/proposals.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
+import 'package:zenscape_app/screens/network/dashboard.dart';
 import '../Screens/network/contracts.dart';
 
 class NavDraw extends StatefulWidget {
@@ -61,7 +62,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 0;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>Validators(networkList:widget.networkData)));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>NetworkDashBoard(networkData:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/val.png',
@@ -127,7 +128,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 6;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Contracts()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Contracts(networkList:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/params.png',
@@ -138,7 +139,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 7;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>const Parameters()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Parameters(networkList:widget.networkData)));
                   }),
             ],
           ),

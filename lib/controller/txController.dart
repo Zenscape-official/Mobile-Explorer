@@ -11,11 +11,13 @@ class TxController extends GetxController {
 
   Future<RxList<dynamic>> fetchTx(String ApiUri) async{
     var response = await client.get(Uri.parse(ApiUri));
-
     if (response.statusCode==200){
       var jsonString= jsonDecode((response.body));
-      print(jsonString);
-      return txList = List.from(jsonString).map((e) => TxModel.fromJson(e)).toList().obs;
+     // print(jsonString);
+      // for(var prod i`n jsonString){
+      //   txList.add(TxModel.fromJson(prod));}
+      txList = List.from(jsonString).map((e) => TxModel.fromJson(e)).toList().obs;
+      return txList;
     }
     else{
       Get.snackbar('Error','No data fetched from API');

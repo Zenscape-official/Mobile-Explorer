@@ -13,10 +13,10 @@ class ProposalController extends GetxController {
     var response = await client.get(Uri.parse(ApiUri));
 
     if (response.statusCode==200){
-      var jsonString= jsonDecode((response.body))['proposals'];
+      var jsonString= jsonDecode((response.body));
       print((jsonString).toString());
 
-     return proposalList = List.from(jsonString).map((e) => ProposalProduct.fromJson(e)).toList().reversed.toList().obs;
+     return proposalList = List.from(jsonString).map((e) => ProposalsModel.fromJson(e)).toList().reversed.toList().obs;
     }
     else{
       Get.snackbar('Error','No data fetched from API');

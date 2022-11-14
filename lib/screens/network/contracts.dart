@@ -1,23 +1,47 @@
 import'package:flutter/material.dart';
-
-import '../../Constants/constants.dart';
+import 'package:get/get.dart';
+import 'package:zenscape_app/backend%20files/contractModel.dart';
+import 'package:zenscape_app/constants/constants.dart';
+import '../../backend files/networkList.dart';
+import '../../controller/ContractController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 class Contracts extends StatefulWidget {
-  const Contracts({Key? key}) : super(key: key);
+  final NetworkList? networkList;
+  const Contracts({Key? key,this.networkList}) : super(key: key);
 
   @override
   State<Contracts> createState() => _ContractsState();
 }
-
 class _ContractsState extends State<Contracts> {
+  final ContractController _contractController =
+  Get.put(ContractController());
 
+  var contracts;
+  bool isLoaded=false;
+  @override
+  void initState() {
+    super.initState();
+    contData();
+  }
 
+  void contData() async {
+    contracts =
+    await _contractController.fetchCont(widget.networkList!.contractsUrl!);
+    setState(() {
+      if(contracts!=null){
+        isLoaded=true;
+      }
+      else {
+        isLoaded=false;
+      }
+    });
+  }
   TextEditingController nameController=TextEditingController();
   String fullName = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:NavDraw(),
+      drawer:NavDraw(networkData:widget.networkList),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -77,108 +101,120 @@ class _ContractsState extends State<Contracts> {
                 ],
               ),
             ),
-             ListView.builder(
+             isLoaded?ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: 6,
+                itemCount: ContractController.ContractList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return
-                    Container(
-                      decoration: kBoxDecorationWithGradient,
-                      margin: const EdgeInsets.all(14),
-                      child: Column(
-                          children:[
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:[
-                                    Row(
-                                      children: [
-                                        CircleAvatar(radius:10,backgroundColor: Colors.transparent,child: Image.asset('assets/images/neta.png',color: Colors.black,)),
-                                        Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Text('NETA TOKEN',
-                                              style:kMediumTextStyle),
-                                        ),],
-                                    ),
-
-                                    Container(
-                                      decoration: kBoxDecorationWithoutGradient,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Text('10s ago',
-                                            style:TextStyle(
-                                                color: Colors.black.withOpacity(.5),
-                                                fontWeight: FontWeight.bold
-                                            )),
-                                      ),
-                                    )
-                                  ]
-                              ),
-
-                            ),
-                            const SizedBox(height: 5,),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:[
-                                    Text('Contract',
-                                        style:kSmallTextStyle),
-                                    Text('CW20 Contract',
-                                        style:kSmallTextStyle)
-                                  ]
-                              ),
-
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Contract Address',
-                                        style:kSmallTextStyle),
-                                    Text('cmdx..12367s',
-                                        style:kSmallTextStyle)
-                                  ]
-                              ),
-
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Executes',
-                                        style:kSmallTextStyle),
-                                    Text('65221',
-                                        style:kSmallTextStyle)
-                                  ]
-                              ),
-
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text('Instantiated at',
-                                        style:kSmallTextStyle),
-                                    Text('2022-4-12 19:55:26',
-                                        style:kSmallTextStyle)
-                                  ]
-                              ),
-
-                            ),
-
-                          ]
-                      ),
-                    );
-                }),
+                    ContractContainer(contractModel: ContractController.ContractList[index],);
+                }):CircularProgressIndicator(),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ContractContainer extends StatelessWidget {
+  final ContractModel? contractModel;
+  const ContractContainer({
+    Key? key, this.contractModel
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: kBoxDecorationWithGradient,
+      margin: const EdgeInsets.all(14),
+      child: Column(
+          children:[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:[
+                    Row(
+                      children: [
+                        CircleAvatar(radius:10,backgroundColor: Colors.transparent,child: Image.asset('assets/images/neta.png',color: Colors.black,)),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(contractModel!.label!,
+                              style:kMediumTextStyle),
+                        ),],
+                    ),
+
+                    Container(
+                      decoration: kBoxDecorationWithoutGradient,
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Text('10s ago',
+                            style:TextStyle(
+                                color: Colors.black.withOpacity(.5),
+                                fontWeight: FontWeight.bold
+                            )),
+                      ),
+                    )
+                  ]
+              ),
+
+            ),
+            const SizedBox(height: 5,),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children:[
+                    Text('Contract',
+                        style:kSmallTextStyle),
+                    Text('CW20 Contract',
+                        style:kSmallTextStyle)
+                  ]
+              ),
+
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Contract Address',
+                        style:kSmallTextStyle),
+                    Text(function(contractModel!.contractAddress!),
+                        style:kSmallTextStyle)
+                  ]
+              ),
+
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Executes',
+                        style:kSmallTextStyle),
+                    Text('',
+                        style:kSmallTextStyle)
+                  ]
+              ),
+
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Instantiated at',
+                        style:kSmallTextStyle),
+                    Text(dateTime(contractModel!.instantiatedAt!),
+                        style:kSmallTextStyle)
+                  ]
+              ),
+
+            ),
+
+          ]
       ),
     );
   }

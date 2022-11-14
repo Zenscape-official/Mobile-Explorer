@@ -10,120 +10,100 @@ String validatorModelToJson(List<ValidatorModel> data) => json.encode(List<dynam
 
 class ValidatorModel {
   ValidatorModel({
-    this.rank,
-    this.accountAddress,
-    this.operatorAddress,
+    this.consensusAddress,
     this.consensusPubkey,
-    this.jailed,
-    this.status,
-    this.tokens,
-    this.delegatorShares,
+    this.validatorAddress,
+    this.commission,
+    this.minSelfDelegation,
+    this.height,
     this.moniker,
     this.identity,
+    this.avatarUrl,
     this.website,
+    this.securityContact,
     this.details,
-    this.unbondingHeight,
-    this.unbondingTime,
-    this.rate,
-    this.maxRate,
+    this.operatorAddress,
+    this.selfDelegateAddress,
     this.maxChangeRate,
-    this.updateTime,
-    this.uptime,
-    this.minSelfDelegation,
-    this.keybaseUrl,
+    this.maxRate,
+    this.startHeight,
+    this.indexOffset,
+    this.jailedUntil,
+    this.tombstoned,
+    this.missedBlocksCounter,
+    this.votingPower,
   });
 
-  int? rank;
-  String? accountAddress;
-  String? operatorAddress;
-  String? consensusPubkey;
-  bool? jailed;
-  int? status;
-  String? tokens;
-  String? delegatorShares;
-  String? moniker;
-  String? identity;
-  String? website;
+  String? consensusAddress;
+  String ?consensusPubkey;
+  String ?validatorAddress;
+  String? commission;
+  String ?minSelfDelegation;
+  String ?height;
+  String ?moniker;
+  String ?identity;
+  String? avatarUrl;
+  String ?website;
+  String? securityContact;
   String? details;
-  String? unbondingHeight;
-  DateTime? unbondingTime;
-  String? rate;
-  String? maxRate;
+  String? operatorAddress;
+  String? selfDelegateAddress;
   String? maxChangeRate;
-  DateTime? updateTime;
-  Uptime? uptime;
-  String? minSelfDelegation;
-  String? keybaseUrl;
+  String? maxRate;
+  String? startHeight;
+  String? indexOffset;
+  DateTime? jailedUntil;
+  bool? tombstoned;
+  String? missedBlocksCounter;
+  String? votingPower;
 
   factory ValidatorModel.fromJson(Map<String, dynamic> json) => ValidatorModel(
-    rank: json["rank"],
-    accountAddress: json["account_address"],
-    operatorAddress: json["operator_address"],
+    consensusAddress: json["consensus_address"],
     consensusPubkey: json["consensus_pubkey"],
-    jailed: json["jailed"],
-    status: json["status"],
-    tokens: json["tokens"],
-    delegatorShares: json["delegator_shares"],
-    moniker: json["moniker"],
-    identity: json["identity"],
-    website: json["website"],
-    details: json["details"],
-    unbondingHeight: json["unbonding_height"],
-    unbondingTime: DateTime.parse(json["unbonding_time"]),
-    rate: json["rate"],
-    maxRate: json["max_rate"],
-    maxChangeRate: json["max_change_rate"],
-    updateTime: DateTime.parse(json["update_time"]),
-    uptime: Uptime.fromJson(json["uptime"]),
+    validatorAddress: json["validator_address"],
+    commission: json["commission"],
     minSelfDelegation: json["min_self_delegation"],
-    keybaseUrl: json["keybase_url"],
+    height: json["height"],
+    moniker: json["moniker"],
+    identity: json["identity"] == null ? null : json["identity"],
+    avatarUrl: json["avatar_url"] == null ? null : json["avatar_url"],
+    website: json["website"] == null ? null : json["website"],
+    securityContact: json["security_contact"] == null ? null : json["security_contact"],
+    details: json["details"] == null ? null : json["details"],
+    operatorAddress: json["operator_address"],
+    selfDelegateAddress: json["self_delegate_address"],
+    maxChangeRate: json["max_change_rate"],
+    maxRate: json["max_rate"],
+    startHeight: json["start_height"],
+    indexOffset: json["index_offset"],
+    jailedUntil: DateTime.parse(json["jailed_until"]),
+    tombstoned: json["tombstoned"],
+    missedBlocksCounter: json["missed_blocks_counter"],
+    votingPower: json["voting_power"],
   );
 
   Map<String, dynamic> toJson() => {
-    "rank": rank,
-    "account_address": accountAddress,
-    "operator_address": operatorAddress,
+    "consensus_address": consensusAddress,
     "consensus_pubkey": consensusPubkey,
-    "jailed": jailed,
-    "status": status,
-    "tokens": tokens,
-    "delegator_shares": delegatorShares,
-    "moniker": moniker,
-    "identity": identity,
-    "website": website,
-    "details": details,
-    "unbonding_height": unbondingHeight,
-    "unbonding_time": unbondingTime!.toIso8601String(),
-    "rate": rate,
-    "max_rate": maxRate,
-    "max_change_rate": maxChangeRate,
-    "update_time": updateTime!.toIso8601String(),
-    "uptime": uptime!.toJson(),
+    "validator_address": validatorAddress,
+    "commission": commission,
     "min_self_delegation": minSelfDelegation,
-    "keybase_url": keybaseUrl,
-  };
-}
-
-class Uptime {
-  Uptime({
-    this.address,
-    this.missedBlocks,
-    this.overBlocks,
-  });
-
-  String? address;
-  int? missedBlocks;
-  int? overBlocks;
-
-  factory Uptime.fromJson(Map<String, dynamic> json) => Uptime(
-    address: json["address"],
-    missedBlocks: json["missed_blocks"],
-    overBlocks: json["over_blocks"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "address": address,
-    "missed_blocks": missedBlocks,
-    "over_blocks": overBlocks,
+    "height": height,
+    "moniker": moniker,
+    "identity": identity == null ? null : identity,
+    "avatar_url": avatarUrl == null ? null : avatarUrl,
+    "website": website == null ? null : website,
+    "security_contact": securityContact == null ? null : securityContact,
+    "details": details == null ? null : details,
+    "operator_address": operatorAddress,
+    "self_delegate_address": selfDelegateAddress,
+    "max_change_rate": maxChangeRate,
+    "max_rate": maxRate,
+    "start_height": startHeight,
+    "index_offset": indexOffset,
+    "jailed_until": jailedUntil!.toIso8601String(),
+    "tombstoned": tombstoned,
+    "missed_blocks_counter": missedBlocksCounter,
+    "voting_power": votingPower,
   };
 }

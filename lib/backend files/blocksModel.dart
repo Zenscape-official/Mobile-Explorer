@@ -10,80 +10,36 @@ String blockModelToJson(List<BlockModel> data) => json.encode(List<dynamic>.from
 
 class BlockModel {
   BlockModel({
-    this.id,
-    this.chainid,
     this.height,
-    this.proposer,
-    this.operatorAddress,
-    this.moniker,
-    this.blockHash,
-    this.identity,
-    this.numSignatures,
-    this.numTxs,
-    this.txs,
     this.timestamp,
+    this.hash,
+    this.numTxs,
+    this.totalGas,
+    this.proposerAddress,
   });
 
-  int? id;
-  String? chainid;
-  int? height;
-  String? proposer;
-  String? operatorAddress;
-  String? moniker;
-  String? blockHash;
-  String? identity;
-  int? numSignatures;
-  int? numTxs;
-  dynamic txs;
+  String ?height;
   DateTime? timestamp;
+  String ?hash;
+  int ?numTxs;
+  String? totalGas;
+  String ?proposerAddress;
 
   factory BlockModel.fromJson(Map<String, dynamic> json) => BlockModel(
-    id: json["id"],
-    chainid: json["chainid"],
     height: json["height"],
-    proposer: json["proposer"],
-    operatorAddress: json["operator_address"],
-    moniker: json["moniker"],
-    blockHash: json["block_hash"],
-    identity: json["identity"] == null ? null : json["identity"],
-    numSignatures: json["num_signatures"],
-    numTxs: json["num_txs"],
-    txs: json["txs"],
     timestamp: DateTime.parse(json["timestamp"]),
+    hash: json["hash"],
+    numTxs: json["num_txs"],
+    totalGas: json["total_gas"],
+    proposerAddress: json["proposer_address"],
   );
 
   Map<String, dynamic> toJson() => {
-    "id": id,
-    "chainid": chainidValues.reverse[chainid],
     "height": height,
-    "proposer": proposer,
-    "operator_address": operatorAddress,
-    "moniker": moniker,
-    "block_hash": blockHash,
-    "identity": identity == null ? null : identity,
-    "num_signatures": numSignatures,
-    "num_txs": numTxs,
-    "txs": txs,
     "timestamp": timestamp!.toIso8601String(),
+    "hash": hash,
+    "num_txs": numTxs,
+    "total_gas": totalGas,
+    "proposer_address": proposerAddress,
   };
-}
-
-enum Chainid { AKASHNET_2 }
-
-final chainidValues = EnumValues({
-  "akashnet-2": Chainid.AKASHNET_2
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String>? reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap!;
-  }
 }

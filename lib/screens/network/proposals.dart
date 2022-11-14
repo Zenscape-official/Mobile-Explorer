@@ -138,12 +138,12 @@ class _ProposalsState extends State<Proposals> {
 }
 
 class ProposalCard extends StatelessWidget {
-  final ProposalProduct product;
+  final ProposalsModel product;
   ProposalCard(this.product, {Key? key}) : super(key: key);
   var status='';
   bool ispassed=true;
   void fun(){
-    if(product.status.toString()=='Status.PROPOSAL_STATUS_PASSED'){
+    if(product.status=='PROPOSAL_STATUS_PASSED'){
       status='Passed';
     }
     else{
@@ -155,7 +155,7 @@ class ProposalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     fun();
     return InkWell(
-      onTap: ()=> Get.to(() => const ProposalDetails()),
+      onTap: ()=> Get.to(() => ProposalDetails(proposalProduct: product)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -179,7 +179,7 @@ class ProposalCard extends StatelessWidget {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.all(3.0),
-                            child: Text('#${product.proposalId!}',
+                            child: Text('#${product.id!}',
                             style:kSmallTextStyle),
                           ),
                         ),
@@ -235,7 +235,7 @@ class ProposalCard extends StatelessWidget {
                   children:[
                      Text('Voting Starts',
                       style: kSmallTextStyle,),
-                    Text(product.votingStartTime.toString(),
+                    Text(product.votingStartTime!.toString(),
                     style: kSmallTextStyle,),
                   ],
                 ),
@@ -246,7 +246,7 @@ class ProposalCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Voting Ends',style: kSmallTextStyle,),
-                    Text(product.votingEndTime.toString(),
+                    Text(product.votingEndTime!.toString(),
                       style:kSmallTextStyle,),
                   ],
                 ),

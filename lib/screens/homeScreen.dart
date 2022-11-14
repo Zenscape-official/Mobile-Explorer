@@ -134,15 +134,15 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-           InfoCard(title1:'Height',
-             titleValue1:'6,690,889',
-             icon1: Icons.terrain,),
-           InfoCard(title1: 'Bonded Tokens',
-               titleValue1: '146M / 197M',
-               icon1:Icons.monetization_on_outlined,),
-           InfoCard(title1: 'Inflation',
-              titleValue1: '14.55%',
-              icon1:Icons.trending_up,)
+           //InfoCard(title1:'Height',
+           //   titleValue1:'6,690,889',
+           //   icon1: Icons.terrain,),
+           // InfoCard(title1: 'Bonded Tokens',
+           //     titleValue1: '146M / 197M',
+           //     icon1:Icons.monetization_on_outlined,),
+           // InfoCard(title1: 'Inflation',
+           //    titleValue1: '14.55%',
+           //    icon1:Icons.trending_up,)
         ],
       ),
     );
@@ -152,7 +152,7 @@ class _HomeScreenState extends State<HomeScreen> {
 class InfoCard extends StatelessWidget {
       final String title1;
       final String? titleValue1;
-      final IconData? icon1;
+      final String? icon1;
 
       InfoCard({Key? key, required this.title1, this.titleValue1,this.icon1}) : super(key: key);
   @override
@@ -165,13 +165,16 @@ class InfoCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-           Icon(icon1),
+           SizedBox(
+               height: 26,
+               width: 26,
+               child: Image.asset(icon1!)),
             SizedBox(height: 4),
             Text(title1,
             style: kSmallTextStyle,),
             SizedBox(height: 4),
             Text(titleValue1!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'),
-              style: kBigBoldTextStyle,
+              style: kMediumBoldTextStyle,
             ),
           ],
         ),

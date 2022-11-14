@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:zenscape_app/constants/constString.dart';
 
 import '../../Screens/homeScreen.dart';
 import '../../constants/constants.dart';
@@ -85,7 +86,7 @@ class _IBCDetailsState extends State<IBCDetails> {
                     crossAxisSpacing: 20,
                     itemCount: 4,
                     itemBuilder: (context,index){
-                      return InfoCard(title1: 'Total Transfer Value',icon1: Icons.manage_accounts_rounded,titleValue1: '\$8734872');
+                      return InfoCard(title1: 'Total Transfer Value',icon1: image[index],titleValue1: '\$8734872');
                     },
                     staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
               ],

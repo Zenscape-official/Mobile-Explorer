@@ -54,10 +54,12 @@ OnboardingPage({Key? key}) : super(key: key);
                 )),
               ),
             ),
-            const Positioned(
+            Positioned(
               left: 20,
               bottom: 20,
-              child: TextButton(onPressed: null ,child:Text('Skip>>')
+              child: TextButton(
+                  onPressed: () => Navigator.of(context).pushReplacement(MaterialPageRoute(builder:(context)=>const MainApp())),
+                  child:Text('Skip>>')
             ),),
             Positioned(
               right: 20,

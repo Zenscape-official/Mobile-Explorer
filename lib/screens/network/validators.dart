@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
 import 'package:zenscape_app/backend%20files/validatorsModel.dart';
+import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
 import '../../controller/validatorsController.dart';
 
@@ -129,7 +129,7 @@ class _ValidatorsState extends State<Validators> {
                 itemCount: ValidatorController.validatorsList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ValidatorContainer(validatorModel: ValidatorController.validatorsList[index]);
-                }):CircularProgressIndicator()
+                }):const CircularProgressIndicator()
           ]),
         ));
   }
@@ -156,20 +156,23 @@ class ValidatorContainer extends StatelessWidget {
             child: Column(
               children: [
                 Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          child: Image.asset(
-                              'assets/images/akt.png'),
-                          backgroundColor: Colors.transparent,
-                        ),
-                        SizedBox(width:5),
-                        Text(validatorModel!.moniker!,
-                            style: kBigBoldTextStyle),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          CircleAvatar(
+                            child: Image.network(
+                                validatorModel!.avatarUrl?? 'https://picsum.photos/200/300'),
+                            backgroundColor: Colors.transparent,
+                          ),
+                          const SizedBox(width:5),
+                          Text(validatorModel!.moniker!,
+                              style: kBigBoldTextStyle),
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -211,7 +214,7 @@ class ValidatorContainer extends StatelessWidget {
                                     const EdgeInsets.all(25.0),
                                 child: Column(
                                   children: [
-                                    Text(validatorModel!.tokens!,
+                                    Text('4407436',
                                         style:
                                             kMediumBoldTextStyle),
                                     const SizedBox(
@@ -256,7 +259,7 @@ class ValidatorContainer extends StatelessWidget {
                             style: kSmallTextStyle,
                           ),
                           Text(
-                            validatorModel!.uptime!.overBlocks!.toString()+' %',
+                            "Uptime",
                             style: kSmallBoldTextStyle,
                           )
                         ],
@@ -282,7 +285,7 @@ class ValidatorContainer extends StatelessWidget {
                             style: kSmallTextStyle,
                           ),
                           Text(
-                           validatorModel!.rate!,
+                           truncateToDecimalPlaces(double.parse(validatorModel!.commission!),2).toString(),
                             style: kSmallBoldTextStyle,
                           )
                         ],

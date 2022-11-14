@@ -1,19 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:zenscape_app/backend%20files/ProposalsModel.dart';
+import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/widgets/filterTab.dart';
 
-import '../../Constants/constants.dart';
-import '../../widgets/onboardingwidgets/toggleButton.dart';
 
 class ProposalDetails extends StatefulWidget {
-  const ProposalDetails({Key? key}) : super(key: key);
+  final ProposalsModel proposalProduct;
+ ProposalDetails({Key? key, required this.proposalProduct}) : super(key: key);
 
   @override
   State<ProposalDetails> createState() => _ProposalDetailsState();
 }
 
 class _ProposalDetailsState extends State<ProposalDetails> {
+  var  status;
+  void fun(){
+    if(widget.proposalProduct.status=='PROPOSAL_STATUS_PASSED'){
+      status='Passed';
+    }
+    else{
+      status='Rejected';
+    }
+  }
   @override
   Widget build(BuildContext context) {
+    fun();
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -82,7 +93,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                   padding: const EdgeInsets.all(18.0),
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children:  <Widget>[
+                      children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -90,16 +101,16 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                               decoration: kBoxDecorationWithoutGradient,
                               child: Padding(
                                 padding: const EdgeInsets.all(4.0),
-                                child: Text('#6',
+                                child: Text('#${widget.proposalProduct.id!}',
                                     style:kMediumBoldTextStyle),
                               ),
                             ),
                             Container(
                               decoration: BoxDecoration(
-                                color: Colors.lightGreenAccent.withOpacity(.1),
+                                color:status=='Passed'? Colors.lightGreenAccent.withOpacity(.1):Colors.red.shade50,
                                 borderRadius: const BorderRadius.all(Radius.circular(20.0)),
                                 border: Border.all(
-                                  color: const Color(0xFF6BD68D),
+                                  color: status=='Passed'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
                                   width: 1.0,
                                 ),
                               ),
@@ -108,11 +119,11 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children:[
-                                    const CircleAvatar(backgroundColor:  Colors.green,
+                                     CircleAvatar(backgroundColor:  status=='Passed'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
                                       radius: 3,),
                                     Padding(
                                       padding: const EdgeInsets.all(2.0),
-                                      child: Text('Passed',
+                                      child: Text(status,
                                         style: kSmallTextStyle,),
                                     ),
                                   ],
@@ -122,7 +133,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                           ],
                         ),
                         const SizedBox(height: 20,),
-                        Text('Update the minimum deposit for governance proposals',
+                        Text(widget.proposalProduct.content!.title!,
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
                         Row(
@@ -131,27 +142,28 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Proposers',
+                                Text('Proposer',
                                     style:kSmallTextStyle),
-                                Text('Synscale.com',
+                                Text(function(widget.proposalProduct.proposerAddress!),
                                     style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
                                 Text('Total Deposit',
                                     style:kSmallTextStyle),
-                                Text('100.000000 CMDX',
+                                Text('widget.proposalProduct.'
+                                    ,
                                     style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
                                 Text('Voting End',
                                     style:kSmallTextStyle),
-                                Text('2022-07-15 22:52:55',
+                                Text((dateTime(widget.proposalProduct.votingEndTime!)).toString(),
                                     style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
                                 Text('Submit Time',
                                     style:kSmallTextStyle),
-                                Text('2022-07-15 22:52:55',
+                                Text((dateTime(widget.proposalProduct.submitTime!)).toString(),
                                     style:kSmallBoldTextStyle),
                               ],
                             ),
@@ -166,19 +178,26 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Voting Start',
                                     style:kSmallTextStyle),
-                                Text('0.000000 CMDX',
-                                    style:kSmallBoldTextStyle),
+                                Text((dateTime(widget.proposalProduct.votingStartTime!)).toString(),
+                                  style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
                                 Text('Type',
                                     style:kSmallTextStyle),
-                                Text('Parameter Change',
-                                    style:kSmallBoldTextStyle),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: SizedBox(
+                                    width:100,
+                                    height: 15,
+                                    child: Text(widget.proposalProduct.proposalType!,
+                                        style:kSmallBoldTextStyle),
+                                  ),
+                                ),
                                 const SizedBox(height: 20,),
 
                                 Text('Deposit End Time',
                                     style:kSmallTextStyle),
-                                Text('Parameter Change',
+                                Text((dateTime(widget.proposalProduct.depositEndTime!)).toString(),
                                     style:kSmallBoldTextStyle),
                               ],
                             ),
@@ -188,7 +207,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                         Text('Details ',
                             style:kSmallBoldTextStyle),
                         const SizedBox(height: 2,),
-                        Text('Update the minimum deposit for governance proposals. Discussion Forum Link : https://forum.comdex.one/t/proposal-increasing-deposit-amount-minimum-transaction-fee-for-comdex-chain/343 .<br/>By voting YES, you agree to update the minimum deposit as per the proposal raised. <br/> By voting NO, you disagree to update the minimum deposit as per the proposal raised',
+                        Text(widget.proposalProduct.content!.description!,
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
                         Text('Parameter Change',
@@ -206,7 +225,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                     children: [
                                       Text('deposit params:',
                                           style:kSmallTextStyle),
-                                      Text('min deposit : 30000000 CMDX',
+                                      Text('',
                                           style:kSmallTextStyle),
                                     ],
                                   ),
@@ -268,7 +287,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                               style:kSmallTextStyle),
                               Text('99.08%',
                               style:kSmallBoldTextStyle),
-                              Text('51,334,682.826751 CMDX',
+                              Text('',
                               style:kSmallTextStyle)
                             ]
                           )
@@ -292,7 +311,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                     style:kSmallTextStyle),
                                 Text('0.00%',
                                     style:kSmallBoldTextStyle),
-                                Text('1,159.427282 CMDX',
+                                Text('',
                                 style:kSmallTextStyle)
                               ]
                           )
@@ -316,7 +335,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                     style:kSmallTextStyle),
                                 Text('0.00%',
                                     style:kSmallBoldTextStyle),
-                                Text('0000000 CMDX',
+                                Text('',
                                 style:kSmallTextStyle),
 
                               ]
@@ -341,7 +360,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                     style:kSmallTextStyle),
                                 Text('0.02%',
                                     style:kSmallBoldTextStyle),
-                                Text('10,064.526492 CMDX',
+                                Text('',
                                     style:kSmallTextStyle),
 
                               ]

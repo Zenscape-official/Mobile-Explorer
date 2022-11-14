@@ -6,7 +6,6 @@ import 'package:zenscape_app/backend%20files/blocksModel.dart';
 class BlocksController extends GetxController {
 
   static var blockList = [].obs;
-
   static var client = http.Client();
 
   Future<RxList<dynamic>> fetchBlocks(String ApiUri) async{
@@ -14,9 +13,11 @@ class BlocksController extends GetxController {
 
     if (response.statusCode==200){
       var jsonString= jsonDecode((response.body));
-      return blockList = List.from(jsonString).map((e) => BlockModel.fromJson(e)).toList().obs;
+      //print(jsonString.runtimeType);
+      return blockList = List.from(jsonString).map((e) => BlockModel.fromJson(e)).toList().reversed.toList().obs;
     }
     else{
+      print(response.statusCode);
       Get.snackbar('Error','No data fetched from API');
       return blockList;
     }

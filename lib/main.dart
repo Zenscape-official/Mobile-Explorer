@@ -4,13 +4,13 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/Screens/explorer.dart';
 import 'package:zenscape_app/Screens/onboardingScreen.dart';
 import 'package:zenscape_app/Screens/landingPage.dart';
-import 'package:zenscape_app/controller/proposalsFunc.dart';
-import 'Controller/productController.dart';
+import 'package:zenscape_app/controller/dashboardController.dart';
+import 'package:zenscape_app/controller/networklistController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'backend files/networkList.dart';
+import 'package:zenscape_app/screens/network/dashboard.dart';
 
 dynamic initScreen;
+var timestamp = DateTime.now().toUtc();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -21,18 +21,23 @@ Future<void> main() async {
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
-
   @override
   State<MyApp> createState() => _MyAppState();
 }
 class _MyAppState extends State<MyApp> {
+
+  @override
+  void initState() {
+    super.initState();
+    NetworkController.networkList();
+    DashboardController.dashboardList();
+}
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-
       title: 'App Title',
       debugShowCheckedModeBanner: false,
-      home:  initScreen ==null ? OnboardingPage():const MainApp()
+      home:  initScreen == null ? OnboardingPage():const MainApp()
     );
   }
 }
@@ -40,18 +45,20 @@ enum TabItem {home,details, explore}
 
 class MainApp extends StatefulWidget {
   const MainApp({Key? key}) : super(key: key);
-
   @override
   State<MainApp> createState() => _MainAppState();
 
 }
 class _MainAppState extends State<MainApp> {
+  final NetworkController networkController = Get.put(NetworkController());
+  final DashboardController dashboardController = Get.put(DashboardController());
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
-
   Widget build(BuildContext context) {
-    ProductController.fetchProducts();
-
     return CupertinoTabScaffold(
       tabBar: CupertinoTabBar(
         inactiveColor: Colors.grey,
@@ -77,11 +84,11 @@ class _MainAppState extends State<MainApp> {
           case 0:
             return CupertinoTabView(builder: (context) {
 
-              return const CupertinoPageScaffold(child: LandingPage());
+              return const CupertinoPageScaffold(child: LandingPage(),);
             });
           case 1:
             return CupertinoTabView(builder: (context) {
-              return CupertinoPageScaffold(child: LandingPage());
+              return const CupertinoPageScaffold(child: NetworkDashBoard());
             });
           case 2:
             return CupertinoTabView(builder: (context) {

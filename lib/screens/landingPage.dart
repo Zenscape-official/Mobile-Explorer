@@ -3,29 +3,38 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend%20files/networkList.dart';
-import '../Constants/constants.dart';
+import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/controller/dashboardController.dart';
 import '../controller/networklistController.dart';
 import 'network/dashboard.dart';
 
 class LandingPage extends StatefulWidget {
   const LandingPage({Key? key}) : super(key: key);
-
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
 
 class _LandingPageState extends State<LandingPage> {
   final NetworkController networkController = Get.put(NetworkController());
-  var isLoaded = false;
-  static var lists;
-  var results;
-  Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
+  final DashboardController dashboardController = Get.put(DashboardController());
+@override
+  void initState() {
+    super.initState();
+     netData();
+  foundNetwork.value=  net;
+  }
 
+  var flag=false;
+  var results;
+  var dash;
+  var net;
+
+  Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
   void filterList(String name) {
     if (name.isEmpty) {
-      // foundNetwork.value = NetworkController.networkList;
+      foundNetwork.value = net ;
     } else {
-      foundNetwork.value = NetworkController.networkList
+       foundNetwork.value = net
           .where((element) => element.name
               .toString()
               .toLowerCase()
@@ -35,23 +44,36 @@ class _LandingPageState extends State<LandingPage> {
     results=foundNetwork.value;
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getData();
-    networkController.fetchList();
-    foundNetwork.value = NetworkController.networkList;
-  }
 
-  getData() async {
-    // lists=await NetworkList.fetchList();
-    if (lists != null) {
-      setState(() {
-        isLoaded = true;
-      });
-    } else {
-      // print(lists);
-    }
+
+  netData() async{
+    net= await networkController.fetchList();
+    dash= await dashboardController.fetchDash();
+    setState(() {
+      if (net!=null&& dash!=null){
+        for (int i = 0; i < NetworkController.networkList.length - 1; i++) {
+          for (int j = 0; j < DashboardController.dashboardList.length - 1; j++) {
+            if (NetworkController.networkList[i].id ==
+                DashboardController.dashboardList[j].id) {
+              NetworkController.networkList[i].price =
+                  DashboardController.dashboardList[j].currentPrice.toString();
+              NetworkController.networkList[i].marketCap =
+                  DashboardController.dashboardList[j].marketCap.toString();
+              NetworkController.networkList[i].the24HrVol = DashboardController
+                  .dashboardList[j].marketCapChange24H
+                  .toString();
+              NetworkController.networkList[i].percChangeInPrice =
+                  DashboardController.dashboardList[j].priceChangePercentage24H
+                      .toString();
+            }
+          }
+        }
+       flag=true;
+      }
+      else{
+        flag=false;
+      }
+    });
   }
 
   TextEditingController nameController = TextEditingController();
@@ -59,7 +81,8 @@ class _LandingPageState extends State<LandingPage> {
   List<String>? image = [];
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+
+    return  Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
         backgroundColor: Colors.transparent,
@@ -87,7 +110,8 @@ class _LandingPageState extends State<LandingPage> {
                   child: TextField(
                       controller: nameController,
                       decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.all(15),
+                        contentPadding: const EdgeInsets.only(
+                            left: 8.0, bottom: 8.0, top: 8.0),
                         filled: true,
                         fillColor: Colors.transparent,
                         focusedBorder: InputBorder.none,
@@ -97,13 +121,13 @@ class _LandingPageState extends State<LandingPage> {
                               style: BorderStyle.none,
                             ),
                             borderRadius: BorderRadius.circular(20)),
-                        //hintText: 'Select a chain',
+
                         prefixIcon: const Icon(Icons.search),
                       ),
                       onChanged: (text) => filterList(text)),
                 )),
             const SizedBox(
-              height: 20,
+              height: 0,
             ),
            nameController.text.isEmpty? SizedBox(width:1): ListView.builder(
                 shrinkWrap: true,
@@ -116,13 +140,16 @@ class _LandingPageState extends State<LandingPage> {
                               builder: (context) =>
                                   NetworkDashBoard(networkData: NetworkController.networkList[index]))),
                       child:ListTile(
-                  title: Text(
-                    foundNetwork.value[index].name!,
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                  ),
-                  subtitle: Text(foundNetwork.value[index].denom!),
-                ),
-              ),),
+
+                        title: Text(
+                          foundNetwork.value[index].name!,
+                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+
+                        subtitle: Text(foundNetwork.value[index].denom!),
+                      ),
+                    ),
+           ),
             Container(
               margin: const EdgeInsets.only(
                   right: 10, top: 10, left: 10, bottom: 15),
@@ -202,8 +229,8 @@ class _LandingPageState extends State<LandingPage> {
                 ],
               ),
             ),
-            Obx(() {
-              return StaggeredGridView.countBuilder(
+         flag? Obx(() {
+              return  StaggeredGridView.countBuilder(
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
@@ -215,7 +242,11 @@ class _LandingPageState extends State<LandingPage> {
                     return NetworkCard(NetworkController.networkList[index]);
                   },
                   staggeredTileBuilder: (index) => const StaggeredTile.fit(1));
-            }),
+            }):Column(
+              children: const [SizedBox(height: 80,),
+                Center(child: CircularProgressIndicator()),
+              ],
+            ),
           ],
         ),
       ),
@@ -279,7 +310,7 @@ class _NetworkCardState extends State<NetworkCard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('APY', style: kExtraSmallTextStyle),
+                        Text('APR', style: kExtraSmallTextStyle),
                         const SizedBox(height: 2),
                         Text(widget.networkList.apy!,
                             style: kMediumBoldTextStyle),
@@ -288,9 +319,9 @@ class _NetworkCardState extends State<NetworkCard> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text('Commission', style: kExtraSmallTextStyle),
+                        Text('Price', style: kExtraSmallTextStyle),
                         const SizedBox(height: 2),
-                        Text(widget.networkList.commission!,
+                        Text(truncateToDecimalPlaces(double.parse(widget.networkList.price!),2).toString(),
                             style: kMediumBoldTextStyle),
                       ],
                     )

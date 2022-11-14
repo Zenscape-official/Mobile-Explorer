@@ -10,13 +10,14 @@ class ValidatorController extends GetxController {
 
   Future<RxList<dynamic>> fetchVal(String ApiUri) async{
     var response = await client.get(Uri.parse(ApiUri));
-
+      print(ApiUri);
     if (response.statusCode==200){
       var jsonString= jsonDecode((response.body));
       print(jsonString);
       return validatorsList = List.from(jsonString).map((e) => ValidatorModel.fromJson(e)).toList().obs;
     }
     else{
+      print("statuscode is ${response.statusCode}");
       Get.snackbar('Error','No data fetched from API');
       return validatorsList;
     }
