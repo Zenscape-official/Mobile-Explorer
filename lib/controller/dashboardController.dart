@@ -3,7 +3,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import '../backend files/dashboardModel.dart';
+import '../backend_files/dashboardModel.dart';
 class DashboardController extends GetxController {
 
   static var dashboardList = [].obs;

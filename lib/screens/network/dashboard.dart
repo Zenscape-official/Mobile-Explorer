@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/networkList.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/main.dart';
-import '../../backend files/blocksModel.dart';
-import '../../backend files/txModel.dart';
+import '../../backend_files/blocksModel.dart';
+import '../../backend_files/txModel.dart';
 import '../../constants/constString.dart';
 import '../../controller/blocksController.dart';
 import '../../controller/txController.dart';
@@ -73,7 +73,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       return '';
     }
   }
-
 
   void getData() async {
     height = (await fetchSingleData(widget.networkData!.height!, 'height'));
@@ -143,7 +142,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                       radius: 15,
                       child: Image.network(widget.networkData!.logoUrl ??
                           widget.networkData!.logUrl!),
-                      backgroundColor: Colors.transparent),
+                      backgroundColor: Colors.transparent
+                  ),
                 ],
               ),
             ),

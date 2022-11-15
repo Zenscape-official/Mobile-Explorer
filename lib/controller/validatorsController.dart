@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import '../backend files/validatorsModel.dart';
+import '../backend_files/validatorsModel.dart';
 
 class ValidatorController extends GetxController {
 

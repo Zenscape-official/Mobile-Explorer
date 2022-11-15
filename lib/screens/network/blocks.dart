@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/blocksModel.dart';
-import 'package:zenscape_app/backend%20files/txModel.dart';
+import 'package:zenscape_app/backend_files/blocksModel.dart';
+import 'package:zenscape_app/backend_files/txModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:zenscape_app/controller/txController.dart';
-import '../../backend files/networkList.dart';
+import '../../backend_files/networkList.dart';
 import '../../constants/constants.dart';
 import '../../Screens/network/transactionDetails.dart';
 import '../../controller/blocksController.dart';

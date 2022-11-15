@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:zenscape_app/backend%20files/ProposalsModel.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
+
+import '../backend_files/ProposalsModel.dart';
 
 class ProposalController extends GetxController {
 

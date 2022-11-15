@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/ibcRelayersModel.dart';
-import 'package:zenscape_app/backend%20files/networkList.dart';
+import 'package:zenscape_app/backend_files/ibcRelayersModel.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/controller/ibcController.dart';
 import 'package:zenscape_app/screens/network/ibcDetails.dart';
 import '../../Constants/constants.dart';

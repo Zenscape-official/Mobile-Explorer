@@ -21,7 +21,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/networkList.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 class NetworkController extends GetxController {
 
   static var networkList = [].obs;

@@ -7,9 +7,9 @@ import 'package:zenscape_app/Screens/network/assets.dart';
 import 'package:zenscape_app/Screens/network/blocks.dart';
 import 'package:zenscape_app/Screens/network/ibcRelayers.dart';
 import 'package:zenscape_app/Screens/network/proposals.dart';
-import 'package:zenscape_app/backend%20files/networkList.dart';
 import 'package:zenscape_app/screens/network/dashboard.dart';
 import '../Screens/network/contracts.dart';
+import '../backend_files/networkList.dart';
 
 class NavDraw extends StatefulWidget {
   final NetworkList? networkData;

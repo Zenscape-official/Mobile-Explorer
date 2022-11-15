@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 
-import '../backend files/txModel.dart';
+import '../backend_files/txModel.dart';
 
 class TxController extends GetxController {
 

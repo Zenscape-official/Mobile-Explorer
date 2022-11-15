@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
-import '../../backend files/networkList.dart';
+import '../../backend_files/networkList.dart';
 import '../../constants/constString.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 import '../homeScreen.dart';

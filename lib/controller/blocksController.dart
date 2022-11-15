@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/blocksModel.dart';
+import 'package:zenscape_app/backend_files/blocksModel.dart';
 
 class BlocksController extends GetxController {
 

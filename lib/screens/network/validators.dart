@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
-import 'package:zenscape_app/backend%20files/networkList.dart';
-import 'package:zenscape_app/backend%20files/validatorsModel.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
+import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
 import '../../controller/validatorsController.dart';
@@ -20,6 +20,8 @@ class _ValidatorsState extends State<Validators> {
   TextEditingController nameController = TextEditingController();
   String fullName = '';
   var validators;
+  var activeVal;
+  var inactiveVal;
   bool isLoaded=false;
   @override
   void initState() {
@@ -39,6 +41,7 @@ class _ValidatorsState extends State<Validators> {
      }
    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,7 +131,7 @@ class _ValidatorsState extends State<Validators> {
                 shrinkWrap: true,
                 itemCount: ValidatorController.validatorsList.length,
                 itemBuilder: (BuildContext context, int index) {
-                  return ValidatorContainer(validatorModel: ValidatorController.validatorsList[index]);
+                  return  ValidatorContainer (validatorModel: ValidatorController.validatorsList[index]);
                 }):const CircularProgressIndicator()
           ]),
         ));

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenscape_app/backend%20files/txModel.dart';
+import 'package:zenscape_app/backend_files/txModel.dart';
 
 import '../../Constants/constants.dart';
 class TxDetails extends StatefulWidget {

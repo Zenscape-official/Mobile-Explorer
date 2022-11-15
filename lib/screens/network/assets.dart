@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/controller/assetsController.dart';
 import '../../Constants/constants.dart';
-import '../../backend files/assetsModel.dart';
-import '../../backend files/networkList.dart';
+import '../../backend_files/assetsModel.dart';
+import '../../backend_files/networkList.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 import '../../widgets/filterTab.dart';
 

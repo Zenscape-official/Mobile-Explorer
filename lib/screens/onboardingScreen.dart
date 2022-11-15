@@ -22,15 +22,21 @@ OnboardingPage({Key? key}) : super(key: key);
               controller:_controller.pageController,
               onPageChanged: _controller.selectedPageIndex,
                 itemCount: _controller.OnboardingPages.length,
-                itemBuilder: (context,index){return Column(
+                itemBuilder: (context,index){
+                return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [SvgPicture.asset(_controller.OnboardingPages[index].assetImage,),
+                  children: [
+                    SvgPicture.asset(
+                      _controller.OnboardingPages[index].assetImage,
+                    ),
                               const SizedBox(height: 32),
-                              Text(_controller.OnboardingPages[index].title,style:kMediumBoldTextStyle),
+                              Text(
+                                  _controller.OnboardingPages[index].title,style:kMediumBoldTextStyle),
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(_controller.OnboardingPages[index].description,style:kSmallTextStyle,textAlign: TextAlign.center,),
+                      child: Text(
+                        _controller.OnboardingPages[index].description,style:kSmallTextStyle,textAlign: TextAlign.center,),
                     )
                   ],
                 );}),

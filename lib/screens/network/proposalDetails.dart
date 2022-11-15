@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:zenscape_app/backend%20files/ProposalsModel.dart';
+import 'package:zenscape_app/backend_files/ProposalsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/widgets/filterTab.dart';
 

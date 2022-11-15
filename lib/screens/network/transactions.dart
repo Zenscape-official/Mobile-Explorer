@@ -1,14 +1,13 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Screens/network/transactionDetails.dart';
-
+import 'package:zenscape_app/backend_files/txDetailRaw.dart';
 import '../../Constants/constants.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 import '../../widgets/onboardingwidgets/toggleButton.dart';
 class Txs extends StatefulWidget {
-  const Txs({Key? key}) : super(key: key);
-
+  final RawLogModel? rawLogModel;
+   Txs({Key? key,this.rawLogModel}) : super(key: key);
   @override
   State<Txs> createState() => _TxsState();
 }

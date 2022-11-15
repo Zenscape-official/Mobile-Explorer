@@ -1,5 +1,5 @@
 import 'dart:convert';
-import '../backend files/akashproposals.dart';
+import '../backend_files/akashproposals.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 

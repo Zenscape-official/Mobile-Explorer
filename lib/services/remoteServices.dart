@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import '../backend files/networkList.dart';
+import '../backend_files/networkList.dart';
 class RemoteServices {
     static var networkClient= http.Client();
     static Future<List<NetworkList>?> fetchData() async{

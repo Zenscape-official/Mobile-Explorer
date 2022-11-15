@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/networkList.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import '../controller/networklistController.dart';
@@ -23,7 +23,6 @@ class _LandingPageState extends State<LandingPage> {
      netData();
   foundNetwork.value=  net;
   }
-
   var flag=false;
   var results;
   var dash;
@@ -43,8 +42,6 @@ class _LandingPageState extends State<LandingPage> {
     }
     results=foundNetwork.value;
   }
-
-
 
   netData() async{
     net= await networkController.fetchList();
@@ -81,7 +78,6 @@ class _LandingPageState extends State<LandingPage> {
   List<String>? image = [];
   @override
   Widget build(BuildContext context) {
-
     return  Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -121,7 +117,6 @@ class _LandingPageState extends State<LandingPage> {
                               style: BorderStyle.none,
                             ),
                             borderRadius: BorderRadius.circular(20)),
-
                         prefixIcon: const Icon(Icons.search),
                       ),
                       onChanged: (text) => filterList(text)),
@@ -145,7 +140,6 @@ class _LandingPageState extends State<LandingPage> {
                           foundNetwork.value[index].name!,
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),
-
                         subtitle: Text(foundNetwork.value[index].denom!),
                       ),
                     ),

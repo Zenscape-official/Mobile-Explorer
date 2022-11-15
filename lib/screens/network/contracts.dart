@@ -1,8 +1,8 @@
 import'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend%20files/contractModel.dart';
+import 'package:zenscape_app/backend_files/contractModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
-import '../../backend files/networkList.dart';
+import '../../backend_files/networkList.dart';
 import '../../controller/ContractController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 class Contracts extends StatefulWidget {

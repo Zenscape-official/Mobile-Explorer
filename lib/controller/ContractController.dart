@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import '../backend files/contractModel.dart';
+import '../backend_files/contractModel.dart';
 
 class ContractController extends GetxController {
 
