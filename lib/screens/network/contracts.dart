@@ -48,10 +48,16 @@ class _ContractsState extends State<Contracts> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title:Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text('CONTRACTS',
                 style:kBigTextStyle),
+            CircleAvatar(
+                radius:15,
+                child: InkWell(
+                    onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                    child: Image.network(widget.networkList!.logoUrl??widget.networkList!.logUrl!)),
+                backgroundColor: Colors.transparent),
           ],
         ),
       ),

@@ -80,7 +80,7 @@ OnboardingPage({Key? key}) : super(key: key);
                   child: Obx(() {
                     if(_controller.isLastPage) {
                       return const Padding(
-                      padding: EdgeInsets.all(8.0),
+                      padding: EdgeInsets.all(10.0),
                       child: Text( 'Getting Started',style:TextStyle(color:Colors.white)),
                     );
                     } else {

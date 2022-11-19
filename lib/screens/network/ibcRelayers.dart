@@ -55,7 +55,9 @@ class _IBCRelayersState extends State<IBCRelayers> {
                 style:kBigBoldTextStyle),
             CircleAvatar(
                 radius:15,
-                child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!),
+                child: InkWell(
+                    onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                    child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
         ),

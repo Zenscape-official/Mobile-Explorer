@@ -63,7 +63,9 @@ class _ProposalsState extends State<Proposals> {
           Text('Proposals',style:kBigBoldTextStyle),
           CircleAvatar(
               radius:15,
-              child: Image.network(widget.networkListProposal!.logoUrl??widget.networkListProposal!.logUrl!),
+              child: InkWell(
+                  onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                  child: Image.network(widget.networkListProposal!.logoUrl??widget.networkListProposal!.logUrl!)),
               backgroundColor: Colors.transparent),
         ],
       ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/txModel.dart';
-
-import '../../Constants/constants.dart';
+import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/controller/rawLogController.dart';
 class TxDetails extends StatefulWidget {
   final TxModel? txModel;
   const TxDetails({Key? key,this.txModel}) : super(key: key);
@@ -10,9 +11,31 @@ class TxDetails extends StatefulWidget {
   State<TxDetails> createState() => _TxDetailsState();
 }
 
-class _TxDetailsState extends State<TxDetails> {
+ class _TxDetailsState extends State<TxDetails> {
+  var raw;
+  var isLoaded;
+  @override
+  void initState() {
+    super.initState();
+    rawData();
+  }
+  final RawLogController rawLogController=Get.put(RawLogController());
+  void rawData() async {
+    // raw =
+    // await rawLogController.fetchTx(widget.txModel!.rawLog);
+    setState(() {
+      if(raw!=null){
+        isLoaded=true;
+      }
+      else {
+        isLoaded=false;
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+   print(raw);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -30,42 +53,44 @@ class _TxDetailsState extends State<TxDetails> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Container(
-                width: MediaQuery.of(context).size.width/1.1,
-                height: 40,
-                decoration: kBoxDecorationWithGradient,
-                margin: const EdgeInsets.all(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(2.0),
-                  child: TextField(
-                    //controller: nameController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(left: 15, right: 15),
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      focusedBorder: InputBorder.none,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      hintText: 'Select a chain',
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                    onChanged: (text) {
-                      setState(() {
-                        //fullName = text;
-                        //you can access nameController in its scope to get
-                        // the value of text entered as shown below
-                        //fullName = nameController.text;
-                      });
-                    },
-                  ),
-                )),
+            // Container(
+            //     width: MediaQuery.of(context).size.width/1.1,
+            //     height: 40,
+            //     decoration: kBoxDecorationWithGradient,
+            //     margin: const EdgeInsets.all(20),
+            //     child: Padding(
+            //       padding: const EdgeInsets.all(2.0),
+            //        child:
+            //       TextField(
+            //         //controller: nameController,
+            //         decoration: InputDecoration(
+            //           contentPadding: const EdgeInsets.only(left: 15, right: 15),
+            //           filled: true,
+            //           fillColor: Colors.transparent,
+            //           focusedBorder: InputBorder.none,
+            //           border: OutlineInputBorder(
+            //               borderSide: const BorderSide(
+            //                 width: 0,
+            //                 style: BorderStyle.none,
+            //               ),
+            //               borderRadius: BorderRadius.circular(20)
+            //           ),
+            //           hintText: 'Select a chain',
+            //           prefixIcon: const Icon(Icons.search),
+            //         ),
+            //         onChanged: (text) {
+            //           setState(() {
+            //             //fullName = text;
+            //             //you can access nameController in its scope to get
+            //             // the value of text entered as shown below
+            //             //fullName = nameController.text;
+            //           });
+            //         },
+            //       ),
+            //     )
+            // ),
             Padding(
-              padding: const EdgeInsets.all(18.0),
+              padding: const EdgeInsets.all(12.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -88,86 +113,91 @@ class _TxDetailsState extends State<TxDetails> {
                       Text('Chain Id',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('widget.txModel!.header!.chainId!.toString()',
+                      Text('' ,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('TxHash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('widget.txModel!.data!.txhash!',
+                      Text(widget.txModel!.hash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Status',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('widget.txModel!.data!.code==0?',
+                      Text(widget.txModel!.success==true?'Success':'Fail',
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Height',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('widget.txModel!.data!.height!',
+                      Text(widget.txModel!.height!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Time',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('widget.txModel!.data!.timestamp.toString()',
-                          style:kMediumBoldTextStyle),
+                      Text(
+
+                          '',
+                          style:kMediumBoldTextStyle
+                      ),
                       const SizedBox(height: 20,),
                       Text('Fee',
                           style:kSmallTextStyle),
-                      const SizedBox(height: 2,),
-                      Text('fee',
+                      const SizedBox(
+                        height: 2,),
+                      Text(
+                          '${widget.txModel!.fee!.amount![0].amount!} ${widget.txModel!.fee!.amount![0].denom!}',
                           style:kMediumBoldTextStyle),
-                      const SizedBox(height: 20,),
+                      const SizedBox(height: 20),
                       Text('Gas (used/wanted)',
                           style:kSmallTextStyle),
-                      const SizedBox(height: 2,),
-                      Text('',
+                      const SizedBox(height: 3,),
+                      Text('${widget.txModel!.gasUsed!}/${widget.txModel!.gasWanted!}',
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Memo',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('',
+                      Text(widget.txModel!.memo!,
                           // ,
                         style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Signer',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('widget.txModel!.data.tx.body.messages[0]''header''signedheader''header''proposraddress',
+                      Text(widget.txModel!.messages![0].signer!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Client ID',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('',
+                      Text(widget.txModel!.messages![0].clientId!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Block',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.version!.block!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('App',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.version!.app!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Height',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('4,306,629',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.height!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Time',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('',
+                      Text(dateTime(widget.txModel!.messages![0].header!.signedHeader!.header!.time!),
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Hash',
@@ -179,61 +209,61 @@ class _TxDetailsState extends State<TxDetails> {
                       Text('Total',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('1',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.lastBlockId!.partSetHeader!.total!.toString(),
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Last Commit Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.lastCommitHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Data Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.lastCommitHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Validator Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.validatorsHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Next Validator Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.nextValidatorsHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Consensus Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.consensusHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('App Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.appHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Last Result Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.lastResultsHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Evidence Hash',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('BrqdCEv8NHBvpl0a5zllxrHyFmS/5ZYx+E9BjhJlL2g=',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.evidenceHash!,
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Proposer Address',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('',
+                      Text(widget.txModel!.messages![0].header!.signedHeader!.header!.proposerAddress!,
                           style:kMediumBoldTextStyle),
 
                     ]),
@@ -257,73 +287,73 @@ class _TxDetailsState extends State<TxDetails> {
                   Text('Sequence',
                       style:kSmallTextStyle),
                   const SizedBox(height: 2,),
-                      Text('5122',
+                      Text(widget.txModel!.messages![1].packet!.sequence!,
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Amount',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('72.33 CMDX',
+                      Text('--',
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Origin Amount',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('72,343,094',
+                      Text('--',
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Origin Denom',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('ucmdx',
+                      Text('--',
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Reciever',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('junohguyty6tr654667tugujijhoiyiyhukbgjkjiuj',
+                      Text('--',
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Sender',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('Kk+EyKoF348cCtRU6BEm5fItHaE1IF8AfYz/OSE+1I=',
+                      Text('--',
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Source Port',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('Transfer',
+                      Text(widget.txModel!.messages![1].packet!.sourcePort!,
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Source Channel',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('channel-18',
+                      Text(widget.txModel!.messages![1].packet!.sourceChannel!,
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Destination Port',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('Transfer',
+                      Text(widget.txModel!.messages![1].packet!.destinationPort!,
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Destination Channel',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('Channel-36',
+                      Text(widget.txModel!.messages![1].packet!.destinationChannel!,
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Signer',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('comdexESZwv+vBBk98dXYnzVGyz2gpB59Aycml0zWo=',
+                      Text(widget.txModel!.messages![1].signer!,
                           style:kMediumBoldTextStyle ),
                       const SizedBox(height: 20,),
                       Text('Effected',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text('0',
+                      Text('--',
                           style:kMediumBoldTextStyle ),
                     ]
                 ),

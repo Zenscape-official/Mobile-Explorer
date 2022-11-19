@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/blocksModel.dart';
@@ -82,7 +84,9 @@ class _BlocksState extends State<Blocks> {
                 style: kBigBoldTextStyle,);}),
             CircleAvatar(
                 radius:15,
-                child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!),
+                child: InkWell(
+                    onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                    child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
         ),
@@ -331,13 +335,16 @@ class BlockContainer extends StatelessWidget {
 
 class TxContainer extends StatelessWidget {
   final TxModel? txModel;
-  const TxContainer({
+   TxContainer({
     Key? key,
     this.txModel
   }) : super(key: key);
 
+
+
   @override
   Widget build(BuildContext context) {
+
     return InkWell(
       onTap:()=> Get.to(() => TxDetails(txModel:txModel)),
       child: Container(

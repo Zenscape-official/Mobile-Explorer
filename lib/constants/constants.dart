@@ -166,3 +166,6 @@ String removeAllChar(String comm){
     }
   }return newS.toString();
 }
+int screen(int scrNo){
+  return scrNo;
+}

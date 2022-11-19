@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
@@ -17,10 +18,10 @@ import 'package:http/http.dart' as http;
 class NetworkDashBoard extends StatefulWidget {
   final NetworkList? networkData;
   const NetworkDashBoard({this.networkData});
+
   @override
   State<NetworkDashBoard> createState() => _NetworkDashBoardState();
 }
-
 class _NetworkDashBoardState extends State<NetworkDashBoard> {
 
   List<String> details = [];
@@ -38,7 +39,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var tx;
   double APR = 0;
   bool isLoaded = false;
-  @override
   void initstate() {
     super.initState();
     getData();
@@ -67,8 +67,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   static Future<String> fetchBankData(String input) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
-      //print(jsonDecode(response.body)['result']['supply'][20]['amount']);
-      return await jsonDecode(response.body)['result']['supply'][20]['amount'];
+     // print(jsonDecode(response.body)['result']['supply'][20]['amount']);
+      return await jsonDecode(response.body)['result']['supply'][21]['amount'];
     } else {
       return '';
     }
@@ -140,8 +140,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                   ),
                   CircleAvatar(
                       radius: 15,
-                      child: Image.network(widget.networkData!.logoUrl ??
-                          widget.networkData!.logUrl!),
+                      child: InkWell(
+                        onTap:()=>
+                        Navigator.of(context).popUntil((route) => route.isFirst)
+                        ,
+                        child: Image.network(widget.networkData!.logoUrl ??
+                            widget.networkData!.logUrl!),
+                      ),
                       backgroundColor: Colors.transparent
                   ),
                 ],
@@ -255,11 +260,12 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                 ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: (Container(
+                                  child: (
+                                      Container(
                                     decoration: BoxDecoration(
                                       color: Colors.transparent,
                                       borderRadius: const BorderRadius.all(
-                                          Radius.circular(200.0)),
+                                          Radius.circular(150.0)),
                                       border: Border.all(
                                         color: Colors.lightBlueAccent
                                             .withOpacity(.5),
@@ -285,22 +291,42 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                               const SizedBox(
                                                 height: 4,
                                               ),
-                                              Text(
-                                                truncateToDecimalPlaces(
-                                                        double.parse(widget
-                                                            .networkData!
-                                                            .percChangeInPrice!),
-                                                        2)
-                                                    .toString(),
-                                                style: (double.parse(widget
+                                              SizedBox(
+                                                width:65,
+                                                child: Row(
+                                                  mainAxisAlignment: MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      '${
+                                                        truncateToDecimalPlaces(
+                                                            double.parse(widget
+                                                                .networkData!
+                                                                .percChangeInPrice!),
+                                                            2)
+                                                      } %'.toString(),
+                                                      style: (double.parse(widget
+                                                                  .networkData!
+                                                                  .percChangeInPrice!) >
+                                                              0
+                                                          ? const TextStyle(
+                                                              color:
+                                                                  Color(0xFF15BE46))
+                                                          : const TextStyle(
+                                                              color: Colors.red)),
+                                                    ),
+                                                    SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child: SvgPicture.asset('assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                                        color: (double.parse(widget
                                                             .networkData!
                                                             .percChangeInPrice!) >
-                                                        0
-                                                    ? const TextStyle(
-                                                        color:
-                                                            Color(0xFF15BE46))
-                                                    : const TextStyle(
-                                                        color: Colors.red)),
+                                                            0
+                                                            ?
+                                                            const Color(0xFF15BE46)
+                                                            :  Colors.red)))
+                                                  ],
+                                                ),
                                               )
                                             ],
                                           ),
@@ -355,34 +381,34 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         const SizedBox(
                                           height: 4,
                                         ),
-                                        Text(double.parse(widget.networkData!.the24HrVol!) > 0?
-                                        '^ ${(truncateToDecimalPlaces(
-                            double.parse(widget
-                                .networkData!
-                                .the24HrVol!),
-                            2)
-                                .toString())}': '${(truncateToDecimalPlaces(
-                                                                double.parse(widget
-                                                                    .networkData!
-                                                                    .the24HrVol!),
-                                                                2) *
-                                                            (-1))
-                                                        .toString()
-                                                  }',
-                                            style: double.parse(widget
-                                                        .networkData!
-                                                        .the24HrVol!) >
-                                                    0
-                                                ? const TextStyle(
-                                                    fontFamily:
-                                                        'MontserratBold',
-                                                    fontSize: 17,
-                                                    color: Color(0xFF15BE46))
-                                                :  TextStyle(
-                                                    fontFamily:
-                                                        'MontserratBold',
-                                                    fontSize: 17,
-                                                    color: Colors.red.withOpacity(.8)))
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child: SvgPicture.asset('assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                                color:  double.parse(widget
+                                                    .networkData!
+                                                    .the24HrVol!) >
+                                                    0?const Color(0xFF15BE46):Colors.red.withOpacity(.8))),
+                                            Text(double.parse(widget.networkData!.the24HrVol!).toString()
+                                            ,
+                                                style: double.parse(widget
+                                                            .networkData!
+                                                            .the24HrVol!) >
+                                                        0
+                                                    ? const TextStyle(
+                                                        fontFamily:
+                                                            'MontserratBold',
+                                                        fontSize: 17,
+                                                        color: Color(0xFF15BE46))
+                                                    :  TextStyle(
+                                                        fontFamily:
+                                                            'MontserratBold',
+                                                        fontSize: 17,
+                                                        color: Colors.red.withOpacity(.8))),
+                                          ],
+                                        )
                                       ],
                                     ),
                                   ],
@@ -558,7 +584,7 @@ class BlockContDash extends StatelessWidget {
                                   style: kSmallTextStyle,
                                 ),
                                 Text(
-                                  dateTime(blockModel!.timestamp!).toString(),
+                                  '${dateTime(blockModel!.timestamp!)} ${(blockModel!.timestamp!.timeZoneName)}'.toString(),
                                   style: kSmallBoldTextStyle,
                                 )
                               ],
@@ -637,7 +663,7 @@ class TxContDash extends StatelessWidget {
                                   style: kSmallTextStyle,
                                 ),
                                 Text(
-                                  '0',
+                                  txModel!.fee!.amount![0].amount!,
                                   style: kSmallBoldTextStyle,
                                 )
                               ],

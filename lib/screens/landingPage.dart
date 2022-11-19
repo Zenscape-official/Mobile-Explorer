@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/controller/bottomNavController.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import '../controller/networklistController.dart';
 import 'network/dashboard.dart';
@@ -15,20 +16,29 @@ class LandingPage extends StatefulWidget {
 }
 
 class _LandingPageState extends State<LandingPage> {
+  Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
   final NetworkController networkController = Get.put(NetworkController());
   final DashboardController dashboardController = Get.put(DashboardController());
+
+  // static void selectPage(BuildContext context,int index) {
+  //   BottomNavigationScreenState? stateObject = context.findAncestorStateOfType<BottomNavigationScreenState>();
+  //   stateObject?.setState((){
+  //     bottomNavigationTabIndex = index;
+  //   });
+  // }
+
 @override
   void initState() {
     super.initState();
      netData();
-  foundNetwork.value=  net;
+  foundNetwork.value=  [];
   }
   var flag=false;
   var results;
   var dash;
   var net;
 
-  Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
+
   void filterList(String name) {
     if (name.isEmpty) {
       foundNetwork.value = net ;
@@ -224,6 +234,7 @@ class _LandingPageState extends State<LandingPage> {
               ),
             ),
          flag? Obx(() {
+
               return  StaggeredGridView.countBuilder(
                   physics: const NeverScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
@@ -256,76 +267,83 @@ class NetworkCard extends StatefulWidget {
 }
 
 class _NetworkCardState extends State<NetworkCard> {
+
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => Navigator.push(
-          context,
-          CupertinoPageRoute(
-              builder: (context) =>
-                  NetworkDashBoard(networkData: widget.networkList))),
-      child: Container(
-        width: MediaQuery.of(context).size.width / 2,
-        margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
-        decoration: kBoxDecorationWithoutGradient,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+    final NavController navController=Get.put(NavController());
+        return InkWell(
+
+          onTap: ()=> {
+          navController.changeIndex(1),
+            print(navController.selectedIndex),
+             Navigator.push(
+                context,
+                CupertinoPageRoute(
+                    builder: (context) =>
+                        NetworkDashBoard(networkData: widget.networkList)))
+          },
+          child: Container(
+            width: MediaQuery.of(context).size.width / 2,
+            margin: const EdgeInsets.fromLTRB(15, 10, 15, 10),
+            decoration: kBoxDecorationWithoutGradient,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
-                    child: CircleAvatar(
-                      child: Image.network(widget.networkList.logoUrl ??
-                          widget.networkList.logUrl!),
-                      radius: 15,
-                      backgroundColor: Colors.white,
-                    ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(widget.networkList.denom!,
-                          style: kMediumBoldTextStyle),
-                      Text(widget.networkList.name!, style: kSmallTextStyle),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
+                        child: CircleAvatar(
+                          child: Image.network(widget.networkList.logoUrl ??
+                              widget.networkList.logUrl!),
+                          radius: 15,
+                          backgroundColor: Colors.white,
+                        ),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(widget.networkList.denom!,
+                              style: kMediumBoldTextStyle),
+                          Text(widget.networkList.name!, style: kSmallTextStyle),
+                        ],
+                      ),
                     ],
+                  ),
+                  const SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('APR', style: kExtraSmallTextStyle),
+                            const SizedBox(height: 2),
+                            Text(widget.networkList.apy!,
+                                style: kMediumBoldTextStyle),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Price', style: kExtraSmallTextStyle),
+                            const SizedBox(height: 2),
+                            Text(truncateToDecimalPlaces(double.parse(widget.networkList.price!),2).toString(),
+                                style: kMediumBoldTextStyle),
+                          ],
+                        )
+                      ],
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(height: 10),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('APR', style: kExtraSmallTextStyle),
-                        const SizedBox(height: 2),
-                        Text(widget.networkList.apy!,
-                            style: kMediumBoldTextStyle),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Price', style: kExtraSmallTextStyle),
-                        const SizedBox(height: 2),
-                        Text(truncateToDecimalPlaces(double.parse(widget.networkList.price!),2).toString(),
-                            style: kMediumBoldTextStyle),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        );
   }
 }
