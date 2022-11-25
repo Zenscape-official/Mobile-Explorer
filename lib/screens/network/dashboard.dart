@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/main.dart';
+import '../../Screens/network/blocks.dart';
 import '../../backend_files/blocksModel.dart';
 import '../../backend_files/txModel.dart';
 import '../../constants/constString.dart';
@@ -29,12 +31,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   final TxController _txController = Get.put(TxController());
   TextEditingController nameController = TextEditingController();
   String fullName = '';
-  var blocktime;
-  var bondedtoken;
+  var blockTime='';
+  var txNum='';
+  var bondedToken='';
   var communityPool='33934';
-  var inflation;
-  var height;
-  var bankTotal;
+  var inflation='';
+  var height='';
+  var bankTotal='';
   var blocks;
   var tx;
   double APR = 0;
@@ -68,7 +71,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
      // print(jsonDecode(response.body)['result']['supply'][20]['amount']);
-      return await jsonDecode(response.body)['result']['supply'][21]['amount'];
+      return await jsonDecode(response.body)['result']['supply'][23]['amount'];
     } else {
       return '';
     }
@@ -76,33 +79,32 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
 
   void getData() async {
     height = (await fetchSingleData(widget.networkData!.height!, 'height'));
+    txNum=(await fetchdata(widget.networkData!.transaction!, 'count'));
     bankTotal = (await fetchBankData(widget.networkData!.height!));
-    blocktime =
+    blockTime =
         (await fetchdata(widget.networkData!.blocktime!, 'average_time'));
     inflation = (await fetchdata(widget.networkData!.inflation!, 'value'));
-    // communityPool =
-    //     await fetchdata(widget.networkData!.communityPool!, 'coins');
-    bondedtoken =
+    communityPool =
+        await fetchdata(widget.networkData!.communityPool!, 'coins');
+    bondedToken =
         await fetchdata(widget.networkData!.bondedTokens!, 'bonded_tokens');
       //print('INF $inflation');print('BT $bondedtoken');
     APR = ((double.parse(inflation) * double.parse(bankTotal)) /
-            double.parse(bondedtoken)) * 100;
+            double.parse(bondedToken)) * 100;
     //print('APR $APR');
 
     details = [
-      height!,
-      widget.networkData!.transaction!,
-      k_m_b_generator(double.parse(bondedtoken)),
-      (communityPool),
-      truncateToDecimalPlaces(double.parse(inflation!), 2).toString(),
+      height,
+      txNum,
+      k_m_b_generator(double.parse(bondedToken)),
+      k_m_b_generator(double.parse(removeAllChar(communityPool))),
+      truncateToDecimalPlaces(double.parse(inflation), 2).toString(),
       "${truncateToDecimalPlaces((APR), 2).toString()}%"
     ];
     tx= await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     blocks= await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
     setState(() {
-      if (blocktime != null &&
-          inflation != null &&
-          bondedtoken != null&&
+      if (
           blocks!=null &&
       tx!=null) {
         isLoaded = true;
@@ -115,8 +117,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   @override
   Widget build(BuildContext context) {
     getData();
-    return isLoaded
-        ? Scaffold(
+    return  Scaffold(
             drawer: NavDraw(
               networkData: widget.networkData,
               logoUrl:
@@ -152,7 +153,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                 ],
               ),
             ),
-            body: SingleChildScrollView(
+            body: isLoaded? SingleChildScrollView(
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
@@ -236,7 +237,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           ),
                                           Text(
                                               truncateToDecimalPlaces(
-                                                      double.parse(blocktime!),
+                                                      double.parse(blockTime),
                                                       2)
                                                   .toString(),
                                               style: kExtraSmallBoldTextStyle),
@@ -248,6 +249,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                               ),
                               const SizedBox(height: 10),
                               Container(
+                                // height:130,width: 130,
                                 decoration: BoxDecoration(
                                   color: Colors.transparent,
                                   borderRadius: const BorderRadius.all(
@@ -280,7 +282,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           child: Column(
                                             children: [
                                               Text(
-                                                  '\$' +
+                                                  '\$'+
                                                       truncateToDecimalPlaces(
                                                               double.parse(widget
                                                                   .networkData!
@@ -317,14 +319,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                     SizedBox(
                                                         height: 20,
                                                         width: 20,
-                                                        child: SvgPicture.asset('assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
-                                                        color: (double.parse(widget
+                                                        child:double.parse(widget
                                                             .networkData!
-                                                            .percChangeInPrice!) >
-                                                            0
-                                                            ?
-                                                            const Color(0xFF15BE46)
-                                                            :  Colors.red)))
+                                      .percChangeInPrice!) >
+                                      0? SvgPicture.asset('assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                      color:  const Color(0xFF15BE46)):SvgPicture.asset('assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
+                                    color: Colors.red.withOpacity(.8),),)
+
                                                   ],
                                                 ),
                                               )
@@ -364,8 +365,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           height: 4,
                                         ),
                                         Text(
-                                          k_m_b_generator(double.parse(
-                                              widget.networkData!.marketCap!)),
+                                        '\$${k_m_b_generator(double.parse(
+                                        widget.networkData!.marketCap!))}',
                                           style: kMediumBoldTextStyle,
                                         )
                                       ],
@@ -383,16 +384,20 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         ),
                                         Row(
                                           children: [
-                                            SizedBox(
-                                                height: 20,
-                                                width: 20,
-                                                child: SvgPicture.asset('assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
-                                                color:  double.parse(widget
-                                                    .networkData!
-                                                    .the24HrVol!) >
-                                                    0?const Color(0xFF15BE46):Colors.red.withOpacity(.8))),
-                                            Text(double.parse(widget.networkData!.the24HrVol!).toString()
-                                            ,
+
+                                            double.parse(widget
+                                                .networkData!
+                                                .the24HrVol!) >
+                                                0
+                                                ?
+                                            Text('\$ ${
+                                                    truncateToDecimalPlaces(
+                                                            double.parse(widget
+                                                                .networkData!
+                                                                .the24HrVol!),
+                                                            2)
+                                                        .toString()
+                                                  }',
                                                 style: double.parse(widget
                                                             .networkData!
                                                             .the24HrVol!) >
@@ -406,7 +411,42 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                         fontFamily:
                                                             'MontserratBold',
                                                         fontSize: 17,
-                                                        color: Colors.red.withOpacity(.8))),
+                                                        color: Colors.red.withOpacity(.8))):
+                                            Text('\$${
+                                                truncateToDecimalPlaces(
+                                                    (double.parse(widget
+                                                        .networkData!
+                                                        .the24HrVol!)*(-1)),
+                                                    2)
+                                                    .toString()
+                                            }'
+                                                ,
+                                                style: double.parse(widget
+                                                    .networkData!
+                                                    .the24HrVol!) >
+                                                    0
+                                                    ? const TextStyle(
+                                                    fontFamily:
+                                                    'MontserratBold',
+                                                    fontSize: 17,
+                                                    color: Color(0xFF15BE46))
+                                                    :  TextStyle(
+                                                    fontFamily:
+                                                    'MontserratBold',
+                                                    fontSize: 17,
+                                                    color: Colors.red.withOpacity(.8))),
+
+                                            SizedBox(
+                                                height: 20,
+                                                width: 20,
+                                                child:double.parse(widget
+                                                    .networkData!
+                                                    .the24HrVol!) >
+                                                    0? SvgPicture.asset('assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                                    color:  const Color(0xFF15BE46)):SvgPicture.asset('assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
+                                                  color: Colors.red.withOpacity(.8),)
+
+                                            ),
                                           ],
                                         )
                                       ],
@@ -466,40 +506,108 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                         )),
                   ),
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 0),
-                      child: ListView.builder(
-                          reverse: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: BlocksController.blockList.length < 2
-                              ? BlocksController.blockList.length
-                              : 2,
-                          itemBuilder: (BuildContext context, int index) {
-                            return BlockContDash(
-                              blockModel: BlocksController.blockList[index],
-                            );
-                          })),
+                      padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 8),
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 8),
+                          child: Container(
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              decoration: kBoxDecorationWithoutGradient,
+                              child: Column(children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Blocks',
+                                        style: kSmallBoldTextStyle,
+                                      ),
+                                    ),
+                                    TextButton(
+                                      onPressed:()=> Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData))),
+                                      child: const Text('See more',
+                                        style: TextStyle(
+                                            decoration:  TextDecoration.underline,
+                                            color: Colors.grey
+                                        ),),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
+                                  child: ListView.builder(
+                                      reverse: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: BlocksController.blockList.length < 2
+                                          ? BlocksController.blockList.length
+                                          : 2,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return BlockContDash(
+                                          blockModel: BlocksController.blockList[index],
+                                        );
+                                      })
+                                  ,
+                                ),
+                              ])))),
                   Padding(
-                      padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 0),
-                      child: ListView.builder(
-                          reverse: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          itemCount: TxController.txList.length < 2
-                              ? TxController.txList.length
-                              : 2,
-                          itemBuilder: (BuildContext context, int index) {
-                            return TxContDash(
-                              txModel: TxController.txList[index],
-                            );
-                          })),
+                      padding: const EdgeInsets.fromLTRB(18.0, 0, 14, 0),
+                      child: Padding(
+                          padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 8),
+                          child: Container(
+                            decoration: kBoxDecorationWithoutGradient,
+                            child: Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        'Transaction',
+                                        style: kSmallBoldTextStyle,
+                                      ),
+                                    ),
+                                     TextButton(
+                                      onPressed:()=> Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData))),
+                                      child: const Text('See more',
+                                        style: TextStyle(
+                                            decoration:  TextDecoration.underline,
+                                          color: Colors.grey
+                                        ),),
+                                    ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
+                                  child: ListView.builder(
+                                      reverse: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: TxController.txList.length < 2
+                                          ? TxController.txList.length
+                                          : 2,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        return TxContDash(
+                                          txModel: TxController.txList[index],
+                                        );
+                                      })
+                                  ,
+                                ),
+
+                              ],
+                            ),
+                          )
+                      ),
+                  ),
+
                 ],
               ),
-            ),
+            ):const Center(child:CircularProgressIndicator()),
           )
-        : const Center(child: CircularProgressIndicator());
+        ;
   }
 }
 
@@ -508,189 +616,167 @@ class BlockContDash extends StatelessWidget {
   const BlockContDash({Key? key, this.blockModel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 8),
-        child: Container(
-            width: MediaQuery.of(context).size.width / 1.1,
-            decoration: kBoxDecorationWithoutGradient,
-            child: Column(children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Blocks',
+    return  Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+          color: const Color(0xFFfbfeff),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      blockModel!.height!,
                       style: kSmallBoldTextStyle,
                     ),
-                  ),
-                  const TextButton(
-                    onPressed: null,
-                    child: Text('See more'),
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
-                  child: Card(
-                      color: const Color(0xFFF9FAFC),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  blockModel!.height!,
-                                  style: kSmallBoldTextStyle,
-                                ),
-                                Text(
-                                  '${
-                                      blockModel!.timestamp!
-                                        .difference(timestamp)
-                                        .inSeconds
-                                  }s ago',
-                                  style: kSmallBoldTextStyle,
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Txs',
-                                  style: kSmallTextStyle,
-                                ),
-                                Text(
-                                  blockModel!.numTxs!.toString(),
-                                  style: kSmallBoldTextStyle,
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Time',
-                                  style: kSmallTextStyle,
-                                ),
-                                Text(
-                                  '${dateTime(blockModel!.timestamp!)} ${(blockModel!.timestamp!.timeZoneName)}'.toString(),
-                                  style: kSmallBoldTextStyle,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
+                    Text(
+                      '${
+                          blockModel!.timestamp!
+                              .difference(timestamp)
+                              .inSeconds
+                      }s ago',
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
                 ),
-              ),
-            ])));
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Txs',
+                      style: kSmallTextStyle,
+                    ),
+                    Text(
+                      blockModel!.numTxs!.toString(),
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Time',
+                      style: kSmallTextStyle,
+                    ),
+                    Text(
+                      '${dateTime(blockModel!.timestamp!)} ${(blockModel!.timestamp!.timeZoneName)}'.toString(),
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
+                ),
+              ],
+            ),
+          )),
+    );
+
   }
 }
 
 class TxContDash extends StatelessWidget {
   final TxModel? txModel;
-  const TxContDash({
+   TxContDash({
     Key? key,
     this.txModel
   }) : super(key: key);
+  var type='';
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 4, 8, 8),
-        child: Container(
-          decoration: kBoxDecorationWithoutGradient,
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgCloseRequest'){
+      type='Message Close Request';
+    }
+    if(txModel!.messages![0].type=='/comdex.liquidity.v1beta1.MsgLimitOrder'){
+      type='Message Limit Order';
+    }
+    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgCreateLockerRequest'){
+      type='Message Create Locker Request';
+    }
+    if(txModel!.messages![0].type=='/ibc.core.client.v1.MsgUpdateClient'){
+      type='Message Update Client';
+    }
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgWithdrawStableMintRequest'){
+      type='Message Create Withdraw StableMint Request';
+    }
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgCloseRequest'){
+      type='Message Close Request';
+    }
+    if(txModel!.messages![0].type=='/cosmos.bank.v1beta1.MsgSend'){
+      type='Message Send';
+    }
+    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgWithdrawAssetRequest'){
+      type='Message Withdraw Asset Request';
+    }
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgDepositStableMintRequest'){
+      type='Message Create Deposit StableMint Reques';
+    }
+    return  Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+        child: Card(
+            color: const Color(0xFFF9FAFC),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      'Transaction',
-                      style: kSmallBoldTextStyle,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        function(txModel!.hash!),
+                        style: kSmallBoldTextStyle,
+                      ),
+                      Text(
+                        '10s Ago',
+                        style: kSmallBoldTextStyle,
+                      )
+                    ],
                   ),
-                  const TextButton(
-                    onPressed: null,
-                    child: Text('See more'),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Type',
+                        style: kSmallTextStyle,
+                      ),
+                      Text(
+                        type,
+                        style: kSmallBoldTextStyle,
+                      )
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Time',
+                        style: kSmallTextStyle,
+                      ),
+                      Text(
+                        '',
+                        style: kSmallBoldTextStyle,
+                      )
+                    ],
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
-                  child: Card(
-                      color: const Color(0xFFF9FAFC),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                 function(txModel!.hash!),
-                                  style: kSmallBoldTextStyle,
-                                ),
-                                Text(
-                                  '10s Ago',
-                                  style: kSmallBoldTextStyle,
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Amount',
-                                  style: kSmallTextStyle,
-                                ),
-                                Text(
-                                  txModel!.fee!.amount![0].amount!,
-                                  style: kSmallBoldTextStyle,
-                                )
-                              ],
-                            ),
-                            const SizedBox(
-                              height: 4,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Time',
-                                  style: kSmallTextStyle,
-                                ),
-                                Text(
-                                  '',
-                                  style: kSmallBoldTextStyle,
-                                )
-                              ],
-                            ),
-                          ],
-                        ),
-                      )),
-                ),
-              ),
-            ],
-          ),
-        ));
+            )),
+      ),
+    );
   }
 }

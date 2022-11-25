@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 var kBigTextStyle= TextStyle(
 fontFamily: 'MontserratRegular',
   color: Colors.black,
@@ -26,7 +27,6 @@ var kMediumBoldTextStyle= TextStyle(
   fontWeight: Platform.isAndroid?FontWeight.w700: FontWeight.w900,
   fontSize: 17,
 );
-
 var kSmallTextStyle= TextStyle(
   fontFamily: 'MontserratRegular',
   color: Colors.black,
@@ -159,12 +159,21 @@ String k_m_b_generator(num) {
 }
 
 String removeAllChar(String comm){
-  List<String> newS=[];
-  for(int i=0;i<comm.length-1;i++){
-    if(comm[i]==0||comm[i]==1||comm[i]==2||comm[i]==3||comm[i]==4||comm[i]==5||comm[i]==6||comm[i]==7||comm[i]==8||comm[i]==9||comm[i]=='.'){
-      {newS.add(comm[i]);}
+  List newS=[];
+
+  for(int i=0;i<comm.length;i++){
+
+    if(
+    (comm[i])=='0'||(comm[i])=='1'||(comm[i])=='2'||(comm[i])=='3'||(comm[i])=='4'||(comm[i])=='5'||
+        (comm[i])=='6'||(comm[i])=='7'||(comm[i])=='8'||(comm[i])=='9'||(comm[i])=='.')
+    {
+      newS.add(comm[i]);
+
     }
-  }return newS.toString();
+    if(comm[i]==')')break;
+  }
+   comm.replaceAll(RegExp(','), '');
+  return newS.join("");
 }
 int screen(int scrNo){
   return scrNo;

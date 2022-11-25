@@ -134,7 +134,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                         ),
                         const SizedBox(height: 20,),
                         Text(widget.proposalProduct.content!.title!,
-                            style:kSmallTextStyle),
+                            style:kMediumBoldTextStyle),
                         const SizedBox(height: 20,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,

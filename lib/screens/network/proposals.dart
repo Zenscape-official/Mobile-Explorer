@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Controller/productController.dart';
 import 'package:zenscape_app/Screens/network/proposalDetails.dart';
 import 'package:zenscape_app/backend_files/ProposalsModel.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
+import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/widgets/filterTab.dart';
 import '../../Controller/dropDownController.dart';
 import '../../controller/proposalsFunc.dart';
@@ -237,7 +237,8 @@ class ProposalCard extends StatelessWidget {
                   children:[
                      Text('Voting Starts',
                       style: kSmallTextStyle,),
-                    Text(product.votingStartTime!.toString(),
+                    Text(
+                        '${dateTime(product.votingStartTime!).toString()} ${product.votingStartTime!.timeZoneName}',
                     style: kSmallTextStyle,),
                   ],
                 ),
@@ -248,7 +249,7 @@ class ProposalCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Voting Ends',style: kSmallTextStyle,),
-                    Text(product.votingEndTime!.toString(),
+                    Text('${dateTime(product.votingEndTime!).toString()} ${(product.votingEndTime!.timeZoneName).toString()}',
                       style:kSmallTextStyle,),
                   ],
                 ),

@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,7 +23,7 @@ class Blocks extends StatefulWidget {
 
 class _BlocksState extends State<Blocks> {
   var AppBar1='Blocks';
-  var AppBar2='Trasactions';
+  var AppBar2='Transactions';
   ToggleController toggleController=Get.put(ToggleController());
   final BlocksController _blocksController= Get.put(BlocksController());
   final TxController _txController=Get.put(TxController());
@@ -66,6 +65,7 @@ class _BlocksState extends State<Blocks> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       drawer: NavDraw(networkData: widget.networkData),
       appBar: AppBar(
@@ -166,7 +166,7 @@ class _BlocksState extends State<Blocks> {
             isLoaded?
             GetBuilder<ToggleController>(builder: (blockController){
                return blockController.isBlockSelected==0?
-              (
+
                   ListView.builder(
                    reverse: true,
                    physics: const NeverScrollableScrollPhysics(),
@@ -177,7 +177,7 @@ class _BlocksState extends State<Blocks> {
                      return
                        BlockContainer(blockModel: BlocksController.blockList[index],);
                    }
-               )):
+               ):
                ListView.builder(
                    reverse: true,
                    physics: const NeverScrollableScrollPhysics(),
@@ -259,24 +259,27 @@ class BlockContainer extends StatelessWidget {
                     children: [
                       Text('Block Hash',
                           style:kSmallTextStyle),
-                      const SizedBox(width: 90),
-                      Flexible(
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          strutStyle: const StrutStyle(fontSize: 12.0),
-                          text: TextSpan(
-                              style: kSmallTextStyle,
-                              text: function(blockModel!.hash!),),
-                        ),
-                      ),
+                    //  const SizedBox(width: 90),
+
                       InkWell(
-                        onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.hash!,)).then((_){
+                        onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.hash!)).then((_){
                           ScaffoldMessenger.of(context)
                               .showSnackBar(const SnackBar(content: Text('BlockHash Copied to your clipboard !')));
                         }),
-                          child: const Icon(Icons.copy,
-                            color: Colors.black54,),
+                        child: Row(
+                          children: [
+                            Text(function(blockModel!.hash!)
+                                ,style:kSmallTextStyle),
+                            const SizedBox(width:4),
+                            const Icon(Icons.copy,
+                              color: Colors.black54,
+                              size: 15,
+
+                            ),
+                          ],
                         ),
+                      ),
+
                     ]
                 ),
 
@@ -289,15 +292,25 @@ class BlockContainer extends StatelessWidget {
                       Text('Proposer',
                           style:kSmallTextStyle),
                       const SizedBox(width:99),
-                      Flexible(
-                        child: RichText(
-                          overflow: TextOverflow.ellipsis,
-                          strutStyle: const StrutStyle(fontSize: 12.0),
-                          text: TextSpan(
-                            style: kSmallTextStyle,
-                            text: function(blockModel!.proposerAddress! ),),
+                      InkWell(
+                        onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.proposerAddress!,)).then((_){
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(content: Text('Proposer Address Copied to your clipboard !')));
+                        }),
+                        child: Row(
+                          children: [
+                            Text(function(blockModel!.proposerAddress!)
+                                ,style:kSmallTextStyle),
+                            const SizedBox(width:4),
+                            const Icon(Icons.copy,
+                              color: Colors.black54,
+                              size: 15,
+
+                            ),
+                          ],
                         ),
                       ),
+
                     ]
                 ),
               ),
@@ -339,12 +352,41 @@ class TxContainer extends StatelessWidget {
     Key? key,
     this.txModel
   }) : super(key: key);
-
+ var type='';
 
 
   @override
   Widget build(BuildContext context) {
-
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgCloseRequest'){
+      type='Message Close Request';
+    }
+    if(txModel!.messages![0].type=='/comdex.liquidity.v1beta1.MsgLimitOrder'){
+      type='Message Limit Order';
+    }
+    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgCreateLockerRequest'){
+      type='Message Create Locker Request';
+    }
+    if(txModel!.messages![0].type=='/ibc.core.client.v1.MsgUpdateClient'){
+      type='Message Update Client';
+    }
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgWithdrawStableMintRequest'){
+      type='Message Create Withdraw StableMint Request';
+    }
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgCloseRequest'){
+      type='Message Close Request';
+    }
+    if(txModel!.messages![0].type=='/cosmos.bank.v1beta1.MsgSend'){
+      type='Message Send';
+    }
+    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgWithdrawAssetRequest'){
+      type='Message Withdraw Asset Request';
+    }
+    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgDepositStableMintRequest'){
+      type='Message Create Deposit StableMint Reques';
+    }
+    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgDepositAssetRequest'){
+      type='Message Deposit Asset Request';
+    }
     return InkWell(
       onTap:()=> Get.to(() => TxDetails(txModel:txModel)),
       child: Container(
@@ -359,8 +401,24 @@ class TxContainer extends StatelessWidget {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
-                        Text(function(txModel!.hash!),
-                            style:kMediumBoldTextStyle),
+                        InkWell(
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: txModel!.hash!,)).then((_){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(content: Text('Transaction Hash Copied to your clipboard !')));
+                          }),
+                          child: Row(
+                            children: [
+                              Text(function(txModel!.hash!)
+                                  ,style:kMediumBoldTextStyle),
+                              const SizedBox(width:4),
+                              const Icon(Icons.copy,
+                                color: Colors.black54,
+                                size: 15,
+
+                              ),
+                            ],
+                          ),
+                        ),
                         Container(
                           decoration: BoxDecoration (
                             border: Border.all(
@@ -393,18 +451,18 @@ class TxContainer extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 5,),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children:[
-                        Text('Amount',
-                            style:kSmallTextStyle),
-                        Text('',
-                            style:kSmallBoldTextStyle)
-                      ]
-                  ),
-                ),
+                // Padding(
+                //   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                //   child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children:[
+                //         Text('Amount',
+                //             style:kSmallTextStyle),
+                //         Text('',
+                //             style:kSmallBoldTextStyle)
+                //       ]
+                //   ),
+                // ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
@@ -412,7 +470,7 @@ class TxContainer extends StatelessWidget {
                       children: [
                         Text('Fee',
                             style:kSmallTextStyle),
-                        Text(txModel!.fee!.amount![0].amount!,
+                        Text(txModel!.fee!.amount![0].amount!+' '+txModel!.fee!.amount![0].denom!,
                             style:kSmallBoldTextStyle)
                       ]
                   ),
@@ -436,17 +494,18 @@ class TxContainer extends StatelessWidget {
                       children: [
                         Text('Type',
                             style:kSmallTextStyle),
-                    SizedBox(width: 70,),
+                    const SizedBox(width: 70,),
                         Flexible(
                       child: RichText(
                         overflow: TextOverflow.ellipsis,
                         strutStyle: const StrutStyle(fontSize: 12.0),
                         text: TextSpan(
                             style: kSmallBoldTextStyle,
-                            text:txModel!.messages![0].type),
+                            text:type,
                       ),
                     )
-                      ]
+                        )]
+
                   ),
                 ),
               ]

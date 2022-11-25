@@ -1,14 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/Screens/explorer.dart';
 import 'package:zenscape_app/Screens/onboardingScreen.dart';
 import 'package:zenscape_app/controller/bottomNavController.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import 'package:zenscape_app/controller/networklistController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zenscape_app/screens/explorer.dart';
 import 'package:zenscape_app/screens/landingPage.dart';
-import 'package:zenscape_app/screens/network/dashboard.dart';
 
 dynamic initScreen;
 var timestamp = DateTime.now().toUtc();
@@ -58,58 +57,74 @@ class _MainAppState extends State<MainApp> {
   void initState() {
     super.initState();
   }
-
-
+DateTime timePressedBack=DateTime.now();
   @override
   Widget build(BuildContext context) {
-
     return Obx(
      () {
-        return CupertinoTabScaffold(
+        return WillPopScope(
+          onWillPop: () async{
+            final difference= DateTime.now().difference(timePressedBack);
+            final isExitWarning=difference>=const Duration(seconds: 2);
+            timePressedBack=DateTime.now();
+            if(isExitWarning)
 
-          tabBar: CupertinoTabBar(
-            onTap:(index) {
-             // navController.changeIndex(index);
+              {
+                const message='Press Back Again to Exit App';
+                Get.snackbar('title', message);
+                return false;
+              }
 
-              Navigator.of(context).popUntil((route) => route.isFirst);
-            },
-            inactiveColor: Colors.grey,
-            currentIndex: navController.selectedIndex.value,
-            activeColor: Colors.lightBlueAccent,
-            items: const <BottomNavigationBarItem>[
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home,size: 27,
-                     // color:Colors.lightBlueAccent
-                ),label:('Home'),),
-              BottomNavigationBarItem(icon: Icon(Icons.widgets_outlined,size: 27,
-                  //color: Colors.lightBlueAccent,
-                ),
-              
-                  label:('Zenscape')),
-              BottomNavigationBarItem(icon: Icon(Icons.explore_rounded,size: 27,
-                //color: Colors.lightBlueAccent,
-              ),
-                  label:('Explorer'))
-            ],
-          ),
+            else {
+              return true;
+            }
 
-          tabBuilder: (context,index){
-            switch(index) {
-              case 0:
-                return CupertinoTabView(builder: (context) {
-                  return const CupertinoPageScaffold(
-                      child:LandingPage());
-                });
-              case 1:
-                return CupertinoTabView(builder: (context) {
-                  return const CupertinoPageScaffold(child: NetworkDashBoard());
-                });
-              case 2:
-                return CupertinoTabView(builder: (context) {
-                  return const CupertinoPageScaffold(child: Webview());
-                });
-            }return Container();
           },
+          child: CupertinoTabScaffold(
+            tabBar: CupertinoTabBar(
+              onTap:(index) {
+               // navController.changeIndex(index);
+
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              },
+              inactiveColor: Colors.grey,
+              currentIndex: navController.selectedIndex.value,
+              activeColor: Colors.lightBlueAccent,
+              items: const <BottomNavigationBarItem>[
+                BottomNavigationBarItem(
+                  icon: Icon(Icons.explore_rounded,size: 27,
+                       // color:Colors.lightBlueAccent
+                  ),label:('Explorer'),),
+                BottomNavigationBarItem(icon: Icon(Icons.widgets_outlined,size: 27,
+                    //color: Colors.lightBlueAccent,
+                  ),
+
+                    label:('Zenscape')),
+                // BottomNavigationBarItem(icon: Icon(Icons.explore_rounded,size: 27,
+                //   //color: Colors.lightBlueAccent,
+                // ),
+                //     label:('Explorer'))
+              ],
+            ),
+
+            tabBuilder: (context,index){
+              switch(index) {
+                case 0:
+                  return CupertinoTabView(builder: (context) {
+                    return const CupertinoPageScaffold(
+                        child:LandingPage());
+                  });
+                case 1:
+                  return CupertinoTabView(builder: (context) {
+                    return CupertinoPageScaffold(child: Webview());
+                  });
+                // case 2:
+                //   return CupertinoTabView(builder: (context) {
+                //     return const CupertinoPageScaffold(child: Webview());
+                  //});
+              }return Container();
+            },
+          ),
         );
       }
     );

@@ -4,6 +4,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
 import '../../controller/validatorsController.dart';
 
@@ -17,12 +18,15 @@ class Validators extends StatefulWidget {
 class _ValidatorsState extends State<Validators> {
   final ValidatorController _validatorController =
       Get.put(ValidatorController());
+  final ToggleController _toggleController =Get.put(ToggleController());
   TextEditingController nameController = TextEditingController();
   String fullName = '';
   var validators;
   var activeVal;
   var inactiveVal;
   bool isLoaded=false;
+  int activeValSelected=0;
+
   @override
   void initState() {
     super.initState();
@@ -39,6 +43,9 @@ class _ValidatorsState extends State<Validators> {
      else {
        isLoaded=false;
      }
+
+
+
    });
   }
 
@@ -104,37 +111,60 @@ class _ValidatorsState extends State<Validators> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  ToggleSwitch(
-                    borderWidth: 1,
-                    minHeight: 30,
-                    borderColor: [Colors.grey.shade400],
-                    minWidth: 110.0,
-                    cornerRadius: 20.0,
-                    activeBgColors: [
-                      [const Color(0xFF12BFFF).withOpacity(.1)],
-                      [const Color(0xFF12BFFF).withOpacity(.1)]
-                    ],
-                    activeFgColor: Colors.blue,
-                    inactiveBgColor: Colors.white,
-                    inactiveFgColor: Colors.grey,
-                    initialLabelIndex: 0,
-                    totalSwitches: 2,
-                    labels: const ['Active', 'Inactive'],
-                    radiusStyle: true,
-                    onToggle: (index) {},
+                  GetBuilder<ToggleController>(
+                    builder: (valController) {
+                      return ToggleSwitch(
+                        borderWidth: 1,
+                        minHeight: 30,
+                        borderColor: [Colors.grey.shade400],
+                        minWidth: 110.0,
+                        cornerRadius: 20.0,
+                        activeBgColors: [
+                          [const Color(0xFF12BFFF).withOpacity(.1)],
+                          [const Color(0xFF12BFFF).withOpacity(.1)]
+                        ],
+                        activeFgColor: Colors.blue,
+                        inactiveBgColor: Colors.white,
+                        inactiveFgColor: Colors.grey,
+                        initialLabelIndex: valController.isBlockSelected == 0 ?0:1,
+                        totalSwitches: 2,
+                        labels: const ['Active', 'Inactive'],
+                        radiusStyle: true,
+                        onToggle: (index) {
+                          activeValSelected = index!;
+                        _toggleController.updateData(index);
+                        },
+                      );
+                    }
                   ),
                 ],
               ),
             ),
-            isLoaded?  ListView.builder(
-                reverse: true,
-                physics: const NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: ValidatorController.validatorsList.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return  ValidatorContainer (validatorModel: ValidatorController.validatorsList[index]);
-                }):const CircularProgressIndicator()
+            isLoaded?  GetBuilder<ToggleController>(
+
+              builder: (valController) {
+                return valController.isBlockSelected==0?
+                ListView.builder(
+                    reverse: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: ValidatorController.activeValidatorsList.length,
+                    itemBuilder: (BuildContext context, int index) {
+
+                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList[index]);
+                    }):ListView.builder(
+                    reverse: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: ValidatorController.inActiveValidatorsList.length,
+                    itemBuilder: (BuildContext context, int index) {
+
+                      return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList[index]);
+                    });
+              }
+            ):const CircularProgressIndicator()
           ]),
         ));
   }
@@ -147,7 +177,9 @@ class ValidatorContainer extends StatelessWidget {
   }) : super(key: key);
 
   @override
+
   Widget build(BuildContext context) {
+    validatorModel!.jailedUntil;
     return Container(
       decoration:
           BoxDecoration(borderRadius: BorderRadius.circular(20)),
@@ -169,13 +201,22 @@ class ValidatorContainer extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            child: Image.network(
-                                validatorModel!.avatarUrl?? 'https://picsum.photos/200/300'),
+                            child:validatorModel!.avatarUrl==null?
+                                Image.network(
+                                validatorModel!.avatarUrl??'https://googleflutter.com/sample_image.jpg'):Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
                             backgroundColor: Colors.transparent,
                           ),
                           const SizedBox(width:5),
-                          Text(validatorModel!.moniker!,
-                              style: kBigBoldTextStyle),
+                          SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: SizedBox(
+                              width:150,
+                              child: Text(validatorModel!.moniker!,
+                                  overflow: TextOverflow.ellipsis,
+                                  softWrap: false,
+                                  style: kBigBoldTextStyle),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -201,6 +242,8 @@ class ValidatorContainer extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: (Container(
+                          height:160,
+                          width: 160,
                           decoration: BoxDecoration(
                             color: Colors.transparent,
                             borderRadius: const BorderRadius.all(
@@ -218,8 +261,9 @@ class ValidatorContainer extends StatelessWidget {
                                 padding:
                                     const EdgeInsets.all(25.0),
                                 child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('4407436',
+                                    Text(validatorModel!.votingPower!,
                                         style:
                                             kMediumBoldTextStyle),
                                     const SizedBox(

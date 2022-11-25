@@ -36,7 +36,7 @@ class TxDetails extends StatefulWidget {
   @override
   Widget build(BuildContext context) {
    print(raw);
-    return Scaffold(
+    return widget.txModel!.messages![0].header==null?Scaffold(body:Center(child:Text('No Data Found!'))): Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
         backgroundColor: Colors.transparent,
@@ -53,42 +53,6 @@ class TxDetails extends StatefulWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Container(
-            //     width: MediaQuery.of(context).size.width/1.1,
-            //     height: 40,
-            //     decoration: kBoxDecorationWithGradient,
-            //     margin: const EdgeInsets.all(20),
-            //     child: Padding(
-            //       padding: const EdgeInsets.all(2.0),
-            //        child:
-            //       TextField(
-            //         //controller: nameController,
-            //         decoration: InputDecoration(
-            //           contentPadding: const EdgeInsets.only(left: 15, right: 15),
-            //           filled: true,
-            //           fillColor: Colors.transparent,
-            //           focusedBorder: InputBorder.none,
-            //           border: OutlineInputBorder(
-            //               borderSide: const BorderSide(
-            //                 width: 0,
-            //                 style: BorderStyle.none,
-            //               ),
-            //               borderRadius: BorderRadius.circular(20)
-            //           ),
-            //           hintText: 'Select a chain',
-            //           prefixIcon: const Icon(Icons.search),
-            //         ),
-            //         onChanged: (text) {
-            //           setState(() {
-            //             //fullName = text;
-            //             //you can access nameController in its scope to get
-            //             // the value of text entered as shown below
-            //             //fullName = nameController.text;
-            //           });
-            //         },
-            //       ),
-            //     )
-            // ),
             Padding(
               padding: const EdgeInsets.all(12.0),
               child: Row(
@@ -167,13 +131,13 @@ class TxDetails extends StatefulWidget {
                       Text('Signer',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text(widget.txModel!.messages![0].signer!,
+                      Text(widget.txModel!.messages![0].signer??' ',
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Client ID',
                           style:kSmallTextStyle),
                       const SizedBox(height: 2,),
-                      Text(widget.txModel!.messages![0].clientId!,
+                      Text(widget.txModel!.messages![0].clientId?? ' ',
                           style:kMediumBoldTextStyle),
                       const SizedBox(height: 20,),
                       Text('Block',

@@ -38,7 +38,6 @@ class _LandingPageState extends State<LandingPage> {
   var dash;
   var net;
 
-
   void filterList(String name) {
     if (name.isEmpty) {
       foundNetwork.value = net ;
@@ -104,155 +103,170 @@ class _LandingPageState extends State<LandingPage> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
+        child: RefreshIndicator(
+          onRefresh: ()async{
+            await netData();
+          },
+          child: Column(
+            children: [
+              Container(
+                  width: MediaQuery.of(context).size.width / 1.1,
+                  height: 40,
+                  decoration: kBoxDecorationWithoutGradient,
+                  margin: const EdgeInsets.all(20),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: TextField(
+                        controller: nameController,
+                        decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.only(
+                              left: 8.0, bottom: 8.0, top: 8.0),
+                          filled: true,
+                          fillColor: Colors.transparent,
+                          focusedBorder: InputBorder.none,
+                          border: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                width: 0,
+                                style: BorderStyle.none,
+                              ),
+                              borderRadius: BorderRadius.circular(20)),
+                          prefixIcon: const Icon(Icons.search),
+                        ),
+                        onChanged: (text) => filterList(text)),
+                  )),
+              const SizedBox(
+                height: 0,
+              ),
+             nameController.text.isEmpty? SizedBox(width:0): ListView.builder(
+                  shrinkWrap: true,
+                  itemCount : nameController.text.isEmpty ? 0: foundNetwork.value.length,
+                  itemBuilder: (context, index) =>
+                      InkWell(
+                        onTap: () => Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    NetworkDashBoard(networkData: NetworkController.networkList[index]))),
+                        child:ListTile(
+                          title: Row(
+                            children: [
+                              ClipOval(child: Image.network(foundNetwork.value[index].logoUrl??foundNetwork.value[index].logUrl!,
+                              fit: BoxFit.fill,
+                                height: 20,
+                                width: 20,
+                              )),
+                              SizedBox(height: 5,),
+                              Text(
+                                foundNetwork.value[index].name!,
+                                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                              ),
+                            ],
+                          ),
+                          subtitle: Text(foundNetwork.value[index].denom!,
+                          style:  const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),),
+                        ),
+                      ),
+             ),
+              Container(
+                margin: const EdgeInsets.only(
+                    right: 10, top: 10, left: 10, bottom: 15),
+                height: 199,
                 width: MediaQuery.of(context).size.width / 1.1,
-                height: 40,
-                decoration: kBoxDecorationWithoutGradient,
-                margin: const EdgeInsets.all(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: TextField(
-                      controller: nameController,
-                      decoration: InputDecoration(
-                        contentPadding: const EdgeInsets.only(
-                            left: 8.0, bottom: 8.0, top: 8.0),
-                        filled: true,
-                        fillColor: Colors.transparent,
-                        focusedBorder: InputBorder.none,
-                        border: OutlineInputBorder(
-                            borderSide: const BorderSide(
-                              width: 0,
-                              style: BorderStyle.none,
+                decoration: kBoxDecorationWithGradient,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Image.asset('assets/images/img.png'),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                      child: Text(
+                        'India\'s Most Valued \n Crypto Company',
+                        style: TextStyle(
+                          fontFamily: 'MontserratBold',
+                          fontWeight: FontWeight.w700,
+                          fontSize: 18,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20, horizontal: 30.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Row(
+                              children: [
+                                const Text('1 ',
+                                    style: TextStyle(
+                                        fontFamily: 'MontserratBold',
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 25,
+                                        color: Colors.black)),
+                                Column(
+                                  children: [
+                                    Text('Crore +', style: kMediumBoldTextStyle),
+                                    Text('Investors', style: kSmallTextStyle),
+                                  ],
+                                ),
+                              ],
                             ),
-                            borderRadius: BorderRadius.circular(20)),
-                        prefixIcon: const Icon(Icons.search),
+                          ),
+                          Column(
+                            children: [
+                              Text('100%', style: kMediumBoldTextStyle),
+                              Text('Transparent', style: kSmallTextStyle),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(0),
+                            child: Row(
+                              children: [
+                                const Text('1 ',
+                                    style: TextStyle(
+                                        fontFamily: 'Montserrat',
+                                        fontWeight: FontWeight.w900,
+                                        fontSize: 25,
+                                        color: Colors.black)),
+                                Column(
+                                  children: [
+                                    Text('Crore +', style: kMediumBoldTextStyle),
+                                    Text('Investors', style: kSmallTextStyle),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                      onChanged: (text) => filterList(text)),
-                )),
-            const SizedBox(
-              height: 0,
-            ),
-           nameController.text.isEmpty? SizedBox(width:1): ListView.builder(
-                shrinkWrap: true,
-                itemCount : nameController.text.isEmpty ? 0: foundNetwork.value.length,
-                itemBuilder: (context, index) =>
-                    InkWell(
-                      onTap: () => Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (context) =>
-                                  NetworkDashBoard(networkData: NetworkController.networkList[index]))),
-                      child:ListTile(
+                    ),
+                  ],
+                ),
+              ),
+           flag? Obx(() {
 
-                        title: Text(
-                          foundNetwork.value[index].name!,
-                          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        subtitle: Text(foundNetwork.value[index].denom!),
-                      ),
-                    ),
-           ),
-            Container(
-              margin: const EdgeInsets.only(
-                  right: 10, top: 10, left: 10, bottom: 15),
-              height: 199,
-              width: MediaQuery.of(context).size.width / 1.1,
-              decoration: kBoxDecorationWithGradient,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Image.asset('assets/images/img.png'),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                    child: Text(
-                      'India\'s Most Valued \n Crypto Company',
-                      style: TextStyle(
-                        fontFamily: 'MontserratBold',
-                        fontWeight: FontWeight.w700,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 20, horizontal: 30.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Row(
-                            children: [
-                              const Text('1 ',
-                                  style: TextStyle(
-                                      fontFamily: 'MontserratBold',
-                                      fontWeight: FontWeight.w700,
-                                      fontSize: 25,
-                                      color: Colors.black)),
-                              Column(
-                                children: [
-                                  Text('Crore +', style: kMediumBoldTextStyle),
-                                  Text('Investors', style: kSmallTextStyle),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Column(
-                          children: [
-                            Text('100%', style: kMediumBoldTextStyle),
-                            Text('Transparent', style: kSmallTextStyle),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: Row(
-                            children: [
-                              const Text('1 ',
-                                  style: TextStyle(
-                                      fontFamily: 'Montserrat',
-                                      fontWeight: FontWeight.w900,
-                                      fontSize: 25,
-                                      color: Colors.black)),
-                              Column(
-                                children: [
-                                  Text('Crore +', style: kMediumBoldTextStyle),
-                                  Text('Investors', style: kSmallTextStyle),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                return  StaggeredGridView.countBuilder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 0,
+                    itemCount: NetworkController.networkList.length,
+                    itemBuilder: (context, index) {
+                      return NetworkCard(NetworkController.networkList[index]);
+                    },
+                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1));
+              }):Column(
+                children: const [SizedBox(height: 80,),
+                  Center(child: CircularProgressIndicator()),
                 ],
               ),
-            ),
-         flag? Obx(() {
-
-              return  StaggeredGridView.countBuilder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 4,
-                  crossAxisSpacing: 0,
-                  itemCount: NetworkController.networkList.length,
-                  itemBuilder: (context, index) {
-                    return NetworkCard(NetworkController.networkList[index]);
-                  },
-                  staggeredTileBuilder: (index) => const StaggeredTile.fit(1));
-            }):Column(
-              children: const [SizedBox(height: 80,),
-                Center(child: CircularProgressIndicator()),
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -296,11 +310,17 @@ class _NetworkCardState extends State<NetworkCard> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
-                        child: CircleAvatar(
-                          child: Image.network(widget.networkList.logoUrl ??
-                              widget.networkList.logUrl!),
-                          radius: 15,
-                          backgroundColor: Colors.white,
+                        child: SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: ClipOval(
+                              child: Image.network(
+                                widget.networkList.logUrl??widget.networkList.logoUrl!,
+                                fit: BoxFit.cover,
+                                width: 30.0,
+                                height: 30.0,
+                              )
+                          ),
                         ),
                       ),
                       Column(
