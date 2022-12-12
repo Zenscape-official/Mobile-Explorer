@@ -4,8 +4,9 @@ import 'package:toggle_switch/toggle_switch.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
-import 'package:zenscape_app/controller/toggleController.dart';
+import 'package:zenscape_app/controller/networklistController.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
+import '../../controller/valToggleController.dart';
 import '../../controller/validatorsController.dart';
 
 class Validators extends StatefulWidget {
@@ -18,8 +19,10 @@ class Validators extends StatefulWidget {
 class _ValidatorsState extends State<Validators> {
   final ValidatorController _validatorController =
       Get.put(ValidatorController());
-  final ToggleController _toggleController =Get.put(ToggleController());
+  final NetworkController networkController=Get.put(NetworkController());
+  final ValToggleController _valToggleController =Get.put(ValToggleController());
   TextEditingController nameController = TextEditingController();
+  ScrollController _scrollController = new ScrollController();
   String fullName = '';
   var validators;
   var activeVal;
@@ -32,8 +35,40 @@ class _ValidatorsState extends State<Validators> {
     super.initState();
     valData();
   }
-
   void valData() async {
+    final result = await networkController.fetchList(widget.networkList!.validatorsUrl!);
+
+    if (result['success'] == false) {
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Error",
+            style: kMediumTextStyle,),
+            content: Text(result['response'],style:kMediumBoldTextStyle),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    if(result['success'] == true) {
+
+      validators = List.from(result['response'])
+          .map((e) => ValidatorModel.fromJson(e))
+          .toList()
+          .reversed
+          .toList()
+          .obs;
+    }
+
     validators =
         await _validatorController.fetchVal(widget.networkList!.validatorsUrl!);
    setState(() {
@@ -43,10 +78,8 @@ class _ValidatorsState extends State<Validators> {
      else {
        isLoaded=false;
      }
-
-
-
-   });
+   }
+   );
   }
 
   @override
@@ -61,7 +94,9 @@ class _ValidatorsState extends State<Validators> {
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Validators', style: kBigBoldTextStyle),
+              Text(
+                  'Validators',
+                  style: kBigBoldTextStyle),
               CircleAvatar(
                   radius:15,
                   child: InkWell(
@@ -71,102 +106,108 @@ class _ValidatorsState extends State<Validators> {
             ],
           ),
         ),
-        body: SingleChildScrollView(
-          child:Column(children: [
-            Container(
-                width: MediaQuery.of(context).size.width / 1.1,
-                height: 40,
-                decoration: kBoxDecorationWithoutGradient,
-                margin: const EdgeInsets.all(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.all(15),
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      focusedBorder: InputBorder.none,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                          borderRadius: BorderRadius.circular(20)),
-                      hintText: 'Select a chain',
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                    onChanged: (text) {
-                      setState(() {
-                        fullName = text;
-                        //you can access nameController in its scope to get
-                        // the value of text entered as shown below
-                        //fullName = nameController.text;
-                      });
-                    },
-                  ),
-                )),
-            Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  GetBuilder<ToggleController>(
-                    builder: (valController) {
-                      return ToggleSwitch(
-                        borderWidth: 1,
-                        minHeight: 30,
-                        borderColor: [Colors.grey.shade400],
-                        minWidth: 110.0,
-                        cornerRadius: 20.0,
-                        activeBgColors: [
-                          [const Color(0xFF12BFFF).withOpacity(.1)],
-                          [const Color(0xFF12BFFF).withOpacity(.1)]
-                        ],
-                        activeFgColor: Colors.blue,
-                        inactiveBgColor: Colors.white,
-                        inactiveFgColor: Colors.grey,
-                        initialLabelIndex: valController.isBlockSelected == 0 ?0:1,
-                        totalSwitches: 2,
-                        labels: const ['Active', 'Inactive'],
-                        radiusStyle: true,
-                        onToggle: (index) {
-                          activeValSelected = index!;
-                        _toggleController.updateData(index);
-                        },
-                      );
-                    }
-                  ),
-                ],
-              ),
+        body: Column(children: [
+          // Container(
+          //     width: MediaQuery.of(context).size.width / 1.1,
+          //     height: 40,
+          //     decoration: kBoxDecorationWithoutGradient,
+          //     margin: const EdgeInsets.all(20),
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(0.0),
+          //       child: TextField(
+          //         controller: nameController,
+          //         decoration: InputDecoration(
+          //           contentPadding: const EdgeInsets.all(15),
+          //           filled: true,
+          //           fillColor: Colors.transparent,
+          //           focusedBorder: InputBorder.none,
+          //           border: OutlineInputBorder(
+          //               borderSide: const BorderSide(
+          //                 width: 0,
+          //                 style: BorderStyle.none,
+          //               ),
+          //               borderRadius: BorderRadius.circular(20)),
+          //           hintText: 'Select a chain',
+          //           prefix: const Icon(Icons.search),
+          //         ),
+          //         onChanged: (text) {
+          //           setState(() {
+          //             fullName = text;
+          //             //you can access nameController in its scope to get
+          //             // the value of text entered as shown below
+          //             //fullName = nameController.text;
+          //           });
+          //         },
+          //       ),
+          //     )),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                GetBuilder<ValToggleController>(
+                  builder: (valController) {
+                    return ToggleSwitch(
+                      borderWidth: 1,
+                      minHeight: 30,
+                      borderColor: [Colors.grey.shade400],
+                      minWidth: 110.0,
+                      cornerRadius: 20.0,
+                      activeBgColors: [
+                        [const Color(0xFF12BFFF).withOpacity(.1)],
+                        [const Color(0xFF12BFFF).withOpacity(.1)]
+                      ],
+                      activeFgColor: Colors.blue,
+                      inactiveBgColor: Colors.white,
+                      inactiveFgColor: Colors.grey,
+                      initialLabelIndex: valController.isActiveSelected == 0 ?0:1,
+                      totalSwitches: 2,
+                      labels: const ['Active', 'Inactive'],
+                      radiusStyle: true,
+                      onToggle: (index) {
+                        activeValSelected = index!;
+                      _valToggleController.updateData(index);
+                      },
+                    );
+                  }
+                ),
+              ],
             ),
-            isLoaded?  GetBuilder<ToggleController>(
+          ),
+          isLoaded?
+          GetBuilder<ValToggleController>(
 
-              builder: (valController) {
-                return valController.isBlockSelected==0?
-                ListView.builder(
-                    reverse: true,
-                    physics: const NeverScrollableScrollPhysics(),
+            builder: (valController) {
+              return valController.isActiveSelected==0?
+              Expanded(
+                child: ListView.builder(
+                    // reverse: true,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    //controller: _scrollController,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: ValidatorController.activeValidatorsList.length,
                     itemBuilder: (BuildContext context, int index) {
 
                       return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList[index]);
-                    }):ListView.builder(
-                    reverse: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: ValidatorController.inActiveValidatorsList.length,
-                    itemBuilder: (BuildContext context, int index) {
+                    }),
+              ):Expanded(
+                child: ListView.builder(
+                // reverse: true,
+                physics: const AlwaysScrollableScrollPhysics(),
+                //controller: _scrollController,
+                scrollDirection: Axis.vertical,
+                shrinkWrap: true,
+                itemCount: ValidatorController.inActiveValidatorsList.length,
+                itemBuilder: (BuildContext context, int index) {
 
-                      return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList[index]);
-                    });
-              }
-            ):const CircularProgressIndicator()
-          ]),
-        ));
+                  return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList[index]);
+                }),
+              );
+            }
+          ):
+          Center(child: const CircularProgressIndicator())
+        ]));
   }
 }
 
@@ -196,17 +237,17 @@ class ValidatorContainer extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     SingleChildScrollView(
+
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           CircleAvatar(
-                            child:validatorModel!.avatarUrl==null?
-                                Image.network(
-                                validatorModel!.avatarUrl??'https://googleflutter.com/sample_image.jpg'):Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
+                            radius:15,
+                            child:Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
                             backgroundColor: Colors.transparent,
                           ),
-                          const SizedBox(width:5),
+                          const SizedBox(width:10),
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: SizedBox(
@@ -269,7 +310,7 @@ class ValidatorContainer extends StatelessWidget {
                                     const SizedBox(
                                       height: 4,
                                     ),
-                                    Text('+4.29%',
+                                    Text('Voting Power',
                                         style: kSmallTextStyle),
                                   ],
                                 ),
@@ -308,23 +349,23 @@ class ValidatorContainer extends StatelessWidget {
                             style: kSmallTextStyle,
                           ),
                           Text(
-                            "Uptime",
+                            '${validatorModel!.missedBlocksCounter!} blocks missed',
                             style: kSmallBoldTextStyle,
                           )
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Text('Partcipation',
-                              style: kSmallTextStyle),
-                          Text(
-                            ' 5/7',
-                            style: kSmallBoldTextStyle,
-                          ),
-                        ],
-                      ),
+                      // Column(
+                      //   crossAxisAlignment:
+                      //       CrossAxisAlignment.start,
+                      //   children: [
+                      //     Text('Participation',
+                      //         style: kSmallTextStyle),
+                      //     Text(
+                      //       ' 5/7',
+                      //       style: kSmallBoldTextStyle,
+                      //     ),
+                      //   ],
+                      // ),
                       Column(
                         crossAxisAlignment:
                             CrossAxisAlignment.start,
@@ -334,7 +375,7 @@ class ValidatorContainer extends StatelessWidget {
                             style: kSmallTextStyle,
                           ),
                           Text(
-                           truncateToDecimalPlaces(double.parse(validatorModel!.commission!),2).toString(),
+                          '${truncateToDecimalPlaces(double.parse(validatorModel!.commission!)*100,2).toString()}%',
                             style: kSmallBoldTextStyle,
                           )
                         ],

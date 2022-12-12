@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Screens/network/parameters.dart';
 import 'package:zenscape_app/Screens/network/validators.dart';
-import 'package:zenscape_app/Screens/network/assets.dart';
 import 'package:zenscape_app/Screens/network/blocks.dart';
-import 'package:zenscape_app/Screens/network/ibcRelayers.dart';
 import 'package:zenscape_app/Screens/network/proposals.dart';
 import 'package:zenscape_app/screens/network/dashboard.dart';
 import '../Screens/network/contracts.dart';
@@ -21,8 +19,14 @@ class NavDraw extends StatefulWidget {
 }
 
 int selectedIndex = 0;
-
 class _NavDrawState extends State<NavDraw> {
+  @override
+  void initState() {
+    super.initState();
+   //selectedIndex = 0;
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -54,6 +58,17 @@ class _NavDrawState extends State<NavDraw> {
                 ),
               ),
               _createDrawerItem(
+                  image: 'assets/images/home_FILL0_wght400_GRAD0_opsz48.png',
+                  text: 'Home',
+                  isSelected: selectedIndex == 8,
+                  onTap: () {
+                    setState(() {
+                      selectedIndex = 8;
+                    });
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+
+                  }),
+              _createDrawerItem(
                   image: 'assets/images/dashbd.png',
                   text: 'Dashboard',
                   isSelected: selectedIndex == 0,
@@ -66,7 +81,7 @@ class _NavDrawState extends State<NavDraw> {
                   }),
               _createDrawerItem(
                   image: 'assets/images/val.png',
-                  text: 'Validator',
+                  text: 'Validators',
                   isSelected: selectedIndex == 1,
                   onTap: () {
                     setState(() {
@@ -97,28 +112,28 @@ class _NavDrawState extends State<NavDraw> {
                     Navigator.of(context).pop();
       Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals(networkListProposal:widget.networkData ,)));
                   }),
-              _createDrawerItem(
-                  image: 'assets/images/ibc.png',
-                  text: 'IBC Relayers',
-                  isSelected: selectedIndex == 4,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = 4;
-                    });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> IBCRelayers(networkData:widget.networkData)));
-                  }),
-              _createDrawerItem(
-                  image: 'assets/images/assets.png',
-                  text: 'Assets',
-                  isSelected: selectedIndex == 5,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = 5;
-                    });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Assets(networkData:widget.networkData)));
-                  }),
+              // _createDrawerItem(
+              //     image: 'assets/images/ibc.png',
+              //     text: 'IBC Relayers',
+              //     isSelected: selectedIndex == 4,
+              //     onTap: () {
+              //       setState(() {
+              //         selectedIndex = 4;
+              //       });
+              //       Navigator.of(context).pop();
+              //       Navigator.push(context, CupertinoPageRoute(builder: (context)=> IBCRelayers(networkData:widget.networkData)));
+              //     }),
+              // _createDrawerItem(
+              //     image: 'assets/images/assets.png',
+              //     text: 'Assets',
+              //     isSelected: selectedIndex == 5,
+              //     onTap: () {
+              //       setState(() {
+              //         selectedIndex = 5;
+              //       });
+              //       Navigator.of(context).pop();
+              //       Navigator.push(context, CupertinoPageRoute(builder: (context)=> Assets(networkData:widget.networkData)));
+              //     }),
               _createDrawerItem(
                   image:'assets/images/contracts.png',
                   text: 'Smart Contracts',

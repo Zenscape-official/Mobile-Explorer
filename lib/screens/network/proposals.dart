@@ -3,11 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Controller/productController.dart';
 import 'package:zenscape_app/Screens/network/proposalDetails.dart';
-import 'package:zenscape_app/backend_files/ProposalsModel.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
-import 'package:zenscape_app/widgets/filterTab.dart';
-import '../../Controller/dropDownController.dart';
+import '../../backend_files/proposalsModel.dart';
+import '../../controller/networklistController.dart';
 import '../../controller/proposalsFunc.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 
@@ -20,7 +19,7 @@ final NetworkList? networkListProposal;
 
 class _ProposalsState extends State<Proposals> {
   final ProductController productController= Get.put(ProductController());
-  final ProposalController _proposalController= Get.put(ProposalController());
+  final NetworkController networkController = Get.put(NetworkController());
   bool isLoaded=false;
   var prop;
 
@@ -37,7 +36,37 @@ class _ProposalsState extends State<Proposals> {
   }
 
   getData() async{
-     prop= await _proposalController.fetchProducts(widget.networkListProposal!.proposalsUrl!);
+    final result= await networkController.fetchList(widget.networkListProposal!.proposalsUrl!);
+    if (result['success'] == false) {
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: Text(prop['response']),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    if(result['success'] == true) {
+
+      prop = List.from(result['response'])
+          .map((e) => ProposalsModel.fromJson(e))
+          .toList()
+          .reversed
+          .toList()
+          .obs;
+    }
+
     setState(() {
       if (prop!=null){
         isLoaded=true;
@@ -48,7 +77,6 @@ class _ProposalsState extends State<Proposals> {
     });
   }
 
-  BookController bookController = BookController();
   TextEditingController nameController=TextEditingController();
   String fullName = '';
 
@@ -75,59 +103,59 @@ class _ProposalsState extends State<Proposals> {
       ),
       body: Column(
         children: [
-          Container(
-              width: MediaQuery.of(context).size.width/1.1,
-              height: 40,
-              decoration: kBoxDecorationWithoutGradient,
-              margin: const EdgeInsets.all(20),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(15),
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    focusedBorder: InputBorder.none,
-                    border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                        borderRadius: BorderRadius.circular(20)
-                    ),
-                    hintText: 'Select a chain',
-                    prefixIcon: const Icon(Icons.search),
-                  ),
-                  onChanged: (text) {
-                    setState(() {
-                      fullName = text;
-                      //you can access nameController in its scope to get
-                      // the value of text entered as shown below
-                      //fullName = nameController.text;
-                    });
-                  },
-                ),
-              )),
+          // Container(
+          //     width: MediaQuery.of(context).size.width/1.1,
+          //     height: 40,
+          //     decoration: kBoxDecorationWithoutGradient,
+          //     margin: const EdgeInsets.all(20),
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(0.0),
+          //       child: TextField(
+          //         controller: nameController,
+          //         decoration: InputDecoration(
+          //           contentPadding: const EdgeInsets.all(15),
+          //           filled: true,
+          //           fillColor: Colors.transparent,
+          //           focusedBorder: InputBorder.none,
+          //           border: OutlineInputBorder(
+          //               borderSide: const BorderSide(
+          //                 width: 0,
+          //                 style: BorderStyle.none,
+          //               ),
+          //               borderRadius: BorderRadius.circular(20)
+          //           ),
+          //           hintText: 'Select a chain',
+          //           prefixIcon: const Icon(Icons.search),
+          //         ),
+          //         onChanged: (text) {
+          //           setState(() {
+          //             fullName = text;
+          //             //you can access nameController in its scope to get
+          //             // the value of text entered as shown below
+          //             //fullName = nameController.text;
+          //           });
+          //         },
+          //       ),
+          //     )),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children:
             const [
-              Filter(),
+             // Filter(),
             ],
           ),
          isLoaded?SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height/1.4,
+              height: MediaQuery.of(context).size.height/1.2,
               child:Obx(()=> CupertinoScrollbar(
                 child: ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    itemCount: ProposalController.proposalList.length,
+                    itemCount: prop.length,
                     itemBuilder: (BuildContext context, int index) {
                       return
-                        ProposalCard(ProposalController.proposalList[index]);
+                        ProposalCard(prop[index]);
                     })
               ),
             ),
@@ -157,7 +185,11 @@ class ProposalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     fun();
     return InkWell(
-      onTap: ()=> Get.to(() => ProposalDetails(proposalProduct: product)),
+      onTap: ()=> Get.to(
+              () => ProposalDetails(
+        proposalProduct: product,
+      )
+      ),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(

@@ -13,34 +13,56 @@ class TxModel {
     this.hash,
     this.height,
     this.success,
+    this.stringMessage,
     this.messages,
     this.fee,
     this.gasWanted,
+    this.amount,
     this.gasUsed,
-    //this.rawLog,
+    this.rawLog,
     this.memo,
+    this.logs,
+    this.partitionId,
+    this.appID,
+    this.stableVaultID,
+    this.extendedPairVaultID,
   });
 
   String? hash;
   String? height;
   bool? success;
+  String? amount;
   List<Message>? messages;
+  String? stringMessage;
   Fee ?fee;
   String? gasWanted;
   String? gasUsed;
-  //List<RawLog>? rawLog;
+  String? rawLog;
   String? memo;
+  List<Log>? logs;
+  String? partitionId;
+  String? appID;
+  String? stableVaultID;
+  String? extendedPairVaultID;
 
   factory TxModel.fromJson(Map<String, dynamic> json) => TxModel(
     hash: json["hash"],
     height: json["height"],
     success: json["success"],
+    amount: json["amount"],
     messages: List<Message>.from(json["messages"].map((x) => Message.fromJson(x))),
+    //stringMessage: json["messages"],
     fee: Fee.fromJson(json["fee"]),
     gasWanted: json["gas_wanted"],
     gasUsed: json["gas_used"],
-   // rawLog: List<RawLog>.from(json["raw_log"].map((x) => RawLog.fromJson(x))),
+   rawLog: json["raw_log"],
     memo: json["memo"],
+    //logs: List<Log>.from(json["logs"].map((x) => Log.fromJson(x))),
+    partitionId: json["partition_id"],
+    appID: json["app_id"],
+    stableVaultID: json["stable_vault_id"],
+    extendedPairVaultID: json["extended_pair_vault_id"]
+
   );
 
   Map<String, dynamic> toJson() => {
@@ -48,10 +70,14 @@ class TxModel {
     "height": height,
     "success": success,
     "messages": List<dynamic>.from(messages!.map((x) => x.toJson())),
+    "stringMessages":stringMessage,
+
     "fee": fee!.toJson(),
     "gas_wanted": gasWanted,
     "gas_used": gasUsed,
-    //"raw_log": List<dynamic>.from(rawLog!.map((x) => x.toJson())),
+    "raw_log": rawLog,
+    "logs": List<dynamic>.from(logs!.map((x) => x.toJson())),
+    "partition_id": partitionId,
     "memo": memo,
   };
 }
@@ -103,6 +129,21 @@ class Amount {
     "amount": amount,
   };
 }
+class Log {
+  Log({
+    this.events,
+  });
+
+  List<Event>? events;
+
+  factory Log.fromJson(Map<String, dynamic> json) => Log(
+    events: List<Event>.from(json["events"].map((x) => Event.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "events": List<dynamic>.from(events!.map((x) => x.toJson())),
+  };
+}
 
 class Message {
   Message({
@@ -114,6 +155,19 @@ class Message {
     this.proofAcked,
     this.proofHeight,
     this.acknowledgement,
+    this.price,
+    this.amount,
+    this.appId,
+    this.orderer,
+    this.pairId,
+    this.direction,
+    this.offerCoin,
+    this.orderLifespan,
+    this.demandCoinDenom,
+    this.farmer,
+    this.farmingPoolCoin,
+    this.poolId
+
   });
 
   String? type;
@@ -124,6 +178,18 @@ class Message {
   String? proofAcked;
   Height? proofHeight;
   String? acknowledgement;
+  String? price;
+  String? amount;
+  String? appId;
+  String? orderer;
+  String? pairId;
+  String? direction;
+  Amount? offerCoin;
+  String? orderLifespan;
+  String? demandCoinDenom;
+  String? farmer;
+  String? poolId;
+  Amount? farmingPoolCoin;
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
     type: json["@type"],
@@ -134,6 +200,15 @@ class Message {
     proofAcked: json["proof_acked"],
     proofHeight: json["proof_height"] == null ? null : Height.fromJson(json["proof_height"]),
     acknowledgement: json["acknowledgement"],
+    price: json["price"],
+    //amount: json["amount"],
+    appId: json["app_id"],
+    orderer: json["orderer"],
+    pairId: json["pair_id"],
+    direction: json["direction"],
+    //offerCoin: Amount.fromJson(json["offer_coin"]),
+    orderLifespan: json["order_lifespan"],
+    demandCoinDenom: json["demand_coin_denom"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -145,6 +220,16 @@ class Message {
     "proof_acked": proofAcked,
     "proof_height": proofHeight == null ? null : proofHeight!.toJson(),
     "acknowledgement": acknowledgement,
+    "price": price,
+    "amount": amount,
+    "app_id": appId,
+    "orderer": orderer,
+    "pair_id": pairId,
+    "direction": direction,
+    "offer_coin": offerCoin!.toJson(),
+    "order_lifespan": orderLifespan,
+    "demand_coin_denom": demandCoinDenom,
+
   };
 }
 

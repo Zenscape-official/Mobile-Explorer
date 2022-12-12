@@ -1,14 +1,16 @@
 import'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/contractModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/screens/network/contractDetails.dart';
 import '../../backend_files/networkList.dart';
-import '../../controller/ContractController.dart';
+import '../../controller/contractController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
+
 class Contracts extends StatefulWidget {
   final NetworkList? networkList;
   const Contracts({Key? key,this.networkList}) : super(key: key);
-
   @override
   State<Contracts> createState() => _ContractsState();
 }
@@ -50,8 +52,8 @@ class _ContractsState extends State<Contracts> {
         title:Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('CONTRACTS',
-                style:kBigTextStyle),
+            Text('Contracts',
+                style:kBigBoldTextStyle),
             CircleAvatar(
                 radius:15,
                 child: InkWell(
@@ -65,40 +67,6 @@ class _ContractsState extends State<Contracts> {
         child: Column(
           children: [
 
-            Container(
-                width: MediaQuery.of(context).size.width/1.1,
-                height: 40,
-                decoration: kBoxDecorationWithoutGradient,
-                margin: const EdgeInsets.all(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.all(15),
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      focusedBorder: InputBorder.none,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      hintText: 'Select a chain',
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                    onChanged: (text) {
-                      setState(() {
-                        fullName = text;
-                        //you can access nameController in its scope to get
-                        // the value of text entered as shown below
-                        //fullName = nameController.text;
-                      });
-                    },
-                  ),
-                )),
             Padding(
               padding: const EdgeInsets.all(18.0),
               child: Row(
@@ -116,7 +84,9 @@ class _ContractsState extends State<Contracts> {
                 itemBuilder: (BuildContext context, int index) {
                   return
                     ContractContainer(contractModel: ContractController.ContractList[index],);
-                }):CircularProgressIndicator(),
+                }
+                ):
+             CircularProgressIndicator(),
           ],
         ),
       ),
@@ -132,95 +102,88 @@ class ContractContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: kBoxDecorationWithGradient,
-      margin: const EdgeInsets.all(14),
-      child: Column(
-          children:[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:[
-                    Row(
-                      children: [
-                        CircleAvatar(radius:10,backgroundColor: Colors.transparent,child: Image.asset('assets/images/neta.png',color: Colors.black,)),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(contractModel!.label!,
-                              style:kMediumTextStyle),
-                        ),],
-                    ),
-
-                    Container(
-                      decoration: kBoxDecorationWithoutGradient,
-                      child: Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: Text('10s ago',
-                            style:TextStyle(
-                                color: Colors.black.withOpacity(.5),
-                                fontWeight: FontWeight.bold
-                            )),
+    return InkWell(
+      onTap:()=> Get.to(() => ContractDetails()),
+      child: Container(
+        decoration: kBoxDecorationWithGradient,
+        margin: const EdgeInsets.all(14),
+        child: Column(
+            children:[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:[
+                      Row(
+                        children: [
+                          CircleAvatar(radius:10,backgroundColor: Colors.transparent,child: SvgPicture.asset('assets/svgfiles/description_FILL0_wght400_GRAD0_opsz48.svg',color: Colors.black,)),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(contractModel!.label!,
+                                style:kMediumTextStyle),
+                          ),],
                       ),
-                    )
-                  ]
+
+                      // Container(
+                      //   decoration: kBoxDecorationWithoutGradient,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.all(5.0),
+                      //     child: Text( '${
+                      //         new DateTime.now().toLocal()
+                      //             .difference((contractModel!.instantiatedAt!).toLocal())
+                      //             .inDays
+                      //     }days ago',
+                      //         style:TextStyle(
+                      //             color: Colors.black.withOpacity(.5),
+                      //             fontWeight: FontWeight.bold
+                      //         )),
+                      //   ),
+                      // )
+                    ]
+                ),
+
+              ),
+              const SizedBox(height: 5,),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8,4,8,8),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children:[
+                      Text('Contract',
+                          style:kSmallTextStyle),
+                      Text('CW20 Contract',
+                          style:kSmallTextStyle)
+                    ]
+                ),
+
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Contract Address',
+                          style:kSmallTextStyle),
+                      Text(dotRefactorFunction(contractModel!.contractAddress!),
+                          style:kSmallTextStyle)
+                    ]
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Instantiated at',
+                          style:kSmallTextStyle),
+                      Text(dateTime(contractModel!.instantiatedAt!),
+                          style:kSmallTextStyle)
+                    ]
+                ),
+
               ),
 
-            ),
-            const SizedBox(height: 5,),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children:[
-                    Text('Contract',
-                        style:kSmallTextStyle),
-                    Text('CW20 Contract',
-                        style:kSmallTextStyle)
-                  ]
-              ),
-
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Contract Address',
-                        style:kSmallTextStyle),
-                    Text(function(contractModel!.contractAddress!),
-                        style:kSmallTextStyle)
-                  ]
-              ),
-
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Executes',
-                        style:kSmallTextStyle),
-                    Text('',
-                        style:kSmallTextStyle)
-                  ]
-              ),
-
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Instantiated at',
-                        style:kSmallTextStyle),
-                    Text(dateTime(contractModel!.instantiatedAt!),
-                        style:kSmallTextStyle)
-                  ]
-              ),
-
-            ),
-
-          ]
+            ]
+        ),
       ),
     );
   }

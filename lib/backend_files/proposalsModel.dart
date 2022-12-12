@@ -92,8 +92,8 @@ class Content {
         type: json["@type"],
         title: json["title"],
         description: json["description"],
-        runAs: json["run_as"] == null ? null : json["run_as"],
-        wasmByteCode: json["wasm_byte_code"] == null ? null : json["wasm_byte_code"],
+        runAs: json["run_as"],
+        wasmByteCode: json["wasm_byte_code"],
         instantiatePermission: json["instantiate_permission"],
     );
 
@@ -102,8 +102,8 @@ class Content {
         "@type": type,
         "title": title,
         "description": description,
-        "run_as": runAs == null ? null : runAs,
-        "wasm_byte_code": wasmByteCode == null ? null : wasmByteCode,
+        "run_as": runAs,
+        "wasm_byte_code": wasmByteCode,
         "instantiate_permission": instantiatePermission,
     };
 }

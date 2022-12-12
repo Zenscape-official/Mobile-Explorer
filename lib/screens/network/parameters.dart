@@ -20,14 +20,12 @@ class Parameters extends StatefulWidget {
 class _ParametersState extends State<Parameters> {
   var isLoaded=false;
 
-
-
-  var mintdenom,blocksPerYear;
-  var max_val,unbondTime,max_entries,hist_entries;
-  var base_reward,bonus_reward,commTax,withdraw_enabled;
-  var signedBlockWindow,minSignedPerWindow,slashFractionDoubleSign,slashFractionDowntime;
-  var minDeposit,maxDeposit,votingPeriod,quorum,threshold,vetoThreshold;
-  var stakingParams;
+  var mintdenom='',blocksPerYear='';
+  var max_val='',unbondTime='',max_entries='',hist_entries='';
+  var base_reward='',bonus_reward='',commTax='',withdraw_enabled='';
+  var signedBlockWindow='',minSignedPerWindow='',slashFractionDoubleSign='',slashFractionDowntime='';
+  var minDeposit='',maxDeposit='',votingPeriod='',quorum='',threshold='',vetoThreshold='';
+  var stakingParams='';
 
 
 
@@ -39,19 +37,21 @@ void initstate() {
   static Future<String> fetchDataMint(String input,String json1,String json2) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
-      return await (jsonDecode(response.body)[json1][json2].toString());
+     // print (jsonDecode(response.body)[json1][json2].toString());
+      return jsonDecode(response.body)[json1][json2].toString();
     } else {
       return '';
     }
   }
-  // static Future<String> fetchDataGov(String input,String json1,String json2) async {
-  //   final response = await http.get(Uri.parse(input));
-  //   if (response.statusCode == 200) {
-  //     return await (jsonDecode(response.body)[0][json1][json2]).toString();
-  //   } else {
-  //     return '';
-  //   }
-  // }
+  static Future<String> fetchDataGov(String input,String json1,String json2) async {
+    final response = await http.get(Uri.parse(input));
+    if (response.statusCode == 200) {
+     // print(jsonDecode(response.body)[0][json1][json2].toString());
+      return jsonDecode(response.body)[0][json1][json2].toString();
+    } else {
+      return '';
+    }
+  }
 
   void getData() async {
      mintdenom = (await fetchDataMint(widget.networkList!.mintingParamssUrl!,'result','mint_denom'));
@@ -82,7 +82,8 @@ void initstate() {
      // vetoThreshold=(await fetchDataGov(widget.networkList!.govParamsUrl!,'tally_params','veto_threshold'));
 
      mintParams=[blocksPerYear,mintdenom];
-     stakeParams=[unbondTime,max_val,max_entries,hist_entries];
+     stakeParams=[
+      ' ${(double.parse(unbondTime) / (86400 * 1000000000)).toString()} days',max_val,max_entries,hist_entries];
 
      // govParams=[k_m_b_generator(double.parse(maxDeposit)),
      //   truncateToDecimalPlaces(double.parse(votingPeriod),2).toString(),
@@ -106,16 +107,17 @@ void initstate() {
        //vetoThreshold != null &&
        //     threshold!= null &&
            // quorum != null &&
-       commTax!=null&&
-           slashFractionDowntime != null &&
+       // commTax!=null&&
+       //     slashFractionDowntime != null &&
            //maxDeposit!=null&&
-           blocksPerYear!=null) {
+       mintdenom!=null) {
          isLoaded = true;
 
        } else {
          isLoaded = false;
        }
-     });
+     }
+     );
   }
 
   TextEditingController nameController=TextEditingController();
@@ -124,7 +126,7 @@ void initstate() {
   Widget build(BuildContext context) {
     getData();
 
-    return isLoaded? Scaffold(
+    return Scaffold(
       drawer: NavDraw(networkData: widget.networkList),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
@@ -132,9 +134,9 @@ void initstate() {
         elevation: 0,
         foregroundColor: Colors.black,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Parameters',
+            const Text('Parameters',
               style:TextStyle(
                 fontWeight: FontWeight.w700,
                 fontFamily: 'MontserratBold',
@@ -149,43 +151,45 @@ void initstate() {
           ],
         ),
       ),
-      body: ListView(
+      body:
+      isLoaded?
+      ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
-          Container(
-              width: MediaQuery.of(context).size.width/1.1,
-              height: 40,
-              decoration: kBoxDecorationWithoutGradient,
-              margin: const EdgeInsets.all(20),
-              child: Padding(
-                padding: const EdgeInsets.all(0.0),
-                child: TextField(
-                  controller: nameController,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.all(15),
-                    filled: true,
-                    fillColor: Colors.transparent,
-                    focusedBorder: InputBorder.none,
-                    border: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          width: 0,
-                          style: BorderStyle.none,
-                        ),
-                        borderRadius: BorderRadius.circular(20)
-                    ),
-                    hintText: 'Select a chain',
-                    prefixIcon: const Icon(Icons.search),
-                  ),
-                  onChanged: (text) {
-                    setState(() {
-                      fullName = text;
-                      //you can access nameController in its scope to get
-                      // the value of text entered as shown below
-                      //fullName = nameController.text;
-                    });
-                  },
-                ),
-              )),
+          // Container(
+          //     width: MediaQuery.of(context).size.width/1.1,
+          //     height: 40,
+          //     decoration: kBoxDecorationWithoutGradient,
+          //     margin: const EdgeInsets.all(20),
+          //     child: Padding(
+          //       padding: const EdgeInsets.all(0.0),
+          //       child: TextField(
+          //         controller: nameController,
+          //         decoration: InputDecoration(
+          //           contentPadding: const EdgeInsets.all(15),
+          //           filled: true,
+          //           fillColor: Colors.transparent,
+          //           focusedBorder: InputBorder.none,
+          //           border: OutlineInputBorder(
+          //               borderSide: const BorderSide(
+          //                 width: 0,
+          //                 style: BorderStyle.none,
+          //               ),
+          //               borderRadius: BorderRadius.circular(20)
+          //           ),
+          //           hintText: 'Select a chain',
+          //           prefixIcon: const Icon(Icons.search),
+          //         ),
+          //         onChanged: (text) {
+          //           setState(() {
+          //             fullName = text;
+          //             //you can access nameController in its scope to get
+          //             // the value of text entered as shown below
+          //             //fullName = nameController.text;
+          //           });
+          //         },
+          //       ),
+          //     )),
 
           Padding(
             padding: const EdgeInsets.all(10.0),
@@ -195,7 +199,7 @@ void initstate() {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Minting Parameters',
-                  style:kMediumTextStyle),
+                  style:kMediumBoldTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -220,7 +224,7 @@ void initstate() {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Staking Parameters',
-                      style:kMediumTextStyle),
+                      style:kMediumBoldTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -237,31 +241,31 @@ void initstate() {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Governance Parameters',
-                      style:kMediumTextStyle),
-                ),
-                StaggeredGridView.countBuilder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    crossAxisCount: 2,
-                    mainAxisSpacing: 20,
-                    crossAxisSpacing: 20,
-                    itemCount: govParams.length,
-                    itemBuilder: (context,index){
-                      return InfoCard(title1: govTitle[index],icon1: image[index],titleValue1: govParams[index]);
-                    },
-                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
-              ],
-            ),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.all(10.0),
+          //   child: Column(
+          //     crossAxisAlignment: CrossAxisAlignment.start,
+          //     children: [
+          //       Padding(
+          //         padding: const EdgeInsets.all(8.0),
+          //         child: Text('Governance Parameters',
+          //             style:kMediumTextStyle),
+          //       ),
+          //       StaggeredGridView.countBuilder(
+          //           physics: const NeverScrollableScrollPhysics(),
+          //           scrollDirection: Axis.vertical,
+          //           shrinkWrap: true,
+          //           crossAxisCount: 2,
+          //           mainAxisSpacing: 20,
+          //           crossAxisSpacing: 20,
+          //           itemCount: govParams.length,
+          //           itemBuilder: (context,index){
+          //             return InfoCard(title1: govTitle[index],icon1: image[index],titleValue1: govParams[index]);
+          //           },
+          //           staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
+          //     ],
+          //   ),
+          // ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -270,7 +274,7 @@ void initstate() {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Distribution Parameters',
-                      style:kMediumTextStyle),
+                      style:kMediumBoldTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -287,6 +291,7 @@ void initstate() {
               ],
             ),
           ),
+
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -295,7 +300,7 @@ void initstate() {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text('Slashing Parameters',
-                      style:kMediumTextStyle),
+                      style:kMediumBoldTextStyle),
                 ),
                 StaggeredGridView.countBuilder(
                     physics: const NeverScrollableScrollPhysics(),
@@ -308,12 +313,15 @@ void initstate() {
                     itemBuilder: (context,index){
                       return InfoCard(title1:slashTitle[index],icon1: image[index],titleValue1: slashingParams[index]);
                     },
-                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
+                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1)
+                ),
               ],
             ),
           ),
         ],
-      ),
-    ):const Center(child: CircularProgressIndicator());
+      )
+
+          :const Center(child: CircularProgressIndicator()),
+    );
   }
 }

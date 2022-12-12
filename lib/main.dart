@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    NetworkController.networkList();
+    // NetworkController.networkList();
     DashboardController.dashboardList();
 }
   @override
@@ -71,7 +71,7 @@ DateTime timePressedBack=DateTime.now();
 
               {
                 const message='Press Back Again to Exit App';
-                Get.snackbar('title', message);
+                Get.snackbar('ALERT!', message);
                 return false;
               }
 
@@ -81,21 +81,22 @@ DateTime timePressedBack=DateTime.now();
 
           },
           child: CupertinoTabScaffold(
+            //resizeToAvoidBottomInset: true,
+
             tabBar: CupertinoTabBar(
               onTap:(index) {
-               // navController.changeIndex(index);
-
-                Navigator.of(context).popUntil((route) => route.isFirst);
               },
               inactiveColor: Colors.grey,
               currentIndex: navController.selectedIndex.value,
               activeColor: Colors.lightBlueAccent,
-              items: const <BottomNavigationBarItem>[
-                BottomNavigationBarItem(
+              items: const<BottomNavigationBarItem>[
+                const BottomNavigationBarItem(
+
                   icon: Icon(Icons.explore_rounded,size: 27,
                        // color:Colors.lightBlueAccent
-                  ),label:('Explorer'),),
-                BottomNavigationBarItem(icon: Icon(Icons.widgets_outlined,size: 27,
+                  ),label:('Explorer'),
+                ),
+                const BottomNavigationBarItem(icon: Icon(Icons.widgets_outlined,size: 27,
                     //color: Colors.lightBlueAccent,
                   ),
 
@@ -103,7 +104,7 @@ DateTime timePressedBack=DateTime.now();
                 // BottomNavigationBarItem(icon: Icon(Icons.explore_rounded,size: 27,
                 //   //color: Colors.lightBlueAccent,
                 // ),
-                //     label:('Explorer'))
+                //label:('Explorer')
               ],
             ),
 
@@ -116,13 +117,14 @@ DateTime timePressedBack=DateTime.now();
                   });
                 case 1:
                   return CupertinoTabView(builder: (context) {
-                    return CupertinoPageScaffold(child: Webview());
+                    return const CupertinoPageScaffold(child: Webview());
                   });
                 // case 2:
                 //   return CupertinoTabView(builder: (context) {
                 //     return const CupertinoPageScaffold(child: Webview());
                   //});
-              }return Container();
+              }
+              return Container();
             },
           ),
         );

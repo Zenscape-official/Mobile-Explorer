@@ -16,7 +16,7 @@ class TxController extends GetxController {
      // print(jsonString);
       // for(var prod i`n jsonString){
       //   txList.add(TxModel.fromJson(prod));}
-      txList = List.from(jsonString).map((e) => TxModel.fromJson(e)).toList().obs;
+      txList = List.from(jsonString).map((e) => TxModel.fromJson(e)).toList().reversed.toList().obs;
       return txList;
     }
     else{

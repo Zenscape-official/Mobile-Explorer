@@ -1,4 +1,4 @@
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/blocksModel.dart';
@@ -9,24 +9,30 @@ import 'package:zenscape_app/controller/txController.dart';
 import '../../backend_files/networkList.dart';
 import '../../constants/constants.dart';
 import '../../Screens/network/transactionDetails.dart';
+import '../../constants/functions.dart';
 import '../../controller/blocksController.dart';
+import '../../controller/networklistController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 
+import 'blockDetails.dart';
+var timestamp = DateTime.now().toLocal();
 class Blocks extends StatefulWidget {
   final NetworkList? networkData;
  const Blocks({this.networkData});
   @override
   State<Blocks> createState() => _BlocksState();
 }
-
 class _BlocksState extends State<Blocks> {
   var AppBar1='Blocks';
   var AppBar2='Transactions';
   ToggleController toggleController=Get.put(ToggleController());
-  final BlocksController _blocksController= Get.put(BlocksController());
+  //final BlocksController _blocksController= Get.put(BlocksController());
+  final NetworkController networkController = Get.put(NetworkController());
   final TxController _txController=Get.put(TxController());
+  Rx<List<BlockModel>> foundBlock = Rx<List<BlockModel>>([]);
   var blocks;
   var tx;
   bool isLoaded=false;
@@ -34,11 +40,48 @@ class _BlocksState extends State<Blocks> {
   @override
   void initState() {
     super.initState();
-    blockData();
-    txData();
+    getData();
   }
-  blockData() async{
-    blocks= await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    setState(() {
+
+    });
+  }
+  getData() async{
+    final result = await networkController.fetchList(widget.networkData!.blocksUrl!);
+    if (result ['success'] == false) {
+      // show the dialog
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Error"),
+            content: Text(result['response']),
+            actions: [
+              TextButton(
+                child: const Text("OK"),
+                onPressed: () {
+                  Navigator.of(context).popUntil((route) => route.isFirst);
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+    if(result['success'] == true) {
+
+     blocks = List.from(result['response'])
+          .map((e) => BlockModel.fromJson(e))
+         .toList()
+         .reversed
+         .toList()
+         .obs;
+    }
+
+    tx= await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     setState(() {
       if (blocks!=null){
         isLoaded=true;
@@ -48,17 +91,7 @@ class _BlocksState extends State<Blocks> {
       }
     });
   }
-  txData() async{
-    tx= await _txController.fetchTx(widget.networkData!.transactionsUrl!);
-    setState(() {
-      if (blocks!=null){
-        isLoaded==true;
-      }
-      else{
-        isLoaded=false;
-      }
-    });
-  }
+
   int blockSelected=0;
   TextEditingController nameController=TextEditingController();
   String txHash='';
@@ -91,107 +124,84 @@ class _BlocksState extends State<Blocks> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-                width: MediaQuery.of(context).size.width/1.1,
-                height: 40,
-                decoration: kBoxDecorationWithoutGradient,
-                margin: const EdgeInsets.all(20),
-                child: Padding(
-                  padding: const EdgeInsets.all(0.0),
-                  child: TextField(
-                    controller: nameController,
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(
-                          left: 8.0, bottom: 8.0, top: 8.0),
-                      filled: true,
-                      fillColor: Colors.transparent,
-                      focusedBorder: InputBorder.none,
-                      border: OutlineInputBorder(
-                          borderSide: const BorderSide(
-                            width: 0,
-                            style: BorderStyle.none,
-                          ),
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      hintText: 'Select a chain',
-                      prefixIcon: const Icon(Icons.search),
-                    ),
-                    onChanged: (text) {
-                      setState(() {
-                        txHash = text;
-                        //you can access nameController in its scope to get
-                        // the value of text entered as shown below
-                        //fullName = nameController.text;
-                      }
-                      );
-                    },
-                  ),
-                )
-            ),
+      body: RefreshIndicator(
+        onRefresh: ()async{
+          await getData();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 30),
 
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-              GetBuilder<ToggleController>(builder: (blockController){
-                return ToggleSwitch(
-                    borderWidth: 1,
-                    minHeight: 30,
-                    borderColor: [Colors.grey.shade400],
-                    minWidth: 110.0,
-                    cornerRadius: 20.0,
-                    activeBgColors: [
-                      [const Color(0xFF12BFFF).withOpacity(.1)],
-                      [const Color(0xFF12BFFF).withOpacity(.1)]
-                    ],
-                    activeFgColor: Colors.lightBlueAccent,
-                    inactiveBgColor: Colors.white,
-                    inactiveFgColor: Colors.grey,
-                    initialLabelIndex: blockController.isBlockSelected == 0 ?0:1,
-                    totalSwitches: 2,
-                    labels: const ['Blocks', 'Transactions'],
-                    radiusStyle: true,
-                    onToggle: (index) {
-                      blockSelected = index!;
-                      toggleController.updateData(index);
-                    },
-                  );})
-                ]
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                GetBuilder<ToggleController>(builder: (blockController){
+                  return ToggleSwitch(
+                      borderWidth: 1,
+                      minHeight: 30,
+                      borderColor: [Colors.grey.shade400],
+                      minWidth: 110.0,
+                      cornerRadius: 20.0,
+                      activeBgColors: [
+                        [const Color(0xFF12BFFF).withOpacity(.1)],
+                        [const Color(0xFF12BFFF).withOpacity(.1)]
+                      ],
+                      activeFgColor: Colors.lightBlueAccent,
+                      inactiveBgColor: Colors.white,
+                      inactiveFgColor: Colors.grey,
+                      initialLabelIndex: blockController.isBlockSelected == 0 ?0:1,
+                      totalSwitches: 2,
+                      labels: const ['Blocks', 'Transactions'],
+                      radiusStyle: true,
+                      onToggle: (index) {
+                        blockSelected = index!;
+                        toggleController.updateData(index);
+                      },
+                    )
+                  ;})
+                  ]
+                ),
               ),
-            ),
-            isLoaded?
-            GetBuilder<ToggleController>(builder: (blockController){
-               return blockController.isBlockSelected==0?
+              isLoaded?
+              GetBuilder<ToggleController>(builder: (blockController){
+                 return blockController.isBlockSelected==0?
 
-                  ListView.builder(
-                   reverse: true,
-                   physics: const NeverScrollableScrollPhysics(),
-                   scrollDirection: Axis.vertical,
-                   shrinkWrap: true,
-                   itemCount: BlocksController.blockList.length,
-                   itemBuilder: (BuildContext context, int index) {
-                     return
-                       BlockContainer(blockModel: BlocksController.blockList[index],);
+                 GetBuilder<BlocksController>(builder: (blocksController){
+                        return ListView.builder(
+                         reverse: true,
+                         physics: const NeverScrollableScrollPhysics(),
+                         scrollDirection: Axis.vertical,
+                         shrinkWrap: true,
+                         itemCount: blocks.length,
+                         itemBuilder: (BuildContext context, int index) {
+                           return
+                             BlockContainer(blockModel: blocks[index],);
+                         }
+                 );
+                      }
+                    ):
+                 Obx(
+                    () {
+                     return ListView.builder(
+                         reverse: true,
+                         physics: const NeverScrollableScrollPhysics(),
+                         scrollDirection: Axis.vertical,
+                         shrinkWrap: true,
+                         itemCount: TxController.txList.length,
+                         itemBuilder: (BuildContext context, int index) {
+                           return
+                             TxContainer(txModel: TxController.txList[index],);
+                         }
+                         );
                    }
-               ):
-               ListView.builder(
-                   reverse: true,
-                   physics: const NeverScrollableScrollPhysics(),
-                   scrollDirection: Axis.vertical,
-                   shrinkWrap: true,
-                   itemCount: TxController.txList.length,
-                   itemBuilder: (BuildContext context, int index) {
-                     return
-                       TxContainer(txModel: TxController.txList[index],);
-                   }
-                   );
-             }
-             ):const Center(child: CircularProgressIndicator()),
-          ],
+                 );
+               }
+               ):const Center(child: CircularProgressIndicator()),
+            ],
+          ),
         ),
       ),
     );
@@ -200,195 +210,202 @@ class _BlocksState extends State<Blocks> {
 
 class BlockContainer extends StatelessWidget {
   final BlockModel? blockModel;
-  const BlockContainer({
+ BlockContainer({
     Key? key, this.blockModel
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: kBoxDecorationWithGradient,
-      margin: const EdgeInsets.all(14),
-      child: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Column(
-            children:[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:[
-                      Text(blockModel!.height!.toString(),
-                          style:kMediumBoldTextStyle),
-                      Container(
-                        decoration: BoxDecoration (
-                          border: Border.all(
-                            color: Colors.lightBlueAccent.withOpacity(.5),
-                            width: 1.0,
-                          ),
-                          color: const Color(0xFF8CDAFF).withOpacity(.5),
-                          borderRadius: const BorderRadius.all(Radius.circular(15.0),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(.05),
-                              spreadRadius: 1,
-                              blurRadius: 1,
-                              offset: const Offset(-2, -2), // changes position of shadow
-                            ),],),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                          child: Text('10s ago',
-                              style:TextStyle(
-                                fontFamily: 'Montserrat',
-                                fontSize: 10,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black.withOpacity(.5),
-                              )
-                          ),
-                        ),
-                      )
-                    ]
-                ),
-              ),
-              const SizedBox(height: 5,),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Block Hash',
-                          style:kSmallTextStyle),
-                    //  const SizedBox(width: 90),
-
-                      InkWell(
-                        onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.hash!)).then((_){
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(content: Text('BlockHash Copied to your clipboard !')));
-                        }),
-                        child: Row(
-                          children: [
-                            Text(function(blockModel!.hash!)
-                                ,style:kSmallTextStyle),
-                            const SizedBox(width:4),
-                            const Icon(Icons.copy,
-                              color: Colors.black54,
-                              size: 15,
-
+   // print(timestamp);
+   // print(blockModel!.timestamp!.toLocal());
+    return InkWell(
+      onTap:()=> Get.to(() => BlockDetails()),
+      child: Container(
+        decoration: kBoxDecorationWithGradient,
+        margin: const EdgeInsets.all(14),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+              children:[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:[
+                        Text(blockModel!.height!.toString(),
+                            style:kMediumBoldTextStyle),
+                        Container(
+                          decoration: BoxDecoration (
+                            border: Border.all(
+                              color: Colors.lightBlueAccent.withOpacity(.5),
+                              width: 1.0,
                             ),
-                          ],
-                        ),
-                      ),
-
-                    ]
-                ),
-
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Proposer',
-                          style:kSmallTextStyle),
-                      const SizedBox(width:99),
-                      InkWell(
-                        onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.proposerAddress!,)).then((_){
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(content: Text('Proposer Address Copied to your clipboard !')));
-                        }),
-                        child: Row(
-                          children: [
-                            Text(function(blockModel!.proposerAddress!)
-                                ,style:kSmallTextStyle),
-                            const SizedBox(width:4),
-                            const Icon(Icons.copy,
-                              color: Colors.black54,
-                              size: 15,
-
+                            color: const Color(0xFF8CDAFF).withOpacity(.5),
+                            borderRadius: const BorderRadius.all(Radius.circular(15.0),
                             ),
-                          ],
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(.05),
+                                spreadRadius: 1,
+                                blurRadius: 1,
+                                offset: const Offset(-2, -2), // changes position of shadow
+                              ),],),
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
+                            child:   Text(
+                              '${
+                                  DateTime.now().toLocal()
+                                      .difference(blockModel!.timestamp!.toLocal())
+                                      .inSeconds
+                               } secs ago',
+                              style: kExtraSmallTextStyle,
+                            )
+                          ),
+                        )
+                      ]
+                  ),
+                ),
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Block Hash',
+                            style:kSmallTextStyle),
+                      //  const SizedBox(width: 90),
+                        InkWell(
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.hash!)).then((_){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(content: Text('BlockHash Copied to your clipboard !')));
+                          }),
+                          child: Row(
+                            children: [
+                              Text(dotRefactorFunction(blockModel!.hash!)
+                                  ,style:kSmallTextStyle),
+                              const SizedBox(width:4),
+                              const Icon(Icons.copy,
+                                color: Colors.black54,
+                                size: 15,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
+                      ]
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Proposer',
+                            style:kSmallTextStyle),
+                        const SizedBox(width:99),
+                        InkWell(
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.proposerAddress!,)).then((_){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(content: Text('Proposer Address Copied to your clipboard !')));
+                          }),
+                          child: Row(
+                            children: [
+                              Text(dotRefactorFunction(blockModel!.proposerAddress!)
+                                  ,style:kSmallTextStyle),
+                              const SizedBox(width:4),
+                              const Icon(Icons.copy,
+                                color: Colors.black54,
+                                size: 15,
+                              ),
+                            ],
+                          ),
+                        ),
 
-                    ]
+                      ]
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Transaction',
-                          style:kSmallTextStyle),
-                      Text(blockModel!.numTxs.toString(),
-                          style:kSmallTextStyle)
-                    ]
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Transaction',
+                            style:kSmallTextStyle),
+                        Text(blockModel!.numTxs.toString(),
+                            style:kSmallTextStyle)
+                      ]
+                  ),
                 ),
-
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
-                child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children:[
-                      Text('Time',
-                          style:kSmallTextStyle),
-                      Text(dateTime(blockModel!.timestamp!).toString(),
-                          style:kSmallTextStyle)
-                    ]
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children:[
+                        Text('Time',
+                            style:kSmallTextStyle),
+                        Text(dateTime(blockModel!.timestamp!.toLocal()).toString(),
+                            style:kSmallTextStyle)
+                      ]
+                  ),
                 ),
-              ),
-            ]
+              ]
+          ),
         ),
       ),
     );
   }
 }
 
-class TxContainer extends StatelessWidget {
+class TxContainer extends StatefulWidget {
   final TxModel? txModel;
    TxContainer({
     Key? key,
     this.txModel
   }) : super(key: key);
- var type='';
 
+  @override
+  State<TxContainer> createState() => _TxContainerState();
+}
+
+class _TxContainerState extends State<TxContainer> {
+  NetworkController networkController=Get.put(NetworkController());
+ var type='';
+ var timestampTx;
+ var txLoaded=false;
+
+ @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  getData()async{
+    final response = await http.get(Uri.parse('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}'));
+    if (response.statusCode == 200) {
+
+      timestampTx =  jsonDecode(response.body)['result']['block']['header']['time'];
+
+        setState(() {
+          if (timestampTx!=null){
+            txLoaded=true;
+          }
+          else{
+            txLoaded=false;
+          }
+        });
+  }
+ else{
+   // print(response.statusCode);
+   // print('+errorr');
+   // print('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}');
+    }
+    }
 
   @override
   Widget build(BuildContext context) {
-    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgCloseRequest'){
-      type='Message Close Request';
-    }
-    if(txModel!.messages![0].type=='/comdex.liquidity.v1beta1.MsgLimitOrder'){
-      type='Message Limit Order';
-    }
-    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgCreateLockerRequest'){
-      type='Message Create Locker Request';
-    }
-    if(txModel!.messages![0].type=='/ibc.core.client.v1.MsgUpdateClient'){
-      type='Message Update Client';
-    }
-    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgWithdrawStableMintRequest'){
-      type='Message Create Withdraw StableMint Request';
-    }
-    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgCloseRequest'){
-      type='Message Close Request';
-    }
-    if(txModel!.messages![0].type=='/cosmos.bank.v1beta1.MsgSend'){
-      type='Message Send';
-    }
-    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgWithdrawAssetRequest'){
-      type='Message Withdraw Asset Request';
-    }
-    if(txModel!.messages![0].type=='/comdex.vault.v1beta1.MsgDepositStableMintRequest'){
-      type='Message Create Deposit StableMint Reques';
-    }
-    if(txModel!.messages![0].type=='/comdex.locker.v1beta1.MsgDepositAssetRequest'){
-      type='Message Deposit Asset Request';
-    }
+  //getData();
+   type=getType(widget.txModel!.messages![0].type!);
+
     return InkWell(
-      onTap:()=> Get.to(() => TxDetails(txModel:txModel)),
+      onTap:()=> Get.to(() => TxDetails(txModel:widget.txModel,)),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -402,13 +419,13 @@ class TxContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
                         InkWell(
-                          onTap:()=> Clipboard.setData ( ClipboardData(text: txModel!.hash!,)).then((_){
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: widget.txModel!.hash!,)).then((_){
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(content: Text('Transaction Hash Copied to your clipboard !')));
                           }),
                           child: Row(
                             children: [
-                              Text(function(txModel!.hash!)
+                              Text(dotRefactorFunction(widget.txModel!.hash!)
                                   ,style:kMediumBoldTextStyle),
                               const SizedBox(width:4),
                               const Icon(Icons.copy,
@@ -422,12 +439,11 @@ class TxContainer extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration (
                             border: Border.all(
-                              color: Colors.lightBlueAccent.withOpacity(.4),
+                              color: Colors.lightBlueAccent.withOpacity(.5),
                               width: 1.0,
                             ),
-                            color: const Color(0xFF8CDAFF).withOpacity(.1),
+                            color: const Color(0xFF8CDAFF).withOpacity(.5),
                             borderRadius: const BorderRadius.all(Radius.circular(15.0),
-
                             ),
                             boxShadow: [
                               BoxShadow(
@@ -438,31 +454,19 @@ class TxContainer extends StatelessWidget {
                               ),],),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                            child: Text('10s ago',
-                                style:TextStyle(
-                                  fontFamily: 'Montserrat',
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black.withOpacity(.5),
-                                )),
+                            child: txLoaded?Text(
+                              timeDifferenceFunction(timestampTx),
+                              style: kExtraSmallTextStyle,
+                            ):SizedBox(
+                                height: 10,
+                                width: 15,
+                                child: LinearProgressIndicator())
                           ),
                         )
                       ]
                   ),
                 ),
                 const SizedBox(height: 5,),
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
-                //   child: Row(
-                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //       children:[
-                //         Text('Amount',
-                //             style:kSmallTextStyle),
-                //         Text('',
-                //             style:kSmallBoldTextStyle)
-                //       ]
-                //   ),
-                // ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
@@ -470,8 +474,8 @@ class TxContainer extends StatelessWidget {
                       children: [
                         Text('Fee',
                             style:kSmallTextStyle),
-                        Text(txModel!.fee!.amount![0].amount!+' '+txModel!.fee!.amount![0].denom!,
-                            style:kSmallBoldTextStyle)
+                        Text(widget.txModel!.fee!.amount![0].amount!+' '+widget.txModel!.fee!.amount![0].denom!,
+                            style:kSmallTextStyle)
                       ]
                   ),
                 ),
@@ -482,8 +486,9 @@ class TxContainer extends StatelessWidget {
                       children:[
                         Text('Height',
                             style:kSmallTextStyle),
-                        Text(txModel!.height!,
-                            style:kSmallBoldTextStyle)
+
+                        Text(widget.txModel!.height!,
+                            style:kSmallTextStyle)
                       ]
                   ),
                 ),
@@ -496,15 +501,37 @@ class TxContainer extends StatelessWidget {
                             style:kSmallTextStyle),
                     const SizedBox(width: 70,),
                         Flexible(
-                      child: RichText(
+                        child: RichText(
                         overflow: TextOverflow.ellipsis,
                         strutStyle: const StrutStyle(fontSize: 12.0),
                         text: TextSpan(
-                            style: kSmallBoldTextStyle,
+                            style: kSmallTextStyle,
                             text:type,
                       ),
                     )
                         )]
+
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Time',
+                            style:kSmallTextStyle),
+                        const SizedBox(width: 70,),
+                   txLoaded? Text(
+                     (dateTime
+                       (DateTime.parse(timestampTx).toLocal()
+                   )
+                     )
+                     ,
+                     style: kSmallTextStyle,):
+                       SizedBox(
+                           height:10,
+                           width:15,
+                           child:LinearProgressIndicator())]
 
                   ),
                 ),
