@@ -58,16 +58,16 @@ class ContractStates {
     this.contractInfo,
   });
 
-  Config? config;
+  String? config;
   ContractInfo? contractInfo;
 
   factory ContractStates.fromJson(Map<String, dynamic> json) => ContractStates(
-    //config: Config.fromJson(json["config"]),
+    config: json["config"],
     //contractInfo: ContractInfo.fromJson(json["contract_info"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "config": config!.toJson(),
+    "config": config,
     "contract_info": contractInfo!.toJson(),
   };
 }

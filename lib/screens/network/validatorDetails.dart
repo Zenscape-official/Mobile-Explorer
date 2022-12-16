@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:zenscape_app/backend_files/txModel.dart';
+import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:http/http.dart' as http;
@@ -11,14 +12,14 @@ import '../../backend_files/blocksModel.dart';
 import '../../backend_files/contractModel.dart';
 import '../../controller/txToggleController.dart';
 
-class BlockDetails extends StatefulWidget {
-  final BlockModel? blockModel;
-  BlockDetails({Key? key,this.blockModel}) : super(key: key);
+class ValidatorDetails extends StatefulWidget {
+  final ValidatorModel? validatorModel;
+  ValidatorDetails({Key? key,this.validatorModel}) : super(key: key);
   @override
-  State<BlockDetails> createState() => _BlockDetailsState();
+  State<ValidatorDetails> createState() => _ValidatorDetailsState();
 }
-class _BlockDetailsState extends State<BlockDetails> {
-
+class _ValidatorDetailsState extends State<ValidatorDetails> {
+  int summarySelected=0;
   @override
   void initState() {
     super.initState();
@@ -35,7 +36,7 @@ class _BlockDetailsState extends State<BlockDetails> {
             title: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Block Details',
+                  'Validators Details',
                   style: kBigBoldTextStyle,
                 ),
               ],
@@ -63,68 +64,52 @@ class _BlockDetailsState extends State<BlockDetails> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Block Height', style: kSmallTextStyle),
+                                  Text('Height', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.blockModel!.height!, style: kMediumBoldTextStyle),
+                                  Text(widget.validatorModel!.height!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Hash', style: kSmallTextStyle),
+                                  Text('Validator Address', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.blockModel!.hash!, style: kMediumBoldTextStyle),
+                                  Text(widget.validatorModel!.validatorAddress!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Number Of Transactions', style: kSmallTextStyle),
+                                  Text('Voting Power', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.blockModel!.numTxs!.toString(), style: kMediumBoldTextStyle),
-
+                                  Text(widget.validatorModel!.votingPower!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('TimeStamp', style: kSmallTextStyle),
+                                  Text('Details', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(dateTime(widget.blockModel!.timestamp!), style: kMediumBoldTextStyle),
-
-
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text('Proposer Address', style: kSmallTextStyle),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text(widget.blockModel!.proposerAddress!, style: kMediumBoldTextStyle),
+                                  Text((widget.validatorModel!.details??''), style: kMediumBoldTextStyle),
 
 
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Total Gas', style: kSmallTextStyle),
+                                  Text('Commision', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.blockModel!.totalGas!, style: kMediumBoldTextStyle),
+                                  Text((double.parse(widget.validatorModel!.commission!)*100).toString(), style: kMediumBoldTextStyle),
 
                                 ]
                             ),
                           ),
-                        ),
-                    ),
-                  ],
-              ),
-          ),
-      );
+                        ))])));
   }
 }

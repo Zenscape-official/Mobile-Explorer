@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,8 +17,9 @@ import '../../widgets/navigationDrawerWidget.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-
+import '../../widgets/searchBarWidget.dart';
 import 'blockDetails.dart';
+
 var timestamp = DateTime.now().toLocal();
 class Blocks extends StatefulWidget {
   final NetworkList? networkData;
@@ -29,6 +31,7 @@ class _BlocksState extends State<Blocks> {
   var AppBar1='Blocks';
   var AppBar2='Transactions';
   ToggleController toggleController=Get.put(ToggleController());
+
   //final BlocksController _blocksController= Get.put(BlocksController());
   final NetworkController networkController = Get.put(NetworkController());
   final TxController _txController=Get.put(TxController());
@@ -36,17 +39,20 @@ class _BlocksState extends State<Blocks> {
   var blocks;
   var tx;
   bool isLoaded=false;
+  Timer? timer;
+  var valMoniker;
+  var monikerLoaded;
 
   @override
   void initState() {
     super.initState();
     getData();
+    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getData());
   }
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     setState(() {
-
     });
   }
   getData() async{
@@ -81,6 +87,21 @@ class _BlocksState extends State<Blocks> {
          .obs;
     }
 
+    final response = await http.get(Uri.parse(''));
+    if (response.statusCode == 200) {
+
+      valMoniker =  jsonDecode(response.body)['result']['block']['header']['time'];
+
+      setState(() {
+        if (valMoniker!=null){
+          monikerLoaded=true;
+        }
+        else{
+          monikerLoaded=false;
+        }
+      });
+    }
+
     tx= await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     setState(() {
       if (blocks!=null){
@@ -95,7 +116,6 @@ class _BlocksState extends State<Blocks> {
   int blockSelected=0;
   TextEditingController nameController=TextEditingController();
   String txHash='';
-
   @override
   Widget build(BuildContext context) {
 
@@ -131,7 +151,8 @@ class _BlocksState extends State<Blocks> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(height: 30),
+              SizedBox(height: 0),
+              SearchBar(nameController:nameController),
 
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12),
@@ -219,7 +240,7 @@ class BlockContainer extends StatelessWidget {
    // print(timestamp);
    // print(blockModel!.timestamp!.toLocal());
     return InkWell(
-      onTap:()=> Get.to(() => BlockDetails()),
+      onTap:()=> Get.to(() => BlockDetails(blockModel: blockModel,)),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -232,8 +253,23 @@ class BlockContainer extends StatelessWidget {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
-                        Text(blockModel!.height!.toString(),
-                            style:kMediumBoldTextStyle),
+                        InkWell(
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.height!)).then((_){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(content: Text('BlockHeight Copied to your clipboard !')));
+                          }),
+                          child: Row(
+                            children: [
+                              Text((blockModel!.height!.toString())
+                                  ,style:kMediumBoldTextStyle),
+                              const SizedBox(width:4),
+                              const Icon(Icons.copy,
+                                color: Colors.black54,
+                                size: 15,
+                              ),
+                            ],
+                          ),
+                        ),
                         Container(
                           decoration: BoxDecoration (
                             border: Border.all(

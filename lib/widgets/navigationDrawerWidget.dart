@@ -24,8 +24,7 @@ class _NavDrawState extends State<NavDraw> {
   void initState() {
     super.initState();
    //selectedIndex = 0;
-
-  }
+   }
 
   @override
   Widget build(BuildContext context) {

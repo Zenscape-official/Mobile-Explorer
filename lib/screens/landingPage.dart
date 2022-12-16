@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,7 @@ import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import '../constants/functions.dart';
 import '../controller/networklistController.dart';
-import '../controller/searchController.dart';
+import '../widgets/searchBarWidget.dart';
 import 'network/dashboard.dart';
 
 class LandingPage extends StatefulWidget {
@@ -22,7 +23,6 @@ class _LandingPageState extends State<LandingPage> {
   Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
   final NetworkController networkController = Get.put(NetworkController());
   final DashboardController dashboardController = Get.put(DashboardController());
-  final SearchController searchController=Get.put(SearchController());
   var flag=false;
   var dash;
   var net;
@@ -136,36 +136,7 @@ final pngPath=['assets/images/banner_zenscape.png','assets/images/banner2.png'];
           },
           child: Column(
               children: [
-                Container(
-                    width: MediaQuery.of(context).size.width / 1.1,
-                    height: 40,
-                    decoration: kBoxDecorationWithoutGradient,
-                    margin: const EdgeInsets.all(20),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: TextField(
-                              controller: nameController,
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    left: 8.0, bottom: 8.0, top: 8.0),
-                                filled: true,
-                                fillColor: Colors.transparent,
-                                focusedBorder: InputBorder.none,
-                                border: OutlineInputBorder(
-                                    borderSide: const BorderSide(
-                                      width: 0,
-                                      style: BorderStyle.none,
-                                    ),
-                                    borderRadius: BorderRadius.circular(20)),
-                                prefixIcon: const Icon(Icons.search),
-                              ),
-                              onChanged:
-                                  (text) {
-                                    filterList(text);
-                              }
-                          ),
-                      ),
-                    ),
+                SearchBar(nameController: nameController),
 
                nameController.text.isEmpty?
                const SizedBox(width:0):
@@ -263,6 +234,8 @@ final pngPath=['assets/images/banner_zenscape.png','assets/images/banner2.png'];
                         );
   }
 }
+
+
 class NetworkCard extends StatefulWidget {
   final NetworkList networkList;
   const NetworkCard(this.networkList);
@@ -272,7 +245,6 @@ class NetworkCard extends StatefulWidget {
 class _NetworkCardState extends State<NetworkCard> {
   void initstate() {
     super.initState();
-
   }
   double APR = 0;
   String image='';
@@ -295,7 +267,7 @@ class _NetworkCardState extends State<NetworkCard> {
             margin: const EdgeInsets.fromLTRB(10, 10, 10,10),
             decoration: kBoxDecorationWithoutGradient,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+              padding: const EdgeInsets.fromLTRB(10, 10, 0, 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -309,14 +281,13 @@ class _NetworkCardState extends State<NetworkCard> {
                           height: 40,
                           width: 40,
                           child: ClipOval(
-                              child: Image.asset(image)
-                              // CachedNetworkImage(
-                              //   imageUrl: widget.networkList.logoUrl??widget.networkList.logUrl!,
-                              //   height: 40,
-                              //   width: 40,
-                              //   placeholder: (context, url) => CircularProgressIndicator(),
-                              //   errorWidget: (context, url, error) => Icon(Icons.error),
-                              // ),
+                              child: CachedNetworkImage(
+                                imageUrl: widget.networkList.logoUrl??widget.networkList.logUrl!,
+                                height: 40,
+                                width: 40,
+                                placeholder: (context, url) => CircularProgressIndicator(),
+                                errorWidget: (context, url, error) => Icon(Icons.error),
+                              ),
                           ),
                         ),
                       ),

@@ -103,7 +103,7 @@ class ContractContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:()=> Get.to(() => ContractDetails()),
+      onTap:()=> Get.to(() => ContractDetails(contractModel: contractModel,)),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -122,22 +122,6 @@ class ContractContainer extends StatelessWidget {
                                 style:kMediumTextStyle),
                           ),],
                       ),
-
-                      // Container(
-                      //   decoration: kBoxDecorationWithoutGradient,
-                      //   child: Padding(
-                      //     padding: const EdgeInsets.all(5.0),
-                      //     child: Text( '${
-                      //         new DateTime.now().toLocal()
-                      //             .difference((contractModel!.instantiatedAt!).toLocal())
-                      //             .inDays
-                      //     }days ago',
-                      //         style:TextStyle(
-                      //             color: Colors.black.withOpacity(.5),
-                      //             fontWeight: FontWeight.bold
-                      //         )),
-                      //   ),
-                      // )
                     ]
                 ),
 

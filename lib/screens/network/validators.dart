@@ -5,6 +5,7 @@ import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/networklistController.dart';
+import 'package:zenscape_app/screens/network/validatorDetails.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
 import '../../controller/valToggleController.dart';
 import '../../controller/validatorsController.dart';
@@ -221,169 +222,172 @@ class ValidatorContainer extends StatelessWidget {
 
   Widget build(BuildContext context) {
     validatorModel!.jailedUntil;
-    return Container(
-      decoration:
-          BoxDecoration(borderRadius: BorderRadius.circular(20)),
-      //height: MediaQuery.of(context).size.height/2.6,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Container(
-          decoration: kBoxDecorationWithGradient,
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SingleChildScrollView(
-
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          CircleAvatar(
-                            radius:15,
-                            child:Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
-                            backgroundColor: Colors.transparent,
-                          ),
-                          const SizedBox(width:10),
-                          SingleChildScrollView(
-                            scrollDirection: Axis.horizontal,
-                            child: SizedBox(
-                              width:150,
-                              child: Text(validatorModel!.moniker!,
-                                  overflow: TextOverflow.ellipsis,
-                                  softWrap: false,
-                                  style: kBigBoldTextStyle),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 5,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.transparent,
-                        borderRadius: const BorderRadius.all(
-                            Radius.circular(200.0)),
-                        border: Border.all(
-                          color: Colors.lightBlueAccent
-                              .withOpacity(.3),
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: (Container(
-                          height:160,
-                          width: 160,
-                          decoration: BoxDecoration(
-                            color: Colors.transparent,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(200.0)),
-                            border: Border.all(
-                              color: Colors.lightBlueAccent
-                                  .withOpacity(.5),
-                              width: 1.0,
-                            ),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              child: Padding(
-                                padding:
-                                    const EdgeInsets.all(25.0),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(validatorModel!.votingPower!,
-                                        style:
-                                            kMediumBoldTextStyle),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Text('Voting Power',
-                                        style: kSmallTextStyle),
-                                  ],
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius:
-                                    const BorderRadius.all(
-                                        Radius.circular(250.0)),
-                                border: Border.all(
-                                  color: Colors.lightBlueAccent,
-                                  width: 1.0,
-                                ),
-                              ),
-                            ),
-                          ),
-                        )),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 25),
-                Padding(
-                  padding:
-                      const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                  child: Row(
-                    mainAxisAlignment:
-                        MainAxisAlignment.spaceBetween,
+    return InkWell(
+      onTap: ()=> Get.to(() =>ValidatorDetails(validatorModel: validatorModel,)),
+      child: Container(
+        decoration:
+            BoxDecoration(borderRadius: BorderRadius.circular(20)),
+        //height: MediaQuery.of(context).size.height/2.6,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Container(
+            decoration: kBoxDecorationWithGradient,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Uptime',
-                            style: kSmallTextStyle,
-                          ),
-                          Text(
-                            '${validatorModel!.missedBlocksCounter!} blocks missed',
-                            style: kSmallBoldTextStyle,
-                          )
-                        ],
-                      ),
-                      // Column(
-                      //   crossAxisAlignment:
-                      //       CrossAxisAlignment.start,
-                      //   children: [
-                      //     Text('Participation',
-                      //         style: kSmallTextStyle),
-                      //     Text(
-                      //       ' 5/7',
-                      //       style: kSmallBoldTextStyle,
-                      //     ),
-                      //   ],
-                      // ),
-                      Column(
-                        crossAxisAlignment:
-                            CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Commission',
-                            style: kSmallTextStyle,
-                          ),
-                          Text(
-                          '${truncateToDecimalPlaces(double.parse(validatorModel!.commission!)*100,2).toString()}%',
-                            style: kSmallBoldTextStyle,
-                          )
-                        ],
+                      SingleChildScrollView(
+
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius:15,
+                              child:Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
+                              backgroundColor: Colors.transparent,
+                            ),
+                            const SizedBox(width:10),
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: SizedBox(
+                                width:150,
+                                child: Text(validatorModel!.moniker!,
+                                    overflow: TextOverflow.ellipsis,
+                                    softWrap: false,
+                                    style: kBigBoldTextStyle),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.transparent,
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(200.0)),
+                          border: Border.all(
+                            color: Colors.lightBlueAccent
+                                .withOpacity(.3),
+                            width: 1.0,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: (Container(
+                            height:160,
+                            width: 160,
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: const BorderRadius.all(
+                                  Radius.circular(200.0)),
+                              border: Border.all(
+                                color: Colors.lightBlueAccent
+                                    .withOpacity(.5),
+                                width: 1.0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.all(25.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(validatorModel!.votingPower!,
+                                          style:
+                                              kMediumBoldTextStyle),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      Text('Voting Power',
+                                          style: kSmallTextStyle),
+                                    ],
+                                  ),
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  borderRadius:
+                                      const BorderRadius.all(
+                                          Radius.circular(250.0)),
+                                  border: Border.all(
+                                    color: Colors.lightBlueAccent,
+                                    width: 1.0,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          )),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 25),
+                  Padding(
+                    padding:
+                        const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                    child: Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Uptime',
+                              style: kSmallTextStyle,
+                            ),
+                            Text(
+                              '${validatorModel!.missedBlocksCounter!} blocks missed',
+                              style: kSmallBoldTextStyle,
+                            )
+                          ],
+                        ),
+                        // Column(
+                        //   crossAxisAlignment:
+                        //       CrossAxisAlignment.start,
+                        //   children: [
+                        //     Text('Participation',
+                        //         style: kSmallTextStyle),
+                        //     Text(
+                        //       ' 5/7',
+                        //       style: kSmallBoldTextStyle,
+                        //     ),
+                        //   ],
+                        // ),
+                        Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Commission',
+                              style: kSmallTextStyle,
+                            ),
+                            Text(
+                            '${truncateToDecimalPlaces(double.parse(validatorModel!.commission!)*100,2).toString()}%',
+                              style: kSmallBoldTextStyle,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

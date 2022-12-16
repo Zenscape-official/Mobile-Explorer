@@ -13,7 +13,7 @@ class ContractController extends GetxController {
 
     if (response.statusCode==200){
       var jsonString= jsonDecode((response.body));
-      print(jsonString);
+      //print(jsonString);
       return ContractList = List.from(jsonString).map((e) => ContractModel.fromJson(e)).toList().obs;
     }
     else{

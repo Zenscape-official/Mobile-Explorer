@@ -92,3 +92,4 @@ getImage(String id){
 
   }
 }
+bool isNumeric(String s) => double.tryParse(s) != null;

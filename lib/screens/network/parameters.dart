@@ -281,8 +281,8 @@ void initstate() {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                     itemCount: distributionParams.length,
                     itemBuilder: (context,index){
                       return InfoCard(title1:disTitle[index],icon1: image[index],titleValue1: distributionParams[index]);
@@ -307,8 +307,8 @@ void initstate() {
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     crossAxisCount: 2,
-                    mainAxisSpacing: 8,
-                    crossAxisSpacing: 8,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
                     itemCount: slashingParams.length,
                     itemBuilder: (context,index){
                       return InfoCard(title1:slashTitle[index],icon1: image[index],titleValue1: slashingParams[index]);

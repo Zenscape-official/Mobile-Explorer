@@ -50,6 +50,6 @@ List<String> disTitle = [
 List<String> slashTitle = [
   'Signed Block Window',
   'Min Signed Per Window',
-  'Slash Fraction Sign',
+  'Slash Fraction DoubleSign',
   'Slash Fraction Downtime'
 ];

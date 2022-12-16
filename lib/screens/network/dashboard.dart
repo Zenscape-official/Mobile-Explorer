@@ -11,13 +11,13 @@ import 'package:zenscape_app/constants/functions.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import '../../Screens/network/blocks.dart';
-import '../../backend_files/bankTotalModal.dart';
 import '../../backend_files/blocksModel.dart';
 import '../../backend_files/txModel.dart';
 import '../../constants/constString.dart';
 import '../../controller/blocksController.dart';
 import '../../controller/txController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
+import '../../widgets/searchBarWidget.dart';
 import '../homeScreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -35,6 +35,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   Get.put(DashboardController());
   final TxController _txController = Get.put(TxController());
   final ToggleController toggleController =Get.put(ToggleController());
+  TextEditingController nameController=TextEditingController();
   String fullName = '';
   var blockTime;
   var txNum;
@@ -50,6 +51,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   bool isLoaded = false;
   bool isListLoaded = false;
   var result;
+  String logoImage='';
   void initstate() {
     super.initState();
     getData();
@@ -67,7 +69,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.blocktime!, 'average_time'));
     supply =
     (await _dashboardController.fetchBankData(widget.networkData!.height!));
-    print(supply);
+  //  print(supply);
 
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
@@ -77,13 +79,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
     for(int i=0;i<supply!.length;i++){
-      print(supply![i].denom);
+     // print(supply![i].denom);
       if(supply![i].denom=='ucmdx'){
         bankTotal=supply![i].amount;
-        print(bankTotal);
+       // print(bankTotal);
       }
     }
-        print(bankTotal);
+      //  print(bankTotal);
     APR = ((double.parse(inflation) * double.parse(bankTotal)) /
         double.parse(bondedToken)) *
         100;
@@ -144,6 +146,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   @override
   Widget build(BuildContext context) {
     getData();
+    logoImage= getImage(widget.networkData!.id!);
     return widget.networkData!.id=='comdex'? Scaffold(
         drawer: NavDraw(
           networkData: widget.networkData,
@@ -165,15 +168,14 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                   fontSize: 20,
                 ),
               ),
-              // CircleAvatar(
-              //     radius: 15,
-              //     child: InkWell(
-              //       onTap: () => Navigator.of(context)
-              //           .popUntil((route) => route.isFirst),
-              //       child: Image.network(widget.networkData!.logoUrl ??
-              //           widget.networkData!.logUrl!),
-              //     ),
-              //     backgroundColor: Colors.transparent),
+              CircleAvatar(
+                  radius: 15,
+                  child: InkWell(
+                    onTap: () => Navigator.of(context)
+                        .popUntil((route) => route.isFirst),
+                    child: Image.asset(logoImage),
+                  ),
+                  backgroundColor: Colors.transparent),
             ],
           ),
         ),
@@ -216,6 +218,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                 //         },
                 //       ),
                 //     )),
+                SearchBar(nameController:nameController),
                 SizedBox(
                   //height: MediaQuery.of(context).size.height / 2.0,
                   child: Padding(
@@ -234,9 +237,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                   children: [
                                     CircleAvatar(
                                         radius: 15,
-                                        child: Image.network(
-                                            widget.networkData!.logoUrl ??
-                                                widget.networkData!.logUrl!),
+                                        child: Image.asset(
+                                            logoImage),
                                         backgroundColor: Colors.transparent),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),
@@ -512,32 +514,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                   ),
                 ),
 
-                // Padding(
-                //   padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-                //   child: Container(
-                //       width: MediaQuery.of(context).size.width / 1.1,
-                //       decoration: kBoxDecorationWithoutGradient,
-                //       child: Padding(
-                //         padding: const EdgeInsets.all(14.0),
-                //         child: Column(
-                //           mainAxisAlignment: MainAxisAlignment.start,
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: [
-                //             const Icon(Icons.how_to_vote_outlined),
-                //             const SizedBox(height: 6),
-                //             Text(
-                //               'Voting Period',
-                //               style: kSmallTextStyle,
-                //             ),
-                //             const SizedBox(height: 3),
-                //             Text(
-                //               '3/4',
-                //               style: kBigTextStyle,
-                //             )
-                //           ],
-                //         ),
-                //       )),
-                // ),
+
                 isLoaded
                     ? Padding(
                     padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 12),
@@ -603,7 +580,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                     (BuildContext context, int index) {
                                   return BlockContDash(
                                     blockModel: BlocksController
-                                        .blockList.reversed.toList()[index],
+                                        .blockList[index],
                                   );
                                 }),
                           ),
@@ -705,18 +682,18 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         body:
         Center(child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-
           children: [
             Text('Coming Soon',
-
               style: kMediumBoldTextStyle,),
-            SizedBox(height: 25,),
+            SizedBox(height: 25),
             Padding(
               padding: const EdgeInsets.symmetric(vertical:10,horizontal: 40),
               child: Text('This Explorer is currently active for Comdex chain only. ',textAlign: TextAlign.center,style: kSmallTextStyle),
             ),
           ],
-        )));
+        ),
+        ),
+    );
   }
 }
 
@@ -746,10 +723,32 @@ class BlockContDash extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    blockModel!.height!,
-                    style: kSmallBoldTextStyle,
-                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        InkWell(
+                          onTap: () => Clipboard.setData(ClipboardData(
+                            text: blockModel!.height!,
+                          )).then((_) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    content: Text(
+                                        'Block Height Copied to your clipboard!')));
+                          }),
+                          child: Row(
+                            children: [
+                              Text(blockModel!.height!,
+                                  style: kSmallBoldTextStyle),
+                              const SizedBox(width: 4),
+                              const Icon(
+                                Icons.copy,
+                                color: Colors.black54,
+                                size: 15,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ]),
                   Text(
                     '${new DateTime.now().toLocal().difference(blockModel!.timestamp!.toLocal()).inSeconds}secs ago',
                     style: kSmallBoldTextStyle,
@@ -813,10 +812,8 @@ class _TxContDashState extends State<TxContDash> {
         'https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
       // print(jsonDecode(response.body)['result']['block']['header']['time']);
-
       timestampTx =
       jsonDecode(response.body)['result']['block']['header']['time'];
-
       setState(() {
         if (timestampTx != null) {
           txLoaded = true;
