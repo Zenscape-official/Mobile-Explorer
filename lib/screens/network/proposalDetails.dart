@@ -859,7 +859,7 @@ class VoterCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:  [
                       Text(proposalVotesModel!.moniker!,style: kSmallBoldTextStyle,),
-                      GreenContainer(proposalVotesModel!.option),
+                      GreenContainer((proposalVotesModel!.option=='VOTE_OPTION_YES')?('Yes'):('No')),
                     ],
                   ),
                   const SizedBox(height: 12,),

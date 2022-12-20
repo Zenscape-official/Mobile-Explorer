@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ import '../../backend_files/blocksModel.dart';
 import '../../backend_files/txModel.dart';
 import '../../constants/constString.dart';
 import '../../controller/blocksController.dart';
+import '../../controller/networklistController.dart';
 import '../../controller/txController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 import '../../widgets/searchBarWidget.dart';
@@ -31,6 +33,8 @@ class NetworkDashBoard extends StatefulWidget {
 class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var details=['0','0','0','0','0','0'];
   final BlocksController _blocksController = Get.put(BlocksController());
+
+  final NetworkController networkController = Get.put(NetworkController());
   final DashboardController _dashboardController =
   Get.put(DashboardController());
   final TxController _txController = Get.put(TxController());
@@ -51,16 +55,32 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   bool isLoaded = false;
   bool isListLoaded = false;
   var result;
+  var timer;
   String logoImage='';
   void initstate() {
     super.initState();
     getData();
+   // getBlockTx();
+    //timer = Timer.periodic(Duration(seconds: 3), (Timer t) => getBlockTx());
   }
 
+  // getBlockTx()async{
+  //   blocks =
+  //       await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
+  //   tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
+  //
+  //   setState(() {
+  //     if (blocks != null && tx != null) {
+  //       isLoaded = true;
+  //     } else {
+  //       isLoaded = false;
+  //     }
+  // });
+  // }
   getData() async {
     result =
     await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
-    //getDialogue(result);
+
     height = (await _dashboardController.fetchSingleData(
         widget.networkData!.height!, 'height'));
     txNum = (await _dashboardController.fetchdata(
@@ -69,7 +89,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.blocktime!, 'average_time'));
     supply =
     (await _dashboardController.fetchBankData(widget.networkData!.height!));
-  //  print(supply);
 
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
@@ -82,10 +101,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
      // print(supply![i].denom);
       if(supply![i].denom=='ucmdx'){
         bankTotal=supply![i].amount;
-       // print(bankTotal);
       }
     }
-      //  print(bankTotal);
     APR = ((double.parse(inflation) * double.parse(bankTotal)) /
         double.parse(bondedToken)) *
         100;
@@ -93,15 +110,15 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     details = [
       height,
       txNum,
-      k_m_b_generator(double.parse(bondedToken)),
-      k_m_b_generator(double.parse(removeAllChar(communityPool))),
+      k_m_b_generator(double.parse(bondedToken)/1000000),
+      k_m_b_generator(double.parse(removeAllChar(communityPool))/1000000),
       '${truncateToDecimalPlaces(double.parse(inflation) * 100, 2)}%'
           .toString(),
       "${truncateToDecimalPlaces((APR), 2).toString()}%"
     ];
     tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     blocks =
-    await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
+    await networkController.fetchList(widget.networkData!.blocksUrl!);
     setState(() {
       if (blocks != null && tx != null) {
         isLoaded = true;
@@ -187,37 +204,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                // Container(
-                //     width: MediaQuery.of(context).size.width / 1.1,
-                //     height: 40,
-                //     decoration: kBoxDecorationWithoutGradient,
-                //     margin: const EdgeInsets.all(20),
-                //     child: Padding(
-                //       padding: const EdgeInsets.all(0.0),
-                //       child: TextField(
-                //         controller: nameController,
-                //         decoration: InputDecoration(
-                //           contentPadding: const EdgeInsets.only(
-                //               left: 8.0, bottom: 8.0, top: 8.0),
-                //           filled: true,
-                //           fillColor: Colors.transparent,
-                //           focusedBorder: InputBorder.none,
-                //           border: OutlineInputBorder(
-                //               borderSide: const BorderSide(
-                //                 width: 0,
-                //                 style: BorderStyle.none,
-                //               ),
-                //               borderRadius: BorderRadius.circular(20)),
-                //           hintText: 'Select a chain',
-                //           prefixIcon: const Icon(Icons.search),
-                //         ),
-                //         onChanged: (text) {
-                //           setState(() {
-                //             fullName = text;
-                //           });
-                //         },
-                //       ),
-                //     )),
                 SearchBar(nameController:nameController),
                 SizedBox(
                   //height: MediaQuery.of(context).size.height / 2.0,

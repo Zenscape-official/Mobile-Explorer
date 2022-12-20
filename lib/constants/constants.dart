@@ -447,6 +447,9 @@ getType(String input) {
     case '/cosmwasm.wasm.v1.MsgExecuteContract':
       return 'Execute Contract';
 
+    case '/ibc.applications.transfer.v1.MsgTransfer':
+      return 'IBC Transfer';
+
     default:
       return 'N/A';
   }

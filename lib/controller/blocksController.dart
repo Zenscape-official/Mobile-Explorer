@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/blocksModel.dart';
 
 class BlocksController extends GetxController {
-
   static var blockList = [].obs;
   static var client = http.Client();
   var isLoading;

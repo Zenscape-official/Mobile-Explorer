@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:zenscape_app/Constants/constants.dart';
 import 'package:zenscape_app/Screens/network/parameters.dart';
 import 'package:zenscape_app/Screens/network/validators.dart';
 import 'package:zenscape_app/Screens/network/blocks.dart';
 import 'package:zenscape_app/Screens/network/proposals.dart';
+import 'package:zenscape_app/routes/routes.dart';
 import 'package:zenscape_app/screens/network/dashboard.dart';
 import '../Screens/network/contracts.dart';
 import '../backend_files/networkList.dart';
+import '../routes/app_pages.dart';
 
 class NavDraw extends StatefulWidget {
   final NetworkList? networkData;
@@ -72,17 +75,19 @@ class _NavDrawState extends State<NavDraw> {
                   text: 'Dashboard',
                   isSelected: selectedIndex == 0,
                   onTap: () {
+                    print(Get.currentRoute);
                     setState(() {
                       selectedIndex = 0;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=>NetworkDashBoard(networkData:widget.networkData)));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> NetworkDashBoard(networkData:widget.networkData)));
                   }),
               _createDrawerItem(
                   image: 'assets/images/val.png',
                   text: 'Validators',
                   isSelected: selectedIndex == 1,
                   onTap: () {
+                    print(Get.currentRoute);
                     setState(() {
                       selectedIndex = 1;
                     });
@@ -188,3 +193,103 @@ Widget _createDrawerItem(
     ),
   );
 }
+
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import '../backend_files/networkList.dart';
+// import '../routes/app_pages.dart';
+//
+// class NavDraw extends StatelessWidget {
+//     final NetworkList? networkData;
+//   final String? logoUrl;
+//   const NavDraw({ this.networkData,this.logoUrl});
+//   @override
+//   Widget build(BuildContext context) {
+//     return Drawer(
+//       child: Container(
+//         child: ListView(
+//           children: [
+//             buildDrawerHeader(),
+//             Divider(
+//               color: Colors.grey,
+//             ),
+//             buildDrawerItem(
+//               icon: Icons.photo,
+//               text: "DASHBOARD",
+//               onTap: () => navigate(0),
+//               tileColor: Get.currentRoute == Routes.DASHBOARD ? Colors.blue : null,
+//               textIconColor: Get.currentRoute == Routes.DASHBOARD
+//                   ? Colors.white
+//                   : Colors.black,
+//             ),
+//             buildDrawerItem(
+//               icon: Icons.video_call,
+//               text: "VALIDATORS",
+//               onTap: () => navigate(1),
+//               tileColor: Get.currentRoute == Routes.VALIDATORS ? Colors.blue : null,
+//               textIconColor: Get.currentRoute == Routes.VALIDATORS
+//                   ? Colors.white
+//                   : Colors.black,
+//             ),
+//             buildDrawerItem(
+//                 icon: Icons.chat,
+//                 text: "BLOCKS",
+//                 onTap: () => navigate(2),
+//                 tileColor: Get.currentRoute == Routes.BLOCKS ? Colors.blue : null,
+//                 textIconColor: Get.currentRoute == Routes.BLOCKS
+//                     ? Colors.white
+//                     : Colors.black),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+//
+//   Widget buildDrawerHeader() {
+//     return UserAccountsDrawerHeader(
+//       accountName: Text("Ripples Code"),
+//       accountEmail: Text("ripplescode@gmail.com"),
+//       currentAccountPicture: CircleAvatar(
+//         backgroundImage: AssetImage('image/logo.jpg'),
+//       ),
+//       currentAccountPictureSize: Size.square(72),
+//       otherAccountsPictures: [
+//         CircleAvatar(
+//           backgroundColor: Colors.white,
+//           child: Text("RC"),
+//         )
+//       ],
+//       otherAccountsPicturesSize: Size.square(50),
+//     );
+//   }
+//
+//   Widget buildDrawerItem({
+//     required String text,
+//     required IconData icon,
+//     required Color textIconColor,
+//     required Color? tileColor,
+//     required VoidCallback onTap,
+//   }) {
+//     return ListTile(
+//       leading: Icon(icon, color: textIconColor),
+//       title: Text(
+//         text,
+//         style: TextStyle(color: textIconColor),
+//       ),
+//       tileColor: tileColor,
+//       onTap: onTap,
+//     );
+//   }
+//
+//   navigate(int index) {
+//     if (index == 0) {
+//       Get.toNamed(Routes.DASHBOARD);
+//     }
+//     else if (index == 1) {
+//       Get.toNamed(Routes.VALIDATORS);
+//     }
+//     if (index == 2) {
+//       Get.toNamed(Routes.BLOCKS);
+//     }
+//   }
+// }

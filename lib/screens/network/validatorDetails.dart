@@ -1,16 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:toggle_switch/toggle_switch.dart';
-import 'package:zenscape_app/backend_files/txModel.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
-import 'package:zenscape_app/controller/toggleController.dart';
-import 'package:http/http.dart' as http;
-import '../../backend_files/blocksModel.dart';
-import '../../backend_files/contractModel.dart';
-import '../../controller/txToggleController.dart';
 
 class ValidatorDetails extends StatefulWidget {
   final ValidatorModel? validatorModel;
@@ -60,15 +50,14 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                 children: <Widget>[
                                   Text('Information', style: kMediumBoldTextStyle),
 
-
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Height', style: kSmallTextStyle),
+                                  Text('Moniker', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.validatorModel!.height!, style: kMediumBoldTextStyle),
+                                  Text(widget.validatorModel!.moniker!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,
@@ -97,7 +86,6 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   ),
                                   Text((widget.validatorModel!.details??''), style: kMediumBoldTextStyle),
 
-
                                   const SizedBox(
                                     height: 20,
                                   ),
@@ -105,11 +93,18 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text((double.parse(widget.validatorModel!.commission!)*100).toString(), style: kMediumBoldTextStyle),
+                                  Text(
+                                      '${truncateToDecimalPlaces(double.parse(widget.validatorModel!.commission!)*100,2).toString()}%',
+                                      style: kMediumBoldTextStyle),
 
                                 ]
                             ),
                           ),
-                        ))])));
+                        ),
+                    ),
+                  ],
+              ),
+          ),
+      );
   }
 }

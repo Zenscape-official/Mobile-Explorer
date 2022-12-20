@@ -40,14 +40,13 @@ class _BlocksState extends State<Blocks> {
   var tx;
   bool isLoaded=false;
   Timer? timer;
-  var valMoniker;
-  var monikerLoaded;
+
 
   @override
   void initState() {
     super.initState();
     getData();
-    timer = Timer.periodic(Duration(seconds: 1), (Timer t) => getData());
+    timer = Timer.periodic(Duration(seconds: 3), (Timer t) => getData());
   }
   @override
   void didChangeDependencies() {
@@ -87,20 +86,7 @@ class _BlocksState extends State<Blocks> {
          .obs;
     }
 
-    final response = await http.get(Uri.parse(''));
-    if (response.statusCode == 200) {
 
-      valMoniker =  jsonDecode(response.body)['result']['block']['header']['time'];
-
-      setState(() {
-        if (valMoniker!=null){
-          monikerLoaded=true;
-        }
-        else{
-          monikerLoaded=false;
-        }
-      });
-    }
 
     tx= await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     setState(() {
@@ -229,18 +215,47 @@ class _BlocksState extends State<Blocks> {
   }
 }
 
-class BlockContainer extends StatelessWidget {
+class BlockContainer extends StatefulWidget {
   final BlockModel? blockModel;
  BlockContainer({
     Key? key, this.blockModel
   }) : super(key: key);
 
   @override
+  State<BlockContainer> createState() => _BlockContainerState();
+}
+
+class _BlockContainerState extends State<BlockContainer> {
+  var valMoniker;
+  var monikerLoaded=false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  getData()async{
+    final response = await http.get(Uri.parse('http://167.235.151.252:3005/validatorDescription/${widget.blockModel!.proposerAddress}'));
+
+    if (response.statusCode == 200) {
+      valMoniker =  jsonDecode(response.body)[0]['moniker'];
+
+      setState(() {
+        if (valMoniker!=null){
+          monikerLoaded=true;
+        }
+        else{
+          monikerLoaded=false;
+        }
+      });
+    }
+  }
+  @override
   Widget build(BuildContext context) {
    // print(timestamp);
    // print(blockModel!.timestamp!.toLocal());
     return InkWell(
-      onTap:()=> Get.to(() => BlockDetails(blockModel: blockModel,)),
+      onTap:()=> Get.to(() => BlockDetails(blockModel: widget.blockModel,)),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -254,13 +269,13 @@ class BlockContainer extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children:[
                         InkWell(
-                          onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.height!)).then((_){
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: widget.blockModel!.height!)).then((_){
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(content: Text('BlockHeight Copied to your clipboard !')));
                           }),
                           child: Row(
                             children: [
-                              Text((blockModel!.height!.toString())
+                              Text((widget.blockModel!.height!.toString())
                                   ,style:kMediumBoldTextStyle),
                               const SizedBox(width:4),
                               const Icon(Icons.copy,
@@ -291,7 +306,7 @@ class BlockContainer extends StatelessWidget {
                             child:   Text(
                               '${
                                   DateTime.now().toLocal()
-                                      .difference(blockModel!.timestamp!.toLocal())
+                                      .difference(widget.blockModel!.timestamp!.toLocal())
                                       .inSeconds
                                } secs ago',
                               style: kExtraSmallTextStyle,
@@ -311,13 +326,13 @@ class BlockContainer extends StatelessWidget {
                             style:kSmallTextStyle),
                       //  const SizedBox(width: 90),
                         InkWell(
-                          onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.hash!)).then((_){
+                          onTap:()=> Clipboard.setData ( ClipboardData(text: widget.blockModel!.hash!)).then((_){
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(content: Text('BlockHash Copied to your clipboard !')));
                           }),
                           child: Row(
                             children: [
-                              Text(dotRefactorFunction(blockModel!.hash!)
+                              Text(dotRefactorFunction(widget.blockModel!.hash!)
                                   ,style:kSmallTextStyle),
                               const SizedBox(width:4),
                               const Icon(Icons.copy,
@@ -338,23 +353,8 @@ class BlockContainer extends StatelessWidget {
                         Text('Proposer',
                             style:kSmallTextStyle),
                         const SizedBox(width:99),
-                        InkWell(
-                          onTap:()=> Clipboard.setData ( ClipboardData(text: blockModel!.proposerAddress!,)).then((_){
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(content: Text('Proposer Address Copied to your clipboard !')));
-                          }),
-                          child: Row(
-                            children: [
-                              Text(dotRefactorFunction(blockModel!.proposerAddress!)
-                                  ,style:kSmallTextStyle),
-                              const SizedBox(width:4),
-                              const Icon(Icons.copy,
-                                color: Colors.black54,
-                                size: 15,
-                              ),
-                            ],
-                          ),
-                        ),
+                        monikerLoaded? Text((valMoniker)
+                             ,style:kSmallTextStyle):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
 
                       ]
                   ),
@@ -366,7 +366,7 @@ class BlockContainer extends StatelessWidget {
                       children: [
                         Text('Transaction',
                             style:kSmallTextStyle),
-                        Text(blockModel!.numTxs.toString(),
+                        Text(widget.blockModel!.numTxs.toString(),
                             style:kSmallTextStyle)
                       ]
                   ),
@@ -378,7 +378,7 @@ class BlockContainer extends StatelessWidget {
                       children:[
                         Text('Time',
                             style:kSmallTextStyle),
-                        Text(dateTime(blockModel!.timestamp!.toLocal()).toString(),
+                        Text(dateTime(widget.blockModel!.timestamp!.toLocal()).toString(),
                             style:kSmallTextStyle)
                       ]
                   ),

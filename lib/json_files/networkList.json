@@ -139,7 +139,7 @@
     "market cap":"44,460,560",
     "24 hr vol":"1,468,879",
     "voting power":"http://167.235.151.252:3005/activeproposalcount",
-    "height": "https://rest.comdex.one/bank/total",
+    "height": "https://meteor.rest.comdex.one/bank/total",
     "transaction": "http://167.235.151.252:3005/transactioncount",
     "bonded tokens":"http://167.235.151.252:3005/stakingpool",
 

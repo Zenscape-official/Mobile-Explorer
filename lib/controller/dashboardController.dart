@@ -10,7 +10,6 @@ class DashboardController extends GetxController {
   static var client = http.Client();
   var isLoading;
 
-  double APR = 0;
   Future<RxList<dynamic>> fetchDash() async{
     isLoading=true;
     var response = await client.get(Uri.parse(

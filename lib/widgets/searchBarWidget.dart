@@ -47,6 +47,8 @@ class SearchBar extends StatelessWidget {
           //     (text) {
           //       filterList(text);
           // }
+       onSubmitted: (name)=>Get.to(() => SearchScreen(nameController:name)),
+              //()=> Get.to(() => SearchScreen(nameController:nameController.text)) ,
         ),
       ),
     );

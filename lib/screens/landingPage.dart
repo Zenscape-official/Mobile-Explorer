@@ -235,7 +235,6 @@ final pngPath=['assets/images/banner_zenscape.png','assets/images/banner2.png'];
   }
 }
 
-
 class NetworkCard extends StatefulWidget {
   final NetworkList networkList;
   const NetworkCard(this.networkList);
