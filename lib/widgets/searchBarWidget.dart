@@ -1,5 +1,6 @@
 import'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import '../constants/constants.dart';
 import '../screens/network/searchDetailsScreen.dart';
 
@@ -39,7 +40,19 @@ class SearchBar extends StatelessWidget {
 
             suffixIcon:  IconButton(
               color:Colors.blue,
-              onPressed:()=> Get.to(() => SearchScreen(nameController:nameController.text)),
+              onPressed:(){
+                if(nameController.text.isEmpty){
+                  Get.snackbar('', 'Please enter Block Height/ Tx Hash');
+                }
+
+                else{
+                  PersistentNavBarNavigator.pushNewScreen(
+                    context,
+                    screen: SearchScreen(nameController: nameController.text ),
+                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                }},
               icon:Icon(Icons.search),
             ),
           ),
@@ -47,7 +60,19 @@ class SearchBar extends StatelessWidget {
           //     (text) {
           //       filterList(text);
           // }
-       onSubmitted: (name)=>Get.to(() => SearchScreen(nameController:name)),
+       onSubmitted: (name) {
+         if(name.isEmpty){
+           Get.snackbar('', 'Please enter Block Height/ Tx Hash');
+         }
+
+         else{
+           PersistentNavBarNavigator.pushNewScreen(
+             context,
+             screen: SearchScreen(nameController: name),
+             withNavBar: true, // OPTIONAL VALUE. True by default.
+             pageTransitionAnimation: PageTransitionAnimation.cupertino,
+           );
+         }},
               //()=> Get.to(() => SearchScreen(nameController:nameController.text)) ,
         ),
       ),

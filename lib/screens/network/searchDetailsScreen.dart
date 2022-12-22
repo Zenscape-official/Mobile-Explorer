@@ -38,27 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
   getData()async{
     loading=true;
     if(isNumeric(widget.nameController)) {
-      // final result =await networkController.fetchList('http://167.235.151.252:3005/block/${widget.nameController.toString()}');
-      // if (result ['success'] == false) {
-      //   // show the dialog
-      //   showDialog(
-      //     context: context,
-      //     builder: (BuildContext context) {
-      //       return AlertDialog(
-      //         title: const Text("Error"),
-      //         content: Text(result['response']),
-      //         actions: [
-      //           TextButton(
-      //             child: const Text("OK"),
-      //             onPressed: () {
-      //               Navigator.of(context).popUntil((route) => route.isFirst);
-      //             },
-      //           ),
-      //         ],
-      //       );
-      //     },
-      //   );
-      // }
+
       final response = await http.get(Uri.parse(
           'http://167.235.151.252:3005/block/${widget.nameController.toString()}'));
       if (response.statusCode == 200) {
@@ -78,6 +58,9 @@ class _SearchScreenState extends State<SearchScreen> {
         // print('+errorr');
         // print('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}');
       }
+    }
+    else if(widget.nameController==null){
+
     }
     else{
       final response = await http.get(Uri.parse(

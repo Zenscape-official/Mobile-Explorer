@@ -424,7 +424,9 @@ class _NetworkCardState extends State<NetworkCard> {
   NetworkController networkController =Get.put(NetworkController());
   void initstate() {
     super.initState();
-    getAPR();
+
+      getAPR();
+
   }
 
   double APR = 0;
@@ -437,40 +439,37 @@ class _NetworkCardState extends State<NetworkCard> {
   bool APRLoaded=false;
 
   getAPR() async {
-    final APR;
+   // print('infunction');
+
     supply =
     (await _dashboardController.fetchBankData(widget.networkList.height!));
-
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
-
     inflation = (await _dashboardController.fetchdata(
     widget.networkList.inflation!, 'value'));
-    print(supply);
-    print(inflation);
-    print(bondedToken);
+    // print(supply);
+    // print(inflation);
+    // print(bondedToken);
     for(int i=0;i<supply!.length;i++){
       if(supply![i].denom=='ucmdx'){
         bankTotal=supply![i].amount;
       }
     }
-    APR = ((double.parse(inflation) * double.parse(bankTotal)) /
+    APRcmdx = ((double.parse(inflation) * double.parse(bankTotal)) /
         double.parse(bondedToken)) *
         100;
-    if(APR!=null){
+   // print(APRcmdx);
+    if(APRcmdx!=0){
       setState(() {
         APRLoaded=true;
       });
     }
     //APRLoaded=true;
-    return APR;
   }
   @override
   Widget build(BuildContext context) {
-    if(widget.networkList.id=='comdex'&&APRLoaded){
-     setState(() {
-       APRcmdx=getAPR();
-     });
+        if(widget.networkList.id=='comdex'){
+      getAPR();
     }
     return InkWell(
       onTap: () => {
@@ -500,7 +499,7 @@ class _NetworkCardState extends State<NetworkCard> {
                       width: 40,
                       child: ClipOval(
                         child: Padding(
-                          padding: widget.networkList.id=='comdex'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
+                          padding: widget.networkList.id=='comdex'||widget.networkList.id=='chihuahua'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
                           child: CachedNetworkImage(
                             imageUrl: widget.networkList.logoUrl ??
                                 widget.networkList.logUrl!,
@@ -519,7 +518,7 @@ class _NetworkCardState extends State<NetworkCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(widget.networkList.denom!,
-                          style: kMediumBoldTextStyle),
+                          style: kSmallBoldTextStyle),
                       Text(widget.networkList.name!, style: kSmallTextStyle),
                     ],
                   ),
@@ -540,22 +539,20 @@ class _NetworkCardState extends State<NetworkCard> {
                           //(widget.networkList.id!='comdex'?''
                             '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
                             //:'85.88%'
-                            , style: kMediumBoldTextStyle),
+                            , style: kLandingPageBoldTextStyle),
                       ],
                     ):Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text('APR', style: kExtraSmallTextStyle),
                         const SizedBox(height: 2),
-                      Text(
-                          //(widget.networkList.id!='comdex'?''
-                           // '${truncateToDecimalPlaces(APRcmdx, 2).obs.toString()}%'
-                            '85.88%'
-                            , style: kMediumBoldTextStyle)
-                          // :SizedBox(
-                          //  height: 10,
-                          //  width: 10,
-                          //  child: LinearProgressIndicator()),
+                     APRLoaded? Text(
+                            '${truncateToDecimalPlaces(APRcmdx, 2).obs.toString()}%'
+                         , style: kLandingPageBoldTextStyle)
+                          :SizedBox(
+                           height: 10,
+                           width: 10,
+                           child: LinearProgressIndicator()),
                       ],
                     ),
                     Padding(
@@ -567,7 +564,7 @@ class _NetworkCardState extends State<NetworkCard> {
                           const SizedBox(height: 2),
                           Text(
                               '\$${truncateToDecimalPlaces(double.parse(widget.networkList.price!), 2).toString()}',
-                              style: kMediumBoldTextStyle),
+                              style: kLandingPageBoldTextStyle),
                         ],
                       ),
                     )

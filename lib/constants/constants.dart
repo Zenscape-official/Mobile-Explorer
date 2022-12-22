@@ -40,6 +40,12 @@ var kSmallBoldTextStyle= TextStyle(
   fontSize: 12,
 );
 
+var kLandingPageBoldTextStyle= TextStyle(
+  fontFamily: 'MontserratBold',
+  color: Colors.black.withOpacity(.7),
+  fontWeight: Platform.isAndroid?FontWeight.bold: FontWeight.bold,
+  fontSize: 15,
+);
 var kExtraSmallTextStyle= TextStyle(
   fontFamily: 'MontserratRegular',
   color: Colors.black,
