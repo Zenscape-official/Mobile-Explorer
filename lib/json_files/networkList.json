@@ -129,7 +129,7 @@
   },
   {"id":"comdex",
     "name" : "Comdex",
-    "logUrl":"https://dfcrpylw0p0vw.cloudfront.net/images/comdex.png",
+    "logUrl":"https://dfcrpylw0p0vw.cloudfront.net/images/cmdx_logo.png",
     "denom":"CMDX",
     "apy":"160%",
     "commission":"5%",
