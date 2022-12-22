@@ -1,9 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/controller/networklistController.dart';
 import 'package:zenscape_app/screens/network/validatorDetails.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
@@ -23,18 +26,20 @@ class _ValidatorsState extends State<Validators> {
   final NetworkController networkController=Get.put(NetworkController());
   final ValToggleController _valToggleController =Get.put(ValToggleController());
   TextEditingController nameController = TextEditingController();
-  ScrollController _scrollController = new ScrollController();
+  NavController navController = Get.put(NavController());
   String fullName = '';
-  var validators;
-  var activeVal;
+  List<ValidatorModel>? validators;
+  List<ValidatorModel>? activeVal;
   var inactiveVal;
   bool isLoaded=false;
   int activeValSelected=0;
+  var totalVoting=1;
 
   @override
   void initState() {
     super.initState();
     valData();
+    navController.updatePage(2);
   }
   void valData() async {
     final result = await networkController.fetchList(widget.networkList!.validatorsUrl!);
@@ -61,7 +66,6 @@ class _ValidatorsState extends State<Validators> {
       );
     }
     if(result['success'] == true) {
-
       validators = List.from(result['response'])
           .map((e) => ValidatorModel.fromJson(e))
           .toList()
@@ -69,7 +73,6 @@ class _ValidatorsState extends State<Validators> {
           .toList()
           .obs;
     }
-
     validators =
         await _validatorController.fetchVal(widget.networkList!.validatorsUrl!);
    setState(() {
@@ -81,10 +84,21 @@ class _ValidatorsState extends State<Validators> {
      }
    }
    );
+   for (int i=0;i<validators!.length;i++){
+     totalVoting+=validators![i].votingPower!;
+   }
+    print(totalVoting);
   }
+
 
   @override
   Widget build(BuildContext context) {
+    ValidatorController.activeValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
+    ValidatorController.inActiveValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
+
+
+    // print(ValidatorController.activeValidatorsList.length);
+    // print(ValidatorController.inActiveValidatorsList.length);
     return Scaffold(
         drawer: NavDraw(networkData: widget.networkList),
         backgroundColor: Colors.grey[100],
@@ -149,7 +163,7 @@ class _ValidatorsState extends State<Validators> {
             builder: (valController) {
               return valController.isActiveSelected==0?
               Expanded(
-                child: ListView.builder(
+                child: CupertinoScrollbar(child:ListView.builder(
                     // reverse: true,
                     physics: const AlwaysScrollableScrollPhysics(),
                     //controller: _scrollController,
@@ -158,21 +172,23 @@ class _ValidatorsState extends State<Validators> {
                     itemCount: ValidatorController.activeValidatorsList.length,
                     itemBuilder: (BuildContext context, int index) {
 
-                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList[index]);
-                    }),
+                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting);
+                    })),
               ):Expanded(
-                child: ListView.builder(
-                // reverse: true,
-                physics: const AlwaysScrollableScrollPhysics(),
-                //controller: _scrollController,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: ValidatorController.inActiveValidatorsList.length,
-                itemBuilder: (BuildContext context, int index) {
+                child: CupertinoScrollbar(
+                  child: ListView.builder(
+                  // reverse: true,
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  //controller: _scrollController,
+                  scrollDirection: Axis.vertical,
+                  shrinkWrap: true,
+                  itemCount: ValidatorController.inActiveValidatorsList.length,
+                  itemBuilder: (BuildContext context, int index) {
 
 
-                  return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList[index]);
-                }),
+                    return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting);
+                  }),
+                ),
               );
             }
           ):
@@ -183,16 +199,17 @@ class _ValidatorsState extends State<Validators> {
 
 class ValidatorContainer extends StatelessWidget {
   final ValidatorModel? validatorModel;
+  final int? totalVoting;
   const ValidatorContainer({
-    Key? key, this.validatorModel
+    Key? key, this.validatorModel,this.totalVoting
   }) : super(key: key);
 
   @override
 
   Widget build(BuildContext context) {
-    validatorModel!.jailedUntil;
+
     return InkWell(
-      onTap: ()=> Get.to(() =>ValidatorDetails(validatorModel: validatorModel,)),
+      onTap: ()=> Get.to(() =>ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,)),
       child: Container(
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(20)),
@@ -215,19 +232,28 @@ class ValidatorContainer extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             CircleAvatar(
-                              radius:15,
-                              child:Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
                               backgroundColor: Colors.transparent,
-                            ),
+                              child:validatorModel!.avatarUrl==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
+                              CachedNetworkImage(
+                                imageUrl: validatorModel!.avatarUrl ??
+                                    validatorModel!.avatarUrl!,
+                                height: 40,
+                                width: 40,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),),
                             const SizedBox(width:10),
+
                             SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: SizedBox(
                                 width:150,
                                 child: Text(validatorModel!.moniker!,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: false,
-                                    style: kBigBoldTextStyle),
+                                   // overflow: TextOverflow.ellipsis,
+                                    //softWrap: false,
+                                    style: kMediumBoldTextStyle),
                               ),
                             ),
                           ],
@@ -276,13 +302,13 @@ class ValidatorContainer extends StatelessWidget {
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text(validatorModel!.votingPower!,
+                                      Text(validatorModel!.votingPower!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'),
                                           style:
                                               kMediumBoldTextStyle),
                                       const SizedBox(
                                         height: 4,
                                       ),
-                                      Text('Voting Power',
+                                      Text('${truncateToDecimalPlaces(validatorModel!.votingPower!/totalVoting!,2)*100}%',
                                           style: kSmallTextStyle),
                                     ],
                                   ),
@@ -326,6 +352,8 @@ class ValidatorContainer extends StatelessWidget {
                             )
                           ],
                         ),
+
+
                         // Column(
                         //   crossAxisAlignment:
                         //       CrossAxisAlignment.start,

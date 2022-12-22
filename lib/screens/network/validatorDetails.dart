@@ -1,10 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 
 class ValidatorDetails extends StatefulWidget {
   final ValidatorModel? validatorModel;
-  ValidatorDetails({Key? key,this.validatorModel}) : super(key: key);
+  var totalVoting;
+  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting}) : super(key: key);
   @override
   State<ValidatorDetails> createState() => _ValidatorDetailsState();
 }
@@ -48,7 +50,19 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  Text('Information', style: kMediumBoldTextStyle),
+                                  CircleAvatar(
+                                    backgroundColor: Colors.transparent,
+                                    child:widget.validatorModel!.avatarUrl==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
+                                    CachedNetworkImage(
+                                      imageUrl: widget.validatorModel!.avatarUrl ??
+                                          widget.validatorModel!.avatarUrl!,
+                                      height: 40,
+                                      width: 40,
+                                      placeholder: (context, url) =>
+                                          CircularProgressIndicator(),
+                                      errorWidget: (context, url, error) =>
+                                          Icon(Icons.error),
+                                    ),),
 
                                   const SizedBox(
                                     height: 20,
@@ -71,11 +85,40 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 20,
                                   ),
+                                  Text('Operator Address', style: kSmallTextStyle),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(widget.validatorModel!.operatorAddress!, style: kMediumBoldTextStyle),
+
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
                                   Text('Voting Power', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.validatorModel!.votingPower!, style: kMediumBoldTextStyle),
+                                  Text('${truncateToDecimalPlaces(widget.validatorModel!.votingPower!/widget.totalVoting!,2)*100}%',
+                                      style: kMediumBoldTextStyle),
+                                  Text(widget.validatorModel!.votingPower!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'), style: kMediumTextStyle),
+
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text('Consensus Address', style: kSmallTextStyle),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(widget.validatorModel!.consensusAddress!.toString(), style: kMediumBoldTextStyle),
+
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text('Minimum Self Delegation', style: kSmallTextStyle),
+                                  const SizedBox(
+                                    height: 2,
+                                  ),
+                                  Text(widget.validatorModel!.minSelfDelegation!.toString(), style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,

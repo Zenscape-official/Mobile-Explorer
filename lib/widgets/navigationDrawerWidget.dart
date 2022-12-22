@@ -6,23 +6,23 @@ import 'package:zenscape_app/Screens/network/parameters.dart';
 import 'package:zenscape_app/Screens/network/validators.dart';
 import 'package:zenscape_app/Screens/network/blocks.dart';
 import 'package:zenscape_app/Screens/network/proposals.dart';
-import 'package:zenscape_app/routes/routes.dart';
+import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/screens/network/dashboard.dart';
 import '../Screens/network/contracts.dart';
 import '../backend_files/networkList.dart';
-import '../routes/app_pages.dart';
 
 class NavDraw extends StatefulWidget {
   final NetworkList? networkData;
   final String? logoUrl;
   const NavDraw({ this.networkData,this.logoUrl});
-
   @override
   _NavDrawState createState() => _NavDrawState();
 }
 
 int selectedIndex = 0;
+int prevIndex=0;
 class _NavDrawState extends State<NavDraw> {
+  NavController navController=Get.put(NavController());
   @override
   void initState() {
     super.initState();
@@ -59,51 +59,83 @@ class _NavDrawState extends State<NavDraw> {
                       decoration: const BoxDecoration()),
                 ),
               ),
-              _createDrawerItem(
-                  image: 'assets/images/home_FILL0_wght400_GRAD0_opsz48.png',
-                  text: 'Home',
-                  isSelected: selectedIndex == 8,
-                  onTap: () {
-                    setState(() {
-                      selectedIndex = 8;
-                    });
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-
-                  }),
+              // _createDrawerItem(
+              //     image: 'assets/images/home_FILL0_wght400_GRAD0_opsz48.png',
+              //     text: 'Home',
+              //     isSelected: selectedIndex == 8,
+              //     onTap: () {
+              //
+              //       setState(() {
+              //         prevIndex=selectedIndex;
+              //         selectedIndex = 8;
+              //       });
+              //       Navigator.of(context).popUntil((route) => route.isFirst);
+              //
+              //     }),
               _createDrawerItem(
                   image: 'assets/images/dashbd.png',
                   text: 'Dashboard',
                   isSelected: selectedIndex == 0,
                   onTap: () {
-                    print(Get.currentRoute);
+                    print(ModalRoute.of(context));
                     setState(() {
+                      prevIndex=selectedIndex;
                       selectedIndex = 0;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> NetworkDashBoard(networkData:widget.networkData)));
+                    //Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> NetworkDashBoard(networkData:widget.networkData)))
+                        .then((value) {
+                      print(selectedIndex);
+                      print(prevIndex);
+                      setState(() {
+                        selectedIndex= prevIndex;
+                        Navigator.of(context).pop();
+                      });
+                    }
+                    );
                   }),
               _createDrawerItem(
                   image: 'assets/images/val.png',
                   text: 'Validators',
-                  isSelected: selectedIndex == 1,
+                  isSelected: selectedIndex==1,
                   onTap: () {
-                    print(Get.currentRoute);
+                    print(ModalRoute.of(context));
+
                     setState(() {
+                      prevIndex=selectedIndex;
                       selectedIndex = 1;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Validators(networkList:widget.networkData)));
+                   // Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Validators(networkList:widget.networkData)))
+                        .then((value) {
+                      print(selectedIndex);
+                      print(prevIndex);
+                      setState(() {
+                        selectedIndex= prevIndex;
+                        Navigator.of(context).pop();
+                      });
+                    }
+                    );
                   }),
               _createDrawerItem(
                   image: 'assets/images/blocks.png',
                   text: 'Blocks',
-                  isSelected: selectedIndex == 2,
+                  isSelected: selectedIndex==2,
                   onTap: () {
                     setState(() {
+                      prevIndex=selectedIndex;
                       selectedIndex = 2;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData)));
+                   // Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData))).then((value) {
+                      print(selectedIndex);
+                      print(prevIndex);
+                      setState(() {
+                        selectedIndex= prevIndex;
+                        Navigator.of(context).pop();
+                      });
+                    }
+                    );
                   }),
               _createDrawerItem(
                   image: 'assets/images/props.png',
@@ -111,10 +143,19 @@ class _NavDrawState extends State<NavDraw> {
                   isSelected: selectedIndex == 3,
                   onTap: () {
                     setState(() {
+                      prevIndex=selectedIndex;
                       selectedIndex = 3;
                     });
-                    Navigator.of(context).pop();
-      Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals(networkListProposal:widget.networkData ,)));
+                   // Navigator.of(context).pop();
+      Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals(networkListProposal:widget.networkData ,))).then((value) {
+        print(selectedIndex);
+        print(prevIndex);
+        setState(() {
+          selectedIndex= prevIndex;
+          Navigator.of(context).pop();
+        });
+      }
+      );
                   }),
               // _createDrawerItem(
               //     image: 'assets/images/ibc.png',
@@ -144,10 +185,19 @@ class _NavDrawState extends State<NavDraw> {
                   isSelected: selectedIndex == 6,
                   onTap: () {
                     setState(() {
+                      prevIndex=selectedIndex;
                       selectedIndex = 6;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Contracts(networkList:widget.networkData)));
+                   // Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Contracts(networkList:widget.networkData))).then((value) {
+                      print(selectedIndex);
+                      print(prevIndex);
+                      setState(() {
+                        selectedIndex= prevIndex;
+                        Navigator.of(context).pop();
+                      });
+                    }
+                    );
                   }),
               _createDrawerItem(
                   image: 'assets/images/params.png',
@@ -155,11 +205,26 @@ class _NavDrawState extends State<NavDraw> {
                   isSelected: selectedIndex == 7,
                   onTap: () {
                     setState(() {
+                      prevIndex=selectedIndex;
                       selectedIndex = 7;
                     });
-                    Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Parameters(networkList:widget.networkData)));
-                  }),
+                    //Navigator.of(context).pop();
+                    Navigator.push(
+                        context, CupertinoPageRoute(
+                        builder: (context)=>
+                            Parameters(networkList:widget.networkData)))
+                        .then((value) {
+                          print(selectedIndex);
+                          print(prevIndex);
+                         setState(() {
+                           selectedIndex= prevIndex;
+                           Navigator.of(context).pop();
+                         });
+                  }
+                      );
+                        }
+
+                  ),
             ],
           ),
         ),

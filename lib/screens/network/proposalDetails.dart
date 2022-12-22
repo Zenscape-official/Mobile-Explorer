@@ -60,7 +60,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
     }
     if (resultDeposit.statusCode==200){
       Deposit=(jsonDecode(resultDeposit.body)[0]['amount']);
-      DepositDenom=(jsonDecode(resultDeposit.body)[0]['denom']);
+      //DepositDenom=(jsonDecode(resultDeposit.body)[0]['denom']);
       //print(propVoters);
     }
 
@@ -221,7 +221,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Total Deposit',
                                     style:kSmallTextStyle),
-                                Text('${removeAllChar(Deposit)} ${DepositDenom}'
+                                Text('${removeAllChar(Deposit)} ${getRestrictedCharacters(Deposit)}'
                                     ,
                                     style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
@@ -255,15 +255,8 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Type',
                                     style:kSmallTextStyle),
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: SizedBox(
-                                    width:100,
-                                    height: 15,
-                                    child: Text(widget.proposalProduct.proposalType!,
-                                        style:kSmallBoldTextStyle),
-                                  ),
-                                ),
+                                Text(widget.proposalProduct.proposalType!,
+                                    style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
                                 Text('Deposit End Time',

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import 'package:zenscape_app/constants/constants.dart';
 import '../backend_files/valStatusModel.dart';
 import '../backend_files/validatorsModel.dart';
 
@@ -38,10 +37,10 @@ class ValidatorController extends GetxController {
           valStatus= List.from(jsonStatusString)
               .map((x) => ValStatusModel.fromMap(x)).toList().obs;
 
-
-          for (int i = 0; i < validatorsList!.length; i++) {
-           for(int j=i;j<valStatus!.length;j++){
-             if ((validatorsList![i].validatorAddress!)==(valStatus![j].validatorAddress)) {
+          if(activeValidatorsList.length==0)
+          for (int i=0; i < validatorsList!.length; i++) {
+           for(int j=0; j<valStatus!.length; j++){
+             if ((validatorsList![i].validatorAddress!) == (valStatus![j].validatorAddress)) {
               if(valStatus![j].status==1){
                 inActiveValidatorsList.add(validatorsList![i]);
               }
@@ -51,7 +50,7 @@ class ValidatorController extends GetxController {
            }
            }
 
-
+          activeValidatorsList.sort((a, b) => a.votingPower.compareTo(b.votingPower));
           //print(inActiveValidatorsList.length);
           return validatorsList;
 

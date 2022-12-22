@@ -52,7 +52,7 @@ timeDifferenceFunction(timeDifference){
   if(finalTimeDiff>86400){
     return '${DateTime.now().toLocal()
         .difference(DateTime.parse(timeDifference).toLocal())
-        .inSeconds}days ago';
+        .inDays}days ago';
   }
 }
 

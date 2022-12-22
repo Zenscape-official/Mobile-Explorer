@@ -179,6 +179,22 @@ int screen(int scrNo){
   return scrNo;
 }
 
+String? getRestrictedCharacters(String string){
+  const notAllowedCharacters = r"""1234567890!"#$%&'()+,-./:;<=>?@[\]^_`{|}~""";
+  Set<String> restricted = Set();
+  final split = string.split('');
+  split.forEach((c) {
+    if (!notAllowedCharacters.contains(c)) {
+      restricted.add(c);
+    }
+  });
+  if (restricted.isEmpty){
+    return null;
+  } else {
+    return restricted.join("");
+  }
+}
+
 
 
 

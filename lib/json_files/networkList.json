@@ -142,10 +142,8 @@
     "height": "https://meteor.rest.comdex.one/bank/total",
     "transaction": "http://167.235.151.252:3005/transactioncount",
     "bonded tokens":"http://167.235.151.252:3005/stakingpool",
-
     "community pool":"http://167.235.151.252:3005/communitypool",
     "inflation": "http://167.235.151.252:3005/inflation",
-
     "staking apr": "8",
     "validatorsUrl":"http://167.235.151.252:3005/validators",
     "blocksURL":"http://167.235.151.252:3005/blocks",
@@ -411,5 +409,4 @@
     "contractsUrl":"",
     "paramssUrl":""
   }
-
 ]

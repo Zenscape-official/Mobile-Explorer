@@ -103,50 +103,10 @@ class _ProposalsState extends State<Proposals> {
       ),
       body: Column(
         children: [
-          // Container(
-          //     width: MediaQuery.of(context).size.width/1.1,
-          //     height: 40,
-          //     decoration: kBoxDecorationWithoutGradient,
-          //     margin: const EdgeInsets.all(20),
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(0.0),
-          //       child: TextField(
-          //         controller: nameController,
-          //         decoration: InputDecoration(
-          //           contentPadding: const EdgeInsets.all(15),
-          //           filled: true,
-          //           fillColor: Colors.transparent,
-          //           focusedBorder: InputBorder.none,
-          //           border: OutlineInputBorder(
-          //               borderSide: const BorderSide(
-          //                 width: 0,
-          //                 style: BorderStyle.none,
-          //               ),
-          //               borderRadius: BorderRadius.circular(20)
-          //           ),
-          //           hintText: 'Select a chain',
-          //           prefixIcon: const Icon(Icons.search),
-          //         ),
-          //         onChanged: (text) {
-          //           setState(() {
-          //             fullName = text;
-          //             //you can access nameController in its scope to get
-          //             // the value of text entered as shown below
-          //             //fullName = nameController.text;
-          //           });
-          //         },
-          //       ),
-          //     )),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children:
-            const [
-             // Filter(),
-            ],
-          ),
+
          isLoaded?SingleChildScrollView(
             child: SizedBox(
-              height: MediaQuery.of(context).size.height/1.2,
+              height: MediaQuery.of(context).size.height/1.3,
               child:Obx(()=> CupertinoScrollbar(
                 child: ListView.builder(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -160,7 +120,7 @@ class _ProposalsState extends State<Proposals> {
               ),
             ),
           ),
-          ):const CircularProgressIndicator(),
+          ):Center(child: const CircularProgressIndicator()),
         ],
       ),
     );

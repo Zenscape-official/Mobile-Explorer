@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/blocksModel.dart';
 import 'package:zenscape_app/backend_files/txModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:zenscape_app/controller/txController.dart';
 import '../../backend_files/networkList.dart';
@@ -36,6 +37,7 @@ class _BlocksState extends State<Blocks> {
   final NetworkController networkController = Get.put(NetworkController());
   final TxController _txController=Get.put(TxController());
   Rx<List<BlockModel>> foundBlock = Rx<List<BlockModel>>([]);
+  NavController navController=Get.put(NavController());
   var blocks;
   var tx;
   bool isLoaded=false;
@@ -47,6 +49,7 @@ class _BlocksState extends State<Blocks> {
     super.initState();
     getData();
     timer = Timer.periodic(Duration(seconds: 3), (Timer t) => getData());
+    navController.updatePage(3);
   }
   @override
   void didChangeDependencies() {
@@ -239,6 +242,7 @@ class _BlockContainerState extends State<BlockContainer> {
 
     if (response.statusCode == 200) {
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
+    //  print(valMoniker);
 
       setState(() {
         if (valMoniker!=null){
@@ -252,8 +256,7 @@ class _BlockContainerState extends State<BlockContainer> {
   }
   @override
   Widget build(BuildContext context) {
-   // print(timestamp);
-   // print(blockModel!.timestamp!.toLocal());
+   getData();
     return InkWell(
       onTap:()=> Get.to(() => BlockDetails(blockModel: widget.blockModel,)),
       child: Container(

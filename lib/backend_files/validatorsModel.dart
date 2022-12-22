@@ -55,7 +55,7 @@ class ValidatorModel {
   DateTime? jailedUntil;
   bool? tombstoned;
   String? missedBlocksCounter;
-  String? votingPower;
+  int? votingPower;
 
   factory ValidatorModel.fromJson(Map<String, dynamic> json) => ValidatorModel(
     consensusAddress: json["consensus_address"],
@@ -79,7 +79,7 @@ class ValidatorModel {
     jailedUntil: DateTime.parse(json["jailed_until"]),
     tombstoned: json["tombstoned"],
     missedBlocksCounter: json["missed_blocks_counter"],
-    votingPower: json["voting_power"],
+    votingPower: int.parse(json["voting_power"]),
   );
 
   Map<String, dynamic> toJson() => {

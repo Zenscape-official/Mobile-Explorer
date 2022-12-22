@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:zenscape_app/backend_files/txModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
@@ -594,7 +595,10 @@ class TxDetails extends StatefulWidget {
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
-                            widget.txModel!.rawLog!=null? Text(widget.txModel!.rawLog!.replaceAll(RegExp('/'), ''),
+                            widget.txModel!.rawLog!=null? Text((widget.txModel!.rawLog!)
+                                .replaceAll(RegExp(r'')
+                                , '')
+                                ,
                                 style: kMediumBoldTextStyle):Text('No Logs Available',style: kMediumBoldTextStyle)
                           ]),
                     ),

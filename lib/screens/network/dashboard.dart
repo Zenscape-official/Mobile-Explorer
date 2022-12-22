@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +15,7 @@ import '../../backend_files/blocksModel.dart';
 import '../../backend_files/txModel.dart';
 import '../../constants/constString.dart';
 import '../../controller/blocksController.dart';
+import '../../controller/navController.dart';
 import '../../controller/networklistController.dart';
 import '../../controller/txController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
@@ -40,16 +40,19 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   final TxController _txController = Get.put(TxController());
   final ToggleController toggleController =Get.put(ToggleController());
   TextEditingController nameController=TextEditingController();
+  NavController navController=Get.put(NavController());
   String fullName = '';
   var blockTime;
   var txNum;
   var bondedToken;
   var communityPool;
   var inflation = '';
-  var height;
+  var height='0';
   var bankTotal;
   var blocks;
   var tx;
+  var blockDashList=[];
+  var txDashList=[];
   List<dynamic>? supply;
   double APR = 0;
   bool isLoaded = false;
@@ -60,29 +63,16 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   void initstate() {
     super.initState();
     getData();
-   // getBlockTx();
-    //timer = Timer.periodic(Duration(seconds: 3), (Timer t) => getBlockTx());
+    navController.updatePage(1);
   }
 
-  // getBlockTx()async{
-  //   blocks =
-  //       await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
-  //   tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
-  //
-  //   setState(() {
-  //     if (blocks != null && tx != null) {
-  //       isLoaded = true;
-  //     } else {
-  //       isLoaded = false;
-  //     }
-  // });
-  // }
   getData() async {
     result =
     await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
 
     height = (await _dashboardController.fetchSingleData(
         widget.networkData!.height!, 'height'));
+
     txNum = (await _dashboardController.fetchdata(
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
@@ -98,7 +88,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
     for(int i=0;i<supply!.length;i++){
-     // print(supply![i].denom);
       if(supply![i].denom=='ucmdx'){
         bankTotal=supply![i].amount;
       }
@@ -119,9 +108,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     blocks =
     await networkController.fetchList(widget.networkData!.blocksUrl!);
+    blockDashList=[BlocksController.blockList[BlocksController.blockList.length-1],BlocksController.blockList[BlocksController.blockList.length-2]];
+    txDashList=[TxController.txList[TxController.txList.length-1],TxController.txList[TxController.txList.length-2]];
+    //height=blockDashList[0].height;
     setState(() {
       if (blocks != null && tx != null) {
         isLoaded = true;
+
       } else {
         isLoaded = false;
       }
@@ -135,7 +128,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
 
   getDialogue(var result) {
     if (result['success'] == false) {
-      // show the dialog
+
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -163,6 +156,9 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   @override
   Widget build(BuildContext context) {
     getData();
+
+
+
     logoImage= getImage(widget.networkData!.id!);
     return widget.networkData!.id=='comdex'? Scaffold(
         drawer: NavDraw(
@@ -415,7 +411,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                               ? double.parse(widget.networkData!.the24HrVol!) >
                                               0
                                               ? Text(
-                                              '\$ ${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString()}',
+                                              '\$ ${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                                               style: double.parse(widget.networkData!.the24HrVol!) > 0
                                                   ? const TextStyle(
                                                   fontFamily:
@@ -431,7 +427,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                       .withOpacity(
                                                       .8)))
                                               : Text(
-                                              '\$${truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString()}',
+                                              '\$${truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                                               style: double.parse(widget.networkData!.the24HrVol!) > 0
                                                   ? const TextStyle(
                                                   fontFamily:
@@ -490,10 +486,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                             title1: par[index],
                             icon1: image[index],
                             titleValue1: details[index]);
-                        // : SizedBox(
-                        //     height: 10,
-                        //     width: 10,
-                        //     child: LinearProgressIndicator());
+
                       },
                       staggeredTileBuilder: (index) =>
                       const StaggeredTile.fit(1)
@@ -565,8 +558,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                 itemBuilder:
                                     (BuildContext context, int index) {
                                   return BlockContDash(
-                                    blockModel: BlocksController
-                                        .blockList[index],
+                                    blockModel: blockDashList.reversed.toList()[index],
                                   );
                                 }),
                           ),
@@ -581,7 +573,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                           height: 15,
                           width: 15,
                           child: CircularProgressIndicator()),
-                    )),
+                    ),
+                ),
                 SizedBox(height:15),
                 isLoaded
                     ? Padding(
@@ -591,7 +584,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 18),
+                          padding: const EdgeInsets.fromLTRB(18.0, 4, 18, 0),
                           child: Row(
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
@@ -626,7 +619,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                         ),
                         Padding(
                           padding:
-                          const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
+                          const EdgeInsets.fromLTRB(8.0, 8, 8, 30),
                           child: ListView.builder(
                               reverse: true,
                               physics:
@@ -640,7 +633,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                               itemBuilder:
                                   (BuildContext context, int index) {
                                 return TxContDash(
-                                  txModel: TxController.txList[index],
+                                  txModel: txDashList.reversed.toList()[index],
                                 );
                               }),
                         ),
@@ -809,9 +802,6 @@ class _TxContDashState extends State<TxContDash> {
         }
       });
     } else {
-      // print(response.statusCode);
-      // print('+errorr');
-      // print('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}');
     }
   }
 
@@ -835,7 +825,9 @@ class _TxContDashState extends State<TxContDash> {
               spreadRadius: 1,
               blurRadius: 1,
               offset: const Offset(-2, -2), // changes position of shadow
-            ),],),
+            ),
+          ],
+        ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
