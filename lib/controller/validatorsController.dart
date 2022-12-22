@@ -41,17 +41,18 @@ class ValidatorController extends GetxController {
           for (int i=0; i < validatorsList!.length; i++) {
            for(int j=0; j<valStatus!.length; j++){
              if ((validatorsList![i].validatorAddress!) == (valStatus![j].validatorAddress)) {
-              if(valStatus![j].status==1){
-                inActiveValidatorsList.add(validatorsList![i]);
+              if(valStatus![j].status==3){
+                activeValidatorsList.add(validatorsList![i]);
               }
              else {
-               (activeValidatorsList.add(validatorsList![i]));
-             } }
+               (inActiveValidatorsList.add(validatorsList![i]));
+             }
+             }
            }
            }
 
           activeValidatorsList.sort((a, b) => a.votingPower.compareTo(b.votingPower));
-          //print(inActiveValidatorsList.length);
+
           return validatorsList;
 
         case 400:

@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/Controller/productController.dart';
-import 'package:zenscape_app/Screens/network/proposalDetails.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/screens/network/proposalDetails.dart';
 import '../../backend_files/proposalsModel.dart';
 import '../../controller/networklistController.dart';
 import '../../controller/proposalsFunc.dart';
@@ -92,7 +92,7 @@ class _ProposalsState extends State<Proposals> {
           CircleAvatar(
               radius:15,
               child: InkWell(
-                  onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                 // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
                   child: Image.network(widget.networkListProposal!.logoUrl??widget.networkListProposal!.logUrl!)),
               backgroundColor: Colors.transparent),
         ],
@@ -145,11 +145,7 @@ class ProposalCard extends StatelessWidget {
   Widget build(BuildContext context) {
     fun();
     return InkWell(
-      onTap: ()=> Get.to(
-              () => ProposalDetails(
-        proposalProduct: product,
-      )
-      ),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ProposalDetails(proposalProduct:product,))),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(

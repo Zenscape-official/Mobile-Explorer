@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
-import '../constants/functions.dart';
 import '../controller/networklistController.dart';
 import '../widgets/searchBarWidget.dart';
 import 'network/dashboard.dart';
@@ -32,14 +31,12 @@ class _LandingPageState extends State<LandingPage> {
   void initState() {
     super.initState();
     netData();
-    // print(foundNetwork.value);
   }
 
   final svgPath = [
     'assets/svgfiles/ZENSCAPE_BANNER_APP.svg',
     'assets/svgfiles/BANNER_2.svg'
   ];
- //late final containerList=[buildContainer1(),buildContainer2()];
   final pngPath = [
     'assets/images/banner_zenscape.png',
     'assets/images/banner2.png'
@@ -502,15 +499,18 @@ class _NetworkCardState extends State<NetworkCard> {
                       height: 40,
                       width: 40,
                       child: ClipOval(
-                        child: CachedNetworkImage(
-                          imageUrl: widget.networkList.logoUrl ??
-                              widget.networkList.logUrl!,
-                          height: 40,
-                          width: 40,
-                          placeholder: (context, url) =>
-                              CircularProgressIndicator(),
-                          errorWidget: (context, url, error) =>
-                              Icon(Icons.error),
+                        child: Padding(
+                          padding: widget.networkList.id=='comdex'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
+                          child: CachedNetworkImage(
+                            imageUrl: widget.networkList.logoUrl ??
+                                widget.networkList.logUrl!,
+                            // height: 40,
+                            // width: 40,
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                          ),
                         ),
                       ),
                     ),

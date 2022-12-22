@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/backend_files/blocksModel.dart';
 import 'package:zenscape_app/backend_files/txModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
@@ -20,6 +21,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import '../../widgets/searchBarWidget.dart';
 import 'blockDetails.dart';
+import 'package:flutter/cupertino.dart';
+
 
 var timestamp = DateTime.now().toLocal();
 class Blocks extends StatefulWidget {
@@ -127,7 +130,7 @@ class _BlocksState extends State<Blocks> {
             CircleAvatar(
                 radius:15,
                 child: InkWell(
-                    onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                    //onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
                     child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
@@ -258,7 +261,7 @@ class _BlockContainerState extends State<BlockContainer> {
   Widget build(BuildContext context) {
    getData();
     return InkWell(
-      onTap:()=> Get.to(() => BlockDetails(blockModel: widget.blockModel,)),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,))),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -444,7 +447,13 @@ class _TxContainerState extends State<TxContainer> {
    type=getType(widget.txModel!.messages![0].type!);
 
     return InkWell(
-      onTap:()=> Get.to(() => TxDetails(txModel:widget.txModel,)),
+
+        onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+          context,
+          screen: TxDetails(txModel: widget.txModel,),
+          withNavBar: true, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        ),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),

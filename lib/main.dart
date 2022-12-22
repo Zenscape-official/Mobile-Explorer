@@ -30,12 +30,14 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    // NetworkController.networkList();
     DashboardController.dashboardList();
 }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
+        defaultTransition: Transition.noTransition, //this would be the solution
+        transitionDuration:  Duration(seconds: 0),
+
       title: 'App Title',
       debugShowCheckedModeBanner: false,
       home:  initScreen == null ? OnboardingPage():const MainApp(),
@@ -87,25 +89,6 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return
 
-     //  Obx(
-     // () {
-     //    return WillPopScope(
-     //      onWillPop: () async{
-     //        final difference= DateTime.now().difference(timePressedBack);
-     //        final isExitWarning=difference>=const Duration(seconds: 2);
-     //        timePressedBack=DateTime.now();
-     //        if(isExitWarning)
-     //
-     //          {
-     //            const message='Press Back Again to Exit App';
-     //            Get.snackbar('ALERT!', message);
-     //            return false;
-     //          }
-     //
-     //        else {
-     //          return true;
-     //        }
-     //      },
            PersistentTabView(
             context,
             controller: _controller,

@@ -864,13 +864,13 @@ class VoterCard extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 4,),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Time',style: kSmallTextStyle,),
-                      Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-                    ],
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text('Time',style: kSmallTextStyle,),
+                  //     Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
+                 //   ],
+                 // ),
                 ],
               ),
             )),

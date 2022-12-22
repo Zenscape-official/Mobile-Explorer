@@ -54,7 +54,7 @@ class _AssetsState extends State<Assets> {
             CircleAvatar(
                 radius:15,
                 child: InkWell(
-                  onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                 // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
                     child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],

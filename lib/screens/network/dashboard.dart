@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -184,9 +185,18 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
               CircleAvatar(
                   radius: 15,
                   child: InkWell(
-                    onTap: () => Navigator.of(context)
-                        .popUntil((route) => route.isFirst),
-                    child: Image.asset(logoImage),
+                    // onTap: () => Navigator.of(context)
+                    //     .popUntil((route) => route.isFirst),
+                    child: CachedNetworkImage(
+                      imageUrl: widget.networkData!.logoUrl ??
+                          widget.networkData!.logUrl!,
+                      height: 40,
+                      width: 40,
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) =>
+                          Icon(Icons.error),
+                    ),
                   ),
                   backgroundColor: Colors.transparent),
             ],
@@ -219,8 +229,16 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                   children: [
                                     CircleAvatar(
                                         radius: 15,
-                                        child: Image.asset(
-                                            logoImage),
+                                        child: CachedNetworkImage(
+                                          imageUrl: widget.networkData!.logoUrl ??
+                                              widget.networkData!.logUrl!,
+                                          height: 40,
+                                          width: 40,
+                                          placeholder: (context, url) =>
+                                              CircularProgressIndicator(),
+                                          errorWidget: (context, url, error) =>
+                                              Icon(Icons.error),
+                                        ),
                                         backgroundColor: Colors.transparent),
                                     Padding(
                                       padding: const EdgeInsets.all(4.0),

@@ -28,9 +28,10 @@ class _ValidatorsState extends State<Validators> {
   TextEditingController nameController = TextEditingController();
   NavController navController = Get.put(NavController());
   String fullName = '';
-  List<ValidatorModel>? validators;
-  List<ValidatorModel>? activeVal;
-  var inactiveVal;
+  List<ValidatorModel>? validators=[];
+  List<ValidatorModel> activeVal=[];
+  List<ValidatorModel> inActiveVal=[];
+
   bool isLoaded=false;
   int activeValSelected=0;
   var totalVoting=1;
@@ -87,7 +88,8 @@ class _ValidatorsState extends State<Validators> {
    for (int i=0;i<validators!.length;i++){
      totalVoting+=validators![i].votingPower!;
    }
-    print(totalVoting);
+
+
   }
 
 
@@ -115,7 +117,7 @@ class _ValidatorsState extends State<Validators> {
               CircleAvatar(
                   radius:15,
                   child: InkWell(
-                      onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                     // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
                       child: Image.network(widget.networkList!.logoUrl??widget.networkList!.logUrl!)),
                   backgroundColor: Colors.transparent),
             ],
@@ -172,7 +174,7 @@ class _ValidatorsState extends State<Validators> {
                     itemCount: ValidatorController.activeValidatorsList.length,
                     itemBuilder: (BuildContext context, int index) {
 
-                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting);
+                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Active',);
                     })),
               ):Expanded(
                 child: CupertinoScrollbar(
@@ -186,7 +188,7 @@ class _ValidatorsState extends State<Validators> {
                   itemBuilder: (BuildContext context, int index) {
 
 
-                    return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting);
+                    return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Inactive',);
                   }),
                 ),
               );
@@ -200,8 +202,9 @@ class _ValidatorsState extends State<Validators> {
 class ValidatorContainer extends StatelessWidget {
   final ValidatorModel? validatorModel;
   final int? totalVoting;
+  final String? status;
   const ValidatorContainer({
-    Key? key, this.validatorModel,this.totalVoting
+    Key? key, this.validatorModel,this.totalVoting,this.status
   }) : super(key: key);
 
   @override
@@ -209,7 +212,7 @@ class ValidatorContainer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return InkWell(
-      onTap: ()=> Get.to(() =>ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,)),
+      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,))),
       child: Container(
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(20)),

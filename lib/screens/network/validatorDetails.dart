@@ -6,7 +6,8 @@ import 'package:zenscape_app/constants/constants.dart';
 class ValidatorDetails extends StatefulWidget {
   final ValidatorModel? validatorModel;
   var totalVoting;
-  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting}) : super(key: key);
+  String? status;
+  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting,this.status}) : super(key: key);
   @override
   State<ValidatorDetails> createState() => _ValidatorDetailsState();
 }
@@ -50,19 +51,51 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                             Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: <Widget>[
-                                  CircleAvatar(
-                                    backgroundColor: Colors.transparent,
-                                    child:widget.validatorModel!.avatarUrl==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
-                                    CachedNetworkImage(
-                                      imageUrl: widget.validatorModel!.avatarUrl ??
-                                          widget.validatorModel!.avatarUrl!,
-                                      height: 40,
-                                      width: 40,
-                                      placeholder: (context, url) =>
-                                          CircularProgressIndicator(),
-                                      errorWidget: (context, url, error) =>
-                                          Icon(Icons.error),
-                                    ),),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        child:widget.validatorModel!.avatarUrl==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
+                                        ClipOval(
+                                          child: CachedNetworkImage(
+                                            imageUrl: widget.validatorModel!.avatarUrl ??
+                                                widget.validatorModel!.avatarUrl!,
+                                            height: 40,
+                                            width: 40,
+                                            placeholder: (context, url) =>
+                                                CircularProgressIndicator(),
+                                            errorWidget: (context, url, error) =>
+                                                Icon(Icons.error),
+                                          ),
+                                        ),),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color:widget.status=='Active'? Colors.lightGreenAccent.withOpacity(.1):Colors.red.shade50,
+                                          borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                                          border: Border.all(
+                                            color: widget.status=='Active'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
+                                            width: 1.0,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 9.0),
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            children:[
+                                              CircleAvatar(backgroundColor:  widget.status=='Active'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
+                                                radius: 3,),
+                                              Padding(
+                                                padding: const EdgeInsets.all(2.0),
+                                                child: Text(widget.status!,
+                                                  style: kSmallTextStyle,),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
 
                                   const SizedBox(
                                     height: 20,

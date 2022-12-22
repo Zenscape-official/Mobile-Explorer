@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -57,7 +58,7 @@ class _ContractsState extends State<Contracts> {
             CircleAvatar(
                 radius:15,
                 child: InkWell(
-                    onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
+                   // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
                     child: Image.network(widget.networkList!.logoUrl??widget.networkList!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
@@ -103,7 +104,7 @@ class ContractContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:()=> Get.to(() => ContractDetails(contractModel: contractModel,)),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ContractDetails(contractModel: contractModel,))),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
