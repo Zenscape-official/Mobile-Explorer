@@ -129,7 +129,7 @@
   },
   {"id":"comdex",
     "name" : "Comdex",
-    "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/cmdx.png",
+    "logUrl":"https://dfcrpylw0p0vw.cloudfront.net/images/comdex.png",
     "denom":"CMDX",
     "apy":"160%",
     "commission":"5%",
