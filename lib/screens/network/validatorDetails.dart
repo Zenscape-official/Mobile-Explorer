@@ -113,7 +113,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.validatorModel!.validatorAddress!, style: kMediumBoldTextStyle),
+                                  Text(widget.validatorModel!.selfDelegateAddress!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,11 +8,16 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
+import 'package:zenscape_app/backend_files/proposalsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
+import 'package:zenscape_app/controller/proposalsFunc.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
+import 'package:zenscape_app/screens/network/proposalDetails.dart';
+import '../../Screens/network/blockDetails.dart';
 import '../../Screens/network/blocks.dart';
+import '../../Screens/network/transactionDetails.dart';
 import '../../backend_files/blocksModel.dart';
 import '../../backend_files/txModel.dart';
 import '../../constants/constString.dart';
@@ -36,8 +42,11 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   final BlocksController _blocksController = Get.put(BlocksController());
 
   final NetworkController networkController = Get.put(NetworkController());
+  final ProposalController proposalController=Get.put(ProposalController());
   final DashboardController _dashboardController =
   Get.put(DashboardController());
+
+
   final TxController _txController = Get.put(TxController());
   final ToggleController toggleController =Get.put(ToggleController());
   TextEditingController nameController=TextEditingController();
@@ -57,9 +66,11 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   List<dynamic>? supply;
   double APR = 0;
   bool isLoaded = false;
-  bool isListLoaded = false;
+  bool isProposalActive = false;
   var result;
   var timer;
+List<ProposalsModel>? activeProposal;
+  List<ProposalsModel> activeProposalsList=[];
   String logoImage='';
   void initstate() {
     super.initState();
@@ -111,7 +122,17 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     await networkController.fetchList(widget.networkData!.blocksUrl!);
     blockDashList=[BlocksController.blockList[BlocksController.blockList.length-1],BlocksController.blockList[BlocksController.blockList.length-2]];
     txDashList=[TxController.txList[TxController.txList.length-1],TxController.txList[TxController.txList.length-2]];
-    //height=blockDashList[0].height;
+    activeProposal= await proposalController.fetchProducts(widget.networkData!.proposalsUrl!);
+   if(activeProposalsList.isEmpty)
+    for(int i=0;i<activeProposal!.length;i++){
+      if(activeProposal![i].status=='PROPOSAL_STATUS_VOTING_PERIOD'){
+        activeProposalsList.add(activeProposal![i]);
+      }
+      activeProposalsList.sort((b, a) => b.id!.compareTo(a.id!));
+      //print(activeProposal![i]);
+
+    }
+
     setState(() {
       if (blocks != null && tx != null) {
         isLoaded = true;
@@ -119,11 +140,12 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       } else {
         isLoaded = false;
       }
-      if (height != null && txNum != null && communityPool != null) {
-        isListLoaded = true;
+      if (activeProposalsList.isNotEmpty) {
+        isProposalActive = true;
       } else {
-        isListLoaded = false;
+        isProposalActive = false;
       }
+
     });
   }
 
@@ -159,8 +181,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     getData();
 
 
-
-    logoImage= getImage(widget.networkData!.id!);
     return widget.networkData!.id=='comdex'? Scaffold(
         drawer: NavDraw(
           networkData: widget.networkData,
@@ -445,7 +465,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                       .withOpacity(
                                                       .8)))
                                               : Text(
-                                              '\$${truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                                              '\$${addComma(truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString())}',
                                               style: double.parse(widget.networkData!.the24HrVol!) > 0
                                                   ? const TextStyle(
                                                   fontFamily:
@@ -486,7 +506,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                 ),
 
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20,20,20,6),
+                  padding: const EdgeInsets.fromLTRB(20,20,20,0),
                   child: StaggeredGridView.countBuilder(
                     padding: EdgeInsets.all(0),
                       physics: const NeverScrollableScrollPhysics(),
@@ -510,8 +530,25 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                       const StaggeredTile.fit(1)
                   ),
                 ),
+                isProposalActive?
+                Padding(padding: const EdgeInsets.fromLTRB(10,0,10,15),
+                child:SizedBox(
+                  height: MediaQuery.of(context).size.height/5,
+                  child:ListView.builder(
 
+                     // controller: _scrollController,
+                      padding: EdgeInsets.zero,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                      itemCount: activeProposalsList.length,
+                      itemBuilder: (BuildContext context, index) {
+                            return
+                              ProposalCardDash(activeProposalsList.reversed.toList()[index]);
+                          })
 
+                )
+                ):SizedBox(height: .1,),
                 isLoaded
                     ? Padding(
                     padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 12),
@@ -537,15 +574,17 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                 ),
                                 TextButton(
                                   onPressed: ()
-                                  { Navigator.push(
+                                  {
+                                    Navigator.push(
                                       context,
                                       CupertinoPageRoute(
                                           builder: (context) =>
                                               Blocks(
                                                   networkData:
-                                                  widget.networkData)));
+                                                  widget.networkData),
+                                      ),
+                                  );
                                     toggleController.updateData(0);
-
                                     },
                                   child: const Text(
                                     'See more',
@@ -699,93 +738,96 @@ class BlockContDash extends StatelessWidget {
   const BlockContDash({Key? key, this.blockModel}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
-      child: Container(
-        decoration: BoxDecoration (
-          color:  Colors.white.withOpacity(.7),
-          borderRadius: const BorderRadius.all(Radius.circular(12.0),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(.05),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(-2, -2), // changes position of shadow
-            ),],),
-        child: Padding(
-          padding: const EdgeInsets.all(14.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () => Clipboard.setData(ClipboardData(
-                            text: blockModel!.height!,
-                          )).then((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Block Height Copied to your clipboard!')));
-                          }),
-                          child: Row(
-                            children: [
-                              Text(blockModel!.height!,
-                                  style: kSmallBoldTextStyle),
-                              const SizedBox(width: 4),
-                              const Icon(
-                                Icons.copy,
-                                color: Colors.black54,
-                                size: 15,
-                              ),
-                            ],
+    return InkWell(
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: blockModel,))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
+        child: Container(
+          decoration: BoxDecoration (
+            color:  Colors.white.withOpacity(.7),
+            borderRadius: const BorderRadius.all(Radius.circular(12.0),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(.05),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(-2, -2), // changes position of shadow
+              ),],),
+          child: Padding(
+            padding: const EdgeInsets.all(14.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () => Clipboard.setData(ClipboardData(
+                              text: blockModel!.height!,
+                            )).then((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Block Height Copied to your clipboard!')));
+                            }),
+                            child: Row(
+                              children: [
+                                Text(blockModel!.height!,
+                                    style: kSmallBoldTextStyle),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.copy,
+                                  color: Colors.black54,
+                                  size: 15,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ]),
-                  Text(
-                    '${new DateTime.now().toLocal().difference(blockModel!.timestamp!.toLocal()).inSeconds}secs ago',
-                    style: kSmallBoldTextStyle,
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Txs',
-                    style: kSmallTextStyle,
-                  ),
-                  Text(
-                    blockModel!.numTxs!.toString(),
-                    style: kSmallBoldTextStyle,
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 4,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Time',
-                    style: kSmallTextStyle,
-                  ),
-                  Text(
-                    '${dateTime(blockModel!.timestamp!.toLocal())} '
-                        .toString(),
-                    style: kSmallBoldTextStyle,
-                  )
-                ],
-              ),
-            ],
+                        ]),
+                    Text(
+                      '${new DateTime.now().toLocal().difference(blockModel!.timestamp!.toLocal()).inSeconds}secs ago',
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Txs',
+                      style: kSmallTextStyle,
+                    ),
+                    Text(
+                      blockModel!.numTxs!.toString(),
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 4,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Time',
+                      style: kSmallTextStyle,
+                    ),
+                    Text(
+                      '${dateTime(blockModel!.timestamp!.toLocal())} '
+                          .toString(),
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -830,104 +872,168 @@ class _TxContDashState extends State<TxContDash> {
     getData();
     type = getType(widget.txModel!.messages![0].type!);
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
-      child: Container(
-        decoration: BoxDecoration (
-          color:  Colors.white.withOpacity(.7),
-          borderRadius: const BorderRadius.all(Radius.circular(12.0),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(.05),
-              spreadRadius: 1,
-              blurRadius: 1,
-              offset: const Offset(-2, -2), // changes position of shadow
+    return InkWell(
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => TxDetails(txModel: widget.txModel))),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
+        child: Container(
+          decoration: BoxDecoration (
+            color:  Colors.white.withOpacity(.7),
+            borderRadius: const BorderRadius.all(Radius.circular(12.0),
             ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        InkWell(
-                          onTap: () => Clipboard.setData(ClipboardData(
-                            text: widget.txModel!.hash!,
-                          )).then((_) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text(
-                                        'Transaction Hash Copied to your clipboard !')));
-                          }),
-                          child: Row(
-                            children: [
-                              Text(dotRefactorFunction(widget.txModel!.hash!),
-                                  style: kSmallBoldTextStyle),
-                              const SizedBox(width: 4),
-                              const Icon(
-                                Icons.copy,
-                                color: Colors.black54,
-                                size: 15,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ]),
-                  txLoaded
-                      ? Text(
-                    timeDifferenceFunction(timestampTx),
-                    style: kSmallBoldTextStyle,
-                  )
-                      : SizedBox(
-                      height: 15,
-                      width: 15,
-                      child: CircularProgressIndicator())
-                ],
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Type',
-                    style: kSmallTextStyle,
-                  ),
-                  Text(
-                    type,
-                    style: kSmallBoldTextStyle,
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 6,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Time',
-                    style: kSmallTextStyle,
-                  ),
-                  txLoaded
-                      ? Text(
-                    (dateTime(DateTime.parse(timestampTx).toLocal())),
-                    style: kSmallBoldTextStyle,
-                  )
-                      : SizedBox(
-                      height: 15,
-                      width: 15,
-                      child: CircularProgressIndicator())
-                ],
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(.05),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(-2, -2), // changes position of shadow
               ),
             ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () => Clipboard.setData(ClipboardData(
+                              text: widget.txModel!.hash!,
+                            )).then((_) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text(
+                                          'Transaction Hash Copied to your clipboard !')));
+                            }),
+                            child: Row(
+                              children: [
+                                Text(dotRefactorFunction(widget.txModel!.hash!),
+                                    style: kSmallBoldTextStyle),
+                                const SizedBox(width: 4),
+                                const Icon(
+                                  Icons.copy,
+                                  color: Colors.black54,
+                                  size: 15,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ]),
+                    txLoaded
+                        ? Text(
+                      timeDifferenceFunction(timestampTx),
+                      style: kSmallBoldTextStyle,
+                    )
+                        : SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator())
+                  ],
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Type',
+                      style: kSmallTextStyle,
+                    ),
+                    Text(
+                      type,
+                      style: kSmallBoldTextStyle,
+                    )
+                  ],
+                ),
+                const SizedBox(
+                  height: 6,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Time',
+                      style: kSmallTextStyle,
+                    ),
+                    txLoaded
+                        ? Text(
+                      (dateTime(DateTime.parse(timestampTx).toLocal())),
+                      style: kSmallBoldTextStyle,
+                    )
+                        : SizedBox(
+                        height: 15,
+                        width: 15,
+                        child: CircularProgressIndicator())
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class ProposalCardDash extends StatelessWidget {
+  final ProposalsModel product;
+  ProposalCardDash(this.product, {Key? key}) : super(key: key);
+  var status='';
+  bool ispassed=true;
+
+  @override
+  Widget build(BuildContext context) {
+   // fun();
+    return InkWell(
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ProposalDetails(proposalProduct:product,))),
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width/1.2,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal:12.0),
+          child: Container(
+            margin:EdgeInsets.all(4),
+            decoration: kBoxDecorationWithoutGradient,
+            child:Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                          height:25,
+                          child: Image.asset('assets/images/votingPeriod.png')
+                      ),
+                      Container(
+                        decoration:const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(200.0),),
+                            color: Color(0xFFD4F1FF)
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child: Text('#${product.id!}',
+                              style:kSmallTextStyle),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text('Voting Period'),
+                  SizedBox(height: 12),
+                  Text(
+                        '${product.title!} ',
+                  style: kMediumBoldTextStyle,)
+
+                ],
+              ),
+            )
           ),
         ),
       ),

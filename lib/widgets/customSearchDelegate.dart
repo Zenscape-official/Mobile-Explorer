@@ -48,7 +48,7 @@ class CustomSearchDelegate extends SearchDelegate  {
   @override
   Widget buildResults(BuildContext context) {
     searchNetwork=networkData;
-    print(networkData);
+    //print(networkData);
     List<String> matchQuery = [];
     for (var terms in searchNetwork) {
       if (terms.toLowerCase().contains(query.toLowerCase())) {

@@ -9,6 +9,7 @@ import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:zenscape_app/controller/txController.dart';
+import 'package:zenscape_app/controller/txToggleController.dart';
 import '../../backend_files/networkList.dart';
 import '../../constants/constants.dart';
 import '../../Screens/network/transactionDetails.dart';
@@ -410,6 +411,7 @@ class TxContainer extends StatefulWidget {
 
 class _TxContainerState extends State<TxContainer> {
   NetworkController networkController=Get.put(NetworkController());
+  TxToggleController txToggleController=Get.put(TxToggleController());
  var type='';
  var timestampTx;
  var txLoaded=false;
@@ -448,12 +450,18 @@ class _TxContainerState extends State<TxContainer> {
 
     return InkWell(
 
-        onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+        onTap:()
+        {
+        PersistentNavBarNavigator.pushNewScreen(
           context,
-          screen: TxDetails(txModel: widget.txModel,),
+          screen: TxDetails(
+            txModel: widget.txModel,
+          ),
           withNavBar: true, // OPTIONAL VALUE. True by default.
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
-        ),
+        );
+        txToggleController.updateData(0);
+      },
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),

@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/Controller/productController.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/screens/network/proposalDetails.dart';
@@ -18,10 +17,11 @@ final NetworkList? networkListProposal;
 }
 
 class _ProposalsState extends State<Proposals> {
-  final ProductController productController= Get.put(ProductController());
+  final ProposalController productController= Get.put(ProposalController());
   final NetworkController networkController = Get.put(NetworkController());
   bool isLoaded=false;
   var prop;
+  List<ProposalsModel> proposals=[];
 
   @override
   void initState() {
@@ -37,6 +37,7 @@ class _ProposalsState extends State<Proposals> {
 
   getData() async{
     final result= await networkController.fetchList(widget.networkListProposal!.proposalsUrl!);
+   proposals= await productController.fetchProducts(widget.networkListProposal!.proposalsUrl!);
     if (result['success'] == false) {
       // show the dialog
       showDialog(
@@ -58,7 +59,6 @@ class _ProposalsState extends State<Proposals> {
       );
     }
     if(result['success'] == true) {
-
       prop = List.from(result['response'])
           .map((e) => ProposalsModel.fromJson(e))
           .toList()
@@ -66,9 +66,8 @@ class _ProposalsState extends State<Proposals> {
           .toList()
           .obs;
     }
-
     setState(() {
-      if (prop!=null){
+      if (proposals.isNotEmpty){
         isLoaded=true;
       }
       else{
@@ -82,6 +81,7 @@ class _ProposalsState extends State<Proposals> {
 
   @override
   Widget build(BuildContext context) {
+    proposals.sort((b, a) => b.id!.compareTo(a.id!));
      return Scaffold(
       drawer: NavDraw(networkData: widget.networkListProposal),
       backgroundColor: Colors.grey[100],
@@ -101,27 +101,26 @@ class _ProposalsState extends State<Proposals> {
         foregroundColor: Colors.black,
         elevation: 0,
       ),
-      body: Column(
-        children: [
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
 
-         isLoaded?SingleChildScrollView(
-            child: SizedBox(
-              height: MediaQuery.of(context).size.height/1.3,
-              child:Obx(()=> CupertinoScrollbar(
-                child: ListView.builder(
-                  physics: const AlwaysScrollableScrollPhysics(),
-                    scrollDirection: Axis.vertical,
-                    shrinkWrap: true,
-                    itemCount: prop.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      return
-                        ProposalCard(prop[index]);
-                    })
-              ),
-            ),
-          ),
-          ):Center(child: const CircularProgressIndicator()),
-        ],
+           isLoaded?
+           Obx(()=> CupertinoScrollbar(
+             child: ListView.builder(
+               physics: const NeverScrollableScrollPhysics(),
+                 scrollDirection: Axis.vertical,
+                 shrinkWrap: true,
+                 itemCount: proposals.length,
+                 itemBuilder: (BuildContext context, int index) {
+
+                   return
+                     ProposalCard(proposals.reversed.toList()[index]);
+                 })
+           ),
+           ):Center(child: const CircularProgressIndicator()),
+          ],
+        ),
       ),
     );
   }
@@ -136,13 +135,22 @@ class ProposalCard extends StatelessWidget {
     if(product.status=='PROPOSAL_STATUS_PASSED'){
       status='Passed';
     }
-    else{
+    else if(product.status=='PROPOSAL_STATUS_REJECTED'){
       status='Rejected';
+      ispassed=false;
+    }
+    else if(product.status=='PROPOSAL_STATUS_VOTING_PERIOD'){
+      status='Voting';
+      ispassed=false;
+    }
+    else if(product.status=='PROPOSAL_STATUS_INVALID'){
+      status='Invalid';
       ispassed=false;
     }
   }
   @override
   Widget build(BuildContext context) {
+
     fun();
     return InkWell(
       onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ProposalDetails(proposalProduct:product,))),

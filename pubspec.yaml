@@ -52,6 +52,8 @@ flutter:
     - assets/images/zenscape_logos/
     - assets/images/banner_logos/
     - assets/svgfiles/
+    - assets/ca/
+    - assets/jsonFiles/
   fonts:
     - family: MontserratRegular
       fonts:

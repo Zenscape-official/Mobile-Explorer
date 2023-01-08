@@ -1,8 +1,4 @@
-List<String> mintParams=[];
-List<String> stakeParams=[];
-List<String> govParams=[];
-List<String> slashingParams=[];
-List<String> distributionParams=[];
+
 
 List<String> par = [
   'Height',

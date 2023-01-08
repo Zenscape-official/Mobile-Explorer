@@ -181,13 +181,10 @@ class _ValidatorsState extends State<Validators> {
                   child: ListView.builder(
                   // reverse: true,
                   physics: const AlwaysScrollableScrollPhysics(),
-                  //controller: _scrollController,
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
                   itemCount: ValidatorController.inActiveValidatorsList.length,
                   itemBuilder: (BuildContext context, int index) {
-
-
                     return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Inactive',);
                   }),
                 ),
@@ -254,8 +251,6 @@ class ValidatorContainer extends StatelessWidget {
                               child: SizedBox(
                                 width:150,
                                 child: Text(validatorModel!.moniker!,
-                                   // overflow: TextOverflow.ellipsis,
-                                    //softWrap: false,
                                     style: kMediumBoldTextStyle),
                               ),
                             ),
@@ -356,19 +351,6 @@ class ValidatorContainer extends StatelessWidget {
                           ],
                         ),
 
-
-                        // Column(
-                        //   crossAxisAlignment:
-                        //       CrossAxisAlignment.start,
-                        //   children: [
-                        //     Text('Participation',
-                        //         style: kSmallTextStyle),
-                        //     Text(
-                        //       ' 5/7',
-                        //       style: kSmallBoldTextStyle,
-                        //     ),
-                        //   ],
-                        // ),
                         Column(
                           crossAxisAlignment:
                               CrossAxisAlignment.start,

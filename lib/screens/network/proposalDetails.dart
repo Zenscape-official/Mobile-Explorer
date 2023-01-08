@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zenscape_app/backend_files/proposalsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
-import 'package:zenscape_app/widgets/filterTab.dart';
 import 'package:http/http.dart' as http;
 import '../../backend_files/propVotesModel.dart';
+import '../../constants/functions.dart';
 
 
 class ProposalDetails extends StatefulWidget {
@@ -24,7 +24,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
   var tallyTotal;
   var tallyLoaded=false;
   var propVoters;
-  var Deposit='';
+  var Deposit='0';
   var DepositDenom='';
 
   getData()async{
@@ -69,8 +69,20 @@ class _ProposalDetailsState extends State<ProposalDetails> {
     if(widget.proposalProduct.status=='PROPOSAL_STATUS_PASSED'){
       status='Passed';
     }
-    else{
+    if(widget.proposalProduct.status=='PROPOSAL_STATUS_PASSED'){
+      status='Passed';
+    }
+    else if(widget.proposalProduct.status=='PROPOSAL_STATUS_REJECTED'){
       status='Rejected';
+     // ispassed=false;
+    }
+    else if(widget.proposalProduct.status=='PROPOSAL_STATUS_VOTING_PERIOD'){
+      status='Voting';
+      //ispassed=false;
+    }
+    else if(widget.proposalProduct.status=='PROPOSAL_STATUS_INVALID'){
+      status='Invalid';
+     // ispassed=false;
     }
   }
   @override
@@ -221,7 +233,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Total Deposit',
                                     style:kSmallTextStyle),
-                                Text('${removeAllChar(Deposit)} ${getRestrictedCharacters(Deposit)}'
+                                Text('${addComma(removeAllChar(Deposit))} ${getRestrictedCharacters(Deposit)}'
                                     ,
                                     style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
@@ -274,30 +286,30 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                         Text(widget.proposalProduct.content!.description!,
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
-                        Text('Parameter Change',
-                            style:kSmallBoldTextStyle),
-                        const SizedBox(height: 2,),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: Container(
-                                margin: const EdgeInsets.all(5),decoration: kBoxBorder,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text('deposit params:',
-                                          style:kSmallTextStyle),
-                                      Text('',
-                                          style:kSmallTextStyle),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
+                        // Text('Parameter Change',
+                        //     style:kSmallBoldTextStyle),
+                        // const SizedBox(height: 2,),
+                        // Row(
+                        //   children: [
+                        //     Expanded(
+                        //       child: Container(
+                        //         margin: const EdgeInsets.all(5),decoration: kBoxBorder,
+                        //         child: Padding(
+                        //           padding: const EdgeInsets.all(8.0),
+                        //           child: Column(
+                        //             crossAxisAlignment: CrossAxisAlignment.start,
+                        //             children: [
+                        //               Text('deposit params:',
+                        //                   style:kSmallTextStyle),
+                        //               Text('',
+                        //                   style:kSmallTextStyle),
+                        //             ],
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   ],
+                        // ),
                         const SizedBox(height: 20,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -440,7 +452,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                       ]),
                 ),
               ),
-              Padding(
+             propVoters.length!=0? Padding(
                 padding: const EdgeInsets.fromLTRB(18.0,18,18,18),
                 child: Container(
                   decoration: kBoxDecorationWithoutGradient,
@@ -549,7 +561,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                       ]
                   ),
                 ),
-              ),
+              ):Container(),
               // Padding(
               //   padding: const EdgeInsets.fromLTRB(18.0,0,18,18),
               //   child: Container(

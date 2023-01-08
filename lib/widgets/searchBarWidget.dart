@@ -1,6 +1,7 @@
 import'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:zenscape_app/backend_files/ibcDenomModel.dart';
 import '../constants/constants.dart';
 import '../screens/network/searchDetailsScreen.dart';
 
@@ -25,7 +26,7 @@ class SearchBar extends StatelessWidget {
          
           controller: nameController,
           decoration: InputDecoration(
-            hintText:'Enter Tx Hash,Block Height',
+            hintText:'Enter Tx Hash, Block Height, Address...',
             contentPadding: const EdgeInsets.only(
                 left: 8.0, bottom: 8.0, top: 8.0),
             filled: true,
@@ -42,7 +43,8 @@ class SearchBar extends StatelessWidget {
               color:Colors.blue,
               onPressed:(){
                 if(nameController.text.isEmpty){
-                  Get.snackbar('', 'Please enter Block Height/ Tx Hash');
+                  Get.snackbar('', 'Please enter Block Height/ Tx Hash /Address');
+                 IBCMapping().readJson();
                 }
 
                 else{
@@ -62,7 +64,7 @@ class SearchBar extends StatelessWidget {
           // }
        onSubmitted: (name) {
          if(name.isEmpty){
-           Get.snackbar('', 'Please enter Block Height/ Tx Hash');
+           Get.snackbar('', 'Please enter Block Height/ Tx Hash/ Address');
          }
 
          else{

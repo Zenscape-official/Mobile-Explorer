@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:zenscape_app/backend_files/ParameterModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import '../../backend_files/networkList.dart';
 import '../../constants/constString.dart';
@@ -19,26 +20,33 @@ class Parameters extends StatefulWidget {
 
 class _ParametersState extends State<Parameters> {
   var isLoaded=false;
+  MintingParamModel? mintingParamModel;
 
-  var mintdenom='',blocksPerYear='';
-  var max_val='',unbondTime='',max_entries='',hist_entries='';
-  var base_reward='',bonus_reward='',commTax='',withdraw_enabled='';
-  var signedBlockWindow='',minSignedPerWindow='',slashFractionDoubleSign='',slashFractionDowntime='';
-  var minDeposit='',maxDeposit='',votingPeriod='',quorum='',threshold='',vetoThreshold='';
-  var stakingParams='';
+  List<String> mintParams=[' ',' ',' ',' '];
+  List<String> stakeParams=[' ',' ',' ',' '];
+  List<String> govParams=[' ',' ',' ',' '];
+  List<String> slashingParams=[' ',' ',' ',' '];
+  List<String> distributionParams=[' ',' ',' ',' '];
 
-
+  var mintdenom='0',blocksPerYear='0';
+  var max_val='0',unbondTime='0',max_entries='0',hist_entries='0';
+  var base_reward='0',bonus_reward='0',commTax='0',withdraw_enabled='0';
+  var signedBlockWindow='0',minSignedPerWindow='0',slashFractionDoubleSign='0',slashFractionDowntime='0';
+  var minDeposit='0',maxDeposit='0',votingPeriod='0',quorum='0',threshold='0',vetoThreshold='0';
+  var stakingParams='0';
+  var minty;
+  var mintyLoaded;
 
 void initstate() {
   super.initState();
   getData();
 }
 
-  static Future<String> fetchDataMint(String input,String json1,String json2) async {
+fetchDataMint(String input) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
-     // print (jsonDecode(response.body)[json1][json2].toString());
-      return jsonDecode(response.body)[json1][json2].toString();
+      return (response.body);
+
     } else {
       return '';
     }
@@ -46,7 +54,6 @@ void initstate() {
   static Future<String> fetchDataGov(String input,String json1,String json2) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
-     // print(jsonDecode(response.body)[0][json1][json2].toString());
       return jsonDecode(response.body)[0][json1][json2].toString();
     } else {
       return '';
@@ -54,70 +61,59 @@ void initstate() {
   }
 
   void getData() async {
-     mintdenom = (await fetchDataMint(widget.networkList!.mintingParamssUrl!,'result','mint_denom'));
-     blocksPerYear = (await fetchDataMint(widget.networkList!.mintingParamssUrl!,'result','blocks_per_year'));
+  final mintResult=await fetchDataMint(widget.networkList!.mintingParamssUrl!);
+  Map<String,dynamic> mintdata= jsonDecode(mintResult)['result'];
+  mintdenom = mintdata["mint_denom"];
 
+  blocksPerYear= mintdata["blocks_per_year"];
+  final stakeResult=await fetchDataMint(widget.networkList!.stakingParamsUrl!);
+  Map<String,dynamic> stakedata= jsonDecode(stakeResult)['result'];
+  unbondTime = stakedata["unbonding_time"];
 
-     max_val = (await fetchDataMint(widget.networkList!.stakingParamsUrl!,'result','max_validators'));
-     unbondTime = (await fetchDataMint(widget.networkList!.stakingParamsUrl!,'result','unbonding_time'));
-     max_entries = (await fetchDataMint(widget.networkList!.stakingParamsUrl!,'result','max_entries'));
-     hist_entries = (await fetchDataMint(widget.networkList!.stakingParamsUrl!,'result','historical_entries'));
+  max_val= (stakedata["max_validators"]).toString();
+  max_entries=stakedata["max_entries"].toString();
+  hist_entries=stakedata["historical_entries"].toString();
 
+  final distResult=await fetchDataMint(widget.networkList!.stakingParamsUrl!);
+  Map<String,dynamic> distdata= jsonDecode(distResult)['result'];
+  unbondTime = distdata["unbonding_time"];
 
-     commTax = (await fetchDataMint(widget.networkList!.distParamsUrl!,'result','community_tax'));
-     base_reward = (await fetchDataMint(widget.networkList!.distParamsUrl!,'result','base_proposer_reward'));
-     bonus_reward = (await fetchDataMint(widget.networkList!.distParamsUrl!,'result','bonus_proposer_reward'));
-     withdraw_enabled = (await fetchDataMint(widget.networkList!.distParamsUrl!,'result','withdraw_addr_enabled'));
+  max_val= (distdata["max_validators"]).toString();
+  max_entries=distdata["max_entries"].toString();
+  hist_entries=distdata["historical_entries"].toString();
 
-     signedBlockWindow = (await fetchDataMint(widget.networkList!.slashingParamsUrl!,'result','signed_blocks_window'));
-     minSignedPerWindow = (await fetchDataMint(widget.networkList!.slashingParamsUrl!,'result','min_signed_per_window'));
-     slashFractionDoubleSign = (await fetchDataMint(widget.networkList!.slashingParamsUrl!,'result','slash_fraction_double_sign'));
-     slashFractionDowntime = (await fetchDataMint(widget.networkList!.slashingParamsUrl!,'result','slash_fraction_downtime'));
+  final slashResult=await fetchDataMint(widget.networkList!.slashingParamsUrl!);
+  Map<String,dynamic> slashdata= jsonDecode(slashResult)['result'];
 
+  signedBlockWindow = slashdata["signed_blocks_window"];
+  minSignedPerWindow= (slashdata["min_signed_per_window"]).toString();
+  slashFractionDowntime=slashdata["slash_fraction_downtime"].toString();
+  slashFractionDoubleSign=slashdata["slash_fraction_double_sign"].toString();
+  setState(() {
 
-     // maxDeposit = (await fetchDataGov(widget.networkList!.govParamsUrl!,'deposit_params','max_deposit_period'));
-     // votingPeriod = (await fetchDataGov(widget.networkList!.govParamsUrl!,'voting_params','voting_period'));
-     // quorum= (await fetchDataGov(widget.networkList!.govParamsUrl!,'tally_params','quorum'));
-     // threshold= (await fetchDataGov(widget.networkList!.govParamsUrl!,'tally_params','threshold'));
-     // vetoThreshold=(await fetchDataGov(widget.networkList!.govParamsUrl!,'tally_params','veto_threshold'));
+  });
 
-     mintParams=[blocksPerYear,mintdenom];
-     stakeParams=[
-      ' ${(double.parse(unbondTime) / (86400 * 1000000000)).toString()} days',max_val,max_entries,hist_entries];
+  mintParams=[blocksPerYear,mintdenom];
+  stakeParams=[
+    ' ${(double.parse(unbondTime) / (86400 * 1000000000)).toString()} days',max_val,max_entries,hist_entries];
 
-     // govParams=[k_m_b_generator(double.parse(maxDeposit)),
-     //   truncateToDecimalPlaces(double.parse(votingPeriod),2).toString(),
-     //   truncateToDecimalPlaces(double.parse(quorum),2).toString(),
-     //   truncateToDecimalPlaces(double.parse(threshold),2).toString(),
-     //   truncateToDecimalPlaces(double.parse(vetoThreshold),2).toString()];
+  // govParams=[k_m_b_generator(double.parse(maxDeposit)),
+  //   truncateToDecimalPlaces(double.parse(votingPeriod),2).toString(),
+  //   truncateToDecimalPlaces(double.parse(quorum),2).toString(),
+  //   truncateToDecimalPlaces(double.parse(threshold),2).toString(),
+  //   truncateToDecimalPlaces(double.parse(vetoThreshold),2).toString()];
 
-     slashingParams=[truncateToDecimalPlaces(double.parse(signedBlockWindow),2).toString(),
-       truncateToDecimalPlaces(double.parse(minSignedPerWindow),2).toString(),
-       truncateToDecimalPlaces(double.parse(slashFractionDoubleSign),2).toString(),
-       truncateToDecimalPlaces(double.parse(slashFractionDowntime),2).toString()];
+  slashingParams=[truncateToDecimalPlaces(double.parse(signedBlockWindow),2).toString(),
+    truncateToDecimalPlaces(double.parse(minSignedPerWindow),2).toString(),
+    truncateToDecimalPlaces(double.parse(slashFractionDoubleSign),2).toString(),
+    truncateToDecimalPlaces(double.parse(slashFractionDowntime),2).toString()];
 
-     distributionParams=[
-       truncateToDecimalPlaces(double.parse(base_reward),2).toString(),
-       truncateToDecimalPlaces(double.parse(bonus_reward),2).toString(),
-       truncateToDecimalPlaces(double.parse(commTax),2).toString()
-       ,withdraw_enabled];
+  distributionParams=[
+    truncateToDecimalPlaces(double.parse(base_reward),2).toString(),
+    truncateToDecimalPlaces(double.parse(bonus_reward),2).toString(),
+    truncateToDecimalPlaces(double.parse(commTax),2).toString()
+    ,withdraw_enabled];
 
-     setState(() {
-       if (
-       //vetoThreshold != null &&
-       //     threshold!= null &&
-           // quorum != null &&
-       // commTax!=null&&
-       //     slashFractionDowntime != null &&
-           //maxDeposit!=null&&
-       mintdenom!=null) {
-         isLoaded = true;
-
-       } else {
-         isLoaded = false;
-       }
-     }
-     );
   }
 
   TextEditingController nameController=TextEditingController();
@@ -152,45 +148,10 @@ void initstate() {
         ),
       ),
       body:
-      isLoaded?
+      //isLoaded?
       ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
-          // Container(
-          //     width: MediaQuery.of(context).size.width/1.1,
-          //     height: 40,
-          //     decoration: kBoxDecorationWithoutGradient,
-          //     margin: const EdgeInsets.all(20),
-          //     child: Padding(
-          //       padding: const EdgeInsets.all(0.0),
-          //       child: TextField(
-          //         controller: nameController,
-          //         decoration: InputDecoration(
-          //           contentPadding: const EdgeInsets.all(15),
-          //           filled: true,
-          //           fillColor: Colors.transparent,
-          //           focusedBorder: InputBorder.none,
-          //           border: OutlineInputBorder(
-          //               borderSide: const BorderSide(
-          //                 width: 0,
-          //                 style: BorderStyle.none,
-          //               ),
-          //               borderRadius: BorderRadius.circular(20)
-          //           ),
-          //           hintText: 'Select a chain',
-          //           prefixIcon: const Icon(Icons.search),
-          //         ),
-          //         onChanged: (text) {
-          //           setState(() {
-          //             fullName = text;
-          //             //you can access nameController in its scope to get
-          //             // the value of text entered as shown below
-          //             //fullName = nameController.text;
-          //           });
-          //         },
-          //       ),
-          //     )),
-
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -241,31 +202,6 @@ void initstate() {
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(10.0),
-          //   child: Column(
-          //     crossAxisAlignment: CrossAxisAlignment.start,
-          //     children: [
-          //       Padding(
-          //         padding: const EdgeInsets.all(8.0),
-          //         child: Text('Governance Parameters',
-          //             style:kMediumTextStyle),
-          //       ),
-          //       StaggeredGridView.countBuilder(
-          //           physics: const NeverScrollableScrollPhysics(),
-          //           scrollDirection: Axis.vertical,
-          //           shrinkWrap: true,
-          //           crossAxisCount: 2,
-          //           mainAxisSpacing: 20,
-          //           crossAxisSpacing: 20,
-          //           itemCount: govParams.length,
-          //           itemBuilder: (context,index){
-          //             return InfoCard(title1: govTitle[index],icon1: image[index],titleValue1: govParams[index]);
-          //           },
-          //           staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
-          //     ],
-          //   ),
-          // ),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -321,7 +257,7 @@ void initstate() {
         ],
       )
 
-          :const Center(child: CircularProgressIndicator()),
+          //:const Center(child: CircularProgressIndicator()),
     );
   }
 }

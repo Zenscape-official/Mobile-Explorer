@@ -4,7 +4,7 @@
 
 import 'dart:convert';
 
-import '../backend_files/contractBalanceModel.dart';
+import 'contractBalanceModel.dart';
 
 DelegationModel delegationModelFromMap(String str) => DelegationModel.fromMap(json.decode(str));
 

@@ -7,7 +7,7 @@ import '../backend_files/proposalsModel.dart';
 
 class ProposalController extends GetxController {
   static var proposalList = [].obs;
-  static var client = http.Client();
+   var client = http.Client();
 
   Future<dynamic> fetchProducts(String ApiUri) async {
     try {

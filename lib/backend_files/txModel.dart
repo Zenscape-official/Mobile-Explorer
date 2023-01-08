@@ -26,6 +26,7 @@ class TxModel {
     this.appID,
     this.stableVaultID,
     this.extendedPairVaultID,
+
   });
 
   String? hash;
@@ -39,6 +40,8 @@ class TxModel {
   String? gasUsed;
   String? rawLog;
   String? memo;
+  String? sender;
+  String? reciever;
   List<Log>? logs;
   String? partitionId;
   String? appID;
@@ -50,8 +53,7 @@ class TxModel {
     height: json["height"],
     success: json["success"],
     amount: json["amount"],
-    messages: List<Message>.from(json["messages"].map((x) => Message.fromJson(x))),
-    //stringMessage: json["messages"],
+    messages: json["messages"] == null ? null : List<Message>.from(json["messages"].map((x) => Message.fromJson(x))),
     fee: Fee.fromJson(json["fee"]),
     gasWanted: json["gas_wanted"],
     gasUsed: json["gas_used"],
@@ -61,7 +63,8 @@ class TxModel {
     partitionId: json["partition_id"],
     appID: json["app_id"],
     stableVaultID: json["stable_vault_id"],
-    extendedPairVaultID: json["extended_pair_vault_id"]
+    extendedPairVaultID: json["extended_pair_vault_id"],
+
 
   );
 
@@ -69,9 +72,8 @@ class TxModel {
     "hash": hash,
     "height": height,
     "success": success,
-    "messages": List<dynamic>.from(messages!.map((x) => x.toJson())),
+    "messages": messages == null ? null : List<dynamic>.from(messages!.map((x) => x.toJson())),
     "stringMessages":stringMessage,
-
     "fee": fee!.toJson(),
     "gas_wanted": gasWanted,
     "gas_used": gasUsed,
@@ -166,8 +168,18 @@ class Message {
     this.demandCoinDenom,
     this.farmer,
     this.farmingPoolCoin,
-    this.poolId
-
+    this.poolId,
+    this.assetId,
+    this.depositor,
+    this.token,
+    this.sender,
+    this.receiver,
+    this.sourcePort,
+    this.sourceChannel,
+    this.timeoutHeight,
+    this.timeoutTimestamp,
+    this.fromAddress,
+    this.toAddress
   });
 
   String? type;
@@ -181,6 +193,8 @@ class Message {
   String? price;
   String? amount;
   String? appId;
+  String? depositor;
+  String? assetId;
   String? orderer;
   String? pairId;
   String? direction;
@@ -190,6 +204,15 @@ class Message {
   String? farmer;
   String? poolId;
   Amount? farmingPoolCoin;
+  TokenTx? token;
+  String? sender;
+  String? receiver;
+  String? sourcePort;
+  String? sourceChannel;
+  TimeoutHeight? timeoutHeight;
+  String? timeoutTimestamp;
+  String? toAddress;
+  String? fromAddress;
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
     type: json["@type"],
@@ -202,6 +225,8 @@ class Message {
     acknowledgement: json["acknowledgement"],
     price: json["price"],
     //amount: json["amount"],
+    assetId: json["asset_id"],
+    depositor: json["depositor"],
     appId: json["app_id"],
     orderer: json["orderer"],
     pairId: json["pair_id"],
@@ -209,6 +234,15 @@ class Message {
     //offerCoin: Amount.fromJson(json["offer_coin"]),
     orderLifespan: json["order_lifespan"],
     demandCoinDenom: json["demand_coin_denom"],
+    //token: Token.fromJson(json["token"]),
+    sender: json["sender"],
+    receiver: json["receiver"],
+    sourcePort: json["source_port"],
+    sourceChannel: json["source_channel"],
+    //timeoutHeight: TimeoutHeight.fromJson(json["timeout_height"]),
+    timeoutTimestamp: json["timeout_timestamp"],
+    toAddress: json["to_address"] == null ? null : json["to_address"],
+    fromAddress: json["from_address"] == null ? null : json["from_address"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -229,9 +263,59 @@ class Message {
     "offer_coin": offerCoin!.toJson(),
     "order_lifespan": orderLifespan,
     "demand_coin_denom": demandCoinDenom,
+    "token": token!.toJson(),
+    "sender": sender,
+    "receiver": receiver,
+    "source_port": sourcePort,
+    "source_channel": sourceChannel,
+    "timeout_height": timeoutHeight!.toJson(),
+    "timeout_timestamp": timeoutTimestamp,
+    "to_address": toAddress == null ? null : toAddress,
+    "from_address": fromAddress == null ? null : fromAddress,
 
   };
 }
+class TimeoutHeight {
+  TimeoutHeight({
+    this.revisionHeight,
+    this.revisionNumber,
+  });
+
+  String? revisionHeight;
+  String? revisionNumber;
+
+  factory TimeoutHeight.fromJson(Map<String, dynamic> json) => TimeoutHeight(
+    revisionHeight: json["revision_height"],
+    revisionNumber: json["revision_number"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "revision_height": revisionHeight,
+    "revision_number": revisionNumber,
+  };
+}
+
+class TokenTx {
+  TokenTx({
+    this.denom,
+    this.amount,
+  });
+
+  String? denom;
+  String? amount;
+
+  factory TokenTx.fromJson(Map<String, dynamic> json) => TokenTx(
+    denom: json["denom"],
+    amount: json["amount"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "denom": denom,
+    "amount": amount,
+  };
+}
+
+
 
 class MessageHeader {
   MessageHeader({

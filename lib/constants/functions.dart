@@ -1,34 +1,9 @@
 
 
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-errorHandler(var result, context, var net, var RxList ){
-  if (result['success'] == false)
-  {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(result['response']),
-          actions: [
-            TextButton(
-              child: const Text("OK"),
-              onPressed: () {
-                Navigator.of(context).popUntil((route) => route.isFirst);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+import 'package:zenscape_app/backend_files/ibcDenomModel.dart';
 
-  if(result['success'] == true) {
-
-    net = RxList;}
-
-}
 
 timeDifferenceFunction(timeDifference){
   var finalTimeDiff= DateTime.now().toLocal()
@@ -93,3 +68,17 @@ getImage(String id){
   }
 }
 bool isNumeric(String s) => double.tryParse(s) != null;
+
+addComma(String input){
+  return  input .replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
+}
+String removeFirstChar(String str) {
+
+  if (str.isNotEmpty && str[0] == 'u') {
+    return str.substring(1);
+  }
+  else if(str[0]=='i'){
+
+  }
+  return str;
+}

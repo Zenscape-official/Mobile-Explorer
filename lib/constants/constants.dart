@@ -25,7 +25,7 @@ var kMediumBoldTextStyle= TextStyle(
   fontFamily: 'MontserratBold',
   color: Colors.black.withOpacity(.7),
   fontWeight: Platform.isAndroid?FontWeight.w700: FontWeight.w700,
-  fontSize: 17,
+  fontSize: 15,
 );
 var kSmallTextStyle= TextStyle(
   fontFamily: 'MontserratRegular',
@@ -60,7 +60,7 @@ var kExtraSmallBoldTextStyle= TextStyle(
   fontSize: 10,
 );
 var kGradientColor= LinearGradient(
-  colors: [ Colors.white, const Color(0xFFBCE4FC).withOpacity(.5)],
+  colors: [ Colors.white, const Color(0xFFBCE4FC).withOpacity(.2)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
@@ -195,7 +195,7 @@ String? getRestrictedCharacters(String string){
     }
   });
   if (restricted.isEmpty){
-    return null;
+    return '0';
   } else {
     return restricted.join("");
   }

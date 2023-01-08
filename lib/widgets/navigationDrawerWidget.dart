@@ -10,6 +10,7 @@ import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/screens/network/dashboard.dart';
 import '../Screens/network/contracts.dart';
 import '../backend_files/networkList.dart';
+import '../controller/toggleController.dart';
 
 class NavDraw extends StatefulWidget {
   final NetworkList? networkData;
@@ -23,6 +24,7 @@ int selectedIndex = 0;
 int prevIndex=0;
 class _NavDrawState extends State<NavDraw> {
   NavController navController=Get.put(NavController());
+  final ToggleController toggleController =Get.put(ToggleController());
   @override
   void initState() {
     super.initState();
@@ -48,7 +50,8 @@ class _NavDrawState extends State<NavDraw> {
             children: <Widget>[
               InkWell(
                 onTap: ()
-                => Navigator.of(context).popUntil((route) => route.isFirst),
+                =>null,
+                    //Navigator.of(context).popUntil((route) => route.isFirst),
                 child: Container(
                   height: 100,
                   color: Colors.transparent,
@@ -77,7 +80,6 @@ class _NavDrawState extends State<NavDraw> {
                   text: 'Dashboard',
                   isSelected: selectedIndex == 0,
                   onTap: () {
-                    print(ModalRoute.of(context));
                     setState(() {
                       prevIndex=selectedIndex;
                       selectedIndex = 0;
@@ -85,8 +87,6 @@ class _NavDrawState extends State<NavDraw> {
                     //Navigator.of(context).pop();
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=> NetworkDashBoard(networkData:widget.networkData)))
                         .then((value) {
-                      print(selectedIndex);
-                      print(prevIndex);
                       setState(() {
                         selectedIndex= prevIndex;
                         Navigator.of(context).pop();
@@ -99,8 +99,6 @@ class _NavDrawState extends State<NavDraw> {
                   text: 'Validators',
                   isSelected: selectedIndex==1,
                   onTap: () {
-                    print(ModalRoute.of(context));
-
                     setState(() {
                       prevIndex=selectedIndex;
                       selectedIndex = 1;
@@ -108,8 +106,7 @@ class _NavDrawState extends State<NavDraw> {
                    // Navigator.of(context).pop();
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=> Validators(networkList:widget.networkData)))
                         .then((value) {
-                      print(selectedIndex);
-                      print(prevIndex);
+
                       setState(() {
                         selectedIndex= prevIndex;
                         Navigator.of(context).pop();
@@ -122,14 +119,14 @@ class _NavDrawState extends State<NavDraw> {
                   text: 'Blocks',
                   isSelected: selectedIndex==2,
                   onTap: () {
+                    toggleController.updateData(0);
                     setState(() {
                       prevIndex=selectedIndex;
                       selectedIndex = 2;
                     });
                    // Navigator.of(context).pop();
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData))).then((value) {
-                      print(selectedIndex);
-                      print(prevIndex);
+
                       setState(() {
                         selectedIndex= prevIndex;
                         Navigator.of(context).pop();
@@ -148,8 +145,7 @@ class _NavDrawState extends State<NavDraw> {
                     });
                    // Navigator.of(context).pop();
       Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals(networkListProposal:widget.networkData ,))).then((value) {
-        print(selectedIndex);
-        print(prevIndex);
+
         setState(() {
           selectedIndex= prevIndex;
           Navigator.of(context).pop();
@@ -190,8 +186,7 @@ class _NavDrawState extends State<NavDraw> {
                     });
                    // Navigator.of(context).pop();
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=> Contracts(networkList:widget.networkData))).then((value) {
-                      print(selectedIndex);
-                      print(prevIndex);
+
                       setState(() {
                         selectedIndex= prevIndex;
                         Navigator.of(context).pop();
@@ -214,8 +209,6 @@ class _NavDrawState extends State<NavDraw> {
                         builder: (context)=>
                             Parameters(networkList:widget.networkData)))
                         .then((value) {
-                          print(selectedIndex);
-                          print(prevIndex);
                          setState(() {
                            selectedIndex= prevIndex;
                            Navigator.of(context).pop();

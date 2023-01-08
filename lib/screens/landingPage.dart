@@ -51,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
               .toLowerCase()
               .contains(name.toLowerCase()))
           .toList();
-      print(foundNetwork.value);
+      // print(foundNetwork.value);
     }
   }
 
@@ -194,12 +194,11 @@ class _LandingPageState extends State<LandingPage> {
                           enableInfiniteScroll: false),
                       itemCount: 2,
                       itemBuilder: (context, index, realIndex) {
-                        final svgImage=svgPath[index];
-
+                        // final svgImage=svgPath[index];
                         final pngImage=pngPath[index];
                         return
                           buildPngPicture(pngImage,index);
-                          //containerList[index];
+
                       }),
                 ],
               ),
@@ -495,11 +494,11 @@ class _NetworkCardState extends State<NetworkCard> {
                     padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
                     child: Container(
                       color: Colors.transparent,
-                      height: 40,
-                      width: 40,
+                      height:widget.networkList.id=='comdex'? 40:40,
+                      width: widget.networkList.id=='comdex'? 40:40,
                       child: ClipOval(
                         child: Padding(
-                          padding: widget.networkList.id=='comdex'||widget.networkList.id=='chihuahua'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
+                          padding: widget.networkList.id=='chihuahua'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
                           child: CachedNetworkImage(
                             imageUrl: widget.networkList.logoUrl ??
                                 widget.networkList.logUrl!,
@@ -518,7 +517,7 @@ class _NetworkCardState extends State<NetworkCard> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(widget.networkList.denom!,
-                          style: kSmallBoldTextStyle),
+                          style: kMediumBoldTextStyle),
                       Text(widget.networkList.name!, style: kSmallTextStyle),
                     ],
                   ),

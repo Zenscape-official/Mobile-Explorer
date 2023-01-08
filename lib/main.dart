@@ -1,4 +1,8 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/Screens/onboardingScreen.dart';
@@ -11,9 +15,20 @@ import 'package:zenscape_app/screens/landingPage.dart';
 
 dynamic initScreen;
 var timestamp = DateTime.now().toUtc();
+class MyHttpOverrides extends HttpOverrides{
+  @override
+  HttpClient createHttpClient(SecurityContext? context){
+    return super.createHttpClient(context)
+      ..badCertificateCallback = (X509Certificate cert, String host, int port)=> true;
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  ByteData data = await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
+  SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
+  HttpOverrides.global = MyHttpOverrides();
+
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = (prefs.getInt("initScreen"));
   runApp(const MyApp());
