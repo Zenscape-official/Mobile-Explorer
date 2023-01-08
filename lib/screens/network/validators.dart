@@ -174,7 +174,7 @@ class _ValidatorsState extends State<Validators> {
                     itemCount: ValidatorController.activeValidatorsList.length,
                     itemBuilder: (BuildContext context, int index) {
 
-                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Active',);
+                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Active',denom:widget.networkList!.denom!);
                     })),
               ):Expanded(
                 child: CupertinoScrollbar(
@@ -185,7 +185,7 @@ class _ValidatorsState extends State<Validators> {
                   shrinkWrap: true,
                   itemCount: ValidatorController.inActiveValidatorsList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Inactive',);
+                    return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Inactive',denom:widget.networkList!.denom!);
                   }),
                 ),
               );
@@ -200,8 +200,9 @@ class ValidatorContainer extends StatelessWidget {
   final ValidatorModel? validatorModel;
   final int? totalVoting;
   final String? status;
+  final String? denom;
   const ValidatorContainer({
-    Key? key, this.validatorModel,this.totalVoting,this.status
+    Key? key, this.validatorModel,this.totalVoting,this.status,this.denom
   }) : super(key: key);
 
   @override
@@ -209,7 +210,7 @@ class ValidatorContainer extends StatelessWidget {
   Widget build(BuildContext context) {
 
     return InkWell(
-      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,))),
+      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,denom:denom))),
       child: Container(
         decoration:
             BoxDecoration(borderRadius: BorderRadius.circular(20)),

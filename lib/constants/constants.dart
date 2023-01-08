@@ -60,7 +60,7 @@ var kExtraSmallBoldTextStyle= TextStyle(
   fontSize: 10,
 );
 var kGradientColor= LinearGradient(
-  colors: [ Colors.white, const Color(0xFFBCE4FC).withOpacity(.2)],
+  colors: [ Colors.white, const Color(0xFFBCE4FC).withOpacity(.05)],
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
 );
@@ -76,7 +76,7 @@ var kBoxDecorationWithGradient=BoxDecoration (
     offset: const Offset(0,4), // changes position of shadow
   ),],);
 var kBoxDecorationWithoutGradient=BoxDecoration (
-  color: const Color(0xFFD4F1FF).withOpacity(.5),
+  color: const Color(0xFFD4F1FF).withOpacity(.3),
   borderRadius: const BorderRadius.all(Radius.circular(12.0),
   ),
   boxShadow: [

@@ -152,11 +152,11 @@
     "ibcUrl":"https://api.mintscan.io/v1/relayer/comdex-1/paths",
     "assetsUrl":"https://api.mintscan.io//v2/assets/comdex",
     "contractsUrl":"http://167.235.151.252:3005/wasmcontracts",
-    "mintingParamssUrl":"https://rest.comdex.one/minting/parameters",
-    "stakingParamsUrl":"https://rest.comdex.one/staking/parameters",
+    "mintingParamssUrl":"https://meteor.rest.comdex.one/minting/parameters",
+    "stakingParamsUrl":"https://meteor.rest.comdex.one/staking/parameters",
     "govParamsUrl":"http://167.235.151.252:3005/governance",
-    "distParamsUrl":"https://rest.comdex.one/distribution/parameters",
-    "slashingParamsUrl":"https://rest.comdex.one/slashing/parameters"
+    "distParamsUrl":"https://meteor.rest.comdex.one/distribution/parameters",
+    "slashingParamsUrl":"https://meteor.rest.comdex.one/slashing/parameters"
   },
   {"id":"injective",
     "name" : "Injective",

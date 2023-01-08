@@ -316,7 +316,7 @@ class _BalanceContState extends State<BalanceCont> {
   }
   var _items;
   List<Token> ibcDenom=[];
-  String denom='';
+  String? denom;
 
   getData() async {
     final String response = await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
@@ -332,12 +332,10 @@ class _BalanceContState extends State<BalanceCont> {
   }
   }
   mapDenom(String input){
-    var denom='';
+
 
     for(int i=0;i<ibcDenom.length;i++){
-
       if(input==ibcDenom[i].ibcDenomHash){
-
         denom=ibcDenom[i].coinDenom!;
         return denom;
       }
@@ -351,6 +349,7 @@ class _BalanceContState extends State<BalanceCont> {
 
   @override
   Widget build(BuildContext context) {
+
      denom=mapDenom(widget.balance!.denom!);
     //print(denom);
     return Padding(
@@ -381,9 +380,10 @@ class _BalanceContState extends State<BalanceCont> {
                     child: SizedBox(
                       width:55,
                       height: 18,
-                      child: Text(
-                         (removeFirstChar(denom)).toUpperCase()
-                      ),
+                      child:
+                        denom!=null?Text(
+                         (removeFirstChar(denom!)).toUpperCase()
+                      ):CircularProgressIndicator(),
                     ),
                   ),
                   Text(

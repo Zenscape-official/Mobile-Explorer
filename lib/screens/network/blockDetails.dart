@@ -1,7 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import '../../backend_files/blocksModel.dart';
+import 'package:http/http.dart' as http;
 
 class BlockDetails extends StatefulWidget {
   final BlockModel? blockModel;
@@ -23,7 +26,7 @@ class _BlockDetailsState extends State<BlockDetails> {
   }
 }
 
-class BlockDetailScreen extends StatelessWidget {
+class BlockDetailScreen extends StatefulWidget {
   BlockDetailScreen({
     Key? key,
     required this.blockModel,
@@ -32,7 +35,36 @@ class BlockDetailScreen extends StatelessWidget {
 
   var blockModel;
 
+  @override
+  State<BlockDetailScreen> createState() => _BlockDetailScreenState();
+}
 
+class _BlockDetailScreenState extends State<BlockDetailScreen> {
+  var valMoniker;
+  var monikerLoaded=false;
+
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+  getData()async{
+    final response = await http.get(Uri.parse('http://167.235.151.252:3005/validatorDescription/${widget.blockModel!.proposerAddress}'));
+
+    if (response.statusCode == 200) {
+      valMoniker =  jsonDecode(response.body)[0]['moniker'];
+      //  print(valMoniker);
+
+      setState(() {
+        if (valMoniker!=null){
+          monikerLoaded=true;
+        }
+        else{
+          monikerLoaded=false;
+        }
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -77,7 +109,7 @@ class BlockDetailScreen extends StatelessWidget {
                                     InkWell(
                                       onTap: () =>
                                           Clipboard.setData(ClipboardData(
-                                            text: blockModel!.height,
+                                            text: widget.blockModel!.height,
                                           )).then((_) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
@@ -100,7 +132,7 @@ class BlockDetailScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(blockModel!.height!, style: kMediumBoldTextStyle),
+                                Text(widget.blockModel!.height!, style: kMediumBoldTextStyle),
 
                                 const SizedBox(
                                   height: 20,
@@ -111,7 +143,7 @@ class BlockDetailScreen extends StatelessWidget {
                                     InkWell(
                                       onTap: () =>
                                           Clipboard.setData(ClipboardData(
-                                            text: blockModel!.hash,
+                                            text: widget.blockModel!.hash,
                                           )).then((_) {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
@@ -134,7 +166,7 @@ class BlockDetailScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(blockModel!.hash!, style: kMediumBoldTextStyle),
+                                Text(widget.blockModel!.hash!, style: kMediumBoldTextStyle),
 
                                 const SizedBox(
                                   height: 20,
@@ -143,7 +175,7 @@ class BlockDetailScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(blockModel!.numTxs!.toString(), style: kMediumBoldTextStyle),
+                                Text(widget.blockModel!.numTxs!.toString(), style: kMediumBoldTextStyle),
 
 
                                 const SizedBox(
@@ -153,17 +185,52 @@ class BlockDetailScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(dateTime(blockModel!.timestamp!), style: kMediumBoldTextStyle),
+                                Text(dateTime(widget.blockModel!.timestamp!), style: kMediumBoldTextStyle),
 
 
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('Proposer Address', style: kSmallTextStyle),
+                                Row(
+                                  children: [
+                                    Text('Proposer Address', style: kSmallTextStyle),
+                                    InkWell(
+                                      onTap: () =>
+                                          Clipboard.setData(ClipboardData(
+                                            text: widget.blockModel!.proposerAddress!,
+                                          )).then((_) {
+                                            ScaffoldMessenger.of(context)
+                                                .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Proposer Address Copied to your clipboard !')));
+                                          }),
+                                      child: Row(
+                                        children: [
+                                          const SizedBox(width: 4),
+                                          const Icon(
+                                            Icons.copy,
+                                            color: Colors.black54,
+                                            size: 15,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(blockModel!.proposerAddress!, style: kMediumBoldTextStyle),
+                                Text(widget.blockModel!.proposerAddress!, style: kMediumBoldTextStyle),
+
+                                const SizedBox(
+                                  height: 20,
+                                ),
+
+                                Text('Proposer',
+                                    style:kSmallTextStyle),
+                                //const SizedBox(width:99),
+                                monikerLoaded? Text((valMoniker)
+                                    ,style:kMediumBoldTextStyle):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
 
 
                                 const SizedBox(
@@ -173,7 +240,7 @@ class BlockDetailScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(blockModel!.totalGas!, style: kMediumBoldTextStyle),
+                                Text(widget.blockModel!.totalGas!, style: kMediumBoldTextStyle),
 
                               ]
                           ),

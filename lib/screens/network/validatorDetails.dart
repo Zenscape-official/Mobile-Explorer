@@ -1,13 +1,17 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/constants/functions.dart';
 
 class ValidatorDetails extends StatefulWidget {
   final ValidatorModel? validatorModel;
+  final String? denom;
   var totalVoting;
   String? status;
-  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting,this.status}) : super(key: key);
+  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting,this.status,this.denom}) : super(key: key);
   @override
   State<ValidatorDetails> createState() => _ValidatorDetailsState();
 }
@@ -100,16 +104,63 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Moniker', style: kSmallTextStyle),
-                                  const SizedBox(
-                                    height: 2,
+                                  Row(
+                                    children: [
+                                      Text('Moniker', style: kMediumTextStyle),
+                                      InkWell(
+                                        onTap: () =>
+                                            Clipboard.setData(ClipboardData(
+                                              text: widget.validatorModel!.moniker!,
+                                            )).then((_) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Moniker Address to your clipboard !')));
+                                            }),
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(width: 4),
+                                            const Icon(
+                                              Icons.copy,
+                                              color: Colors.black54,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   Text(widget.validatorModel!.moniker!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Validator Address', style: kSmallTextStyle),
+                                  Row(
+                                    children: [
+                                      Text('Self Delegated Address', style: kMediumTextStyle),
+                                      InkWell(
+                                        onTap: () =>
+                                            Clipboard.setData(ClipboardData(
+                                              text: widget.validatorModel!.selfDelegateAddress!,
+                                            )).then((_) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Self Delegated Address to your clipboard !')));
+                                            }),
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(width: 4),
+                                            const Icon(
+                                              Icons.copy,
+                                              color: Colors.black54,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 2,
                                   ),
@@ -118,7 +169,32 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Operator Address', style: kSmallTextStyle),
+                                  Row(
+                                    children: [
+                                      Text('Operator Address', style: kMediumTextStyle),
+                                      InkWell(
+                                        onTap: () =>
+                                            Clipboard.setData(ClipboardData(
+                                              text: widget.validatorModel!.operatorAddress!,
+                                            )).then((_) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Operator Address to your clipboard !')));
+                                            }),
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(width: 4),
+                                            const Icon(
+                                              Icons.copy,
+                                              color: Colors.black54,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 2,
                                   ),
@@ -131,14 +207,47 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text('${truncateToDecimalPlaces(widget.validatorModel!.votingPower!/widget.totalVoting!,2)*100}%',
-                                      style: kMediumBoldTextStyle),
-                                  Text(widget.validatorModel!.votingPower!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'), style: kMediumTextStyle),
+                                  Row(
+                                    children: [
+                                      Text('${truncateToDecimalPlaces(widget.validatorModel!.votingPower!/widget.totalVoting!,2)*100}%',
+                                          style: kMediumBoldTextStyle),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                        child: Text(' (${addComma(widget.validatorModel!.votingPower!.toString())}', style: kMediumTextStyle),
+                                      ),
+                                      Text(' ${widget.denom!})',style: kMediumTextStyle)
+                                    ],
+                                  ),
 
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Consensus Address', style: kSmallTextStyle),
+                                  Row(
+                                    children: [
+                                      Text('Consensus Address', style: kMediumTextStyle),
+                                      InkWell(
+                                        onTap: () =>
+                                            Clipboard.setData(ClipboardData(
+                                              text: widget.validatorModel!.consensusAddress!,
+                                            )).then((_) {
+                                              ScaffoldMessenger.of(context)
+                                                  .showSnackBar(const SnackBar(
+                                                  content: Text(
+                                                      'Consensus Address to your clipboard !')));
+                                            }),
+                                        child: Row(
+                                          children: [
+                                            const SizedBox(width: 4),
+                                            const Icon(
+                                              Icons.copy,
+                                              color: Colors.black54,
+                                              size: 15,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   const SizedBox(
                                     height: 2,
                                   ),
@@ -147,15 +256,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Minimum Self Delegation', style: kSmallTextStyle),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text(widget.validatorModel!.minSelfDelegation!.toString(), style: kMediumBoldTextStyle),
 
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
                                   Text('Details', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,

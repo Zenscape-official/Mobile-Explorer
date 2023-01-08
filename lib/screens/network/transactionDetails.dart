@@ -247,9 +247,9 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(
+                                widget.txModel!.fee!.amount!.length!=0? Text(
                                     '${addComma(widget.txModel!.fee!.amount![0].amount!)} ${widget.txModel!.fee!.amount![0].denom!}',
-                                    style: kMediumBoldTextStyle),
+                                    style: kMediumBoldTextStyle):Text('0',style: kMediumBoldTextStyle),
                                 const SizedBox(height: 20),
                                 Text('Gas (used/wanted)',
                                     style: kSmallTextStyle),
@@ -917,7 +917,33 @@ class _TxDetailsState extends State<TxDetails> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    Text('Depositor', style: kSmallTextStyle),
+                                    Row(
+                                      children: [
+                                        Text('Depositor Address', style: kSmallTextStyle),
+                                        InkWell(
+                                          onTap: () =>
+                                              Clipboard.setData(ClipboardData(
+                                                text: widget.txModel!.messages![0]
+                                                    .depositor ??'',
+                                              )).then((_) {
+                                                ScaffoldMessenger.of(context)
+                                                    .showSnackBar(const SnackBar(
+                                                    content: Text(
+                                                        ' Depositor Address Copied to your clipboard !')));
+                                              }),
+                                          child: Row(
+                                            children: [
+                                              const SizedBox(width: 4),
+                                              const Icon(
+                                                Icons.copy,
+                                                color: Colors.black54,
+                                                size: 15,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                     const SizedBox(
                                       height: 2,
                                     ),

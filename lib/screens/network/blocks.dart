@@ -359,7 +359,7 @@ class _BlockContainerState extends State<BlockContainer> {
                       children: [
                         Text('Proposer',
                             style:kSmallTextStyle),
-                        const SizedBox(width:99),
+                        //const SizedBox(width:99),
                         monikerLoaded? Text((valMoniker)
                              ,style:kSmallTextStyle):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
 
