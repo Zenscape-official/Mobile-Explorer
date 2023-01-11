@@ -135,7 +135,32 @@ class _ContractDetailsState extends State<ContractDetails> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text('Contract Address', style: kSmallTextStyle),
+                        Row(
+                          children: [
+                            Text('Contract Address', style: kMediumTextStyle),
+                            InkWell(
+                              onTap: () =>
+                                  Clipboard.setData(ClipboardData(
+                                    text: widget.contractModel!.contractAddress!,
+                                  )).then((_) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            'Contract Address Copied to your clipboard !')));
+                                  }),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 4),
+                                  const Icon(
+                                    Icons.copy,
+                                    color: Colors.black54,
+                                    size: 15,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(
                           height: 2,
                         ),
@@ -156,7 +181,32 @@ class _ContractDetailsState extends State<ContractDetails> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text('Creator', style: kSmallTextStyle),
+                        Row(
+                          children: [
+                            Text('Creator Address', style: kMediumTextStyle),
+                            InkWell(
+                              onTap: () =>
+                                  Clipboard.setData(ClipboardData(
+                                    text: widget.contractModel!.creator!,
+                                  )).then((_) {
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                        content: Text(
+                                            'Creator Address Copied to your clipboard !')));
+                                  }),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 4),
+                                  const Icon(
+                                    Icons.copy,
+                                    color: Colors.black54,
+                                    size: 15,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                         const SizedBox(
                           height: 2,
                         ),
@@ -478,7 +528,7 @@ class TxCont extends StatelessWidget {
                       style: kSmallTextStyle,
                     ),
                     Text(
-                      contractTxModel!.tx!.type!,
+                      getType(contractTxModel!.tx!.type!),
                       style: kSmallBoldTextStyle,
                     )
                   ],

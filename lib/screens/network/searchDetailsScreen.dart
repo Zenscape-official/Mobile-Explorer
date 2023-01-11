@@ -23,7 +23,6 @@ class SearchScreen extends StatefulWidget {
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
-
 class _SearchScreenState extends State<SearchScreen> {
   NetworkController networkController = Get.put(NetworkController());
   List<BlockModel>? blockDetails;

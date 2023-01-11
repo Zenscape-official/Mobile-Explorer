@@ -44,6 +44,7 @@ class _BlocksState extends State<Blocks> {
   NavController navController=Get.put(NavController());
   var blocks;
   var tx;
+  int pageIndex=2;
   bool isLoaded=false;
   Timer? timer;
 
@@ -113,7 +114,7 @@ class _BlocksState extends State<Blocks> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      drawer: NavDraw(networkData: widget.networkData),
+      drawer: NavDraw(networkData: widget.networkData,pageIndex: pageIndex,),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -214,6 +215,7 @@ class _BlocksState extends State<Blocks> {
                  );
                }
                ):const Center(child: CircularProgressIndicator()),
+              SizedBox(height:30),
             ],
           ),
         ),
@@ -332,23 +334,8 @@ class _BlockContainerState extends State<BlockContainer> {
                         Text('Block Hash',
                             style:kSmallTextStyle),
                       //  const SizedBox(width: 90),
-                        InkWell(
-                          onTap:()=> Clipboard.setData ( ClipboardData(text: widget.blockModel!.hash!)).then((_){
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(content: Text('BlockHash Copied to your clipboard !')));
-                          }),
-                          child: Row(
-                            children: [
-                              Text(dotRefactorFunction(widget.blockModel!.hash!)
-                                  ,style:kSmallTextStyle),
-                              const SizedBox(width:4),
-                              const Icon(Icons.copy,
-                                color: Colors.black54,
-                                size: 15,
-                              ),
-                            ],
-                          ),
-                        ),
+                        SelectableText(dotRefactorFunction(widget.blockModel!.hash!),
+                            style:kSmallTextStyle)
                       ]
                   ),
                 ),

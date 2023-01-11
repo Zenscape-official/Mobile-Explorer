@@ -460,17 +460,60 @@ getType(String input) {
 
     case '/comdex.vault.v1beta1.MsgVaultInterestCalcRequest':
       return 'Vault Interest Calc Request';
-
+    //cosmos
     case '/cosmos.bank.v1beta1.MsgSend':
       return 'Send';
-      case '/ibc.core.client.v1.MsgDepositResponse':
-      return 'Deposit Request';
 
+    case'/cosmos.tx.v1beta1.Tx':
+      return 'Execute Contract';
+
+      //staking
+    case'/cosmos.staking.v1beta1.MsgCreateValidator':
+      return 'Create Validator';
+    case'/cosmos.staking.v1beta1.MsgEditValidator':
+      return 'Edit Validator';
+    case'/cosmos.staking.v1beta1.MsgDelegate':
+      return 'Delegate';
+    case'/cosmos.staking.v1beta1.MsgBeginRedelegate':
+      return 'Begin Redelegate';
+    case'/cosmos.staking.v1beta1.MsgUndelegate':
+      return 'Undelegate';
+    case'/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation':
+      return 'Cancel Unbonding Delegation';
+    case'/cosmos.staking.v1beta1.MsgUpdateParams':
+      return 'Update Params';
+
+      //slashing
+    case'/cosmos.slashing.v1beta1.MsgUnjail':
+      return 'Unjail';
+    case'/cosmos.slashing.v1beta1.MsgUpdateParams':
+      return 'Update Params';
+
+      //upgrade
+    case'/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade':
+      return 'Software Upgrade';
+    case'/cosmos.upgrade.v1beta1.MsgCancelUpgrade':
+      return 'Cancel Upgrade Validator';
+
+      //vesting
+    case'/cosmos.vesting.v1beta1.MsgCreateVestingAccount':
+      return 'Create Vesting Acc';
+    case'/cosmos.vesting.v1beta1.MsgCreatePermanentLockedAccount':
+      return 'Create Permanent Locked Acc';
+    case'/cosmos.vesting.v1beta1.MsgCreatePeriodicVestingAccount':
+      return 'Create Periodic Vesting Acc';
+
+
+      //cosmwasm
     case '/cosmwasm.wasm.v1.MsgExecuteContract':
       return 'Execute Contract';
 
+      //ibc
     case '/ibc.applications.transfer.v1.MsgTransfer':
       return 'IBC Transfer';
+
+    case '/ibc.core.client.v1.MsgDepositResponse':
+      return 'Deposit Request';
 
     default:
       return 'N/A';

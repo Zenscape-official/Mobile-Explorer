@@ -8,6 +8,7 @@ import 'package:zenscape_app/screens/network/contractDetails.dart';
 import '../../backend_files/networkList.dart';
 import '../../controller/contractController.dart';
 import '../../widgets/navigationDrawerWidget.dart';
+import '../../widgets/searchBarWidget.dart';
 
 class Contracts extends StatefulWidget {
   final NetworkList? networkList;
@@ -20,6 +21,7 @@ class _ContractsState extends State<Contracts> {
   Get.put(ContractController());
 
   var contracts;
+  int pageIndex=4;
   bool isLoaded=false;
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _ContractsState extends State<Contracts> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:NavDraw(networkData:widget.networkList),
+      drawer:NavDraw(networkData:widget.networkList,pageIndex: pageIndex,),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -67,6 +69,7 @@ class _ContractsState extends State<Contracts> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            SearchBar(nameController:nameController),
 
             Padding(
               padding: const EdgeInsets.all(18.0),
@@ -76,6 +79,7 @@ class _ContractsState extends State<Contracts> {
                 ],
               ),
             ),
+
              isLoaded?ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),
@@ -88,6 +92,7 @@ class _ContractsState extends State<Contracts> {
                 }
                 ):
              CircularProgressIndicator(),
+            SizedBox(height:30),
           ],
         ),
       ),

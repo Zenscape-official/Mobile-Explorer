@@ -4,6 +4,7 @@ import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
 import '../../backend_files/contractTxModel.dart';
 import '../../controller/txToggleController.dart';
+import '../../widgets/searchBarWidget.dart';
 
 class ContractTxDetails extends StatefulWidget {
   final ContractTxModel? contractTxModel;
@@ -24,6 +25,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
     //getData();
   }
   final TxToggleController txToggleController =Get.put(TxToggleController());
+  TextEditingController nameController =TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -45,6 +47,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
         body: SingleChildScrollView(
           child: Column(
             children: [
+              SearchBar(nameController:nameController),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(

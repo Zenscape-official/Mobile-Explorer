@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -52,6 +51,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   TextEditingController nameController=TextEditingController();
   NavController navController=Get.put(NavController());
   String fullName = '';
+  var pageIndex=0;
   var blockTime;
   var txNum;
   var bondedToken;
@@ -185,6 +185,8 @@ List<ProposalsModel>? activeProposal;
         drawer: NavDraw(
           networkData: widget.networkData,
           logoUrl: widget.networkData!.logoUrl ?? widget.networkData!.logUrl,
+          pageIndex: pageIndex,
+
         ),
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
@@ -694,6 +696,7 @@ List<ProposalsModel>? activeProposal;
                                 );
                               }),
                         ),
+
                       ],
                     ),
                   ),
@@ -705,6 +708,7 @@ List<ProposalsModel>? activeProposal;
                       width: 15,
                       child: CircularProgressIndicator()),
                 ),
+                SizedBox(height:30),
               ],
             ),
           ),

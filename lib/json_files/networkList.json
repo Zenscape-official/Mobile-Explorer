@@ -1,9 +1,9 @@
 [
   {"id":"akash-network",
+    "isActive": "0",
     "name" : "Akash",
     "logoUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/akash-network-akt-logo.png",
     "denom":"AKT",
-
     "apy":"160%",
     "commission":"5%",
     "price":"0.00",
@@ -33,6 +33,7 @@
 
   },
   {"id":"assetmantle",
+    "isActive": "0",
     "name" : "AssetMantle",
     "logoUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/assetmantle.jpeg",
     "denom":"MNTL",
@@ -64,6 +65,7 @@
     "slashingParamsUrl":"https://rest.comdex.one/slashing/parameters"
   },
   {"id":"cosmos",
+    "isActive": "0",
     "name" : "Cosmos",
     "logoUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/cosmos-atom-logo.png",
     "denom":"ATOM",
@@ -97,6 +99,7 @@
 
   {
     "id":"chihuahua",
+    "isActive": "0",
     "name" : "Chihuahua",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/huahua.png",
     "denom":"HUAHUA",
@@ -128,6 +131,7 @@
     "slashingParamsUrl":"https://rest.comdex.one/slashing/parameters"
   },
   {"id":"comdex",
+    "isActive": "1",
     "name" : "Comdex",
     "logUrl":"https://dfcrpylw0p0vw.cloudfront.net/images/cmdx_logo_1.png",
     "denom":"CMDX",
@@ -159,6 +163,7 @@
     "slashingParamsUrl":"https://meteor.rest.comdex.one/slashing/parameters"
   },
   {"id":"injective",
+    "isActive": "0",
     "name" : "Injective",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/injective-protocol-inj-logo.png",
     "denom":"INJ",
@@ -191,6 +196,7 @@
   }
 ,
   {"id":"juno-network",
+    "isActive": "0",
     "name" : "Juno",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/juno.jpeg",
     "denom":"JUNO",
@@ -223,6 +229,7 @@
   },
 
   {"id":"kava",
+    "isActive": "0",
     "name" : "Kava",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/KAVA.png",
     "denom":"KAVA",
@@ -256,6 +263,7 @@
 
 
   {"id":"omniflix",
+    "isActive": "0",
     "name" : "Omniflix",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/OmniFlix.webp",
     "denom":"FLIX",
@@ -287,6 +295,7 @@
     "slashingParamsUrl":"https://rest.comdex.one/slashing/parameters"
   },
   {"id":"osmosis",
+    "isActive": "0",
     "name" : "Osmosis",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/OSMO.png",
     "denom":"OSMO",
@@ -318,6 +327,7 @@
     "slashingParamsUrl":"https://rest.comdex.one/slashing/parameters"
   },
   {"id":"persistence",
+    "isActive": "0",
     "name" : "Persistence",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/XPRT.jpeg",
     "denom":"XPRT",
@@ -350,6 +360,7 @@
   }
 ,
   {"id":"secret",
+    "isActive": "0",
     "name" : "Secret",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/SCRT.png",
     "denom":"SCRT",
@@ -383,6 +394,7 @@
 
 ,
   {"id": "umee",
+    "isActive": "0",
     "name" : "Umee",
     "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/UMEE.png",
     "denom":"UMEE",

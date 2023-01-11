@@ -6,6 +6,7 @@ import 'package:zenscape_app/constants/constants.dart';
 import '../../backend_files/networkList.dart';
 import '../../constants/constString.dart';
 import '../../widgets/navigationDrawerWidget.dart';
+import '../../widgets/searchBarWidget.dart';
 import '../homeScreen.dart';
 import 'package:http/http.dart' as http;
 
@@ -20,6 +21,7 @@ class Parameters extends StatefulWidget {
 
 class _ParametersState extends State<Parameters> {
   var isLoaded=false;
+  var pageIndex=6;
   MintingParamModel? mintingParamModel;
 
   List<String> mintParams=[' ',' ',' ',' '];
@@ -123,7 +125,7 @@ fetchDataMint(String input) async {
     getData();
 
     return Scaffold(
-      drawer: NavDraw(networkData: widget.networkList),
+      drawer: NavDraw(networkData: widget.networkList,pageIndex: pageIndex,),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -152,6 +154,7 @@ fetchDataMint(String input) async {
       ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
+          SearchBar(nameController:nameController),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -254,6 +257,7 @@ fetchDataMint(String input) async {
               ],
             ),
           ),
+          SizedBox(height:30),
         ],
       )
 

@@ -12,6 +12,7 @@ import 'package:zenscape_app/screens/network/validatorDetails.dart';
 import 'package:zenscape_app/widgets/navigationDrawerWidget.dart';
 import '../../controller/valToggleController.dart';
 import '../../controller/validatorsController.dart';
+import '../../widgets/searchBarWidget.dart';
 
 class Validators extends StatefulWidget {
   final NetworkList? networkList;
@@ -35,6 +36,7 @@ class _ValidatorsState extends State<Validators> {
   bool isLoaded=false;
   int activeValSelected=0;
   var totalVoting=1;
+  int pageIndex=1;
 
   @override
   void initState() {
@@ -88,8 +90,6 @@ class _ValidatorsState extends State<Validators> {
    for (int i=0;i<validators!.length;i++){
      totalVoting+=validators![i].votingPower!;
    }
-
-
   }
 
 
@@ -102,7 +102,7 @@ class _ValidatorsState extends State<Validators> {
     // print(ValidatorController.activeValidatorsList.length);
     // print(ValidatorController.inActiveValidatorsList.length);
     return Scaffold(
-        drawer: NavDraw(networkData: widget.networkList),
+        drawer: NavDraw(networkData: widget.networkList,pageIndex: pageIndex,),
         backgroundColor: Colors.grey[100],
         appBar: AppBar(
           backgroundColor: Colors.transparent,
@@ -124,6 +124,7 @@ class _ValidatorsState extends State<Validators> {
           ),
         ),
         body: Column(children: [
+          SearchBar(nameController:nameController),
 
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -191,7 +192,8 @@ class _ValidatorsState extends State<Validators> {
               );
             }
           ):
-          Center(child: const CircularProgressIndicator())
+          Center(child: const CircularProgressIndicator()),
+          SizedBox(height:30),
         ]));
   }
 }
@@ -208,7 +210,6 @@ class ValidatorContainer extends StatelessWidget {
   @override
 
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,denom:denom))),
       child: Container(

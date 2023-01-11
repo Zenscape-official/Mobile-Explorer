@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
+
+import '../../widgets/searchBarWidget.dart';
 
 class ValidatorDetails extends StatefulWidget {
   final ValidatorModel? validatorModel;
@@ -16,6 +17,7 @@ class ValidatorDetails extends StatefulWidget {
   State<ValidatorDetails> createState() => _ValidatorDetailsState();
 }
 class _ValidatorDetailsState extends State<ValidatorDetails> {
+  TextEditingController nameController=TextEditingController();
   int summarySelected=0;
   @override
   void initState() {
@@ -42,6 +44,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
           body: SingleChildScrollView(
               child: Column(
                   children: [
+                    SearchBar(nameController:nameController),
                     Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Container(

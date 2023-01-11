@@ -6,6 +6,7 @@ import 'package:zenscape_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import '../../backend_files/propVotesModel.dart';
 import '../../constants/functions.dart';
+import '../../widgets/searchBarWidget.dart';
 
 
 class ProposalDetails extends StatefulWidget {
@@ -16,6 +17,7 @@ class ProposalDetails extends StatefulWidget {
 }
 
 class _ProposalDetailsState extends State<ProposalDetails> {
+  TextEditingController nameController=TextEditingController();
   var  status;
   var tallyYes;
   var tallyNo;
@@ -106,40 +108,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
       body: tallyLoaded? SingleChildScrollView(
         child: Column(
             children: [
-              // Container(
-              //     width: MediaQuery.of(context).size.width/1.1,
-              //     height: 40,
-              //     decoration: kBoxDecorationWithoutGradient,
-              //     margin: const EdgeInsets.all(20),
-              //     child: Padding(
-              //       padding: const EdgeInsets.all(2.0),
-              //       child: TextField(
-              //         //controller: nameController,
-              //         decoration: InputDecoration(
-              //           contentPadding: const EdgeInsets.only(left: 15, right: 15),
-              //           filled: true,
-              //           fillColor: Colors.transparent,
-              //           focusedBorder: InputBorder.none,
-              //           border: OutlineInputBorder(
-              //               borderSide: const BorderSide(
-              //                 width: 0,
-              //                 style: BorderStyle.none,
-              //               ),
-              //               borderRadius: BorderRadius.circular(20)
-              //           ),
-              //           hintText: 'Search',
-              //           prefixIcon: const Icon(Icons.search),
-              //         ),
-              //         onChanged: (text) {
-              //           setState(() {
-              //             //fullName = text;
-              //             //you can access nameController in its scope to get
-              //             // the value of text entered as shown below
-              //             //fullName = nameController.text;
-              //           });
-              //         },
-              //       ),
-              //     )),
+              SearchBar(nameController:nameController),
               Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: Row(

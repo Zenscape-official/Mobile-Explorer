@@ -38,7 +38,6 @@ class SearchBar extends StatelessWidget {
                   style: BorderStyle.none,
                 ),
                 borderRadius: BorderRadius.circular(20)),
-
             suffixIcon:  IconButton(
               color:Colors.blue,
               onPressed:(){
@@ -46,22 +45,20 @@ class SearchBar extends StatelessWidget {
                   Get.snackbar('', 'Please enter Block Height/ Tx Hash /Address');
                  IBCMapping().readJson();
                 }
-
                 else{
                   PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: SearchScreen(nameController: nameController.text ),
                     withNavBar: true, // OPTIONAL VALUE. True by default.
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                  );
+                  ).then((value) {
+    nameController.clear();
+                  });
                 }},
               icon:Icon(Icons.search),
             ),
           ),
-          // onChanged:
-          //     (text) {
-          //       filterList(text);
-          // }
+
        onSubmitted: (name) {
          if(name.isEmpty){
            Get.snackbar('', 'Please enter Block Height/ Tx Hash/ Address');
@@ -73,9 +70,10 @@ class SearchBar extends StatelessWidget {
              screen: SearchScreen(nameController: name),
              withNavBar: true, // OPTIONAL VALUE. True by default.
              pageTransitionAnimation: PageTransitionAnimation.cupertino,
-           );
+           ).then((value) {
+             nameController.clear();
+           });
          }},
-              //()=> Get.to(() => SearchScreen(nameController:nameController.text)) ,
         ),
       ),
     );

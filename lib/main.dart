@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -119,7 +117,7 @@ class _MainAppState extends State<MainApp> {
               borderRadius: BorderRadius.circular(10.0),
               colorBehindNavBar: Colors.white,
             ),
-            popAllScreensOnTapOfSelectedTab: false,
+            popAllScreensOnTapOfSelectedTab: true,
             popActionScreens: PopActionScreensType.all,
             itemAnimationProperties: ItemAnimationProperties( // Navigation Bar's items animation properties.
               duration: Duration(milliseconds: 200),

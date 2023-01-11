@@ -8,6 +8,7 @@ import '../../backend_files/proposalsModel.dart';
 import '../../controller/networklistController.dart';
 import '../../controller/proposalsFunc.dart';
 import '../../widgets/navigationDrawerWidget.dart';
+import '../../widgets/searchBarWidget.dart';
 
 class Proposals extends StatefulWidget {
 final NetworkList? networkListProposal;
@@ -21,6 +22,7 @@ class _ProposalsState extends State<Proposals> {
   final NetworkController networkController = Get.put(NetworkController());
   bool isLoaded=false;
   var prop;
+  int pageIndex=3;
   List<ProposalsModel> proposals=[];
 
   @override
@@ -83,7 +85,7 @@ class _ProposalsState extends State<Proposals> {
   Widget build(BuildContext context) {
     proposals.sort((b, a) => b.id!.compareTo(a.id!));
      return Scaffold(
-      drawer: NavDraw(networkData: widget.networkListProposal),
+      drawer: NavDraw(networkData: widget.networkListProposal,pageIndex: pageIndex,),
       backgroundColor: Colors.grey[100],
       appBar: AppBar(title:Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -103,7 +105,10 @@ class _ProposalsState extends State<Proposals> {
       ),
       body: SingleChildScrollView(
         child: Column(
+
           children: [
+
+            SearchBar(nameController:nameController),
 
            isLoaded?
            Obx(()=> CupertinoScrollbar(
@@ -119,6 +124,7 @@ class _ProposalsState extends State<Proposals> {
                  })
            ),
            ):Center(child: const CircularProgressIndicator()),
+            SizedBox(height:30),
           ],
         ),
       ),
