@@ -5,7 +5,7 @@
     "logoUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/akash-network-akt-logo.png",
     "denom":"AKT",
     "apy":"160%",
-    "commission":"5%",
+    "commission":"0%",
     "price":"0.00",
     "perc change in price":"",
     "blocktime": "http://167.235.151.252:3005/blocktime",
