@@ -161,14 +161,13 @@
     "govParamsUrl":"http://167.235.151.252:3005/governance",
     "distParamsUrl":"https://meteor.rest.comdex.one/distribution/parameters",
     "slashingParamsUrl":"https://meteor.rest.comdex.one/slashing/parameters",
-
-    "TxTimestamp": "https://meteor.rpc.comdex.one/block?height=",
-    "BlocksMoniker": "http://167.235.151.252:3005/validatorDescription/",
-    "ProposalTally" : "http://167.235.151.252:3005/proposalTally/",
-    "ProposalVote" : "http://167.235.151.252:3005/proposalVotes/",
-    "ProposalDeposit": "http://167.235.151.252:3005/proposalDeposit/",
-    "ContractDetailsBalances" : "https://meteor.rest.comdex.one/cosmos/bank/v1beta1/balances/",
-    "ContractTxs" : "https://meteor.rest.comdex.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz"
+    "txTimestamp": "https://meteor.rpc.comdex.one/block?height=",
+    "blocksMoniker": "http://167.235.151.252:3005/validatorDescription/",
+    "proposalTally" : "http://167.235.151.252:3005/proposalTally/",
+    "proposalVote" : "http://167.235.151.252:3005/proposalVotes/",
+    "proposalDeposit": "http://167.235.151.252:3005/proposalDeposit/",
+    "contractDetailsBalances" : "https://meteor.rest.comdex.one/cosmos/bank/v1beta1/balances/",
+    "contractTxs" : "https://meteor.rest.comdex.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz"
   },
   {"id":"injective",
     "isActive": "0",
