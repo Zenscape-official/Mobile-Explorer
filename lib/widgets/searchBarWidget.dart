@@ -23,7 +23,7 @@ class SearchBar extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(0.0),
         child: TextField(
-         
+          autofocus: false,
           controller: nameController,
           decoration: InputDecoration(
             hintText:'Enter Tx Hash, Block Height, Address...',
@@ -49,10 +49,11 @@ class SearchBar extends StatelessWidget {
                   PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: SearchScreen(nameController: nameController.text ),
-                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                    withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   ).then((value) {
-    nameController.clear();
+                    nameController.clear();
+                    FocusScope.of(context).requestFocus(FocusNode());
                   });
                 }},
               icon:Icon(Icons.search),
@@ -72,6 +73,7 @@ class SearchBar extends StatelessWidget {
              pageTransitionAnimation: PageTransitionAnimation.cupertino,
            ).then((value) {
              nameController.clear();
+             FocusScope.of(context).requestFocus(FocusNode());
            });
          }},
         ),

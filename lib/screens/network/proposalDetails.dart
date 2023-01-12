@@ -39,10 +39,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
       tallyAbstain = double.parse(jsonDecode(response.body)[0]['abstain']);
       tallyNoWithVeto = double.parse(jsonDecode(response.body)[0]['no_with_veto']);
       tallyTotal=tallyNo+tallyYes+tallyAbstain+tallyNoWithVeto;
-      //print(tallyNoWithVeto);
-     // print(tallyYes);
-      //print(tallyAbstain);
-      //print(tallyNo);
 
       setState(() {
         if (tallyYes!=null){
@@ -58,12 +54,10 @@ class _ProposalDetailsState extends State<ProposalDetails> {
     }
     if (resultVote.statusCode==200){
     propVoters=List<ProposalVotesModel>.from(json.decode((resultVote.body)).map((x) => ProposalVotesModel.fromJson(x)));
-    //print(propVoters);
     }
     if (resultDeposit.statusCode==200){
       Deposit=(jsonDecode(resultDeposit.body)[0]['amount']);
-      //DepositDenom=(jsonDecode(resultDeposit.body)[0]['denom']);
-      //print(propVoters);
+
     }
 
   }
@@ -109,16 +103,8 @@ class _ProposalDetailsState extends State<ProposalDetails> {
         child: Column(
             children: [
               SearchBar(nameController:nameController),
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    // ToggleButton(leftTitle: 'Summary',rightTitle: 'JSON',)
-                  ],),
-              ),
               Container(
-                margin: const EdgeInsets.only(right: 10,top: 10,left: 10),
+                margin: const EdgeInsets.only(right: 10,left: 10),
                 width: MediaQuery.of(context).size.width/1.1,
                 decoration: kBoxDecorationWithGradient,
                 child: Padding(
@@ -531,276 +517,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                   ),
                 ),
               ):Container(),
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(18.0,0,18,18),
-              //   child: Container(
-              //     decoration: kBoxDecorationWithoutGradient,
-              //
-              //     child: Column(
-              //         children:[
-              //           Row(
-              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //             children: [
-              //               Padding(
-              //                 padding: const EdgeInsets.all(18.0),
-              //                 child: Text('Validator Votes',style: kSmallBoldTextStyle,),
-              //               ),
-              //               const Filter(),
-              //             ],
-              //           ),
-              //
-              //           Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Padding(
-              //               padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-              //               child: Card(
-              //                   color: const Color(0xFFF9FAFC),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Column(
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children:  [
-              //                             Row(
-              //                               children: [
-              //
-              //                                 Padding(
-              //                                   padding: const EdgeInsets.fromLTRB(0,0,8,0),
-              //                                   child: CircleAvatar(
-              //                                     radius: 12,
-              //                                       backgroundColor:Colors.transparent,
-              //                                       child:ClipOval(child: Image.asset('assets/images/auditor.png'))),
-              //                                 ),
-              //                         Text('Auditor.one',style: kSmallBoldTextStyle,)
-              //                               ],
-              //                             ),
-              //
-              //                             GreenContainer('Yes'),
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 8),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('TxHash',style: kSmallTextStyle,),
-              //                             Text('D0123NK..IU234VC',style: kSmallBoldTextStyle,)
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 4,),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('Time',style: kSmallTextStyle,),
-              //                             Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-              //                           ],
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   )),
-              //             ),
-              //           ),
-              //           Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Padding(
-              //               padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-              //               child: Card(
-              //                   color: const Color(0xFFF9FAFC),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Column(
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children:  [
-              //                             Row(
-              //                               children: [
-              //
-              //                                 Padding(
-              //                                   padding: const EdgeInsets.fromLTRB(0,0,8,0),
-              //                                   child: CircleAvatar(
-              //                                       radius: 12,
-              //                                       backgroundColor:Colors.transparent,
-              //                                       child:ClipOval(child: Image.asset('assets/images/auditor.png'))),
-              //                                 ),
-              //                                 Text('Cosmostation',style: kSmallBoldTextStyle,)
-              //                               ],
-              //                             ),
-              //
-              //                             GreenContainer('Yes'),
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 8),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('TxHash',style: kSmallTextStyle,),
-              //                             Text('D0123NK..IU234VC',style: kSmallBoldTextStyle,)
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 4,),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('Time',style: kSmallTextStyle,),
-              //                             Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-              //                           ],
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   )),
-              //             ),
-              //           ),
-              //            Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Padding(
-              //               padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-              //               child: Card(
-              //                   color: const Color(0xFFF9FAFC),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Column(
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children:  [
-              //                             Row(
-              //                               children: [
-              //
-              //                                 Padding(
-              //                                   padding: const EdgeInsets.fromLTRB(0,0,8,0),
-              //                                   child: CircleAvatar(
-              //                                       radius: 12,
-              //                                       backgroundColor:Colors.transparent,
-              //                                       child:ClipOval(child: Image.asset('assets/images/auditor.png'))),
-              //                                 ),
-              //                                 Text('Caps',style: kSmallBoldTextStyle,)
-              //                               ],
-              //                             ),
-              //                             GreenContainer('Yes'),
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 8),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('TxHash',style: kSmallTextStyle,),
-              //                             Text('D0123NK..IU234VC',style: kSmallBoldTextStyle,)
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 4,),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('Time',style: kSmallTextStyle,),
-              //                             Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-              //                           ],
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   )),
-              //             ),
-              //           ),
-              //         ]
-              //     ),
-              //   ),
-              // ),
-              // Padding(
-              //   padding: const EdgeInsets.fromLTRB(18.0,0,18,18),
-              //   child: Container(
-              //     decoration: kBoxDecorationWithoutGradient,
-              //
-              //     child: Column(
-              //         children:[
-              //           Row(
-              //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //             children: [
-              //               Padding(
-              //                 padding: const EdgeInsets.all(18.0),
-              //                 child: Text('Depositors',style: kSmallBoldTextStyle,),
-              //               ),
-              //               const Filter(),
-              //             ],
-              //           ),
-              //
-              //           Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Padding(
-              //               padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-              //               child: Card(
-              //                   color: const Color(0xFFF9FAFC),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Column(
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children:  [
-              //                             Text('SycScale.com',style: kSmallBoldTextStyle,),
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 8),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('TxHash',style: kSmallTextStyle,),
-              //                             Text('D0123NK..IU234VC',style: kSmallBoldTextStyle,)
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 4,),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('Time',style: kSmallTextStyle,),
-              //                             Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-              //                           ],
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   )),
-              //             ),
-              //           ),
-              //           Padding(
-              //             padding: const EdgeInsets.all(8.0),
-              //             child: Padding(
-              //               padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-              //               child: Card(
-              //                   color: const Color(0xFFF9FAFC),
-              //                   child: Padding(
-              //                     padding: const EdgeInsets.all(8.0),
-              //                     child: Column(
-              //                       children: [
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children:  [
-              //                             Text('SycScale.com',style: kSmallBoldTextStyle,),
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 8),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('TxHash',style: kSmallTextStyle,),
-              //                             Text('D0123NK..IU234VC',style: kSmallBoldTextStyle,)
-              //                           ],
-              //                         ),
-              //                         const SizedBox(height: 4,),
-              //                         Row(
-              //                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //                           children: [
-              //                             Text('Time',style: kSmallTextStyle,),
-              //                             Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-              //                           ],
-              //                         ),
-              //                       ],
-              //                     ),
-              //                   )),
-              //             ),
-              //           ),
-              //         ]
-              //     ),
-              //   ),
-              // ),
+              SizedBox(height: 30,)
 
             ]
         ),

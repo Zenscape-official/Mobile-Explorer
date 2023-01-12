@@ -11,6 +11,7 @@ String networkListToJson(List<NetworkList> data) => json.encode(List<dynamic>.fr
 class NetworkList {
   NetworkList({
     this.id,
+    this.isActive,
     this.name,
     this.logoUrl,
     this.denom,
@@ -44,6 +45,7 @@ class NetworkList {
   });
 
   String? id;
+  String? isActive;
   String? name;
   String? logoUrl;
   String? denom;
@@ -77,6 +79,7 @@ class NetworkList {
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
+    isActive: json["isActive"],
     name: json["name"],
     logoUrl: json["logoUrl"] == null ? null : json["logoUrl"],
     denom: json["denom"],
@@ -111,6 +114,7 @@ class NetworkList {
 
   Map<String, dynamic> toJson() => {
     "id": id,
+    "isActive":isActive,
     "name": name,
     "logoUrl": logoUrl == null ? null : logoUrl,
     "denom": denom,

@@ -37,41 +37,39 @@ class NetworkDashBoard extends StatefulWidget {
 }
 
 class _NetworkDashBoardState extends State<NetworkDashBoard> {
-  var details=['0','0','0','0','0','0'];
+  var details = ['0', '0', '0', '0', '0', '0'];
   final BlocksController _blocksController = Get.put(BlocksController());
 
   final NetworkController networkController = Get.put(NetworkController());
-  final ProposalController proposalController=Get.put(ProposalController());
+  final ProposalController proposalController = Get.put(ProposalController());
   final DashboardController _dashboardController =
-  Get.put(DashboardController());
-
-
+      Get.put(DashboardController());
   final TxController _txController = Get.put(TxController());
-  final ToggleController toggleController =Get.put(ToggleController());
-  TextEditingController nameController=TextEditingController();
-  NavController navController=Get.put(NavController());
+  final ToggleController toggleController = Get.put(ToggleController());
+  TextEditingController nameController = TextEditingController();
+  NavController navController = Get.put(NavController());
   String fullName = '';
-  var pageIndex=0;
+  var pageIndex = 0;
   var blockTime;
   var txNum;
   var bondedToken;
   var communityPool;
   var inflation = '';
-  var height='0';
+  var height = '0';
   var bankTotal;
   var blocks;
   var tx;
-  var blockDashList=[];
-  var txDashList=[];
+  var blockDashList = [];
+  var txDashList = [];
   List<dynamic>? supply;
   double APR = 0;
   bool isLoaded = false;
   bool isProposalActive = false;
   var result;
   var timer;
-List<ProposalsModel>? activeProposal;
-  List<ProposalsModel> activeProposalsList=[];
-  String logoImage='';
+  List<ProposalsModel>? activeProposal;
+  List<ProposalsModel> activeProposalsList = [];
+  String logoImage = '';
   void initstate() {
     super.initState();
     getData();
@@ -80,7 +78,7 @@ List<ProposalsModel>? activeProposal;
 
   getData() async {
     result =
-    await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
+        await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
 
     height = (await _dashboardController.fetchSingleData(
         widget.networkData!.height!, 'height'));
@@ -90,7 +88,7 @@ List<ProposalsModel>? activeProposal;
     blockTime = (await _dashboardController.fetchdata(
         widget.networkData!.blocktime!, 'average_time'));
     supply =
-    (await _dashboardController.fetchBankData(widget.networkData!.height!));
+        (await _dashboardController.fetchBankData(widget.networkData!.height!));
 
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
@@ -99,44 +97,47 @@ List<ProposalsModel>? activeProposal;
         widget.networkData!.inflation!, 'value'));
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
-    for(int i=0;i<supply!.length;i++){
-      if(supply![i].denom=='ucmdx'){
-        bankTotal=supply![i].amount;
+    for (int i = 0; i < supply!.length; i++) {
+      if (supply![i].denom == 'ucmdx') {
+        bankTotal = supply![i].amount;
       }
     }
     APR = ((double.parse(inflation) * double.parse(bankTotal)) /
-        double.parse(bondedToken)) *
+            double.parse(bondedToken)) *
         100;
 
     details = [
       height,
       txNum,
-      k_m_b_generator(double.parse(bondedToken)/1000000),
-      k_m_b_generator(double.parse(removeAllChar(communityPool))/1000000),
+      k_m_b_generator(double.parse(bondedToken) / 1000000),
+      k_m_b_generator(double.parse(removeAllChar(communityPool)) / 1000000),
       '${truncateToDecimalPlaces(double.parse(inflation) * 100, 2)}%'
           .toString(),
       "${truncateToDecimalPlaces((APR), 2).toString()}%"
     ];
     tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
-    blocks =
-    await networkController.fetchList(widget.networkData!.blocksUrl!);
-    blockDashList=[BlocksController.blockList[BlocksController.blockList.length-1],BlocksController.blockList[BlocksController.blockList.length-2]];
-    txDashList=[TxController.txList[TxController.txList.length-1],TxController.txList[TxController.txList.length-2]];
-    activeProposal= await proposalController.fetchProducts(widget.networkData!.proposalsUrl!);
-   if(activeProposalsList.isEmpty)
-    for(int i=0;i<activeProposal!.length;i++){
-      if(activeProposal![i].status=='PROPOSAL_STATUS_VOTING_PERIOD'){
-        activeProposalsList.add(activeProposal![i]);
+    blocks = await networkController.fetchList(widget.networkData!.blocksUrl!);
+    blockDashList = [
+      BlocksController.blockList[BlocksController.blockList.length - 1],
+      BlocksController.blockList[BlocksController.blockList.length - 2]
+    ];
+    txDashList = [
+      TxController.txList[TxController.txList.length - 1],
+      TxController.txList[TxController.txList.length - 2]
+    ];
+    activeProposal = await proposalController
+        .fetchProducts(widget.networkData!.proposalsUrl!);
+    if (activeProposalsList.isEmpty)
+      for (int i = 0; i < activeProposal!.length; i++) {
+        if (activeProposal![i].status == 'PROPOSAL_STATUS_VOTING_PERIOD') {
+          activeProposalsList.add(activeProposal![i]);
+        }
+        activeProposalsList.sort((b, a) => b.id!.compareTo(a.id!));
       }
-      activeProposalsList.sort((b, a) => b.id!.compareTo(a.id!));
-      //print(activeProposal![i]);
-
-    }
 
     setState(() {
       if (blocks != null && tx != null) {
         isLoaded = true;
-
       } else {
         isLoaded = false;
       }
@@ -145,13 +146,11 @@ List<ProposalsModel>? activeProposal;
       } else {
         isProposalActive = false;
       }
-
     });
   }
 
   getDialogue(var result) {
     if (result['success'] == false) {
-
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -165,7 +164,7 @@ List<ProposalsModel>? activeProposal;
               TextButton(
                 child: const Text("OK"),
                 onPressed: () {
-                      () =>
+                  () =>
                       Navigator.of(context).popUntil((route) => route.isFirst);
                 },
               ),
@@ -180,560 +179,584 @@ List<ProposalsModel>? activeProposal;
   Widget build(BuildContext context) {
     getData();
 
-
-    return widget.networkData!.id=='comdex'? Scaffold(
-        drawer: NavDraw(
-          networkData: widget.networkData,
-          logoUrl: widget.networkData!.logoUrl ?? widget.networkData!.logUrl,
-          pageIndex: pageIndex,
-
-        ),
-        backgroundColor: Colors.grey[100],
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0,
-          foregroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                'Dashboard',
-                style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontFamily: 'MontserratBold',
-                  fontSize: 20,
-                ),
-              ),
-              CircleAvatar(
-                  radius: 15,
-                  child: InkWell(
-                    // onTap: () => Navigator.of(context)
-                    //     .popUntil((route) => route.isFirst),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.networkData!.logoUrl ??
-                          widget.networkData!.logUrl!,
-                      height: 40,
-                      width: 40,
-                      placeholder: (context, url) =>
-                          CircularProgressIndicator(),
-                      errorWidget: (context, url, error) =>
-                          Icon(Icons.error),
+    return widget.networkData!.id == 'comdex'
+        ? Scaffold(
+            drawer: NavDraw(
+              networkData: widget.networkData,
+              logoUrl:
+                  widget.networkData!.logoUrl ?? widget.networkData!.logUrl,
+              pageIndex: pageIndex,
+            ),
+            backgroundColor: Colors.grey[100],
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              foregroundColor: Colors.black,
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'Dashboard',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'MontserratBold',
+                      fontSize: 20,
                     ),
                   ),
-                  backgroundColor: Colors.transparent),
-            ],
-          ),
-        ),
-        body: RefreshIndicator(
-          onRefresh: () async {
-            await getData();
-          },
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                SearchBar(nameController:nameController),
-                SizedBox(
-                  //height: MediaQuery.of(context).size.height / 2.0,
-                  child: Padding(
-                    padding: const EdgeInsets.fromLTRB(15,10,15,5),
-                    child: Container(
-                      // height:MediaQuery.of(context).size.height/1.2,
-                      decoration: kBoxDecorationWithGradient,
+                  CircleAvatar(
+                      radius: 15,
+                      child: InkWell(
+                        // onTap: () => Navigator.of(context)
+                        //     .popUntil((route) => route.isFirst),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.networkData!.logoUrl ??
+                              widget.networkData!.logUrl!,
+                          height: 40,
+                          width: 40,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
+                        ),
+                      ),
+                      backgroundColor: Colors.transparent),
+                ],
+              ),
+            ),
+            body: RefreshIndicator(
+              onRefresh: () async {
+                await getData();
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    SearchBar(nameController: nameController),
+                    SizedBox(
+                      //height: MediaQuery.of(context).size.height / 2.0,
                       child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                        child: Container(
+                          // height:MediaQuery.of(context).size.height/1.2,
+                          decoration: kBoxDecorationWithGradient,
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
                               children: [
                                 Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    CircleAvatar(
-                                        radius: 15,
-                                        child: CachedNetworkImage(
-                                          imageUrl: widget.networkData!.logoUrl ??
-                                              widget.networkData!.logUrl!,
-                                          height: 40,
-                                          width: 40,
-                                          placeholder: (context, url) =>
-                                              CircularProgressIndicator(),
-                                          errorWidget: (context, url, error) =>
-                                              Icon(Icons.error),
+                                    Row(
+                                      children: [
+                                        CircleAvatar(
+                                            radius: 15,
+                                            child: CachedNetworkImage(
+                                              imageUrl: widget
+                                                      .networkData!.logoUrl ??
+                                                  widget.networkData!.logUrl!,
+                                              height: 40,
+                                              width: 40,
+                                              placeholder: (context, url) =>
+                                                  CircularProgressIndicator(),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      Icon(Icons.error),
+                                            ),
+                                            backgroundColor:
+                                                Colors.transparent),
+                                        Padding(
+                                          padding: const EdgeInsets.all(4.0),
+                                          child: Text(
+                                            widget.networkData!.denom!,
+                                            style: TextStyle(
+                                                color:
+                                                    Colors.black.withOpacity(1),
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily:
+                                                    'MontserratRegular'),
+                                          ),
                                         ),
-                                        backgroundColor: Colors.transparent),
-                                    Padding(
-                                      padding: const EdgeInsets.all(4.0),
-                                      child: Text(
-                                        widget.networkData!.denom!,
-                                        style: TextStyle(
-                                            color: Colors.black.withOpacity(1),
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w700,
-                                            fontFamily: 'MontserratRegular'),
+                                      ],
+                                    ),
+                                    Container(
+                                      decoration: kBoxBorder,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              'BLOCK TIME ',
+                                              style: kExtraSmallTextStyle,
+                                            ),
+                                            isLoaded
+                                                ? Text(
+                                                    truncateToDecimalPlaces(
+                                                            double.parse(
+                                                                blockTime),
+                                                            2)
+                                                        .toString(),
+                                                    style:
+                                                        kExtraSmallBoldTextStyle)
+                                                : SizedBox(
+                                                    height: 5,
+                                                    width: 15,
+                                                    child:
+                                                        LinearProgressIndicator()),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ],
                                 ),
+                                const SizedBox(height: 10),
                                 Container(
-                                  decoration: kBoxBorder,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          'BLOCK TIME ',
-                                          style: kExtraSmallTextStyle,
-                                        ),
-                                        isLoaded
-                                            ? Text(
-                                            truncateToDecimalPlaces(
-                                                double.parse(blockTime),
-                                                2)
-                                                .toString(),
-                                            style: kExtraSmallBoldTextStyle)
-                                            : SizedBox(
-                                            height: 5,
-                                            width: 15,
-                                            child:
-                                            LinearProgressIndicator()),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 10),
-                            Container(
-                              height: 150,
-                              width: 170,
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(200.0)),
-                                border: Border.all(
-                                  color: Colors.lightBlueAccent.withOpacity(.3),
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: (Container(
+                                  height: 150,
+                                  width: 170,
                                   decoration: BoxDecoration(
                                     color: Colors.transparent,
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(150.0)),
+                                        Radius.circular(200.0)),
                                     border: Border.all(
                                       color: Colors.lightBlueAccent
-                                          .withOpacity(.5),
+                                          .withOpacity(.3),
                                       width: 1.0,
                                     ),
                                   ),
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(25.0),
-                                        child: Column(
-                                          children: [
-                                            Text(
-                                                '\$' +
-                                                    truncateToDecimalPlaces(
-                                                        double.parse(widget
-                                                            .networkData!
-                                                            .price!),
-                                                        2)
-                                                        .toString(),
-                                                style: kBigBoldTextStyle),
-                                            const SizedBox(
-                                              height: 4,
-                                            ),
-                                            SizedBox(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                                children: [
-                                                  Text(
-                                                    '${truncateToDecimalPlaces(double.parse(widget.networkData!.percChangeInPrice ?? '0'), 2)} %'
-                                                        .toString(),
-                                                    style: (double.parse(widget
-                                                        .networkData!
-                                                        .percChangeInPrice!) >
-                                                        0
-                                                        ? const TextStyle(
-                                                        color: Color(
-                                                            0xFF15BE46))
-                                                        : const TextStyle(
-                                                        color: Colors.red)),
-                                                  ),
-                                                  SizedBox(
-                                                    height: 20,
-                                                    width: 20,
-                                                    child: double.parse(widget
-                                                        .networkData!
-                                                        .percChangeInPrice!) >
-                                                        0
-                                                        ? SvgPicture.asset(
-                                                        'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
-                                                        color: const Color(
-                                                            0xFF15BE46))
-                                                        : SvgPicture.asset(
-                                                      'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
-                                                      color: Colors.red
-                                                          .withOpacity(
-                                                          .8),
-                                                    ),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
-                                      ),
+                                    child: (Container(
                                       decoration: BoxDecoration(
                                         color: Colors.transparent,
                                         borderRadius: const BorderRadius.all(
-                                          Radius.circular(250.0),
-                                        ),
+                                            Radius.circular(150.0)),
                                         border: Border.all(
-                                          color: Colors.lightBlueAccent,
+                                          color: Colors.lightBlueAccent
+                                              .withOpacity(.5),
                                           width: 1.0,
                                         ),
                                       ),
-                                    ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(25.0),
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                    '\$' +
+                                                        truncateToDecimalPlaces(
+                                                                double.parse(widget
+                                                                    .networkData!
+                                                                    .price!),
+                                                                2)
+                                                            .toString(),
+                                                    style: kBigBoldTextStyle),
+                                                const SizedBox(
+                                                  height: 4,
+                                                ),
+                                                SizedBox(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        '${truncateToDecimalPlaces(double.parse(widget.networkData!.percChangeInPrice ?? '0'), 2)} %'
+                                                            .toString(),
+                                                        style: (double.parse(widget
+                                                                    .networkData!
+                                                                    .percChangeInPrice!) >
+                                                                0
+                                                            ? const TextStyle(
+                                                                color: Color(
+                                                                    0xFF15BE46))
+                                                            : const TextStyle(
+                                                                color: Colors
+                                                                    .red)),
+                                                      ),
+                                                      SizedBox(
+                                                        height: 20,
+                                                        width: 20,
+                                                        child: double.parse(widget
+                                                                    .networkData!
+                                                                    .percChangeInPrice!) >
+                                                                0
+                                                            ? SvgPicture.asset(
+                                                                'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                                                color: const Color(
+                                                                    0xFF15BE46))
+                                                            : SvgPicture.asset(
+                                                                'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
+                                                                color: Colors
+                                                                    .red
+                                                                    .withOpacity(
+                                                                        .8),
+                                                              ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: Colors.transparent,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(250.0),
+                                            ),
+                                            border: Border.all(
+                                              color: Colors.lightBlueAccent,
+                                              width: 1.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )),
                                   ),
-                                )),
-                              ),
-                            ),
-                            const SizedBox(height: 10),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Market Cap',
-                                        style: kMediumTextStyle,
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      isLoaded
-                                          ? Text(
-                                        '\$${k_m_b_generator(double.parse(widget.networkData!.marketCap!))}',
-                                        style: kMediumBoldTextStyle,
-                                      )
-                                          : SizedBox(
-                                          height: 5,
-                                          width: 15,
-                                          child: LinearProgressIndicator()),
-                                    ],
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        '24h Vol',
-                                        style: kMediumTextStyle,
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        children: [
-                                          isLoaded
-                                              ? double.parse(widget.networkData!.the24HrVol!) >
-                                              0
-                                              ? Text(
-                                              '\$ ${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
-                                              style: double.parse(widget.networkData!.the24HrVol!) > 0
-                                                  ? const TextStyle(
-                                                  fontFamily:
-                                                  'MontserratBold',
-                                                  fontSize: 17,
-                                                  color: Color(
-                                                      0xFF15BE46))
-                                                  : TextStyle(
-                                                  fontFamily:
-                                                  'MontserratBold',
-                                                  fontSize: 17,
-                                                  color: Colors.red
-                                                      .withOpacity(
-                                                      .8)))
-                                              : Text(
-                                              '\$${addComma(truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString())}',
-                                              style: double.parse(widget.networkData!.the24HrVol!) > 0
-                                                  ? const TextStyle(
-                                                  fontFamily:
-                                                  'MontserratBold',
-                                                  fontSize: 17,
-                                                  color:
-                                                  Color(0xFF15BE46))
-                                                  : TextStyle(fontFamily: 'MontserratBold', fontSize: 17, color: Colors.red.withOpacity(.8)))
-                                              : SizedBox(height: 5, width: 15, child: LinearProgressIndicator()),
-                                          SizedBox(
-                                              height: 20,
-                                              width: 20,
-                                              child: double.parse(widget
-                                                  .networkData!
-                                                  .the24HrVol!) >
-                                                  0
-                                                  ? SvgPicture.asset(
-                                                  'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
-                                                  color: const Color(
-                                                      0xFF15BE46))
-                                                  : SvgPicture.asset(
-                                                'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
-                                                color: Colors.red
-                                                    .withOpacity(.8),
-                                              )),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20,20,20,0),
-                  child: StaggeredGridView.countBuilder(
-                    padding: EdgeInsets.all(0),
-                      physics: const NeverScrollableScrollPhysics(),
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      crossAxisCount: 2,
-                      mainAxisSpacing: 20,
-                      crossAxisSpacing: 20,
-
-                      itemCount: 6,
-                      itemBuilder: (context, index) {
-                        return
-                         // isListLoaded ?
-                        InfoCard(
-                            title1: par[index],
-                            icon1: image[index],
-                            titleValue1: details[index]);
-
-                      },
-                      staggeredTileBuilder: (index) =>
-                      const StaggeredTile.fit(1)
-                  ),
-                ),
-                isProposalActive?
-                Padding(padding: const EdgeInsets.fromLTRB(10,0,10,15),
-                child:SizedBox(
-                  height: MediaQuery.of(context).size.height/5,
-                  child:ListView.builder(
-
-                     // controller: _scrollController,
-                      padding: EdgeInsets.zero,
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      scrollDirection: Axis.horizontal,
-                      shrinkWrap: true,
-                      itemCount: activeProposalsList.length,
-                      itemBuilder: (BuildContext context, index) {
-                            return
-                              ProposalCardDash(activeProposalsList.reversed.toList()[index]);
-                          })
-
-                )
-                ):SizedBox(height: .1,),
-                isLoaded
-                    ? Padding(
-                    padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 12),
-                    child: Container(
-                       // height: 350,
-                        width: MediaQuery.of(context).size.width / 1.1,
-                        decoration: kBoxDecorationWithoutGradient,
-                        child: Column(children: [
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical:4.0,horizontal: 18),
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Blocks',
-                                  style: TextStyle(
-                              fontFamily: 'MontserratBold',
-                              color: Colors.black.withOpacity(.7),
-                              fontWeight: FontWeight.w700,
-                              fontSize: 15,
-                            ),
                                 ),
-                                TextButton(
-                                  onPressed: ()
-                                  {
-                                    Navigator.push(
-                                      context,
-                                      CupertinoPageRoute(
-                                          builder: (context) =>
-                                              Blocks(
-                                                  networkData:
-                                                  widget.networkData),
+                                const SizedBox(height: 10),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            'Market Cap',
+                                            style: kMediumTextStyle,
+                                          ),
+                                          const SizedBox(
+                                            height: 4,
+                                          ),
+                                          isLoaded
+                                              ? Text(
+                                                  '\$${k_m_b_generator(double.parse(widget.networkData!.marketCap!))}',
+                                                  style: kMediumBoldTextStyle,
+                                                )
+                                              : SizedBox(
+                                                  height: 5,
+                                                  width: 15,
+                                                  child:
+                                                      LinearProgressIndicator()),
+                                        ],
                                       ),
-                                  );
-                                    toggleController.updateData(0);
-                                    },
-                                  child: const Text(
-                                    'See more',
-                                    style: TextStyle(
-                                        decoration:
-                                        TextDecoration.underline,
-                                        color: Colors.grey),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            '24h Vol',
+                                            style: kMediumTextStyle,
+                                          ),
+                                          const SizedBox(
+                                            height: 4,
+                                          ),
+                                          Row(
+                                            children: [
+                                              isLoaded
+                                                  ? double.parse(widget.networkData!.the24HrVol!) >
+                                                          0
+                                                      ? Text(
+                                                          '\$ ${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                                                          style: double.parse(widget.networkData!.the24HrVol!) > 0
+                                                              ? const TextStyle(
+                                                                  fontFamily:
+                                                                      'MontserratBold',
+                                                                  fontSize: 17,
+                                                                  color: Color(
+                                                                      0xFF15BE46))
+                                                              : TextStyle(
+                                                                  fontFamily:
+                                                                      'MontserratBold',
+                                                                  fontSize: 17,
+                                                                  color: Colors
+                                                                      .red
+                                                                      .withOpacity(
+                                                                          .8)))
+                                                      : Text(
+                                                          '\$${addComma(truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString())}',
+                                                          style: double.parse(widget.networkData!.the24HrVol!) > 0
+                                                              ? const TextStyle(
+                                                                  fontFamily:
+                                                                      'MontserratBold',
+                                                                  fontSize: 17,
+                                                                  color:
+                                                                      Color(0xFF15BE46))
+                                                              : TextStyle(fontFamily: 'MontserratBold', fontSize: 17, color: Colors.red.withOpacity(.8)))
+                                                  : SizedBox(height: 5, width: 15, child: LinearProgressIndicator()),
+                                              SizedBox(
+                                                  height: 20,
+                                                  width: 20,
+                                                  child: double.parse(widget
+                                                              .networkData!
+                                                              .the24HrVol!) >
+                                                          0
+                                                      ? SvgPicture.asset(
+                                                          'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                                          color: const Color(
+                                                              0xFF15BE46))
+                                                      : SvgPicture.asset(
+                                                          'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
+                                                          color: Colors.red
+                                                              .withOpacity(.8),
+                                                        )),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
                           ),
-                          Padding(
-                            padding:
-                            const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
-                            child: ListView.builder(
-                              padding: EdgeInsets.all(0),
-                                reverse: true,
-                                physics:
-                                const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                itemCount: BlocksController
-                                    .blockList.length <
-                                    2
-                                    ? BlocksController.blockList.length
-                                    : 2,
-                                itemBuilder:
-                                    (BuildContext context, int index) {
-                                  return BlockContDash(
-                                    blockModel: blockDashList.reversed.toList()[index],
-                                  );
-                                }),
-                          ),
-                          SizedBox(height:25)
-                        ])))
-                    : SizedBox(
-                    height: 15,
-                    width: 15,
-                    child: Padding(
-                      padding: const EdgeInsets.all(40.0),
-                      child: SizedBox(
-                          height: 15,
-                          width: 15,
-                          child: CircularProgressIndicator()),
+                        ),
+                      ),
                     ),
-                ),
-                SizedBox(height:15),
-                isLoaded
-                    ? Padding(
-                  padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 0),
-                  child: Container(
-                    decoration: kBoxDecorationWithoutGradient,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(18.0, 4, 18, 0),
-                          child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Transactions',
-                                style: TextStyle(
-                                  fontFamily: 'MontserratBold',
-                                  color: Colors.black.withOpacity(.7),
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              TextButton(
-                                onPressed: (){ Navigator.push(
-                                    context,
-                                    CupertinoPageRoute(
-                                        builder: (context) => Blocks(
-                                            networkData:
-                                            widget.networkData)));
-                                toggleController.updateData(1);},
-                                child: const Text(
-                                  'See more',
-                                  style: TextStyle(
-                                      decoration:
-                                      TextDecoration.underline,
-                                      color: Colors.grey),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                          const EdgeInsets.fromLTRB(8.0, 8, 8, 30),
-                          child: ListView.builder(
-                              reverse: true,
-                              physics:
-                              const NeverScrollableScrollPhysics(),
-                              scrollDirection: Axis.vertical,
-                              shrinkWrap: true,
-                              itemCount:
-                              TxController.txList.length < 2
-                                  ? TxController.txList.length
-                                  : 2,
-                              itemBuilder:
-                                  (BuildContext context, int index) {
-                                return TxContDash(
-                                  txModel: txDashList.reversed.toList()[index],
-                                );
-                              }),
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                      child: StaggeredGridView.countBuilder(
+                          padding: EdgeInsets.all(0),
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          crossAxisCount: 2,
+                          mainAxisSpacing: 20,
+                          crossAxisSpacing: 20,
+                          itemCount: 6,
+                          itemBuilder: (context, index) {
+                            return
+                                // isListLoaded ?
+                                InfoCard(
+                                    title1: par[index],
+                                    icon1: image[index],
+                                    titleValue1: details[index]);
+                          },
+                          staggeredTileBuilder: (index) =>
+                              const StaggeredTile.fit(1)),
+                    ),
+                    isProposalActive
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),
+                            child: SizedBox(
+                                height: MediaQuery.of(context).size.height / 5,
+                                child: ListView.builder(
 
-                      ],
-                    ),
-                  ),
-                )
-                    : Padding(
-                  padding: const EdgeInsets.all(80.0),
-                  child: SizedBox(
-                      height: 15,
-                      width: 15,
-                      child: CircularProgressIndicator()),
+                                    // controller: _scrollController,
+                                    padding: EdgeInsets.zero,
+                                    physics:
+                                        const AlwaysScrollableScrollPhysics(),
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    itemCount: activeProposalsList.length,
+                                    itemBuilder: (BuildContext context, index) {
+                                      return ProposalCardDash(
+                                          activeProposalsList.reversed
+                                              .toList()[index]);
+                                    })))
+                        : SizedBox(
+                            height: .1,
+                          ),
+                    isLoaded
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 12),
+                            child: Container(
+                                // height: 350,
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                decoration: kBoxDecorationWithoutGradient,
+                                child: Column(children: [
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 4.0, horizontal: 18),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Blocks',
+                                          style: TextStyle(
+                                            fontFamily: 'MontserratBold',
+                                            color: Colors.black.withOpacity(.7),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) => Blocks(
+                                                    networkData:
+                                                        widget.networkData),
+                                              ),
+                                            );
+                                            toggleController.updateData(0);
+                                          },
+                                          child: const Text(
+                                            'See more',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                color: Colors.grey),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
+                                    child: ListView.builder(
+                                        padding: EdgeInsets.all(0),
+                                        reverse: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount: BlocksController
+                                                    .blockList.length <
+                                                2
+                                            ? BlocksController.blockList.length
+                                            : 2,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return BlockContDash(
+                                            blockModel: blockDashList.reversed
+                                                .toList()[index],
+                                          );
+                                        }),
+                                  ),
+                                  SizedBox(height: 25)
+                                ])))
+                        : SizedBox(
+                            height: 15,
+                            width: 15,
+                            child: Padding(
+                              padding: const EdgeInsets.all(40.0),
+                              child: SizedBox(
+                                  height: 15,
+                                  width: 15,
+                                  child: CircularProgressIndicator()),
+                            ),
+                          ),
+                    SizedBox(height: 15),
+                    isLoaded
+                        ? Padding(
+                            padding: const EdgeInsets.fromLTRB(18.0, 0, 18, 0),
+                            child: Container(
+                              decoration: kBoxDecorationWithoutGradient,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        18.0, 4, 18, 0),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          'Transactions',
+                                          style: TextStyle(
+                                            fontFamily: 'MontserratBold',
+                                            color: Colors.black.withOpacity(.7),
+                                            fontWeight: FontWeight.w700,
+                                            fontSize: 15,
+                                          ),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                CupertinoPageRoute(
+                                                    builder: (context) =>
+                                                        Blocks(
+                                                            networkData: widget
+                                                                .networkData)));
+                                            toggleController.updateData(1);
+                                          },
+                                          child: const Text(
+                                            'See more',
+                                            style: TextStyle(
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                color: Colors.grey),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        8.0, 8, 8, 30),
+                                    child: ListView.builder(
+                                        reverse: true,
+                                        physics:
+                                            const NeverScrollableScrollPhysics(),
+                                        scrollDirection: Axis.vertical,
+                                        shrinkWrap: true,
+                                        itemCount:
+                                            TxController.txList.length < 2
+                                                ? TxController.txList.length
+                                                : 2,
+                                        itemBuilder:
+                                            (BuildContext context, int index) {
+                                          return TxContDash(
+                                            txModel: txDashList.reversed
+                                                .toList()[index],
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(80.0),
+                            child: SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: CircularProgressIndicator()),
+                          ),
+                    SizedBox(height: 30),
+                  ],
                 ),
-                SizedBox(height:30),
-              ],
+              ),
+            ))
+        : Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              foregroundColor: Colors.black,
             ),
-          ),
-        )):
-    Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        foregroundColor: Colors.black,
-      ),
-        body:
-        Center(child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text('Coming Soon',
-              style: kMediumBoldTextStyle,),
-            SizedBox(height: 25),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical:10,horizontal: 40),
-              child: Text('This Explorer is currently active for Comdex chain only. ',textAlign: TextAlign.center,style: kSmallTextStyle),
+            body: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Coming Soon',
+                    style: kMediumBoldTextStyle,
+                  ),
+                  SizedBox(height: 25),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 10, horizontal: 40),
+                    child: Text(
+                        'This Explorer is currently active for Comdex chain only. ',
+                        textAlign: TextAlign.center,
+                        style: kSmallTextStyle),
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-        ),
-    );
+          );
   }
 }
 
@@ -743,13 +766,19 @@ class BlockContDash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: blockModel,))),
+      onTap: () => Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => BlockDetails(
+                    blockModel: blockModel,
+                  ))),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8),
         child: Container(
-          decoration: BoxDecoration (
-            color:  Colors.white.withOpacity(.7),
-            borderRadius: const BorderRadius.all(Radius.circular(12.0),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.7),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(12.0),
             ),
             boxShadow: [
               BoxShadow(
@@ -757,7 +786,9 @@ class BlockContDash extends StatelessWidget {
                 spreadRadius: 1,
                 blurRadius: 1,
                 offset: const Offset(-2, -2), // changes position of shadow
-              ),],),
+              ),
+            ],
+          ),
           child: Padding(
             padding: const EdgeInsets.all(14.0),
             child: Column(
@@ -854,9 +885,9 @@ class _TxContDashState extends State<TxContDash> {
     final response = await http.get(Uri.parse(
         'https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body)['result']['block']['header']['time']);
+
       timestampTx =
-      jsonDecode(response.body)['result']['block']['header']['time'];
+          jsonDecode(response.body)['result']['block']['header']['time'];
       setState(() {
         if (timestampTx != null) {
           txLoaded = true;
@@ -865,8 +896,7 @@ class _TxContDashState extends State<TxContDash> {
           txLoaded = false;
         }
       });
-    } else {
-    }
+    } else {}
   }
 
   var type = '';
@@ -877,13 +907,17 @@ class _TxContDashState extends State<TxContDash> {
     type = getType(widget.txModel!.messages![0].type!);
 
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => TxDetails(txModel: widget.txModel))),
+      onTap: () => Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => TxDetails(txModel: widget.txModel))),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8),
         child: Container(
-          decoration: BoxDecoration (
-            color:  Colors.white.withOpacity(.7),
-            borderRadius: const BorderRadius.all(Radius.circular(12.0),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(.7),
+            borderRadius: const BorderRadius.all(
+              Radius.circular(12.0),
             ),
             boxShadow: [
               BoxShadow(
@@ -929,13 +963,13 @@ class _TxContDashState extends State<TxContDash> {
                         ]),
                     txLoaded
                         ? Text(
-                      timeDifferenceFunction(timestampTx),
-                      style: kSmallBoldTextStyle,
-                    )
+                            timeDifferenceFunction(timestampTx),
+                            style: kSmallBoldTextStyle,
+                          )
                         : SizedBox(
-                        height: 15,
-                        width: 15,
-                        child: CircularProgressIndicator())
+                            height: 15,
+                            width: 15,
+                            child: CircularProgressIndicator())
                   ],
                 ),
                 const SizedBox(
@@ -966,13 +1000,13 @@ class _TxContDashState extends State<TxContDash> {
                     ),
                     txLoaded
                         ? Text(
-                      (dateTime(DateTime.parse(timestampTx).toLocal())),
-                      style: kSmallBoldTextStyle,
-                    )
+                            (dateTime(DateTime.parse(timestampTx).toLocal())),
+                            style: kSmallBoldTextStyle,
+                          )
                         : SizedBox(
-                        height: 15,
-                        width: 15,
-                        child: CircularProgressIndicator())
+                            height: 15,
+                            width: 15,
+                            child: CircularProgressIndicator())
                   ],
                 ),
               ],
@@ -987,58 +1021,62 @@ class _TxContDashState extends State<TxContDash> {
 class ProposalCardDash extends StatelessWidget {
   final ProposalsModel product;
   ProposalCardDash(this.product, {Key? key}) : super(key: key);
-  var status='';
-  bool ispassed=true;
+  var status = '';
+  bool ispassed = true;
 
   @override
   Widget build(BuildContext context) {
-   // fun();
+    // fun();
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ProposalDetails(proposalProduct:product,))),
+      onTap: () => Navigator.push(
+          context,
+          CupertinoPageRoute(
+              builder: (context) => ProposalDetails(
+                    proposalProduct: product,
+                  ))),
       child: SizedBox(
-        width: MediaQuery.of(context).size.width/1.2,
+        width: MediaQuery.of(context).size.width / 1.2,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal:12.0),
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Container(
-            margin:EdgeInsets.all(4),
-            decoration: kBoxDecorationWithoutGradient,
-            child:Padding(
-              padding: const EdgeInsets.all(18.0),
-              child: Column(
-
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          height:25,
-                          child: Image.asset('assets/images/votingPeriod.png')
-                      ),
-                      Container(
-                        decoration:const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(200.0),),
-                            color: Color(0xFFD4F1FF)
+              margin: EdgeInsets.all(4),
+              decoration: kBoxDecorationWithoutGradient,
+              child: Padding(
+                padding: const EdgeInsets.all(18.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                            height: 25,
+                            child:
+                                Image.asset('assets/images/votingPeriod.png')),
+                        Container(
+                          decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(200.0),
+                              ),
+                              color: Color(0xFFD4F1FF)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(3.0),
+                            child:
+                                Text('#${product.id!}', style: kSmallTextStyle),
+                          ),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Text('#${product.id!}',
-                              style:kSmallTextStyle),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 4),
-                  Text('Voting Period'),
-                  SizedBox(height: 12),
-                  Text(
-                        '${product.title!} ',
-                  style: kMediumBoldTextStyle,)
-
-                ],
-              ),
-            )
-          ),
+                      ],
+                    ),
+                    SizedBox(height: 4),
+                    Text('Voting Period'),
+                    SizedBox(height: 12),
+                    Text(
+                      '${product.title!} ',
+                      style: kMediumBoldTextStyle,
+                    )
+                  ],
+                ),
+              )),
         ),
       ),
     );

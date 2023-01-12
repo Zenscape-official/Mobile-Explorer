@@ -131,11 +131,11 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('Chain Id', style: kSmallTextStyle),
-                                const SizedBox(
-                                  height: 2,
-                                ),
-                                Text('comdex-1', style: kMediumBoldTextStyle),
+                                // Text('Chain Id', style: kSmallTextStyle),
+                                // const SizedBox(
+                                //   height: 2,
+                                // ),
+                                // Text('comdex-1', style: kMediumBoldTextStyle),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -687,24 +687,6 @@ class _TxDetailsState extends State<TxDetails> {
                                                                                                                                                 const SizedBox(
                                                                                                                                                   height: 20,
                                                                                                                                                 ),
-                                                                                                                                                // Text('Amount', style: kSmallTextStyle),
-                                                                                                                                                // const SizedBox(
-                                                                                                                                                //   height: 2,
-                                                                                                                                                // ),
-                                                                                                                                                // Text(
-                                                                                                                                                //     widget.txModel!.messages![0].token.toString(),
-                                                                                                                                                //     style: kMediumBoldTextStyle),
-                                                                                                                                                // const SizedBox(
-                                                                                                                                                //   height: 20,
-                                                                                                                                               // ),
-                                                                                                                                                // Text('TimeOut Height', style: kSmallTextStyle),
-                                                                                                                                                // const SizedBox(
-                                                                                                                                                //   height: 2,
-                                                                                                                                                // ),
-                                                                                                                                                // Text(
-                                                                                                                                                //     widget.txModel!.messages![0].timeoutHeight!.revisionHeight ??
-                                                                                                                                                //         '',
-                                                                                                                                                //     style: kMediumBoldTextStyle),
                                                                                                                                                 const SizedBox(
                                                                                                                                                   height: 20,
                                                                                                                                                 ),
@@ -734,152 +716,6 @@ class _TxDetailsState extends State<TxDetails> {
                                                                                                                                               ]),
                                                                                                                                         )):Container()
 
-                      // Container(margin: const EdgeInsets.only(right: 10,top: 10,left: 10),
-                      //     width: MediaQuery.of(context).size.width/1.1,
-                      //     decoration: kBoxDecorationWithGradient,
-                      //     child: Padding(
-                      //         padding: const EdgeInsets.all(18.0),
-                      //         child: Column(
-                      //           crossAxisAlignment: CrossAxisAlignment.start,
-                      //           children: [
-                      //             Text('IBC Progress',
-                      //                 style:kMediumBoldTextStyle),
-                      //             const SizedBox(height:30),
-                      //             Column(
-                      //               children: [Row(
-                      //                 children: [
-                      //                   const Text(''),
-                      //
-                      //                   Column(
-                      //                       crossAxisAlignment: CrossAxisAlignment.start,
-                      //                       children:[
-                      //                         const Text('Transfer'),
-                      //                         const SizedBox(height:10),
-                      //                         Container(
-                      //                           decoration: BoxDecoration (
-                      //                             border: Border.all(
-                      //                               color: Colors.lightGreenAccent,
-                      //                               width: 1.0,
-                      //                             ),
-                      //                             color: Colors.lightGreenAccent.withOpacity(.1),
-                      //                             borderRadius: const BorderRadius.all(Radius.circular(15.0),
-                      //
-                      //                             ),
-                      //                             boxShadow: [
-                      //                               BoxShadow(
-                      //                                 color: Colors.lightGreenAccent.withOpacity(.05),
-                      //                                 spreadRadius: 1,
-                      //                                 blurRadius: 1,
-                      //                                 offset: const Offset(-2, -2), // changes position of shadow
-                      //                               ),],),
-                      //                           child: Padding(
-                      //                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                      //                             child: Padding(
-                      //                               padding: const EdgeInsets.all(8.0),
-                      //                               child: Column(
-                      //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                      //                                 children: [
-                      //                                   Text('COMDEX',
-                      //                                       style:kMediumBoldTextStyle),
-                      //                                   const SizedBox(height: 5,),
-                      //                                   Text('CA07HYYGYG12....12334HGGVGG',
-                      //                                       style:kExtraSmallTextStyle),
-                      //                                   const SizedBox(height: 5,),
-                      //
-                      //                                   Text('2h ago (2022-08-10 21:34:42)',
-                      //                                       style:kExtraSmallTextStyle),
-                      //                                 ],
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ),
-                      //                         const SizedBox(height: 20,),
-                      //                         const Text('Reciever'),
-                      //                         const SizedBox(height:10),
-                      //                         Container(
-                      //                           decoration: BoxDecoration (
-                      //                             border: Border.all(
-                      //                               color: Colors.lightGreenAccent,
-                      //                               width: 1.0,
-                      //                             ),
-                      //                             color: Colors.lightGreenAccent.withOpacity(.1),
-                      //                             borderRadius: const BorderRadius.all(Radius.circular(15.0),
-                      //
-                      //                             ),
-                      //                             boxShadow: [
-                      //                               BoxShadow(
-                      //                                 color: Colors.grey.withOpacity(.05),
-                      //                                 spreadRadius: 1,
-                      //                                 blurRadius: 1,
-                      //                                 offset: const Offset(-2, -2), // changes position of shadow
-                      //                               ),],),
-                      //                           child: Padding(
-                      //                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                      //                             child: Padding(
-                      //                               padding: const EdgeInsets.all(8.0),
-                      //                               child: Column(
-                      //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                      //                                 children: [
-                      //                                   Text('JUNO',
-                      //                                       style:kMediumBoldTextStyle),
-                      //                                   const SizedBox(height: 5,),
-                      //                                   Text('CA07HYYGYG12....12334HGGVGG',
-                      //                                       style:kExtraSmallTextStyle),
-                      //                                   const SizedBox(height: 5,),
-                      //
-                      //                                   Text('2h ago (2022-08-10 21:34:42)',
-                      //                                       style:kExtraSmallTextStyle),
-                      //                                 ],
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ),
-                      //                         const SizedBox(height:20),
-                      //                         const Text('Acknowledgement'),
-                      //                         const SizedBox(height:10),
-                      //                         Container(
-                      //                           decoration: BoxDecoration (
-                      //                             border: Border.all(
-                      //                               color: Colors.lightGreenAccent,
-                      //                               width: 1.0,
-                      //                             ),
-                      //                             color: Colors.lightGreenAccent.withOpacity(.1),
-                      //                             borderRadius: const BorderRadius.all(Radius.circular(15.0),
-                      //
-                      //                             ),
-                      //                             boxShadow: [
-                      //                               BoxShadow(
-                      //                                 color: Colors.grey.withOpacity(.05),
-                      //                                 spreadRadius: 1,
-                      //                                 blurRadius: 1,
-                      //                                 offset: const Offset(-2, -2), // changes position of shadow
-                      //                               ),],),
-                      //                           child: Padding(
-                      //                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                      //                             child: Padding(
-                      //                               padding: const EdgeInsets.all(8.0),
-                      //                               child: Column(
-                      //                                 crossAxisAlignment: CrossAxisAlignment.start,
-                      //                                 children: [
-                      //                                   Text('COMDEX',
-                      //                                       style:kMediumBoldTextStyle),
-                      //                                   const SizedBox(height: 5,),
-                      //                                   Text('CA07HYYGYG12....12334HGGVGG',
-                      //                                       style:kExtraSmallTextStyle),
-                      //                                   const SizedBox(height: 5,),
-                      //                                   Text('2h ago (2022-08-10 21:34:42)',
-                      //                                       style:kExtraSmallTextStyle),
-                      //                                 ],
-                      //                               ),
-                      //                             ),
-                      //                           ),
-                      //                         ),
-                      //                       ]
-                      //                   )
-                      //                 ],
-                      //               )],
-                      //             ),
-                      //           ],)))
                     ],
                   )
                 : Container(
@@ -907,6 +743,7 @@ class _TxDetailsState extends State<TxDetails> {
                     ),
                   );
           }),
+          SizedBox(height: 30,)
         ]),
       ),
     );

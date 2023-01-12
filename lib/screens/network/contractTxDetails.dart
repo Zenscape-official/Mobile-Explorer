@@ -180,7 +180,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text('Data', style: kSmallTextStyle),
+                          Text('Logs', style: kSmallTextStyle),
                           const SizedBox(
                             height: 4,
                           ),
@@ -190,6 +190,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                   ),
                 ),
               ),
+              SizedBox(height: 25,)
             ],
           ),
         ),

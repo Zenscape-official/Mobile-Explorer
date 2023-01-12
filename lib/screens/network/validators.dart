@@ -97,10 +97,6 @@ class _ValidatorsState extends State<Validators> {
   Widget build(BuildContext context) {
     ValidatorController.activeValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
     ValidatorController.inActiveValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
-
-
-    // print(ValidatorController.activeValidatorsList.length);
-    // print(ValidatorController.inActiveValidatorsList.length);
     return Scaffold(
         drawer: NavDraw(networkData: widget.networkList,pageIndex: pageIndex,),
         backgroundColor: Colors.grey[100],

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 class NetworkController extends GetxController {
- // static var networkList = [].obs;
+
   static var client = http.Client();
   var isLoading=false;
 
@@ -21,9 +21,6 @@ class NetworkController extends GetxController {
       final jsonResponse = {'success': true, 'response': result};
       isLoading=false;
       return jsonResponse;
-      // var jsonString= jsonDecode((response.body));
-      // //print(jsonString);
-      // return networkList = List.from(jsonString).map((e) => NetworkList.fromJson(e)).toList().obs;
       case 400:
         final result = jsonDecode(response.body);
         final jsonResponse = {'success': false, 'response': result};

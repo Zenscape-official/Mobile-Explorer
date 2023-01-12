@@ -17,7 +17,6 @@ class LandingPage extends StatefulWidget {
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
-
 class _LandingPageState extends State<LandingPage> {
   Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
   final NetworkController networkController = Get.put(NetworkController());
@@ -26,6 +25,8 @@ class _LandingPageState extends State<LandingPage> {
   var flag = false;
   var dash;
   var net;
+  List<NetworkList> activeNet=[];
+  List<NetworkList> inactiveNet=[];
 
   @override
   void initState() {
@@ -41,19 +42,6 @@ class _LandingPageState extends State<LandingPage> {
     'assets/images/banner_zenscape.png',
     'assets/images/banner2.png'
   ];
-  void filterList(String name) async {
-    if (name.isEmpty) {
-      foundNetwork.value = net;
-    } else {
-      foundNetwork.value = net
-          .where((element) => element.name
-              .toString()
-              .toLowerCase()
-              .contains(name.toLowerCase()))
-          .toList();
-      // print(foundNetwork.value);
-    }
-  }
 
   netData() async {
     final result = await networkController
@@ -77,13 +65,11 @@ class _LandingPageState extends State<LandingPage> {
         },
       );
     }
-
     if (result['success'] == true) {
       net = List.from(result['response'])
           .map((e) => NetworkList.fromJson(e))
           .toList()
           .obs;
-
       dash = await dashboardController.fetchDash();
       setState(() {
         if (dash != null) {
@@ -110,9 +96,15 @@ class _LandingPageState extends State<LandingPage> {
           flag = false;
         }
       });
+      for(int i=0;i<net.length;i++){
+        if(net[i].isActive=='1'){
+          activeNet.add(net[i]);}
+          else if(net[i].isActive=='0'){
+            inactiveNet.add(net[i]);
+        }
+      }
     }
   }
-
   TextEditingController nameController = TextEditingController();
   String fullName = '';
   List<String>? image = [];
@@ -203,190 +195,66 @@ class _LandingPageState extends State<LandingPage> {
                 ],
               ),
               flag
-                  ? Obx(() {
-                      return Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: StaggeredGridView.countBuilder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 4,
-                            crossAxisSpacing: 2,
-                            itemCount: net.length,
-                            itemBuilder: (context, index) {
-                              return NetworkCard(net[index]);
-                            },
-                            staggeredTileBuilder: (index) =>
-                                const StaggeredTile.fit(1)),
-                      );
-                    })
-                  : Column(
-                      children: const [
-                        SizedBox(
-                          height: 80,
-                        ),
-                        Center(child: CircularProgressIndicator()),
-                      ],
-                    ),
+                  ?Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text('Active Chains',style: kMediumBoldTextStyle,),
+                  ),
+                    Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: StaggeredGridView.countBuilder(
+                                physics: const NeverScrollableScrollPhysics(),
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                crossAxisCount: 2,
+                                mainAxisSpacing: 4,
+                                crossAxisSpacing: 2,
+                                itemCount: activeNet.length,
+                                itemBuilder: (context, index) {
+                                  return NetworkCard(activeNet[index]);
+                                },
+                                staggeredTileBuilder: (index) =>
+                                    const StaggeredTile.fit(1)),
+                          ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                    child: Text('All Chains',style: kMediumBoldTextStyle,),
+                  ),
+
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: StaggeredGridView.countBuilder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 2,
+                        itemCount: net.length,
+                        itemBuilder: (context, index) {
+                          return NetworkCard(net[index]);
+                        },
+                        staggeredTileBuilder: (index) =>
+                        const StaggeredTile.fit(1)),
+                  )
+
+                ],
+              ): Column(
+                children: const [
+                  SizedBox(
+                    height: 80,
+                  ),
+                  Center(child: CircularProgressIndicator()),
+                ],
+              ),
             ],
           ),
         ),
       ),
     );
   }
-
-// Widget buildContainer1() {
-//     return Container(
-//                           //margin: EdgeInsets.only(right: 10, top: 10),
-//                           // height: 199,
-//                           // width: 310,
-//                           //decoration: kBoxDecorationWithGradient,
-//
-//                           child: Stack(
-//                             children: <Widget>[
-//                               SvgPicture.asset(
-//                                 'assets/svgfiles/banner_background.svg',
-//
-//                                 width: MediaQuery.of(context).size.width,
-//                                 height: MediaQuery.of(context).size.height,
-//                               ),
-//                               Positioned(
-//                                 top:20,
-//                                 left:133,
-//                                 //right:112,
-//                                 child: Image.asset('assets/images/img.png',
-//                                   height:40 ,
-//                                   width: 80,),
-//                               ),
-//                               Positioned(
-//                                 top:75,
-//                                 left:23,
-//                                 //right:112,
-//                                 child: Image.asset('assets/images/banner_logos/osmosis.png',
-//                                   height:40 ,
-//                                   width: 80,),
-//                               ),
-//                               Positioned(
-//                                 top:75,
-//                                 left:133,
-//                                 //right:112,
-//                                 child: Image.asset('assets/images/banner_logos/persistence.png',
-//                                   height:40 ,
-//                                   width: 80,),
-//                               ),
-//                               Positioned(
-//                                 bottom:65,
-//                                 left:193,
-//                                 //right:112,
-//                                 child: Image.asset('assets/images/banner_logos/canto.png',
-//                                   height:40 ,
-//                                   width: 80,),
-//                               ),
-//                               Positioned(
-//                                 bottom:69,
-//                                 left:53,
-//                                 //right:112,
-//                                 child: SvgPicture.asset('assets/images/banner_logos/comdex.svg',
-//                                   height:20 ,
-//                                   width: 30,),
-//                               ),
-//                               // Positioned(
-//                               //   bottom:69,
-//                               //   left:33,
-//                               //   //right:112,
-//                               //   child: SvgPicture.asset('assets/images/banner_logos/mntl_logo.svg',
-//                               //     height:20 ,
-//                               //     width: 30,),
-//                               // ),
-//                               Positioned(
-//                                 top:75,
-//                                 right:20,
-//                                 //right:112,
-//                                 child: Image.asset('assets/images/banner_logos/rebus.png',
-//                                   height:40 ,
-//                                   width: 80,),
-//                               ),
-//                               Positioned(
-//                                 top:60,
-//                                 right:92,
-//                                 child: Text('VALIDATING CHAINS',
-//                                 style: kMediumTextStyle,),
-//                               ),
-//
-//                             ],
-//                           ),
-//     );
-//   }
-//   Widget buildContainer2() {
-//     return Container(
-//       //margin: EdgeInsets.only(right: 10, top: 10),
-//       // height: 199,
-//       // width: 310,
-//       //decoration: kBoxDecorationWithGradient,
-//
-//         child: Stack(
-//           children: <Widget>[
-//             SvgPicture.asset(
-//               'assets/svgfiles/banner_background.svg',
-//
-//               width: MediaQuery.of(context).size.width,
-//               height: MediaQuery.of(context).size.height,
-//             ),
-//             Positioned(
-//               top:0,
-//               left:0,
-//               right:0,
-//               child: Padding(
-//                 padding: const EdgeInsets.symmetric(vertical: 25.0,horizontal: 140),
-//                 child: Image.asset('assets/images/img.png',
-//                 height:40 ,
-//                 width: 80,),
-//               ),
-//             ),
-//             Positioned(
-//               top:80,
-//               right:72,
-//               child: Text('Eat,Sleep,Stake,Repeat',
-//                 style: kMediumBoldTextStyle,),
-//             ),
-//             Positioned(
-//               bottom: 100,
-//               right: 50,
-//               child: Text('Join the staking ecosystem with Zenscape today',
-//                 style: kExtraSmallTextStyle,
-//             ),),
-//
-//             Positioned(
-//                 bottom: 60,
-//                 right: 120,
-//                 // left: 0,
-//                 child: Container(
-//                   decoration: BoxDecoration(
-//                     color: Colors.lightBlueAccent,
-//                     borderRadius: BorderRadius.circular(35),
-//                     //border: Border.all(color: Colors.black),
-//                   ),
-//                   child: InkWell(
-//                    onTap: null,
-//                     child: Padding(
-//                       padding: const EdgeInsets.all(8.0),
-//                       child: Text('STAKE WITH US',
-//                             style: TextStyle(
-//                               fontFamily: 'MontserratRegular',
-//                               color: Colors.white,
-//                               fontWeight:  FontWeight.bold,
-//                               fontSize: 10,
-//                             ),
-//                       ),
-//                     ),
-//                   ),
-//                 )),
-//
-//           ],
-//         ));
-//   }
-
   Widget buildSvgPicture(String urlImage, int index,) {
     // return
     // Image.asset(urlImage,height: 20,
@@ -410,7 +278,6 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 }
-
 class NetworkCard extends StatefulWidget {
   final NetworkList networkList;
   const NetworkCard(this.networkList);
@@ -423,11 +290,8 @@ class _NetworkCardState extends State<NetworkCard> {
   NetworkController networkController =Get.put(NetworkController());
   void initstate() {
     super.initState();
-
       getAPR();
-
   }
-
   double APR = 0;
   double APRcmdx=0;
   String image = '';
@@ -438,17 +302,13 @@ class _NetworkCardState extends State<NetworkCard> {
   bool APRLoaded=false;
 
   getAPR() async {
-   // print('infunction');
-
     supply =
     (await _dashboardController.fetchBankData(widget.networkList.height!));
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
     inflation = (await _dashboardController.fetchdata(
     widget.networkList.inflation!, 'value'));
-    // print(supply);
-    // print(inflation);
-    // print(bondedToken);
+
     for(int i=0;i<supply!.length;i++){
       if(supply![i].denom=='ucmdx'){
         bankTotal=supply![i].amount;
@@ -457,13 +317,11 @@ class _NetworkCardState extends State<NetworkCard> {
     APRcmdx = ((double.parse(inflation) * double.parse(bankTotal)) /
         double.parse(bondedToken)) *
         100;
-   // print(APRcmdx);
     if(APRcmdx!=0){
       setState(() {
         APRLoaded=true;
       });
     }
-    //APRLoaded=true;
   }
   @override
   Widget build(BuildContext context) {

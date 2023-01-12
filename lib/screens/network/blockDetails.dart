@@ -53,7 +53,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
 
     if (response.statusCode == 200) {
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
-      //  print(valMoniker);
+
 
       setState(() {
         if (valMoniker!=null){

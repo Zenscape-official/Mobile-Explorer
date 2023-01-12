@@ -424,15 +424,11 @@ class _TxContainerState extends State<TxContainer> {
         });
   }
  else{
-   // print(response.statusCode);
-   // print('+errorr');
-   // print('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}');
     }
     }
 
   @override
   Widget build(BuildContext context) {
-  //getData();
    type=getType(widget.txModel!.messages![0].type!);
 
     return InkWell(
@@ -444,7 +440,7 @@ class _TxContainerState extends State<TxContainer> {
           screen: TxDetails(
             txModel: widget.txModel,
           ),
-          withNavBar: true, // OPTIONAL VALUE. True by default.
+          withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
         );
         txToggleController.updateData(0);
@@ -474,7 +470,6 @@ class _TxContainerState extends State<TxContainer> {
                               const Icon(Icons.copy,
                                 color: Colors.black54,
                                 size: 15,
-
                               ),
                             ],
                           ),
@@ -494,7 +489,9 @@ class _TxContainerState extends State<TxContainer> {
                                 spreadRadius: 1,
                                 blurRadius: 1,
                                 offset: const Offset(-2, -2), // changes position of shadow
-                              ),],),
+                              ),
+                            ],
+                          ),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
                             child: txLoaded?Text(
@@ -529,7 +526,6 @@ class _TxContainerState extends State<TxContainer> {
                       children:[
                         Text('Height',
                             style:kSmallTextStyle),
-
                         Text(widget.txModel!.height!,
                             style:kSmallTextStyle)
                       ]
@@ -551,9 +547,9 @@ class _TxContainerState extends State<TxContainer> {
                             style: kSmallTextStyle,
                             text:type,
                       ),
-                    )
-                        )]
-
+                        )
+                        )
+                      ]
                   ),
                 ),
                 Padding(
@@ -568,14 +564,14 @@ class _TxContainerState extends State<TxContainer> {
                      (dateTime
                        (DateTime.parse(timestampTx).toLocal()
                    )
-                     )
-                     ,
+                     ),
                      style: kSmallTextStyle,):
                        SizedBox(
                            height:10,
                            width:15,
-                           child:LinearProgressIndicator())]
-
+                           child:LinearProgressIndicator(),
+                       )
+                      ]
                   ),
                 ),
               ]
