@@ -24,11 +24,11 @@ import '../../widgets/searchBarWidget.dart';
 import 'blockDetails.dart';
 import 'package:flutter/cupertino.dart';
 
-
-var timestamp = DateTime.now().toLocal();
+//var timestamp = DateTime.now().toLocal();
 class Blocks extends StatefulWidget {
   final NetworkList? networkData;
- const Blocks({this.networkData});
+  final String? valDescUrl;
+ const Blocks({this.networkData,this.valDescUrl});
   @override
   State<Blocks> createState() => _BlocksState();
 }
@@ -47,8 +47,6 @@ class _BlocksState extends State<Blocks> {
   int pageIndex=2;
   bool isLoaded=false;
   Timer? timer;
-
-
   @override
   void initState() {
     super.initState();
@@ -85,7 +83,6 @@ class _BlocksState extends State<Blocks> {
       );
     }
     if(result['success'] == true) {
-
      blocks = List.from(result['response'])
           .map((e) => BlockModel.fromJson(e))
          .toList()
@@ -93,9 +90,6 @@ class _BlocksState extends State<Blocks> {
          .toList()
          .obs;
     }
-
-
-
     tx= await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     setState(() {
       if (blocks!=null){
@@ -183,7 +177,6 @@ class _BlocksState extends State<Blocks> {
               isLoaded?
               GetBuilder<ToggleController>(builder: (blockController){
                  return blockController.isBlockSelected==0?
-
                  GetBuilder<BlocksController>(builder: (blocksController){
                         return ListView.builder(
                          reverse: true,
@@ -193,7 +186,7 @@ class _BlocksState extends State<Blocks> {
                          itemCount: blocks.length,
                          itemBuilder: (BuildContext context, int index) {
                            return
-                             BlockContainer(blockModel: blocks[index],);
+                             BlockContainer(blockModel: blocks[index],valDescUrl: widget.valDescUrl,);
                          }
                  );
                       }
@@ -208,7 +201,7 @@ class _BlocksState extends State<Blocks> {
                          itemCount: TxController.txList.length,
                          itemBuilder: (BuildContext context, int index) {
                            return
-                             TxContainer(txModel: TxController.txList[index],);
+                             TxContainer(txModel: TxController.txList[index],heightSearchUrl: widget.networkData!.txTimestamp,);
                          }
                          );
                    }
@@ -226,8 +219,9 @@ class _BlocksState extends State<Blocks> {
 
 class BlockContainer extends StatefulWidget {
   final BlockModel? blockModel;
+  final String? valDescUrl;
  BlockContainer({
-    Key? key, this.blockModel
+    Key? key, this.blockModel,this.valDescUrl
   }) : super(key: key);
 
   @override
@@ -244,11 +238,10 @@ class _BlockContainerState extends State<BlockContainer> {
     getData();
   }
   getData()async{
-    final response = await http.get(Uri.parse('http://167.235.151.252:3005/validatorDescription/${widget.blockModel!.proposerAddress}'));
+    final response = await http.get(Uri.parse('${widget.valDescUrl}${widget.blockModel!.proposerAddress}'));
 
     if (response.statusCode == 200) {
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
-    //  print(valMoniker);
 
       setState(() {
         if (valMoniker!=null){
@@ -387,9 +380,11 @@ class _BlockContainerState extends State<BlockContainer> {
 
 class TxContainer extends StatefulWidget {
   final TxModel? txModel;
+  final String? heightSearchUrl;
    TxContainer({
     Key? key,
-    this.txModel
+    this.txModel,
+     this.heightSearchUrl
   }) : super(key: key);
 
   @override
@@ -409,7 +404,7 @@ class _TxContainerState extends State<TxContainer> {
     getData();
   }
   getData()async{
-    final response = await http.get(Uri.parse('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}'));
+    final response = await http.get(Uri.parse('${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
 
       timestampTx =  jsonDecode(response.body)['result']['block']['header']['time'];

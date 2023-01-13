@@ -163,9 +163,7 @@ class _ValidatorsState extends State<Validators> {
               return valController.isActiveSelected==0?
               Expanded(
                 child: CupertinoScrollbar(child:ListView.builder(
-                    // reverse: true,
                     physics: const AlwaysScrollableScrollPhysics(),
-                    //controller: _scrollController,
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
                     itemCount: ValidatorController.activeValidatorsList.length,
@@ -189,7 +187,7 @@ class _ValidatorsState extends State<Validators> {
             }
           ):
           Center(child: const CircularProgressIndicator()),
-          SizedBox(height:30),
+          SizedBox(height:14),
         ]));
   }
 }
@@ -208,135 +206,73 @@ class ValidatorContainer extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,denom:denom))),
-      child: Container(
-        decoration:
-            BoxDecoration(borderRadius: BorderRadius.circular(20)),
-        //height: MediaQuery.of(context).size.height/2.6,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Container(
+      child: Column(
+        children: [
+
+          Container(
             decoration: kBoxDecorationWithGradient,
+            margin: const EdgeInsets.all(14),
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(12.0),
               child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SingleChildScrollView(
+                  children:[
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SingleChildScrollView(
 
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              backgroundColor: Colors.transparent,
-                              child:validatorModel!.avatarUrl==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
-                              CachedNetworkImage(
-                                imageUrl: validatorModel!.avatarUrl ??
-                                    validatorModel!.avatarUrl!,
-                                height: 40,
-                                width: 40,
-                                placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
-                                errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                              ),),
-                            const SizedBox(width:10),
+                            scrollDirection: Axis.horizontal,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child:validatorModel!.avatarUrl==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
+                                  CachedNetworkImage(
+                                    imageUrl: validatorModel!.avatarUrl ??
+                                        validatorModel!.avatarUrl!,
+                                    height: 40,
+                                    width: 40,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Icon(Icons.error),
+                                  ),),
+                                const SizedBox(width:10),
 
-                            SingleChildScrollView(
-                              scrollDirection: Axis.horizontal,
-                              child: SizedBox(
-                                width:150,
-                                child: Text(validatorModel!.moniker!,
-                                    style: kMediumBoldTextStyle),
-                              ),
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: SizedBox(
+                                    width:150,
+                                    child: Text(validatorModel!.moniker!,
+                                        style: kMediumBoldTextStyle),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          borderRadius: const BorderRadius.all(
-                              Radius.circular(200.0)),
-                          border: Border.all(
-                            color: Colors.lightBlueAccent
-                                .withOpacity(.3),
-                            width: 1.0,
                           ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: (Container(
-                            height:160,
-                            width: 160,
-                            decoration: BoxDecoration(
-                              color: Colors.transparent,
-                              borderRadius: const BorderRadius.all(
-                                  Radius.circular(200.0)),
-                              border: Border.all(
-                                color: Colors.lightBlueAccent
-                                    .withOpacity(.5),
-                                width: 1.0,
+                          Column(crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(validatorModel!.votingPower!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'),
+                                  style:
+                                  kMediumBoldTextStyle),
+                              const SizedBox(
+                                height: 4,
                               ),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.all(25.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(validatorModel!.votingPower!.toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},'),
-                                          style:
-                                              kMediumBoldTextStyle),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Text('${truncateToDecimalPlaces(validatorModel!.votingPower!/totalVoting!,2)*100}%',
-                                          style: kSmallTextStyle),
-                                    ],
-                                  ),
-                                ),
-                                decoration: BoxDecoration(
-                                  color: Colors.transparent,
-                                  borderRadius:
-                                      const BorderRadius.all(
-                                          Radius.circular(250.0)),
-                                  border: Border.all(
-                                    color: Colors.lightBlueAccent,
-                                    width: 1.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          )),
-                        ),
+                              Text('${truncateToDecimalPlaces(validatorModel!.votingPower!/totalVoting!,2)*100}%',
+                                  style: kSmallTextStyle),
+                            ],
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  const SizedBox(height: 25),
-                  Padding(
-                    padding:
-                        const EdgeInsets.fromLTRB(12, 4, 12, 4),
-                    child: Row(
-                      mainAxisAlignment:
-                          MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                    ),
+                    const SizedBox(height: 12),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:8),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               'Uptime',
@@ -346,31 +282,33 @@ class ValidatorContainer extends StatelessWidget {
                               '${validatorModel!.missedBlocksCounter!} blocks missed',
                               style: kSmallBoldTextStyle,
                             )
-                          ],
-                        ),
-
-                        Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                          ]
+                      ),
+                    ),
+                    SizedBox(height: 4),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal:8),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
                               'Commission',
                               style: kSmallTextStyle,
                             ),
                             Text(
-                            '${truncateToDecimalPlaces(double.parse(validatorModel!.commission!)*100,2).toString()}%',
+                              '${truncateToDecimalPlaces(double.parse(validatorModel!.commission!)*100,2).toString()}%',
                               style: kSmallBoldTextStyle,
                             )
-                          ],
-                        ),
-                      ],
+
+                          ]
+                      ),
                     ),
-                  ),
-                ],
+
+                  ]
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

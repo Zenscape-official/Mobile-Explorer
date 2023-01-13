@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/proposalsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
@@ -11,7 +12,8 @@ import '../../widgets/searchBarWidget.dart';
 
 class ProposalDetails extends StatefulWidget {
   final ProposalsModel proposalProduct;
- ProposalDetails({Key? key, required this.proposalProduct}) : super(key: key);
+  final NetworkList? networkData;
+ ProposalDetails({Key? key, required this.proposalProduct,this.networkData}) : super(key: key);
   @override
   State<ProposalDetails> createState() => _ProposalDetailsState();
 }
@@ -30,9 +32,9 @@ class _ProposalDetailsState extends State<ProposalDetails> {
   var DepositDenom='';
 
   getData()async{
-    final response = await http.get(Uri.parse('http://167.235.151.252:3005/proposalTally/${widget.proposalProduct.id}'));
-    final resultVote= await http.get(Uri.parse('http://167.235.151.252:3005/proposalVotes/${widget.proposalProduct.id}'));
-    final resultDeposit= await http.get(Uri.parse('http://167.235.151.252:3005/proposalDeposit/${widget.proposalProduct.id}'));
+    final response = await http.get(Uri.parse('${widget.networkData!.proposalTally}${widget.proposalProduct.id}'));
+    final resultVote= await http.get(Uri.parse('${widget.networkData!.proposalVote}${widget.proposalProduct.id}'));
+    final resultDeposit= await http.get(Uri.parse('${widget.networkData!.proposalVote}${widget.proposalProduct.id}'));
     if (response.statusCode == 200) {
       tallyYes =  double.parse(jsonDecode(response.body)[0]['yes']);
       tallyNo = double.parse(jsonDecode(response.body)[0]['no']);

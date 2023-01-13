@@ -121,7 +121,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 2;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData)));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Blocks(networkData:widget.networkData,valDescUrl: widget.networkData!.blocksMoniker,)));
 
                   }),
               _createDrawerItem(

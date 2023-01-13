@@ -711,6 +711,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           return TxContDash(
                                             txModel: txDashList.reversed
                                                 .toList()[index],
+                                            heightSearchUrl: widget.networkData!.txTimestamp,
                                           );
                                         }),
                                   ),
@@ -872,7 +873,8 @@ class BlockContDash extends StatelessWidget {
 
 class TxContDash extends StatefulWidget {
   final TxModel? txModel;
-  TxContDash({Key? key, this.txModel}) : super(key: key);
+  final String? heightSearchUrl;
+  TxContDash({Key? key, this.txModel,this.heightSearchUrl}) : super(key: key);
 
   @override
   State<TxContDash> createState() => _TxContDashState();
@@ -881,9 +883,10 @@ class TxContDash extends StatefulWidget {
 class _TxContDashState extends State<TxContDash> {
   var timestampTx;
   var txLoaded = false;
+
   getData() async {
     final response = await http.get(Uri.parse(
-        'https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}'));
+        '${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
 
       timestampTx =

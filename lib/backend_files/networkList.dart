@@ -4,9 +4,9 @@
 
 import 'dart:convert';
 
-List<NetworkList> networkListFromJson(String str) => List<NetworkList>.from(json.decode(str).map((x) => NetworkList.fromJson(x)));
+List<NetworkList?>? networkListFromJson(String str) => json.decode(str) == null ? [] : List<NetworkList?>.from(json.decode(str)!.map((x) => NetworkList.fromJson(x)));
 
-String networkListToJson(List<NetworkList> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String networkListToJson(List<NetworkList?>? data) => json.encode(data == null ? [] : List<dynamic>.from(data.map((x) => x!.toJson())));
 
 class NetworkList {
   NetworkList({
@@ -42,6 +42,14 @@ class NetworkList {
     this.distParamsUrl,
     this.slashingParamsUrl,
     this.logUrl,
+    this.txTimestamp,
+    this.blocksMoniker,
+    this.proposalTally,
+    this.proposalVote,
+    this.proposalDeposit,
+    this.contractDetailsBalances,
+    this.contractTxs,
+    this.paramssUrl,
   });
 
   String? id;
@@ -76,12 +84,20 @@ class NetworkList {
   String? distParamsUrl;
   String? slashingParamsUrl;
   String? logUrl;
+  String? txTimestamp;
+  String? blocksMoniker;
+  String? proposalTally;
+  String? proposalVote;
+  String? proposalDeposit;
+  String? contractDetailsBalances;
+  String? contractTxs;
+  String? paramssUrl;
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
     isActive: json["isActive"],
     name: json["name"],
-    logoUrl: json["logoUrl"] == null ? null : json["logoUrl"],
+    logoUrl: json["logoUrl"],
     denom: json["denom"],
     apy: json["apy"],
     commission: json["commission"],
@@ -109,23 +125,31 @@ class NetworkList {
     govParamsUrl: json["govParamsUrl"],
     distParamsUrl: json["distParamsUrl"],
     slashingParamsUrl: json["slashingParamsUrl"],
-    logUrl: json["logUrl"] == null ? null : json["logUrl"],
+    logUrl: json["logUrl"],
+    txTimestamp: json["txTimestamp"],
+    blocksMoniker: json["blocksMoniker"],
+    proposalTally: json["proposalTally"],
+    proposalVote: json["proposalVote"],
+    proposalDeposit: json["proposalDeposit"],
+    contractDetailsBalances: json["contractDetailsBalances"],
+    contractTxs: json["contractTxs"],
+    paramssUrl: json["paramssUrl"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "isActive":isActive,
+    "isActive": isActive,
     "name": name,
-    "logoUrl": logoUrl == null ? null : logoUrl,
+    "logoUrl": logoUrl,
     "denom": denom,
-    "apy": apyValues.reverse[apy],
-    "commission": commissionValues.reverse[commission],
+    "apy": apy,
+    "commission": commission,
     "price": price,
     "perc change in price": percChangeInPrice,
     "blocktime": blocktime,
-    "market cap": marketCapValues.reverse[marketCap],
-    "24 hr vol": the24HrVolValues.reverse[the24HrVol],
-    "voting power": votingPowerValues.reverse[votingPower],
+    "market cap": marketCap,
+    "24 hr vol": the24HrVol,
+    "voting power": votingPower,
     "height": height,
     "transaction": transaction,
     "bonded tokens": bondedTokens,
@@ -144,48 +168,14 @@ class NetworkList {
     "govParamsUrl": govParamsUrl,
     "distParamsUrl": distParamsUrl,
     "slashingParamsUrl": slashingParamsUrl,
-    "logUrl": logUrl == null ? null : logUrl,
+    "logUrl": logUrl,
+    "txTimestamp": txTimestamp,
+    "blocksMoniker": blocksMoniker,
+    "proposalTally": proposalTally,
+    "proposalVote": proposalVote,
+    "proposalDeposit": proposalDeposit,
+    "contractDetailsBalances": contractDetailsBalances,
+    "contractTxs": contractTxs,
+    "paramssUrl": paramssUrl,
   };
-}
-
-enum Apy { THE_160 }
-
-final apyValues = EnumValues({
-  "160%": Apy.THE_160
-});
-
-enum Commission { THE_5 }
-
-final commissionValues = EnumValues({
-  "5%": Commission.THE_5
-});
-
-enum MarketCap { THE_44460560 }
-
-final marketCapValues = EnumValues({
-  "44,460,560": MarketCap.THE_44460560
-});
-
-enum The24HrVol { THE_1468879 }
-
-final the24HrVolValues = EnumValues({
-  "1,468,879": The24HrVol.THE_1468879
-});
-
-enum VotingPower { THE_34 }
-final votingPowerValues = EnumValues({
-  "3/4": VotingPower.THE_34
-});
-class EnumValues<T> {
-  Map<String, T> map;
-  Map<T, String>? reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    if (reverseMap == null) {
-      reverseMap = map.map((k, v) => new MapEntry(v, k));
-    }
-    return reverseMap!;
-  }
 }

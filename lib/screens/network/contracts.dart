@@ -88,7 +88,7 @@ class _ContractsState extends State<Contracts> {
                 itemCount: ContractController.ContractList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return
-                    ContractContainer(contractModel: ContractController.ContractList[index],);
+                    ContractContainer(contractModel: ContractController.ContractList[index],networkList: widget.networkList,);
                 }
                 ):
              CircularProgressIndicator(),
@@ -101,15 +101,16 @@ class _ContractsState extends State<Contracts> {
 }
 
 class ContractContainer extends StatelessWidget {
+  final NetworkList? networkList;
   final ContractModel? contractModel;
   const ContractContainer({
-    Key? key, this.contractModel
+    Key? key, this.contractModel,this.networkList
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ContractDetails(contractModel: contractModel,))),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ContractDetails(contractModel: contractModel,networkList:networkList,))),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),

@@ -9,11 +9,13 @@ import 'package:zenscape_app/screens/network/contractTxDetails.dart';
 import '../../backend_files/contractBalanceModel.dart';
 import '../../backend_files/contractModel.dart';
 import '../../backend_files/ibcDenomModel.dart';
+import '../../backend_files/networkList.dart';
 import '../../constants/functions.dart';
 
 class ContractDetails extends StatefulWidget {
+  final NetworkList? networkList;
   final ContractModel? contractModel;
-  ContractDetails({Key? key, this.contractModel}) : super(key: key);
+  ContractDetails({Key? key, this.contractModel,this.networkList}) : super(key: key);
   @override
   State<ContractDetails> createState() => _ContractDetailsState();
 }
@@ -35,9 +37,9 @@ class _ContractDetailsState extends State<ContractDetails> {
 
   getData() async {
     final response = await http.get(Uri.parse(
-        'https://meteor.rest.comdex.one/cosmos/bank/v1beta1/balances/${widget.contractModel!.contractAddress!}'));
+        '${widget.networkList!.contractDetailsBalances}${widget.contractModel!.contractAddress!}'));
     final txResponse = await http.get(Uri.parse(
-        'https://meteor.rest.comdex.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz'));
+        '${widget.networkList!.contractTxs!}'   ));
 
     if (response.statusCode == 200) {
       balance = jsonDecode(response.body)['balances'];
