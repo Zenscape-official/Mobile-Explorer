@@ -21,7 +21,7 @@ class Parameters extends StatefulWidget {
 
 class _ParametersState extends State<Parameters> {
   var isLoaded=false;
-  var pageIndex=6;
+  var pageIndex=5;
   MintingParamModel? mintingParamModel;
 
   List<String> mintParams=[' ',' ',' ',' '];

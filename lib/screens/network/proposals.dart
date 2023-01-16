@@ -105,9 +105,7 @@ class _ProposalsState extends State<Proposals> {
       ),
       body: SingleChildScrollView(
         child: Column(
-
           children: [
-
             SearchBar(nameController:nameController),
 
            isLoaded?
@@ -120,7 +118,7 @@ class _ProposalsState extends State<Proposals> {
                  itemBuilder: (BuildContext context, int index) {
 
                    return
-                     ProposalCard(proposals.reversed.toList()[index]);
+                     ProposalCard(proposals.reversed.toList()[index],widget.networkListProposal!);
                  })
            ),
            ):Center(child: const CircularProgressIndicator()),
@@ -134,7 +132,8 @@ class _ProposalsState extends State<Proposals> {
 
 class ProposalCard extends StatelessWidget {
   final ProposalsModel product;
-  ProposalCard(this.product, {Key? key}) : super(key: key);
+  final NetworkList networkList;
+  ProposalCard(this.product,this.networkList, {Key? key}) : super(key: key);
   var status='';
   bool ispassed=true;
   void fun(){
@@ -159,7 +158,7 @@ class ProposalCard extends StatelessWidget {
 
     fun();
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ProposalDetails(proposalProduct:product,))),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => ProposalDetails(proposalProduct:product,networkData: networkList,))),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
@@ -240,7 +239,7 @@ class ProposalCard extends StatelessWidget {
                      Text('Voting Starts',
                       style: kSmallTextStyle,),
                     Text(
-                        '${dateTime(product.votingStartTime!).toString()} ${product.votingStartTime!.timeZoneName}',
+                        '${dateTime(product.votingStartTime!.toLocal()).toString()}',
                     style: kSmallTextStyle,),
                   ],
                 ),
@@ -251,7 +250,7 @@ class ProposalCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text('Voting Ends',style: kSmallTextStyle,),
-                    Text('${dateTime(product.votingEndTime!).toString()} ${(product.votingEndTime!.timeZoneName).toString()}',
+                    Text('${dateTime(product.votingEndTime!.toLocal())}',
                       style:kSmallTextStyle,),
                   ],
                 ),

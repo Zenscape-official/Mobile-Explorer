@@ -277,7 +277,7 @@ class _BlockContainerState extends State<BlockContainer> {
                           }),
                           child: Row(
                             children: [
-                              Text((widget.blockModel!.height!.toString())
+                              Text(addComma(widget.blockModel!.height!)
                                   ,style:kMediumBoldTextStyle),
                               const SizedBox(width:4),
                               const Icon(Icons.copy,
@@ -527,7 +527,7 @@ class _TxContainerState extends State<TxContainer> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -548,7 +548,7 @@ class _TxContainerState extends State<TxContainer> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(8,4.0,8,12),
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -566,6 +566,26 @@ class _TxContainerState extends State<TxContainer> {
                            width:15,
                            child:LinearProgressIndicator(),
                        )
+                      ]
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Status',
+                            style:kSmallTextStyle),
+                        const SizedBox(width: 70,),
+                         Text(
+                          widget.txModel!.success==true?'Success':'Fail',
+                          style:TextStyle(
+                            fontFamily: 'MontserratRegular',
+                            color: widget.txModel!.success==true?Colors.green:Colors.redAccent,
+                            fontWeight: FontWeight.normal,
+                            fontSize: 13,
+                          )
+                         )
                       ]
                   ),
                 ),

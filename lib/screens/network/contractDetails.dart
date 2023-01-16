@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/backend_files/contractTxModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:zenscape_app/screens/network/contractTxDetails.dart';
+import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import '../../backend_files/contractBalanceModel.dart';
 import '../../backend_files/contractModel.dart';
 import '../../backend_files/ibcDenomModel.dart';
@@ -146,8 +148,14 @@ class _ContractDetailsState extends State<ContractDetails> {
                         const SizedBox(
                           height: 2,
                         ),
-                        Text(widget.contractModel!.contractAddress!,
-                            style: kMediumBoldTextStyle),
+                        InkWell(
+                          onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: SearchScreen(nameController: widget.contractModel!.contractAddress!),
+                            withNavBar: true,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ),
+                          child: Text(widget.contractModel!.contractAddress!, style: kMediumBlueBoldTextStyle),),
                         const SizedBox(
                           height: 20,
                         ),
@@ -155,8 +163,14 @@ class _ContractDetailsState extends State<ContractDetails> {
                         const SizedBox(
                           height: 2,
                         ),
-                        Text(addComma(widget.contractModel!.height!),
-                            style: kMediumBoldTextStyle),
+                        InkWell(
+                          onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: SearchScreen(nameController: widget.contractModel!.height!),
+                            withNavBar: true,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ),
+                          child: Text(addComma(widget.contractModel!.height!), style: kMediumBlueBoldTextStyle),),
                         const SizedBox(
                           height: 20,
                         ),
@@ -188,8 +202,15 @@ class _ContractDetailsState extends State<ContractDetails> {
                         const SizedBox(
                           height: 2,
                         ),
-                        Text(widget.contractModel!.creator!,
-                            style: kMediumBoldTextStyle),
+                        InkWell(
+                          onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                            context,
+                            screen: SearchScreen(nameController: widget.contractModel!.creator! ),
+                            withNavBar: true,
+                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                          ),
+                          child: Text(widget.contractModel!.creator!, style: kMediumBlueBoldTextStyle),),
+
                         const SizedBox(
                           height: 20,
                         ),
@@ -203,9 +224,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                           height: 20,
                         ),
                         Text('Init Message', style: kSmallTextStyle),
-                        const SizedBox(
-                          height: 2,
-                        ),
+
                         widget.contractModel!.contractStates!.config == null
                             ? Text('No Message', style: kMediumBoldTextStyle)
                             : Text(
@@ -396,7 +415,7 @@ class _BalanceContState extends State<BalanceCont> {
                   SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: SizedBox(
-                      width: 55,
+                      width: 85,
                       height: 18,
                       child: denom != null
                           ? Text((removeFirstChar(denom!)).toUpperCase())

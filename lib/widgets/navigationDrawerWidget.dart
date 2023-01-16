@@ -114,7 +114,6 @@ class _NavDrawState extends State<NavDraw> {
                   text: 'Blocks',
                   isSelected:widget.pageIndex==2,
                   onTap: () {
-                    print(widget.pageIndex);
                     toggleController.updateData(0);
                     setState(() {
                       prevIndex=selectedIndex;

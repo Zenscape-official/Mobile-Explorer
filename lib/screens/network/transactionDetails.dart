@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:zenscape_app/backend_files/txModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:zenscape_app/constants/functions.dart';
+import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import '../../controller/txToggleController.dart';
 import '../../widgets/searchBarWidget.dart';
 
@@ -51,12 +53,9 @@ class _TxDetailsState extends State<TxDetails> {
         }
       });
     } else {
-      // print(response.statusCode);
-      // print('+errorr');
-      // print('https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}');
+
     }
   }
-
   @override
   Widget build(BuildContext context) {
     type = getType(widget.txModel!.messages![0].type!);
@@ -149,38 +148,21 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('TxHash', style: kSmallTextStyle),
-                                    InkWell(
-                                      onTap: () =>
-                                          Clipboard.setData(ClipboardData(
-                                        text: widget.txModel!.hash!,
-                                      )).then((_) {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    'Transaction Hash Copied to your clipboard !')));
-                                      }),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 4),
-                                          const Icon(
-                                            Icons.copy,
-                                            color: Colors.black54,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                Text('Tx Hash',
+                                    textAlign: TextAlign.start,
+                                    style: kMediumTextStyle),
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text((widget.txModel!.hash!),
-                                    textAlign: TextAlign.start,
-                                    style: kMediumBoldTextStyle),
+                                InkWell(
+                                  onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: SearchScreen(nameController: widget.txModel!.hash! ),
+                                    withNavBar: true,
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  ),
+                                  child: Text(widget.txModel!.hash!, style: kMediumBlueBoldTextStyle),),
+
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -196,37 +178,18 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('Height', style: kSmallTextStyle),
-                                    InkWell(
-                                      onTap: () =>
-                                          Clipboard.setData(ClipboardData(
-                                            text: widget.txModel!.hash,
-                                          )).then((_) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    'Height Copied to your clipboard !')));
-                                          }),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 4),
-                                          const Icon(
-                                            Icons.copy,
-                                            color: Colors.black54,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                Text('Height', style: kSmallTextStyle),
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(widget.txModel!.height!,
-                                    style: kMediumBoldTextStyle),
+                                InkWell(
+                                  onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                                    context,
+                                    screen: SearchScreen(nameController: widget.txModel!.height! ),
+                                    withNavBar: true,
+                                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                  ),
+                                  child: Text(addComma(widget.txModel!.height!), style: kMediumBlueBoldTextStyle),),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -236,14 +199,28 @@ class _TxDetailsState extends State<TxDetails> {
                                 ),
                                 txLoaded
                                     ? Text(
-                                        dateTime(DateTime.parse(timestampTx)
-                                            .toLocal()),
+                                    '${dateTime(DateTime.parse(timestampTx)
+                                            .toLocal())} (${timeDifferenceFunction(timestampTx)})',
                                         style: kMediumBoldTextStyle)
                                     : SizedBox(
                                         height: 10,
                                         width: 15,
                                         child: LinearProgressIndicator()),
                                 const SizedBox(
+                                  height: 20,
+                                ),
+                                Text('Status',
+                                    style:kMediumTextStyle),
+                                const SizedBox(width: 70,),
+                                Text(
+                                    widget.txModel!.success==true?'Success':'Fail',
+                                    style:TextStyle(
+                                      fontFamily: 'MontserratRegular',
+                                      color: widget.txModel!.success==true?Colors.green:Colors.redAccent,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 15,
+                                    )
+                                ),const SizedBox(
                                   height: 20,
                                 ),
                                 Text('Fee', style: kSmallTextStyle),
@@ -265,15 +242,22 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('Memo', style: kSmallTextStyle),
-                                const SizedBox(
-                                  height: 2,
-                                ),
-                                Text(widget.txModel!.memo!,
-                                    style: kMediumBoldTextStyle),
-                                const SizedBox(
-                                  height: 20,
-                                ),
+                                widget.txModel!.memo!.isNotEmpty?
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text('Memo', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(widget.txModel!.memo!,
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
+                                ):Container(),
+
                               ]),
                         ),
                       ),
@@ -749,3 +733,5 @@ class _TxDetailsState extends State<TxDetails> {
     );
   }
 }
+
+

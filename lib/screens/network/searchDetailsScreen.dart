@@ -87,6 +87,7 @@ class _SearchScreenState extends State<SearchScreen> {
           }
         });
       }}
+    else if(widget.nameController.length==52){}
      else {
 
         final tx_response = await http.get(Uri.parse(
@@ -127,7 +128,7 @@ class _SearchScreenState extends State<SearchScreen> {
           );
         }
         else{
-          print(balance_response.statusCode);
+          //print(balance_response.statusCode);
         }
         if(delegate_response.statusCode==200){
           delegation =  jsonDecode(delegate_response.body)["delegation_responses"];
@@ -144,7 +145,7 @@ class _SearchScreenState extends State<SearchScreen> {
           });
         }
         else{
-          print(delegate_response.statusCode);
+          //print(delegate_response.statusCode);
         }
         if(reward_response.statusCode==200){
           reward =  jsonDecode(balance_response.body)['balances'];
@@ -162,10 +163,9 @@ class _SearchScreenState extends State<SearchScreen> {
           });
         }
         else{
-          print(delegate_response.statusCode);
+         // print(delegate_response.statusCode);
         }
       }
-
     loading=false;
   }
   @override
@@ -176,7 +176,6 @@ class _SearchScreenState extends State<SearchScreen> {
     else if(txLoaded==1){
       return
         Scaffold(
-
       appBar: AppBar(
         foregroundColor: Colors.black,
         backgroundColor: Colors.transparent,

@@ -24,7 +24,14 @@ var kMediumTextStyle= TextStyle(
 var kMediumBoldTextStyle= TextStyle(
   fontFamily: 'MontserratBold',
   color: Colors.black.withOpacity(.7),
-  fontWeight: Platform.isAndroid?FontWeight.w700: FontWeight.w700,
+  fontWeight:  FontWeight.w700,
+  fontSize: 15,
+);
+var kMediumBlueBoldTextStyle= TextStyle(
+  decoration: TextDecoration.underline,
+  fontFamily: 'MontserratBold',
+  color: Colors.blue.withOpacity(1),
+  fontWeight:  FontWeight.w700,
   fontSize: 15,
 );
 var kSmallTextStyle= TextStyle(

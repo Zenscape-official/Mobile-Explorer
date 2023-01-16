@@ -1,8 +1,10 @@
 
 
-import 'dart:convert';
 
-import 'package:zenscape_app/backend_files/ibcDenomModel.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+
+import '../Constants/constants.dart';
 
 
 timeDifferenceFunction(timeDifference){
@@ -81,4 +83,43 @@ String removeFirstChar(String str) {
 
   }
   return str;
+}
+class TextWithCopyIcon extends StatelessWidget {
+  const TextWithCopyIcon({
+    Key? key,
+
+    required this.copyTextValue,
+    required this.copyTextName
+  }) : super(key: key);
+
+
+  final String copyTextValue;
+  final String copyTextName;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () =>
+          Clipboard.setData(ClipboardData(
+            text: copyTextValue,
+          )).then((_) {
+            ScaffoldMessenger.of(context)
+                .showSnackBar(SnackBar(
+                content: Text(
+                    '${copyTextName} Copied to your clipboard !')));
+          }),
+      child:  Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Flexible(child: Text(copyTextValue, style: kMediumBoldTextStyle,)),
+          const SizedBox(width: 4),
+          const Icon(
+            Icons.copy,
+            color: Colors.black54,
+            size: 15,
+          ),
+        ],
+      ),
+    );
+  }
 }

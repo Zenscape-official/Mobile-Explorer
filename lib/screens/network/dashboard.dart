@@ -98,7 +98,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
     for (int i = 0; i < supply!.length; i++) {
-      if (supply![i].denom == 'ucmdx') {
+      if (supply![i].denom == widget.networkData!.denom) {
         bankTotal = supply![i].amount;
       }
     }
@@ -363,7 +363,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                             .center,
                                                     children: [
                                                       Text(
-                                                        '${truncateToDecimalPlaces(double.parse(widget.networkData!.percChangeInPrice ?? '0'), 2)} %'
+                                                        '${truncateToDecimalPlaces(double.parse(widget.networkData!.percChangeInPrice ?? '0'), 2)}%'
                                                             .toString(),
                                                         style: (double.parse(widget
                                                                     .networkData!
@@ -464,7 +464,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                   ? double.parse(widget.networkData!.the24HrVol!) >
                                                           0
                                                       ? Text(
-                                                          '\$ ${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
+                                                          '\$${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
                                                           style: double.parse(widget.networkData!.the24HrVol!) > 0
                                                               ? const TextStyle(
                                                                   fontFamily:

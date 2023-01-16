@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
+import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import '../../backend_files/contractTxModel.dart';
 import '../../controller/txToggleController.dart';
 import '../../widgets/searchBarWidget.dart';
@@ -71,7 +73,15 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           const SizedBox(
                             height: 2,
                           ),
-                          Text(addComma(widget.contractTxModel!.height!), style: kMediumBoldTextStyle),
+                          InkWell(
+                            onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: SearchScreen(nameController: widget.contractTxModel!.height!),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            ),
+                            child: Text(addComma(widget.contractTxModel!.height!), style: kMediumBlueBoldTextStyle),),
+
 
                           const SizedBox(
                             height: 20,
@@ -85,17 +95,25 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text('Information', style: kSmallTextStyle),
-                          const SizedBox(
-                            height: 2,
-                          ),
-                          Text(widget.contractTxModel!.info!, style: kMediumBoldTextStyle),
+
+                          widget.contractTxModel!.info!.isNotEmpty?
+                          Column(
+                            children: [
+                              Text('Information', style: kSmallTextStyle),
+                              const SizedBox(
+                                height: 2,
+                              ),
+                              Text(widget.contractTxModel!.info!, style: kMediumBoldTextStyle),
+
+                            ],
+                          ):
+                          Container(),
 
 
                           const SizedBox(
                             height: 20,
                           ),
-                          Text('TimeStamp', style: kSmallTextStyle),
+                          Text('Time', style: kSmallTextStyle),
                           const SizedBox(
                             height: 2,
                           ),
@@ -125,28 +143,35 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           const SizedBox(
                             height: 20,
                           ),
-                          Text('Type', style: kSmallTextStyle),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text('${(widget.contractTxModel!.tx!.type!)}' , style: kMediumBoldTextStyle),
-
                           const SizedBox(
                             height: 20,
                           ),
-                          Text('Memo', style: kSmallTextStyle),
-                          const SizedBox(
-                            height: 4,
-                          ),
-                          Text('${(widget.contractTxModel!.tx!.body!.memo!)}' , style: kMediumBoldTextStyle),
+                          widget.contractTxModel!.tx!.body!.memo!.isNotEmpty? Column(
+                            children: [
+                              Text('Memo', style: kSmallTextStyle),
+                              const SizedBox(
+                                height: 4,
+                              ),
+                              Text('${(widget.contractTxModel!.tx!.body!.memo!)}' , style: kMediumBoldTextStyle),
 
-                          const SizedBox(
-                            height: 20,
-                          ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                            ],
+                          ):Container(),
+
                           Text('Sender', style: kSmallTextStyle),
                           const SizedBox(
                             height: 4,
                           ),
+                          InkWell(
+                            onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: SearchScreen(nameController: widget.contractTxModel!.tx!.body!.messages![0].sender!),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            ),
+                            child: Text(widget.contractTxModel!.tx!.body!.messages![0].sender!, style: kMediumBlueBoldTextStyle),),
                           Text('${(widget.contractTxModel!.tx!.body!.messages![0].sender)}', style: kMediumBoldTextStyle),
 
                           const SizedBox(
@@ -165,7 +190,14 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           const SizedBox(
                             height: 4,
                           ),
-                          Text('${(widget.contractTxModel!.tx!.body!.messages![0].contract!)}', style: kMediumBoldTextStyle),
+                          InkWell(
+                            onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                              context,
+                              screen: SearchScreen(nameController: widget.contractTxModel!.tx!.body!.messages![0].contract!),
+                              withNavBar: true,
+                              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                            ),
+                            child: Text((widget.contractTxModel!.tx!.body!.messages![0].contract!), style: kMediumBlueBoldTextStyle),),
 
 
                           const SizedBox(

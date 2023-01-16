@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import 'package:zenscape_app/constants/functions.dart';
+import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import '../../backend_files/blocksModel.dart';
 import 'package:http/http.dart' as http;
 
@@ -53,8 +55,6 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
 
     if (response.statusCode == 200) {
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
-
-
       setState(() {
         if (valMoniker!=null){
           monikerLoaded=true;
@@ -98,76 +98,23 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text('Information', style: kMediumBoldTextStyle),
-
-
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('Block Height', style: kSmallTextStyle),
-                                    InkWell(
-                                      onTap: () =>
-                                          Clipboard.setData(ClipboardData(
-                                            text: widget.blockModel!.height,
-                                          )).then((_) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    'Block Height Copied to your clipboard !')));
-                                          }),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 4),
-                                          const Icon(
-                                            Icons.copy,
-                                            color: Colors.black54,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                Text('Block Height', style: kSmallTextStyle),
+
+                                TextWithCopyIcon(copyTextValue: addComma(widget.blockModel!.height), copyTextName: 'BlockHeight'),
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(widget.blockModel!.height!, style: kMediumBoldTextStyle),
-
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('Hash', style: kSmallTextStyle),
-                                    InkWell(
-                                      onTap: () =>
-                                          Clipboard.setData(ClipboardData(
-                                            text: widget.blockModel!.hash,
-                                          )).then((_) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    'Hash Copied to your clipboard !')));
-                                          }),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 4),
-                                          const Icon(
-                                            Icons.copy,
-                                            color: Colors.black54,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                                Text('Block Hash', style: kSmallTextStyle),
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(widget.blockModel!.hash!, style: kMediumBoldTextStyle),
-
+                                TextWithCopyIcon(copyTextValue:widget.blockModel!.hash!,copyTextName: 'Block Hash'),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -176,63 +123,38 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                   height: 2,
                                 ),
                                 Text(widget.blockModel!.numTxs!.toString(), style: kMediumBoldTextStyle),
-
-
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('TimeStamp', style: kSmallTextStyle),
+                                Text('Time', style: kSmallTextStyle),
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(dateTime(widget.blockModel!.timestamp!), style: kMediumBoldTextStyle),
-
-
+                                Text('${dateTime(widget.blockModel!.timestamp!)} (${timeDifferenceFunction(dateTime(widget.blockModel!.timestamp!))})', style: kMediumBoldTextStyle),
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Row(
-                                  children: [
-                                    Text('Proposer Address', style: kSmallTextStyle),
-                                    InkWell(
-                                      onTap: () =>
-                                          Clipboard.setData(ClipboardData(
-                                            text: widget.blockModel!.proposerAddress!,
-                                          )).then((_) {
-                                            ScaffoldMessenger.of(context)
-                                                .showSnackBar(const SnackBar(
-                                                content: Text(
-                                                    'Proposer Address Copied to your clipboard !')));
-                                          }),
-                                      child: Row(
-                                        children: [
-                                          const SizedBox(width: 4),
-                                          const Icon(
-                                            Icons.copy,
-                                            color: Colors.black54,
-                                            size: 15,
-                                          ),
-                                        ],
-                                      ),
+
+                                Text('Proposer Address', style: kSmallTextStyle),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                InkWell(
+                                    onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: SearchScreen(nameController: widget.blockModel!.proposerAddress! ),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 2,
-                                ),
-                                Text(widget.blockModel!.proposerAddress!, style: kMediumBoldTextStyle),
-
+                                    child: Text(widget.blockModel!.proposerAddress!, style: kMediumBlueBoldTextStyle),),
                                 const SizedBox(
                                   height: 20,
                                 ),
-
                                 Text('Proposer',
                                     style:kSmallTextStyle),
                                 //const SizedBox(width:99),
                                 monikerLoaded? Text((valMoniker)
                                     ,style:kMediumBoldTextStyle):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
-
-
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -241,7 +163,6 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                   height: 2,
                                 ),
                                 Text(widget.blockModel!.totalGas!, style: kMediumBoldTextStyle),
-
                               ]
                           ),
                         ),

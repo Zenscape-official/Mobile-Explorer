@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
+import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 
 import '../../widgets/searchBarWidget.dart';
 
@@ -138,36 +140,19 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Row(
-                                    children: [
-                                      Text('Self Delegated Address', style: kMediumTextStyle),
-                                      InkWell(
-                                        onTap: () =>
-                                            Clipboard.setData(ClipboardData(
-                                              text: widget.validatorModel!.selfDelegateAddress!,
-                                            )).then((_) {
-                                              ScaffoldMessenger.of(context)
-                                                  .showSnackBar(const SnackBar(
-                                                  content: Text(
-                                                      'Self Delegated Address to your clipboard !')));
-                                            }),
-                                        child: Row(
-                                          children: [
-                                            const SizedBox(width: 4),
-                                            const Icon(
-                                              Icons.copy,
-                                              color: Colors.black54,
-                                              size: 15,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  Text('Self Delegated Address', style: kMediumTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.validatorModel!.selfDelegateAddress!, style: kMediumBoldTextStyle),
+                                  InkWell(
+                                    onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: SearchScreen(nameController: widget.validatorModel!.selfDelegateAddress! ),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ),
+                                    child: Text(widget.validatorModel!.selfDelegateAddress!, style: kMediumBlueBoldTextStyle),),
+
 
                                   const SizedBox(
                                     height: 20,
@@ -201,7 +186,14 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  Text(widget.validatorModel!.operatorAddress!, style: kMediumBoldTextStyle),
+                                  InkWell(
+                                    onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: SearchScreen(nameController: widget.validatorModel!.operatorAddress! ),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    ),
+                                    child: Text(widget.validatorModel!.operatorAddress!, style: kMediumBlueBoldTextStyle),),
 
                                   const SizedBox(
                                     height: 20,
@@ -260,15 +252,21 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                     height: 20,
                                   ),
 
-                                  Text('Details', style: kSmallTextStyle),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text((widget.validatorModel!.details??''), style: kMediumBoldTextStyle),
+                                  widget.validatorModel!.details!=null? Column(
+                                    children: [
+                                      Text('Details', style: kSmallTextStyle),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text((widget.validatorModel!.details??''), style: kMediumBoldTextStyle),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                    ],
+                                  ):Container(),
 
-                                  const SizedBox(
-                                    height: 20,
-                                  ),
+
+
                                   Text('Commision', style: kSmallTextStyle),
                                   const SizedBox(
                                     height: 2,

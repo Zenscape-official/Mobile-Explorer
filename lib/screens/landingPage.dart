@@ -384,43 +384,50 @@ class _NetworkCardState extends State<NetworkCard> {
               const SizedBox(height: 10),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(
+                child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    widget.networkList.id!='comdex'? Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('APR', style: kExtraSmallTextStyle),
-                        const SizedBox(height: 2),
-                        Text(
-                          //(widget.networkList.id!='comdex'?''
-                            '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
-                            //:'85.88%'
-                            , style: kLandingPageBoldTextStyle),
-                      ],
-                    ):Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('APR', style: kExtraSmallTextStyle),
-                        const SizedBox(height: 2),
-                     APRLoaded? Text(
-                            '${truncateToDecimalPlaces(APRcmdx, 2).obs.toString()}%'
-                         , style: kLandingPageBoldTextStyle)
-                          :SizedBox(
-                           height: 10,
-                           width: 10,
-                           child: LinearProgressIndicator()),
-                      ],
+                    widget.networkList.id!='comdex'? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('APR', style: kExtraSmallTextStyle),
+                          const SizedBox(height: 2),
+                          Text(
+                            //(widget.networkList.id!='comdex'?''
+                              '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
+                              //:'85.88%'
+                              , style: kLandingPageBoldTextStyle),
+                        ],
+                      ),
+                    ):
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('APR', style: kExtraSmallTextStyle),
+                          const SizedBox(height: 2),
+                       APRLoaded? Text(
+                              '${truncateToDecimalPlaces(APRcmdx, 2).obs.toString()}%'
+                           , style: kLandingPageBoldTextStyle)
+                            :SizedBox(
+                             height: 10,
+                             width: 10,
+                             child: LinearProgressIndicator()),
+                        ],
+                      ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+                      child: Row(
+                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Price', style: kExtraSmallTextStyle),
                           const SizedBox(height: 2),
                           Text(
-                              '\$${truncateToDecimalPlaces(double.parse(widget.networkList.price!), 2).toString()}',
+                              '\$${widget.networkList.price!}',
                               style: kLandingPageBoldTextStyle),
                         ],
                       ),
