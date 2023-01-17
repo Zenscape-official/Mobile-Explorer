@@ -9,9 +9,11 @@ class SearchBar extends StatelessWidget {
   const SearchBar({
     Key? key,
     required this.nameController,
+    required this.hintText,
   }) : super(key: key);
 
   final TextEditingController nameController;
+  final String hintText;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class SearchBar extends StatelessWidget {
           autofocus: false,
           controller: nameController,
           decoration: InputDecoration(
-            hintText:'Enter Tx Hash, Block Height, Address...',
+            hintText:hintText,
             contentPadding: const EdgeInsets.only(
                 left: 8.0, bottom: 8.0, top: 8.0),
             filled: true,
@@ -42,7 +44,7 @@ class SearchBar extends StatelessWidget {
               color:Colors.blue,
               onPressed:(){
                 if(nameController.text.isEmpty){
-                  Get.snackbar('', 'Please enter Block Height/ Tx Hash /Address');
+                  Get.snackbar('', 'Please $hintText');
                  IBCMapping().readJson();
                 }
                 else{
@@ -62,7 +64,7 @@ class SearchBar extends StatelessWidget {
 
        onSubmitted: (name) {
          if(name.isEmpty){
-           Get.snackbar('', 'Please enter Block Height/ Tx Hash/ Address');
+           Get.snackbar('', 'Please $hintText');
          }
 
          else{

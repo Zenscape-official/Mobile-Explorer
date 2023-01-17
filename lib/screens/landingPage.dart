@@ -132,7 +132,7 @@ class _LandingPageState extends State<LandingPage> {
           },
           child: Column(
             children: [
-              SearchBar(nameController: nameController),
+              SearchBar(nameController: nameController,hintText: 'Enter Tx hash, Address...'),
               nameController.text.isEmpty
                   ? const SizedBox(width: 0)
                   : ListView.builder(
@@ -256,9 +256,6 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
   Widget buildSvgPicture(String urlImage, int index,) {
-    // return
-    // Image.asset(urlImage,height: 20,
-    // fit: BoxFit.cover,);
     return SvgPicture.asset(
       urlImage,
       height: 200,
@@ -325,7 +322,7 @@ class _NetworkCardState extends State<NetworkCard> {
   }
   @override
   Widget build(BuildContext context) {
-        if(widget.networkList.id=='comdex'){
+        if(widget.networkList.isActive=='1'){
       getAPR();
     }
     return InkWell(
@@ -352,8 +349,8 @@ class _NetworkCardState extends State<NetworkCard> {
                     padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
                     child: Container(
                       color: Colors.transparent,
-                      height:widget.networkList.id=='comdex'? 40:40,
-                      width: widget.networkList.id=='comdex'? 40:40,
+                      height:40,
+                      width:40,
                       child: ClipOval(
                         child: Padding(
                           padding: widget.networkList.id=='chihuahua'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
@@ -387,7 +384,7 @@ class _NetworkCardState extends State<NetworkCard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    widget.networkList.id!='comdex'? Padding(
+                    widget.networkList.isActive!='1'? Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
                       child: Row(
                         mainAxisAlignment:MainAxisAlignment.spaceBetween,

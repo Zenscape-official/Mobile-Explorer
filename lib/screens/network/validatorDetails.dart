@@ -27,7 +27,6 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
   }
   @override
   Widget build(BuildContext context) {
-
     return
       Scaffold(
           appBar: AppBar(
@@ -46,7 +45,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
           body: SingleChildScrollView(
               child: Column(
                   children: [
-                    SearchBar(nameController:nameController),
+                    SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
                     Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Container(
@@ -253,6 +252,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   ),
 
                                   widget.validatorModel!.details!=null? Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text('Details', style: kSmallTextStyle),
                                       const SizedBox(
@@ -275,11 +275,13 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                       '${truncateToDecimalPlaces(double.parse(widget.validatorModel!.commission!)*100,2).toString()}%',
                                       style: kMediumBoldTextStyle),
 
+
                                 ]
                             ),
                           ),
                         ),
                     ),
+                    SizedBox(height: 10,)
                   ],
               ),
           ),

@@ -10,7 +10,8 @@ import 'package:http/http.dart' as http;
 
 class BlockDetails extends StatefulWidget {
   final BlockModel? blockModel;
-  BlockDetails({Key? key,this.blockModel}) : super(key: key);
+  final String valDesc;
+  BlockDetails({Key? key,this.blockModel,required this.valDesc}) : super(key: key);
   @override
   State<BlockDetails> createState() => _BlockDetailsState();
 }
@@ -24,18 +25,19 @@ class _BlockDetailsState extends State<BlockDetails> {
   Widget build(BuildContext context) {
 
     return
-      BlockDetailScreen(blockModel: widget.blockModel);
+      BlockDetailScreen(blockModel: widget.blockModel,valDesc: widget.valDesc);
   }
 }
 
 class BlockDetailScreen extends StatefulWidget {
   BlockDetailScreen({
     Key? key,
-    required this.blockModel,
+    required this.blockModel,required this.valDesc,
 
   }) : super(key: key);
 
   var blockModel;
+  String valDesc;
 
   @override
   State<BlockDetailScreen> createState() => _BlockDetailScreenState();
@@ -51,7 +53,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
     getData();
   }
   getData()async{
-    final response = await http.get(Uri.parse('http://167.235.151.252:3005/validatorDescription/${widget.blockModel!.proposerAddress}'));
+    final response = await http.get(Uri.parse('${widget.valDesc}${widget.blockModel!.proposerAddress}'));
 
     if (response.statusCode == 200) {
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
@@ -162,7 +164,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(widget.blockModel!.totalGas!, style: kMediumBoldTextStyle),
+                                Text(addComma(widget.blockModel!.totalGas??''), style: kMediumBoldTextStyle),
                               ]
                           ),
                         ),

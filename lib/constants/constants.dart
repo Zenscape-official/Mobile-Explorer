@@ -526,3 +526,11 @@ getType(String input) {
       return 'N/A';
   }
 }
+String truncateBeforeLastDot(String input) {
+  int lastDotIndex = input.lastIndexOf(".");
+  if (lastDotIndex == -1) {
+    return input;
+  } else {
+    return input.substring(lastDotIndex + 1);
+  }
+}

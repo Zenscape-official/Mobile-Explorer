@@ -140,8 +140,10 @@ class _BlocksState extends State<Blocks> {
           child: Column(
             children: [
               SizedBox(height: 0),
-              SearchBar(nameController:nameController),
-
+              SearchBar(
+                nameController:nameController,
+                hintText: 'Enter Block Height, Tx Hash, Address..'
+              ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12),
                 child: Row(
@@ -169,8 +171,9 @@ class _BlocksState extends State<Blocks> {
                         blockSelected = index!;
                         toggleController.updateData(index);
                       },
-                    )
-                  ;})
+                    );
+                }
+                )
                   ]
                 ),
               ),
@@ -257,7 +260,7 @@ class _BlockContainerState extends State<BlockContainer> {
   Widget build(BuildContext context) {
    getData();
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,))),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,valDesc: widget.valDescUrl!,))),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -424,7 +427,7 @@ class _TxContainerState extends State<TxContainer> {
 
   @override
   Widget build(BuildContext context) {
-   type=getType(widget.txModel!.messages![0].type!);
+   type=truncateBeforeLastDot(widget.txModel!.messages![0].type!);
 
     return InkWell(
 

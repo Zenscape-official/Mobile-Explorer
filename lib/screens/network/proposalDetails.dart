@@ -104,7 +104,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
       body: tallyLoaded? SingleChildScrollView(
         child: Column(
             children: [
-              SearchBar(nameController:nameController),
+              SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
               Container(
                 margin: const EdgeInsets.only(right: 10,left: 10),
                 width: MediaQuery.of(context).size.width/1.1,
@@ -143,7 +143,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                       radius: 3,),
                                     Padding(
                                       padding: const EdgeInsets.all(2.0),
-                                      child: Text(status,
+                                      child: Text(status??'',
                                         style: kSmallTextStyle,),
                                     ),
                                   ],
@@ -291,7 +291,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                       radius: 3,),
                                     Padding(
                                       padding: const EdgeInsets.all(2.0),
-                                      child: Text(status,
+                                      child: Text(status??'',
                                         style: kSmallTextStyle,),
                                     ),
                                   ],

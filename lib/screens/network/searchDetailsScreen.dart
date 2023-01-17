@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/controller/txToggleController.dart';
 import 'package:zenscape_app/screens/network/blockDetails.dart';
 import 'package:zenscape_app/screens/network/contractDetails.dart';
@@ -19,7 +20,8 @@ import '../../controller/networklistController.dart';
 
 class SearchScreen extends StatefulWidget {
   var nameController;
- SearchScreen({Key? key,this.nameController}) : super(key: key);
+  final NetworkList? networkList;
+ SearchScreen({Key? key,this.nameController, this.networkList}) : super(key: key);
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -70,7 +72,6 @@ class _SearchScreenState extends State<SearchScreen> {
       print(response.statusCode);
       }
     }
-
     else if(widget.nameController.length==64){
       final response = await http.get(Uri.parse(
           'http://167.235.151.252:3005/transaction/${widget.nameController.toString()}'
@@ -89,7 +90,6 @@ class _SearchScreenState extends State<SearchScreen> {
       }}
     else if(widget.nameController.length==52){}
      else {
-
         final tx_response = await http.get(Uri.parse(
             'http://167.235.151.252:3005/transactionFromAddress/${widget.nameController.toString()}'));
         final balance_response = await http.get(Uri.parse(
@@ -99,9 +99,7 @@ class _SearchScreenState extends State<SearchScreen> {
         final reward_response = await http.get(Uri.parse(
             'https://rest.comdex.one/cosmos/distribution/v1beta1/delegators/${widget.nameController.toString()}/rewards'));
         if (tx_response.statusCode == 200) {
-
           txModel = List<TxModel>.from(json.decode(tx_response.body).map((x) => TxModel.fromJson(x)));
-
           setState(() {
             if (txModel!.isNotEmpty) {
               addressLoaded =1;
@@ -145,7 +143,6 @@ class _SearchScreenState extends State<SearchScreen> {
           });
         }
         else{
-          //print(delegate_response.statusCode);
         }
         if(reward_response.statusCode==200){
           reward =  jsonDecode(balance_response.body)['balances'];
@@ -171,7 +168,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     if(blockLoaded==1){
-      return BlockDetailScreen(blockModel:blockDetails![0]);
+      return BlockDetailScreen(blockModel:blockDetails![0],valDesc: '',);
     }
     else if(txLoaded==1){
       return
@@ -281,7 +278,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               Text((txModel![0].hash!),
                                   textAlign: TextAlign.start
                                   ,style:kMediumBoldTextStyle),
-
                               const SizedBox(
                                 height: 20,
                               ),

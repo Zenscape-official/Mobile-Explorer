@@ -49,7 +49,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SearchBar(nameController:nameController),
+              SearchBar(nameController:nameController, hintText:  'Enter Block Height,Tx hash, Address..',),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(

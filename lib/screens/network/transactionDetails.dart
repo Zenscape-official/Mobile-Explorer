@@ -77,7 +77,7 @@ class _TxDetailsState extends State<TxDetails> {
       ),
       body: SingleChildScrollView(
         child: Column(children: [
-          SearchBar(nameController:nameController),
+          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
           Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
@@ -143,7 +143,7 @@ class _TxDetailsState extends State<TxDetails> {
                                   height: 2,
                                 ),
                                 Text(
-                                    getType(widget.txModel!.messages![0].type!),
+                                    truncateBeforeLastDot(widget.txModel!.messages![0].type!),
                                     style: kMediumBoldTextStyle),
                                 const SizedBox(
                                   height: 20,

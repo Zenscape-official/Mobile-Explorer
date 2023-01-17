@@ -82,14 +82,12 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
 
     height = (await _dashboardController.fetchSingleData(
         widget.networkData!.height!, 'height'));
-
     txNum = (await _dashboardController.fetchdata(
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
         widget.networkData!.blocktime!, 'average_time'));
     supply =
         (await _dashboardController.fetchBankData(widget.networkData!.height!));
-
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
 
@@ -98,7 +96,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
     for (int i = 0; i < supply!.length; i++) {
-      if (supply![i].denom == widget.networkData!.denom) {
+      if (supply![i].denom == 'ucmdx') {
         bankTotal = supply![i].amount;
       }
     }
@@ -179,7 +177,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   Widget build(BuildContext context) {
     getData();
 
-    return widget.networkData!.id == 'comdex'
+    return widget.networkData!.isActive == '1'
         ? Scaffold(
             drawer: NavDraw(
               networkData: widget.networkData,
@@ -231,7 +229,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SearchBar(nameController: nameController),
+                    SearchBar(nameController: nameController,hintText: 'Enter Block Height, Tx Hash, Address..'),
                     SizedBox(
                       //height: MediaQuery.of(context).size.height / 2.0,
                       child: Padding(
@@ -242,6 +240,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+
                               children: [
                                 Row(
                                   mainAxisAlignment:
@@ -280,143 +280,88 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         ),
                                       ],
                                     ),
-                                    Container(
-                                      decoration: kBoxBorder,
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(5.0),
-                                        child: Row(
-                                          children: [
-                                            Text(
+                                    Padding(
+                                      padding: const EdgeInsets.all(5.0),
+                                      child: Row(
+                                        children: [
+                                          Icon(Icons.access_time,color: Colors.blue.withOpacity(.8),
+                                          size: 18,
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                                            child: Text(
                                               'BLOCK TIME ',
                                               style: kExtraSmallTextStyle,
                                             ),
-                                            isLoaded
-                                                ? Text(
-                                                    truncateToDecimalPlaces(
-                                                            double.parse(
-                                                                blockTime),
-                                                            2)
-                                                        .toString(),
-                                                    style:
-                                                        kExtraSmallBoldTextStyle)
-                                                : SizedBox(
-                                                    height: 5,
-                                                    width: 15,
-                                                    child:
-                                                        LinearProgressIndicator()),
-                                          ],
-                                        ),
+                                          ),
+                                          isLoaded
+                                              ? Text(
+                                                  truncateToDecimalPlaces(
+                                                          double.parse(
+                                                              blockTime),
+                                                          2)
+                                                      .toString(),
+                                                  style:
+                                                      kExtraSmallBoldTextStyle)
+                                              : SizedBox(
+                                                  height: 5,
+                                                  width: 15,
+                                                  child:
+                                                      LinearProgressIndicator()),
+                                        ],
                                       ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 10),
-                                Container(
-                                  height: 150,
-                                  width: 170,
-                                  decoration: BoxDecoration(
-                                    color: Colors.transparent,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(200.0)),
-                                    border: Border.all(
-                                      color: Colors.lightBlueAccent
-                                          .withOpacity(.3),
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: (Container(
-                                      decoration: BoxDecoration(
-                                        color: Colors.transparent,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(150.0)),
-                                        border: Border.all(
-                                          color: Colors.lightBlueAccent
-                                              .withOpacity(.5),
-                                          width: 1.0,
-                                        ),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(25.0),
-                                            child: Column(
-                                              children: [
-                                                Text(
-                                                    '\$' +
-                                                        truncateToDecimalPlaces(
-                                                                double.parse(widget
-                                                                    .networkData!
-                                                                    .price!),
-                                                                2)
-                                                            .toString(),
-                                                    style: kBigBoldTextStyle),
-                                                const SizedBox(
-                                                  height: 4,
-                                                ),
-                                                SizedBox(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      Text(
-                                                        '${truncateToDecimalPlaces(double.parse(widget.networkData!.percChangeInPrice ?? '0'), 2)}%'
-                                                            .toString(),
-                                                        style: (double.parse(widget
-                                                                    .networkData!
-                                                                    .percChangeInPrice!) >
-                                                                0
-                                                            ? const TextStyle(
-                                                                color: Color(
-                                                                    0xFF15BE46))
-                                                            : const TextStyle(
-                                                                color: Colors
-                                                                    .red)),
-                                                      ),
-                                                      SizedBox(
-                                                        height: 20,
-                                                        width: 20,
-                                                        child: double.parse(widget
-                                                                    .networkData!
-                                                                    .percChangeInPrice!) >
-                                                                0
-                                                            ? SvgPicture.asset(
-                                                                'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
-                                                                color: const Color(
-                                                                    0xFF15BE46))
-                                                            : SvgPicture.asset(
-                                                                'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
-                                                                color: Colors
-                                                                    .red
-                                                                    .withOpacity(
-                                                                        .8),
-                                                              ),
-                                                      )
-                                                    ],
-                                                  ),
-                                                )
-                                              ],
-                                            ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Price',style: kMediumTextStyle,),
+                                      Row(
+                                        children: [
+                                          Text('\$'+widget.networkData!.price!,style: kMediumBoldTextStyle,),
+                                          SizedBox(
+                                            height: 20,
+                                            width: 20,
+                                            child: double.parse(widget
+                                                .networkData!
+                                                .percChangeInPrice!) >
+                                                0
+                                                ? SvgPicture.asset(
+                                                'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
+                                                color: const Color(
+                                                    0xFF15BE46))
+                                                : SvgPicture.asset(
+                                              'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
+                                              color: Colors
+                                                  .red
+                                                  .withOpacity(
+                                                  .8),
+                                            ),),
+                                          Text(
+                                            ' (${truncateToDecimalPlaces(double.parse(widget.networkData!.percChangeInPrice ?? '0'), 2)}%)'
+                                                .toString(),
+                                            style: (double.parse(widget
+                                                .networkData!
+                                                .percChangeInPrice!) >
+                                                0
+                                                ? const TextStyle(
+                                                color: Color(
+                                                    0xFF15BE46))
+                                                : const TextStyle(
+                                                color: Colors
+                                                    .red)),
                                           ),
-                                          decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(250.0),
-                                            ),
-                                            border: Border.all(
-                                              color: Colors.lightBlueAccent,
-                                              width: 1.0,
-                                            ),
-                                          ),
-                                        ),
+                                        ],
                                       ),
-                                    )),
+                                    ],
                                   ),
                                 ),
+
+
                                 const SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -469,13 +414,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                               ? const TextStyle(
                                                                   fontFamily:
                                                                       'MontserratBold',
-                                                                  fontSize: 17,
+                                                                  fontSize: 15,
                                                                   color: Color(
                                                                       0xFF15BE46))
                                                               : TextStyle(
                                                                   fontFamily:
                                                                       'MontserratBold',
-                                                                  fontSize: 17,
+                                                                  fontSize: 15,
                                                                   color: Colors
                                                                       .red
                                                                       .withOpacity(
@@ -595,7 +540,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                               CupertinoPageRoute(
                                                 builder: (context) => Blocks(
                                                     networkData:
-                                                        widget.networkData),
+                                                        widget.networkData,valDescUrl:widget.networkData!.blocksMoniker!),
                                               ),
                                             );
                                             toggleController.updateData(0);
@@ -907,7 +852,7 @@ class _TxContDashState extends State<TxContDash> {
   @override
   Widget build(BuildContext context) {
     getData();
-    type = getType(widget.txModel!.messages![0].type!);
+    type = truncateBeforeLastDot(widget.txModel!.messages![0].type!);
 
     return InkWell(
       onTap: () => Navigator.push(

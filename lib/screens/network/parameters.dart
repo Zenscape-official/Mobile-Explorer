@@ -154,7 +154,7 @@ fetchDataMint(String input) async {
       ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
-          SearchBar(nameController:nameController),
+          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(

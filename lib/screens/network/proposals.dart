@@ -106,7 +106,7 @@ class _ProposalsState extends State<Proposals> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SearchBar(nameController:nameController),
+            SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
 
            isLoaded?
            Obx(()=> CupertinoScrollbar(
@@ -215,10 +215,9 @@ class ProposalCard extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children:[
-                            CircleAvatar(backgroundColor: ispassed? Colors.green:Colors.red,
-                              radius: 3,),
+
                             Padding(
-                              padding: const EdgeInsets.all(2.0),
+                              padding: const EdgeInsets.all(4.0),
                               child: Text(status,
                                 style: kSmallTextStyle,),
                             ),

@@ -120,7 +120,7 @@ class _ValidatorsState extends State<Validators> {
           ),
         ),
         body: Column(children: [
-          SearchBar(nameController:nameController),
+          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
 
           Padding(
             padding: const EdgeInsets.all(12.0),
