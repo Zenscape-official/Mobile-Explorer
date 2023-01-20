@@ -61,7 +61,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var tx;
   var blockDashList = [];
   var txDashList = [];
-  List<dynamic>? supply;
+  // var supply;
   double APR = 0;
   bool isLoaded = false;
   bool isProposalActive = false;
@@ -84,20 +84,15 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
         widget.networkData!.blocktime!, 'average_time'));
-    supply =
-        (await _dashboardController.fetchBankData(widget.networkData!.height!));
+    bankTotal =
+        (await _dashboardController.fetchdata(widget.networkData!.height!,'amount'));
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
-
     inflation = (await _dashboardController.fetchdata(
         widget.networkData!.inflation!, 'value'));
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
-    for (int i = 0; i < supply!.length; i++) {
-      if (supply![i].denom == 'ucmdx') {
-        bankTotal = supply![i].amount;
-      }
-    }
+
     APR = ((double.parse(inflation) * double.parse(bankTotal)) /
             double.parse(bondedToken)) *
         100;

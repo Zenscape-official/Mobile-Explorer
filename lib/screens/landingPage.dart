@@ -298,18 +298,13 @@ class _NetworkCardState extends State<NetworkCard> {
   bool APRLoaded=false;
 
   getAPR() async {
-    supply =
-    (await _dashboardController.fetchBankData(widget.networkList.height!));
+    bankTotal =
+    (await _dashboardController.fetchdata(widget.networkList.height!,'amount'));
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
     inflation = (await _dashboardController.fetchdata(
-    widget.networkList.inflation!, 'value'));
+    widget.networkList.inflation!,'value'));
 
-    for(int i=0;i<supply!.length;i++){
-      if(supply![i].denom=='ucmdx'){
-        bankTotal=supply![i].amount;
-      }
-    }
     APRcmdx = ((double.parse(inflation) * double.parse(bankTotal)) /
         double.parse(bondedToken)) *
         100;

@@ -48,7 +48,8 @@ class NetworkList {
     this.contractTxs,
     this.paramssUrl,
     this.blockSearchUrl,
-    this.txSearchUrl
+    this.txSearchUrl,
+    this.uDenom
   });
 
   String? id;
@@ -56,6 +57,7 @@ class NetworkList {
   String? name;
   String? logoUrl;
   String? denom;
+  String? uDenom;
   String? apy;
   String? commission;
   String? price;
@@ -136,7 +138,8 @@ class NetworkList {
     contractTxs: json["contractTxs"],
     paramssUrl: json["paramssUrl"],
     blockSearchUrl: json["blockSearch"],
-    txSearchUrl: json["transactionSearch"]
+    txSearchUrl: json["transactionSearch"],
+    uDenom: json["uDenom"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -181,6 +184,7 @@ class NetworkList {
     "contractTxs": contractTxs,
     "paramssUrl": paramssUrl,
     "transactionSearch":txSearchUrl,
-    "blockSearch":blockSearchUrl
+    "blockSearch":blockSearchUrl,
+    "uDenom":uDenom
   };
 }
