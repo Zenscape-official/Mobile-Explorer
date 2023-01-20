@@ -73,8 +73,8 @@ class _LandingPageState extends State<LandingPage> {
       dash = await dashboardController.fetchDash();
       setState(() {
         if (dash != null) {
-          for(int i = 0; i < net.length - 1; i++){
-            for (int j = 0; j < DashboardController.dashboardList.length - 1; j++) {
+          for(int i = 0; i < net.length; i++){
+            for (int j = 0; j < DashboardController.dashboardList.length; j++) {
               if (net[i].id == DashboardController.dashboardList[j].id) {
                 net[i].price = DashboardController.dashboardList[j].currentPrice
                     .toString();
@@ -108,6 +108,7 @@ class _LandingPageState extends State<LandingPage> {
   List<String>? image = [];
   @override
   Widget build(BuildContext context) {
+    print(net[1].price);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,

@@ -173,7 +173,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   @override
   Widget build(BuildContext context) {
     getData();
-
     return widget.networkData!.isActive == '1'
         ? Scaffold(
             drawer: NavDraw(
@@ -354,8 +353,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                     ],
                                   ),
                                 ),
-
-
                                 const SizedBox(height: 10),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
