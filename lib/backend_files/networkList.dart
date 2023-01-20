@@ -187,4 +187,53 @@ class NetworkList {
     "blockSearch":blockSearchUrl,
     "uDenom":uDenom
   };
+
+
+}
+// To parse this JSON data, do
+//
+//     final supply = supplyFromJson(jsonString);
+
+Supply supplyFromJson(String str) => Supply.fromJson(json.decode(str));
+
+String supplyToJson(Supply data) => json.encode(data.toJson());
+
+class Supply {
+  Supply({
+    this.height,
+    this.result,
+  });
+
+  String? height;
+  Result? result;
+
+  factory Supply.fromJson(Map<String, dynamic> json) => Supply(
+    height: json["height"],
+    result: json["result"] == null ? null : Result.fromJson(json["result"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "height": height,
+    "result": result?.toJson(),
+  };
+}
+
+class Result {
+  Result({
+    this.denom,
+    this.amount,
+  });
+
+  String? denom;
+  String? amount;
+
+  factory Result.fromJson(Map<String, dynamic> json) => Result(
+    denom: json["denom"],
+    amount: json["amount"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "denom": denom,
+    "amount": amount,
+  };
 }

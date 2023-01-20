@@ -25,6 +25,7 @@ class _LandingPageState extends State<LandingPage> {
   var flag = false;
   var dash;
   var net;
+  var supply;
   List<NetworkList> activeNet=[];
   List<NetworkList> inactiveNet=[];
 
@@ -33,7 +34,6 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
     netData();
   }
-
   final svgPath = [
     'assets/svgfiles/ZENSCAPE_BANNER_APP.svg',
     'assets/svgfiles/BANNER_2.svg'
@@ -108,7 +108,6 @@ class _LandingPageState extends State<LandingPage> {
   List<String>? image = [];
   @override
   Widget build(BuildContext context) {
-    print(net[1].price);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -289,26 +288,25 @@ class _NetworkCardState extends State<NetworkCard> {
       getAPR();
   }
   double APR = 0;
-  double APRcmdx=0;
   String image = '';
-  var supply;
+  Supply? supply;
   var bondedToken;
-  var inflation;
+  var inflation='0';
   var bankTotal;
   bool APRLoaded=false;
 
   getAPR() async {
-    bankTotal =
-    (await _dashboardController.fetchdata(widget.networkList.height!,'amount'));
+    supply =
+    supplyFromJson(await _dashboardController.fetchDataWithoutParam(widget.networkList.height!));
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
     inflation = (await _dashboardController.fetchdata(
     widget.networkList.inflation!,'value'));
 
-    APRcmdx = ((double.parse(inflation) * double.parse(bankTotal)) /
+    APR = ((double.parse(inflation) * double.parse(supply!.result!.amount!)) /
         double.parse(bondedToken)) *
         100;
-    if(APRcmdx!=0){
+    if(APR!=0){
       setState(() {
         APRLoaded=true;
       });
@@ -325,7 +323,7 @@ class _NetworkCardState extends State<NetworkCard> {
             context,
             CupertinoPageRoute(
                 builder: (context) =>
-                    NetworkDashBoard(networkData: widget.networkList)))
+                    NetworkDashBoard(networkData: widget.networkList,APR: APR,)))
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 2,
@@ -399,7 +397,7 @@ class _NetworkCardState extends State<NetworkCard> {
                           Text('APR', style: kExtraSmallTextStyle),
                           const SizedBox(height: 2),
                        APRLoaded? Text(
-                              '${truncateToDecimalPlaces(APRcmdx, 2).obs.toString()}%'
+                              '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
                            , style: kLandingPageBoldTextStyle)
                             :SizedBox(
                              height: 10,

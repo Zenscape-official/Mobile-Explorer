@@ -30,8 +30,9 @@ import '../homeScreen.dart';
 import 'package:http/http.dart' as http;
 
 class NetworkDashBoard extends StatefulWidget {
+  final double? APR;
   final NetworkList? networkData;
-  const NetworkDashBoard({this.networkData});
+  const NetworkDashBoard({this.networkData,this.APR});
   @override
   State<NetworkDashBoard> createState() => _NetworkDashBoardState();
 }
@@ -61,7 +62,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var tx;
   var blockDashList = [];
   var txDashList = [];
-  // var supply;
   double APR = 0;
   bool isLoaded = false;
   bool isProposalActive = false;
@@ -84,18 +84,18 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
         widget.networkData!.blocktime!, 'average_time'));
-    bankTotal =
-        (await _dashboardController.fetchdata(widget.networkData!.height!,'amount'));
+    // bankTotal =
+    //     (await _dashboardController.fetchdata(widget.networkData!.height!,'amount'));
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
-    inflation = (await _dashboardController.fetchdata(
-        widget.networkData!.inflation!, 'value'));
+    // inflation = (await _dashboardController.fetchdata(
+    //     widget.networkData!.inflation!, 'value'));
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
 
-    APR = ((double.parse(inflation) * double.parse(bankTotal)) /
-            double.parse(bondedToken)) *
-        100;
+    // APR = ((double.parse(inflation) * double.parse(bankTotal)) /
+    //         double.parse(bondedToken)) *
+    //     100;
     details = [
       height,
       txNum,
@@ -103,7 +103,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       k_m_b_generator(double.parse(removeAllChar(communityPool)) / 1000000),
       '${truncateToDecimalPlaces(double.parse(inflation) * 100, 2)}%'
           .toString(),
-      "${truncateToDecimalPlaces((APR), 2).toString()}%"
+     widget.APR.toString()
     ];
     tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     blocks = await networkController.fetchList(widget.networkData!.blocksUrl!);

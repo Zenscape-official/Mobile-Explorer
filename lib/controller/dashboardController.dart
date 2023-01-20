@@ -45,6 +45,14 @@ class DashboardController extends GetxController {
     }
   }
 
+  Future<String> fetchDataWithoutParam(String input) async {
+    final response = await http.get(Uri.parse(input));
+    if (response.statusCode == 200) {
+      return (response.body);
+    } else {
+      return '';
+    }
+  }
   fetchBankData(String input) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {

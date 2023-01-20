@@ -45,37 +45,7 @@ class _ValidatorsState extends State<Validators> {
     navController.updatePage(2);
   }
   void valData() async {
-    final result = await networkController.fetchList(widget.networkList!.validatorsUrl!);
 
-    if (result['success'] == false) {
-      // show the dialog
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text("Error",
-            style: kMediumTextStyle,),
-            content: Text(result['response'],style:kMediumBoldTextStyle),
-            actions: [
-              TextButton(
-                child: const Text("OK"),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          );
-        },
-      );
-    }
-    if(result['success'] == true) {
-      validators = List.from(result['response'])
-          .map((e) => ValidatorModel.fromJson(e))
-          .toList()
-          .reversed
-          .toList()
-          .obs;
-    }
     validators =
         await _validatorController.fetchVal(widget.networkList!.validatorsUrl!);
    setState(() {
