@@ -228,17 +228,14 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                   children: <Widget>[
                     SearchBar(nameController: nameController,hintText: 'Enter Block Height, Tx Hash, Address..'),
                     SizedBox(
-                      //height: MediaQuery.of(context).size.height / 2.0,
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                         child: Container(
-                          // height:MediaQuery.of(context).size.height/1.2,
                           decoration: kBoxDecorationWithGradient,
                           child: Padding(
                             padding: const EdgeInsets.all(16.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-
                               children: [
                                 Row(
                                   mainAxisAlignment:

@@ -10,7 +10,6 @@ import '../../backend_files/propVotesModel.dart';
 import '../../constants/functions.dart';
 import '../../widgets/searchBarWidget.dart';
 
-
 class ProposalDetails extends StatefulWidget {
   final ProposalsModel proposalProduct;
   final NetworkList? networkData;
@@ -18,7 +17,6 @@ class ProposalDetails extends StatefulWidget {
   @override
   State<ProposalDetails> createState() => _ProposalDetailsState();
 }
-
 class _ProposalDetailsState extends State<ProposalDetails> {
   TextEditingController nameController=TextEditingController();
   var  status;
@@ -248,30 +246,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                        SimpleRichText(formatString(widget.proposalProduct.content!.description!),
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
-                        // Text('Parameter Change',
-                        //     style:kSmallBoldTextStyle),
-                        // const SizedBox(height: 2,),
-                        // Row(
-                        //   children: [
-                        //     Expanded(
-                        //       child: Container(
-                        //         margin: const EdgeInsets.all(5),decoration: kBoxBorder,
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           child: Column(
-                        //             crossAxisAlignment: CrossAxisAlignment.start,
-                        //             children: [
-                        //               Text('deposit params:',
-                        //                   style:kSmallTextStyle),
-                        //               Text('',
-                        //                   style:kSmallTextStyle),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   ],
-                        // ),
                         const SizedBox(height: 20,),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -303,7 +277,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                 ),
                               ),
                             ),
-
                           ],
                         ),
                         const SizedBox(height: 20,),
@@ -314,7 +287,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             decoration: BoxDecoration(
                               color: Colors.green,
                               borderRadius: BorderRadius.circular(4),
-
                             ),
                           ),
                           const SizedBox(width:10),
@@ -339,7 +311,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             decoration: BoxDecoration(
                               color: Colors.red,
                               borderRadius: BorderRadius.circular(4),
-
                             ),
                           ),
                           const SizedBox(width:10),
@@ -364,7 +335,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             decoration: BoxDecoration(
                               color: Colors.red.withOpacity(.5),
                               borderRadius: BorderRadius.circular(4),
-
                             ),
                           ),
                           const SizedBox(width:10),
@@ -391,7 +361,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             decoration: BoxDecoration(
                               color: Colors.red.withOpacity(.5),
                               borderRadius: BorderRadius.circular(4),
-
                             ),
                           ),
                           const SizedBox(width:10),
@@ -405,13 +374,12 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                     style:kSmallBoldTextStyle),
                                 Text(tallyAbstain.toString(),
                                     style:kSmallTextStyle),
-
                               ]
                           )
-                        ],)
-
-
-                      ]),
+                        ],
+                        )
+                      ]
+                  ),
                 ),
               ),
              propVoters.length!=0? Padding(
@@ -443,83 +411,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             return VoterCard(proposalVotesModel: propVoters[index],);
                           }
                         ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-                        //     child: Card(
-                        //         color: const Color(0xFFF9FAFC),
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           child: Column(
-                        //             children: [
-                        //               Row(
-                        //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                 children:  [
-                        //                   Text('Cosmostation',style: kSmallBoldTextStyle,),
-                        //                   GreenContainer('Yes'),
-                        //                 ],
-                        //               ),
-                        //               const SizedBox(height: 4,),
-                        //               Row(
-                        //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                 children: [
-                        //                   Text('TxHash',style: kSmallTextStyle,),
-                        //                   Text('0',style: kSmallTextStyle,)
-                        //                 ],
-                        //               ),
-                        //               const SizedBox(height: 4,),
-                        //               Row(
-                        //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                 children: [
-                        //                   Text('Time',style: kSmallTextStyle,),
-                        //                   Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-                        //                 ],
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         )),
-                        //   ),
-                        // ),
-                        // Padding(
-                        //   padding: const EdgeInsets.all(8.0),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.fromLTRB(8.0,0,8,8),
-                        //     child: Card(
-                        //         color: const Color(0xFFF9FAFC),
-                        //         child: Padding(
-                        //           padding: const EdgeInsets.all(8.0),
-                        //           child: Column(
-                        //             children: [
-                        //               Row(
-                        //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                 children:  [
-                        //                   Text('1hgyfyf..jhyf9',style: kSmallBoldTextStyle,),
-                        //                   GreenContainer('Yes'),
-                        //                 ],
-                        //               ),
-                        //               const SizedBox(height: 4,),
-                        //               Row(
-                        //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                 children: [
-                        //                   Text('TxHash',style: kSmallTextStyle,),
-                        //                   Text('0',style: kSmallTextStyle,)
-                        //                 ],
-                        //               ),
-                        //               const SizedBox(height: 4,),
-                        //               Row(
-                        //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        //                 children: [
-                        //                   Text('Time',style: kSmallTextStyle,),
-                        //                   Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-                        //                 ],
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         )),
-                        //   ),
-                        // ),
-
                       ]
                   ),
                 ),
@@ -568,14 +459,7 @@ class VoterCard extends StatelessWidget {
                       Text(dotRefactorFunction(proposalVotesModel!.validatorAddress!),style: kSmallBoldTextStyle,)
                     ],
                   ),
-                  const SizedBox(height: 4,),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: [
-                  //     Text('Time',style: kSmallTextStyle,),
-                  //     Text('Yesterday, 12:49 PM',style: kSmallTextStyle,)
-                 //   ],
-                 // ),
+                  const SizedBox(height: 4,)
                 ],
               ),
             )),

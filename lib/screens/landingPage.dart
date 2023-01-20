@@ -73,10 +73,8 @@ class _LandingPageState extends State<LandingPage> {
       dash = await dashboardController.fetchDash();
       setState(() {
         if (dash != null) {
-          for (int i = 0; i < net.length - 1; i++) {
-            for (int j = 0;
-                j < DashboardController.dashboardList.length - 1;
-                j++) {
+          for(int i = 0; i < net.length - 1; i++){
+            for (int j = 0; j < DashboardController.dashboardList.length - 1; j++) {
               if (net[i].id == DashboardController.dashboardList[j].id) {
                 net[i].price = DashboardController.dashboardList[j].currentPrice
                     .toString();
@@ -392,9 +390,7 @@ class _NetworkCardState extends State<NetworkCard> {
                           Text('APR', style: kExtraSmallTextStyle),
                           const SizedBox(height: 2),
                           Text(
-                            //(widget.networkList.id!='comdex'?''
                               '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
-                              //:'85.88%'
                               , style: kLandingPageBoldTextStyle),
                         ],
                       ),

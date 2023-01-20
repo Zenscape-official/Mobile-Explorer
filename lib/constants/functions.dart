@@ -1,13 +1,9 @@
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../Constants/constants.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
-
-
 timeDifferenceFunction(timeDifference){
   var finalTimeDiff= DateTime.now().toLocal()
       .difference(DateTime.parse(timeDifference).toLocal())
@@ -62,11 +58,8 @@ getImage(String id){
       return 'assets/images/zenscape_logos/scrt.png';
     case 'umee':
       return 'assets/images/zenscape_logos/umee.png';
-
     default:
       return '';
-
-
 
   }
 }
