@@ -75,11 +75,9 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     getData();
     navController.updatePage(1);
   }
-
   getData() async {
     result =
         await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
-
     height = (await _dashboardController.fetchSingleData(
         widget.networkData!.height!, 'height'));
     txNum = (await _dashboardController.fetchdata(
@@ -103,7 +101,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
     APR = ((double.parse(inflation) * double.parse(bankTotal)) /
             double.parse(bondedToken)) *
         100;
-
     details = [
       height,
       txNum,
@@ -574,6 +571,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return BlockContDash(
+                                            valDesc: widget.networkData!.blocksMoniker!,
                                             blockModel: blockDashList.reversed
                                                 .toList()[index],
                                           );
@@ -708,7 +706,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
 
 class BlockContDash extends StatelessWidget {
   final BlockModel? blockModel;
-  const BlockContDash({Key? key, this.blockModel}) : super(key: key);
+  final String valDesc;
+  const BlockContDash({Key? key, this.blockModel,required this.valDesc}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -716,6 +715,7 @@ class BlockContDash extends StatelessWidget {
           context,
           CupertinoPageRoute(
               builder: (context) => BlockDetails(
+                valDesc:valDesc,
                     blockModel: blockModel,
                   ))),
       child: Padding(

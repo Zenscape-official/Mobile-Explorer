@@ -208,11 +208,6 @@ String? getRestrictedCharacters(String string){
   }
 }
 
-
-
-
-
-
 getType(String input) {
   switch (input) {
     //auction

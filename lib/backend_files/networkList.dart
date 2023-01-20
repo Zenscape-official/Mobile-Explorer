@@ -3,11 +3,8 @@
 //     final networkList = networkListFromJson(jsonString);
 
 import 'dart:convert';
-
 List<NetworkList?>? networkListFromJson(String str) => json.decode(str) == null ? [] : List<NetworkList?>.from(json.decode(str)!.map((x) => NetworkList.fromJson(x)));
-
 String networkListToJson(List<NetworkList?>? data) => json.encode(data == null ? [] : List<dynamic>.from(data.map((x) => x!.toJson())));
-
 class NetworkList {
   NetworkList({
     this.id,
@@ -50,6 +47,8 @@ class NetworkList {
     this.contractDetailsBalances,
     this.contractTxs,
     this.paramssUrl,
+    this.blockSearchUrl,
+    this.txSearchUrl
   });
 
   String? id;
@@ -74,6 +73,8 @@ class NetworkList {
   String? validatorsUrl;
   String? blocksUrl;
   String? transactionsUrl;
+  String? blockSearchUrl;
+  String? txSearchUrl;
   String? proposalsUrl;
   String? ibcUrl;
   String? assetsUrl;
@@ -134,6 +135,8 @@ class NetworkList {
     contractDetailsBalances: json["contractDetailsBalances"],
     contractTxs: json["contractTxs"],
     paramssUrl: json["paramssUrl"],
+    blockSearchUrl: json["blockSearch"],
+    txSearchUrl: json["transactionSearch"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -177,5 +180,7 @@ class NetworkList {
     "contractDetailsBalances": contractDetailsBalances,
     "contractTxs": contractTxs,
     "paramssUrl": paramssUrl,
+    "transactionSearch":txSearchUrl,
+    "blockSearch":blockSearchUrl
   };
 }

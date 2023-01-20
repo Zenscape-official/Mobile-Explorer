@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/proposalsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
@@ -30,6 +31,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
   var propVoters;
   var Deposit='0';
   var DepositDenom='';
+  var details='';
 
   getData()async{
     final response = await http.get(Uri.parse('${widget.networkData!.proposalTally}${widget.proposalProduct.id}'));
@@ -58,6 +60,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
     propVoters=List<ProposalVotesModel>.from(json.decode((resultVote.body)).map((x) => ProposalVotesModel.fromJson(x)));
     }
     if (resultDeposit.statusCode==200){
+      if(jsonDecode(resultDeposit.body)[0]['amount']!=null)
       Deposit=(jsonDecode(resultDeposit.body)[0]['amount']);
 
     }
@@ -87,6 +90,8 @@ class _ProposalDetailsState extends State<ProposalDetails> {
   Widget build(BuildContext context) {
     fun();
     getData();
+    details=widget.proposalProduct.content!.description!;
+    print(details);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -240,7 +245,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                         Text('Details ',
                             style:kSmallBoldTextStyle),
                         const SizedBox(height: 2,),
-                        Text(widget.proposalProduct.content!.description!,
+                       SimpleRichText(formatString(widget.proposalProduct.content!.description!),
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
                         // Text('Parameter Change',

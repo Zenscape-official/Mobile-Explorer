@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../Constants/constants.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 
 timeDifferenceFunction(timeDifference){
@@ -122,4 +123,10 @@ class TextWithCopyIcon extends StatelessWidget {
       ),
     );
   }
+}
+
+String formatString(String str) {
+  str = str.replaceAll("**", "*");
+  //str = str.replaceAll("\\n", "\n");
+  return str;
 }

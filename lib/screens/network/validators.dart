@@ -246,7 +246,7 @@ class ValidatorContainer extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   child: SizedBox(
                                     width:180,
-                                    height: 20,
+                                    height: 22,
 
                                     child: Text(validatorModel!.moniker!,
                                         style: kMediumBoldTextStyle),

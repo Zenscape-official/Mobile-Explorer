@@ -10,8 +10,8 @@ import 'package:http/http.dart' as http;
 
 class BlockDetails extends StatefulWidget {
   final BlockModel? blockModel;
-  final String valDesc;
-  BlockDetails({Key? key,this.blockModel,required this.valDesc}) : super(key: key);
+  final String? valDesc;
+  BlockDetails({Key? key,this.blockModel,this.valDesc}) : super(key: key);
   @override
   State<BlockDetails> createState() => _BlockDetailsState();
 }
@@ -25,7 +25,7 @@ class _BlockDetailsState extends State<BlockDetails> {
   Widget build(BuildContext context) {
 
     return
-      BlockDetailScreen(blockModel: widget.blockModel,valDesc: widget.valDesc);
+      BlockDetailScreen(blockModel: widget.blockModel,valDesc: widget.valDesc!);
   }
 }
 
