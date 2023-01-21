@@ -30,6 +30,7 @@
     "mintingParamssUrl":"https://rest.comdex.one/minting/parameters",
     "stakingParamsUrl":"https://lcd.osmosis.zone/staking/parameters",
     "blockSearch": "https://staging-explorer-api.zenscape.one/osmosis/block/",
+    "txFromAddress": "https://staging-explorer-api.zenscape.one/osmosis/transactionFromAddress/",
     "govParamsUrl":"https://staging-explorer-api.zenscape.one/osmosis/governance",
     "distParamsUrl":"https://lcd.osmosis.zone/distribution/parameters",
     "slashingParamsUrl":"https://lcd.osmosis.zone/slashing/parameters",
@@ -39,7 +40,7 @@
     "proposalVote" : "https://staging-explorer-api.zenscape.one/osmosis/proposalVotes/",
     "proposalDeposit": "https://staging-explorer-api.zenscape.one/osmosis/proposalDeposit/",
     "contractDetailsBalances" : "https://lcd.osmosis.zone/cosmos/bank/v1beta1/balances/",
-    "txFromAddress": "https://staging-explorer-api.zenscape.one/osmosis/transactionFromAddress/",
+    "transactionSearch": "https://staging-explorer-api.zenscape.one/osmosis/transaction/",
     "delegationFromAddress": "https://lcd.osmosis.zone/cosmos/staking/v1beta1/delegations/",
     "rewardFromAddress": "https://lcd.osmosis.zone/cosmos/distribution/v1beta1/delegators/",
     "contractTxs" : "https://lcd.osmosis.zone/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz"
