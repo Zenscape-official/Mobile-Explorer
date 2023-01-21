@@ -29,6 +29,7 @@
     "contractsUrl":"https://staging-explorer-api.zenscape.one/osmosis/wasmcontracts",
     "mintingParamssUrl":"https://rest.comdex.one/minting/parameters",
     "stakingParamsUrl":"https://lcd.osmosis.zone/staking/parameters",
+    "blockSearch": "https://staging-explorer-api.zenscape.one/osmosis/block/",
     "govParamsUrl":"https://staging-explorer-api.zenscape.one/osmosis/governance",
     "distParamsUrl":"https://lcd.osmosis.zone/distribution/parameters",
     "slashingParamsUrl":"https://lcd.osmosis.zone/slashing/parameters",
