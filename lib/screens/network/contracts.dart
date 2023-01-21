@@ -69,7 +69,7 @@ class _ContractsState extends State<Contracts> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
+            SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList!,),
 
             Padding(
               padding: const EdgeInsets.all(18.0),

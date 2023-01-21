@@ -51,7 +51,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   NavController navController = Get.put(NavController());
   String fullName = '';
   var pageIndex = 0;
-  var blockTime;
+  var blockTime='0';
   var txNum;
   var bondedToken;
   var communityPool;
@@ -84,12 +84,10 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
         widget.networkData!.blocktime!, 'average_time'));
-    // bankTotal =
-    //     (await _dashboardController.fetchdata(widget.networkData!.height!,'amount'));
     bondedToken = await _dashboardController.fetchdata(
         widget.networkData!.bondedTokens!, 'bonded_tokens');
-    // inflation = (await _dashboardController.fetchdata(
-    //     widget.networkData!.inflation!, 'value'));
+    inflation = (await _dashboardController.fetchdata(
+        widget.networkData!.inflation!, 'value'));
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
 
@@ -103,7 +101,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       k_m_b_generator(double.parse(removeAllChar(communityPool)) / 1000000),
       '${truncateToDecimalPlaces(double.parse(inflation) * 100, 2)}%'
           .toString(),
-     widget.APR.toString()
+     '${widget.APR!.toStringAsFixed(2)}%'
     ];
     tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
     blocks = await networkController.fetchList(widget.networkData!.blocksUrl!);
@@ -124,9 +122,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         }
         activeProposalsList.sort((b, a) => b.id!.compareTo(a.id!));
       }
-
     setState(() {
-      if (blocks != null && tx != null) {
+      if (blocks != null || tx != null|| txNum!=null||height!='0') {
         isLoaded = true;
       } else {
         isLoaded = false;
@@ -138,7 +135,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       }
     });
   }
-
   getDialogue(var result) {
     if (result['success'] == false) {
       showDialog(
@@ -220,7 +216,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SearchBar(nameController: nameController,hintText: 'Enter Block Height, Tx Hash, Address..'),
+                    SearchBar(nameController: nameController,hintText: 'Enter Block Height, Tx Hash, Address..',networkList: widget.networkData!,),
                     SizedBox(
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
@@ -282,8 +278,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                               style: kExtraSmallTextStyle,
                                             ),
                                           ),
-                                          isLoaded
-                                              ? Text(
+                                           Text(
                                                   truncateToDecimalPlaces(
                                                           double.parse(
                                                               blockTime),
@@ -291,11 +286,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                       .toString(),
                                                   style:
                                                       kExtraSmallBoldTextStyle)
-                                              : SizedBox(
-                                                  height: 5,
-                                                  width: 15,
-                                                  child:
-                                                      LinearProgressIndicator()),
+
                                         ],
                                       ),
                                     ),
@@ -366,16 +357,12 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           const SizedBox(
                                             height: 4,
                                           ),
-                                          isLoaded
-                                              ? Text(
+
+                                               Text(
                                                   '\$${k_m_b_generator(double.parse(widget.networkData!.marketCap!))}',
                                                   style: kMediumBoldTextStyle,
                                                 )
-                                              : SizedBox(
-                                                  height: 5,
-                                                  width: 15,
-                                                  child:
-                                                      LinearProgressIndicator()),
+
                                         ],
                                       ),
                                       Column(
@@ -391,8 +378,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           ),
                                           Row(
                                             children: [
-                                              isLoaded
-                                                  ? double.parse(widget.networkData!.the24HrVol!) >
+                                              double.parse(widget.networkData!.the24HrVol!) >
                                                           0
                                                       ? Text(
                                                           '\$${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
@@ -421,7 +407,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                                   color:
                                                                       Color(0xFF15BE46))
                                                               : TextStyle(fontFamily: 'MontserratBold', fontSize: 17, color: Colors.red.withOpacity(.8)))
-                                                  : SizedBox(height: 5, width: 15, child: LinearProgressIndicator()),
+                                                  ,
                                               SizedBox(
                                                   height: 20,
                                                   width: 20,
@@ -822,7 +808,6 @@ class _TxContDashState extends State<TxContDash> {
     final response = await http.get(Uri.parse(
         '${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
-
       timestampTx =
           jsonDecode(response.body)['result']['block']['header']['time'];
       setState(() {

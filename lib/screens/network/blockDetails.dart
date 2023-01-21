@@ -144,7 +144,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 InkWell(
                                     onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                                       context,
-                                      screen: SearchScreen(nameController: widget.blockModel!.proposerAddress! ),
+                                      screen: SearchScreen(nameController: widget.blockModel!.proposerAddress!),
                                       withNavBar: true,
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ),

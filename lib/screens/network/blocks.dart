@@ -142,7 +142,8 @@ class _BlocksState extends State<Blocks> {
               SizedBox(height: 0),
               SearchBar(
                 nameController:nameController,
-                hintText: 'Enter Block Height, Tx Hash, Address..'
+                hintText: 'Enter Block Height, Tx Hash, Address..',
+                networkList: widget.networkData!,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 2.0,horizontal: 12),

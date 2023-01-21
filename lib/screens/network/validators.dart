@@ -90,7 +90,7 @@ class _ValidatorsState extends State<Validators> {
           ),
         ),
         body: Column(children: [
-          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
+          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList!,),
 
           Padding(
             padding: const EdgeInsets.all(12.0),

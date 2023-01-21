@@ -151,7 +151,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                         InkWell(
                           onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: SearchScreen(nameController: widget.contractModel!.contractAddress!),
+                            screen: SearchScreen(nameController: widget.contractModel!.contractAddress!,),
                             withNavBar: true,
                             pageTransitionAnimation: PageTransitionAnimation.cupertino,
                           ),

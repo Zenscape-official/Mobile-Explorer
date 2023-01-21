@@ -107,7 +107,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
       body: tallyLoaded? SingleChildScrollView(
         child: Column(
             children: [
-              SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
+              SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',),
               Container(
                 margin: const EdgeInsets.only(right: 10,left: 10),
                 width: MediaQuery.of(context).size.width/1.1,

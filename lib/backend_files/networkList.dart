@@ -50,7 +50,10 @@ class NetworkList {
     this.blockSearchUrl,
     this.txSearchUrl,
     this.uDenom,
-    this.valStatus
+    this.valStatus,
+    this.txFromAddress,
+    this.delegationFromAddress,
+    this.rewardFromAddress,
   });
 
   String? id;
@@ -97,6 +100,9 @@ class NetworkList {
   String? contractTxs;
   String? paramssUrl;
   String? valStatus;
+  String? txFromAddress;
+  String? delegationFromAddress;
+  String? rewardFromAddress;
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
@@ -142,7 +148,10 @@ class NetworkList {
     blockSearchUrl: json["blockSearch"],
     txSearchUrl: json["transactionSearch"],
     uDenom: json["uDenom"],
-    valStatus:json["valStatus"]
+    valStatus:json["valStatus"],
+    txFromAddress: json["txFromAddress"],
+    delegationFromAddress: json["delegationFromAddress"],
+    rewardFromAddress: json["rewardFromAddress"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -189,7 +198,10 @@ class NetworkList {
     "transactionSearch":txSearchUrl,
     "blockSearch":blockSearchUrl,
     "uDenom":uDenom,
-    "valStatus":valStatus
+    "valStatus":valStatus,
+    "txFromAddress": txFromAddress,
+    "delegationFromAddress": delegationFromAddress,
+    "rewardFromAddress": rewardFromAddress,
   };
 
 

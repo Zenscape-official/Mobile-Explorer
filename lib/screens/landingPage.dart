@@ -131,7 +131,7 @@ class _LandingPageState extends State<LandingPage> {
           },
           child: Column(
             children: [
-              SearchBar(nameController: nameController,hintText: 'Enter Tx hash, Address...'),
+              // SearchBar(nameController: nameController,hintText: 'Enter Tx hash, Address...'),
               nameController.text.isEmpty
                   ? const SizedBox(width: 0)
                   : ListView.builder(
@@ -299,8 +299,7 @@ class _NetworkCardState extends State<NetworkCard> {
   getAPR() async {
     supply =
     (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));
-    print(supply);
-    print(widget.networkList.uDenom);
+
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
     inflation = (await _dashboardController.fetchdata(

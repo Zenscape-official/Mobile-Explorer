@@ -2,6 +2,7 @@ import'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/backend_files/ibcDenomModel.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import '../constants/constants.dart';
 import '../screens/network/searchDetailsScreen.dart';
 
@@ -10,10 +11,13 @@ class SearchBar extends StatelessWidget {
     Key? key,
     required this.nameController,
     required this.hintText,
+    this.networkList
+
   }) : super(key: key);
 
   final TextEditingController nameController;
   final String hintText;
+  final NetworkList? networkList;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +54,14 @@ class SearchBar extends StatelessWidget {
                 else{
                   PersistentNavBarNavigator.pushNewScreen(
                     context,
-                    screen: SearchScreen(nameController: nameController.text ),
+                    screen: SearchScreen(nameController: nameController.text,
+                        blockSearch: networkList!.blockSearchUrl!,
+                        balanceFromAddress: networkList!.contractDetailsBalances!,
+                        txSearch: networkList!.txSearchUrl!,
+                        txFromAddress: networkList!.txFromAddress!,
+                        rewardsFromAddress: networkList!.rewardFromAddress!,
+                        delegationFromAddress:networkList!.delegationFromAddress!
+                    ),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   ).then((value) {
@@ -70,7 +81,13 @@ class SearchBar extends StatelessWidget {
          else{
            PersistentNavBarNavigator.pushNewScreen(
              context,
-             screen: SearchScreen(nameController: name),
+             screen: SearchScreen(nameController: name,
+               blockSearch: networkList!.blockSearchUrl!,
+               balanceFromAddress: networkList!.contractDetailsBalances!,
+               txSearch: networkList!.txSearchUrl!,
+               txFromAddress: networkList!.txFromAddress!,
+               rewardsFromAddress: networkList!.rewardFromAddress!,
+               delegationFromAddress:networkList!.delegationFromAddress! ,),
              withNavBar: true, // OPTIONAL VALUE. True by default.
              pageTransitionAnimation: PageTransitionAnimation.cupertino,
            ).then((value) {

@@ -21,7 +21,16 @@ import '../../controller/networklistController.dart';
 class SearchScreen extends StatefulWidget {
   var nameController;
   final NetworkList? networkList;
- SearchScreen({Key? key,this.nameController, this.networkList}) : super(key: key);
+  final String? blockSearch,txSearch,txFromAddress,balanceFromAddress,delegationFromAddress,rewardsFromAddress;
+ SearchScreen({Key? key,
+   this.nameController,
+   this.networkList,
+   this.blockSearch,
+   this.txSearch,
+   this.balanceFromAddress,
+   this.delegationFromAddress,
+   this.txFromAddress,
+   this.rewardsFromAddress}) : super(key: key);
   @override
   State<SearchScreen> createState() => _SearchScreenState();
 }
@@ -56,7 +65,7 @@ class _SearchScreenState extends State<SearchScreen> {
     if(isNumeric(widget.nameController)) {
 
       final response = await http.get(Uri.parse(
-          'http://167.235.151.252:3005/block/${widget.nameController.toString()}'));
+          '${widget.blockSearch}${widget.nameController.toString()}'));
       if (response.statusCode == 200) {
         blockDetails =
         List<BlockModel>.from(json.decode(response.body).map((x) => BlockModel.fromJson(x)));
@@ -74,7 +83,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     else if(widget.nameController.length==64){
       final response = await http.get(Uri.parse(
-          'http://167.235.151.252:3005/transaction/${widget.nameController.toString()}'
+          '${widget.txSearch}${widget.nameController.toString()}'
       )
       );
       if (response.statusCode == 200) {
@@ -91,11 +100,11 @@ class _SearchScreenState extends State<SearchScreen> {
     else if(widget.nameController.length==52){}
      else {
         final tx_response = await http.get(Uri.parse(
-            'http://167.235.151.252:3005/transactionFromAddress/${widget.nameController.toString()}'));
+            '${widget.txFromAddress}${widget.nameController.toString()}'));
         final balance_response = await http.get(Uri.parse(
-            'https://meteor.rest.comdex.one/cosmos/bank/v1beta1/balances/${widget.nameController.toString()}'));
+            '${widget.balanceFromAddress}${widget.nameController.toString()}'));
         final delegate_response = await http.get(Uri.parse(
-            'https://rest.comdex.one/cosmos/staking/v1beta1/delegations/${widget.nameController.toString()}'));
+            '${widget.delegationFromAddress}${widget.nameController.toString()}'));
         final reward_response = await http.get(Uri.parse(
             'https://rest.comdex.one/cosmos/distribution/v1beta1/delegators/${widget.nameController.toString()}/rewards'));
         if (tx_response.statusCode == 200) {

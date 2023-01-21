@@ -106,7 +106,7 @@ class _ProposalsState extends State<Proposals> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..'),
+            SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkListProposal!,),
 
            isLoaded?
            Obx(()=> CupertinoScrollbar(
