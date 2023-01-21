@@ -47,7 +47,7 @@ class _ValidatorsState extends State<Validators> {
   void valData() async {
 
     validators =
-        await _validatorController.fetchVal(widget.networkList!.validatorsUrl!);
+        await _validatorController.fetchVal(widget.networkList!.validatorsUrl!,widget.networkList!.valStatus!);
    setState(() {
      if(validators!=null){
        isLoaded=true;

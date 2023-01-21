@@ -54,7 +54,7 @@
     "market cap":"0",
     "24 hr vol":"0",
     "voting power":"https://staging-explorer-api.zenscape.one/comdex/activeproposalcount",
-    "height": "https://rest.comdex.one/bank/total",
+    "height": "https://rest.comdex.one/bank/total/ucmdx",
     "transaction": "https://staging-explorer-api.zenscape.one/comdex/transactioncount",
     "bonded tokens":"https://staging-explorer-api.zenscape.one/comdex/stakingpool",
     "community pool":"https://staging-explorer-api.zenscape.one/comdex/communitypool",

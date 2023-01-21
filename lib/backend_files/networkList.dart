@@ -49,7 +49,8 @@ class NetworkList {
     this.paramssUrl,
     this.blockSearchUrl,
     this.txSearchUrl,
-    this.uDenom
+    this.uDenom,
+    this.valStatus
   });
 
   String? id;
@@ -95,6 +96,7 @@ class NetworkList {
   String? contractDetailsBalances;
   String? contractTxs;
   String? paramssUrl;
+  String? valStatus;
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
@@ -139,7 +141,8 @@ class NetworkList {
     paramssUrl: json["paramssUrl"],
     blockSearchUrl: json["blockSearch"],
     txSearchUrl: json["transactionSearch"],
-    uDenom: json["uDenom"]
+    uDenom: json["uDenom"],
+    valStatus:json["valStatus"]
   );
 
   Map<String, dynamic> toJson() => {
@@ -185,7 +188,8 @@ class NetworkList {
     "paramssUrl": paramssUrl,
     "transactionSearch":txSearchUrl,
     "blockSearch":blockSearchUrl,
-    "uDenom":uDenom
+    "uDenom":uDenom,
+    "valStatus":valStatus
   };
 
 
@@ -221,7 +225,7 @@ class Supply {
 class Result {
   Result({
     this.denom,
-    this.amount,
+     this.amount,
   });
 
   String? denom;
@@ -229,7 +233,7 @@ class Result {
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
     denom: json["denom"],
-    amount: json["amount"],
+    amount: json["amount"]??'0',
   );
 
   Map<String, dynamic> toJson() => {

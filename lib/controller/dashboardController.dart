@@ -53,12 +53,10 @@ class DashboardController extends GetxController {
       return '';
     }
   }
-  fetchBankData(String input) async {
-    final response = await http.get(Uri.parse(input));
+  fetch2PathData(String uri,String path1, String path2) async {
+    final response = await http.get(Uri.parse(uri));
     if (response.statusCode == 200) {
-      // print(jsonDecode(response.body)['result']['supply']);
-      var result = await jsonDecode(response.body)['result']['supply'];
-      return List.from((result).map((x) => SupplyData.fromJson(x)));
+      return await jsonDecode(response.body)[path1][path2];
     } else {
       return '';
     }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:zenscape_app/backend_files/akashproposals.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
@@ -289,7 +290,7 @@ class _NetworkCardState extends State<NetworkCard> {
   }
   double APR = 0;
   String image = '';
-  Supply? supply;
+  String? supply;
   var bondedToken;
   var inflation='0';
   var bankTotal;
@@ -297,15 +298,20 @@ class _NetworkCardState extends State<NetworkCard> {
 
   getAPR() async {
     supply =
-    supplyFromJson(await _dashboardController.fetchDataWithoutParam(widget.networkList.height!));
+    (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));
+    print(supply);
+    print(widget.networkList.uDenom);
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
     inflation = (await _dashboardController.fetchdata(
     widget.networkList.inflation!,'value'));
-
-    APR = ((double.parse(inflation) * double.parse(supply!.result!.amount!)) /
-        double.parse(bondedToken)) *
-        100;
+    if(supply!=null){
+      setState(() {
+        APR = ((double.parse(inflation) * double.parse(supply!)) /
+            double.parse(bondedToken)) *
+            100;
+      });
+    }
     if(APR!=0){
       setState(() {
         APRLoaded=true;
@@ -323,7 +329,9 @@ class _NetworkCardState extends State<NetworkCard> {
             context,
             CupertinoPageRoute(
                 builder: (context) =>
-                    NetworkDashBoard(networkData: widget.networkList,APR: APR,)))
+                    NetworkDashBoard(networkData: widget.networkList,APR: APR,)
+            )
+        )
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 2,

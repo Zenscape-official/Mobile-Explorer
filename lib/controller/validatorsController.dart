@@ -15,13 +15,11 @@ class ValidatorController extends GetxController {
   var isLoading=false;
 
   var dateToday= DateTime.now();
-  Future<dynamic> fetchVal(String ApiUri) async {
+  Future<dynamic> fetchVal(String ApiUri,String status) async {
     isLoading=true;
-    // print(ApiUri);
     try {
-
       var response = await client.get(Uri.parse(ApiUri));
-      var statusResponse=await client.get(Uri.parse('http://167.235.151.252:3005/validatorstatus'));
+      var statusResponse=await client.get(Uri.parse(status));
       isLoading=false;
       switch (response.statusCode) {
 
