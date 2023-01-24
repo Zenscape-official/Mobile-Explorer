@@ -85,7 +85,7 @@ class _ContractsState extends State<Contracts> {
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
-                itemCount: ContractController.ContractList.length,
+                itemCount:( ContractController.ContractList.length>50)?50:ContractController.ContractList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return
                     ContractContainer(contractModel: ContractController.ContractList[index],networkList: widget.networkList,);
@@ -99,7 +99,6 @@ class _ContractsState extends State<Contracts> {
     );
   }
 }
-
 class ContractContainer extends StatelessWidget {
   final NetworkList? networkList;
   final ContractModel? contractModel;

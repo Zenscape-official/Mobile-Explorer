@@ -40,7 +40,6 @@ class NetworkDashBoard extends StatefulWidget {
 class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var details = ['0', '0', '0', '0', '0', '0'];
   final BlocksController _blocksController = Get.put(BlocksController());
-
   final NetworkController networkController = Get.put(NetworkController());
   final ProposalController proposalController = Get.put(ProposalController());
   final DashboardController _dashboardController =
@@ -90,15 +89,11 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.inflation!, 'value'));
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
-
-    // APR = ((double.parse(inflation) * double.parse(bankTotal)) /
-    //         double.parse(bondedToken)) *
-    //     100;
     details = [
       height,
       txNum,
       k_m_b_generator(double.parse(bondedToken) / 1000000),
-      k_m_b_generator(double.parse(removeAllChar(communityPool)) / 1000000),
+      k_m_b_generator((getValueFromBracket(findBracketByToken(communityPool,widget.networkData!.uDenom!)!)) / 1000000),
       '${truncateToDecimalPlaces(double.parse(inflation) * 100, 2)}%'
           .toString(),
      '${widget.APR!.toStringAsFixed(2)}%'
@@ -122,9 +117,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         }
         activeProposalsList.sort((b, a) => b.id!.compareTo(a.id!));
       }
-    setState(() {
-      if (blocks != null || tx != null|| txNum!=null||height!='0') {
-        isLoaded = true;
+
+      if (blocks != null || tx != null||communityPool!=null) {
+        setState(() {
+          isLoaded = true;
+
+        });
+
       } else {
         isLoaded = false;
       }
@@ -133,7 +132,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       } else {
         isProposalActive = false;
       }
-    });
+
   }
   getDialogue(var result) {
     if (result['success'] == false) {
@@ -406,7 +405,12 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                                   fontSize: 17,
                                                                   color:
                                                                       Color(0xFF15BE46))
-                                                              : TextStyle(fontFamily: 'MontserratBold', fontSize: 17, color: Colors.red.withOpacity(.8)))
+                                                              :
+                                                          TextStyle(
+                                                              fontFamily:
+                                                              'MontserratBold',
+                                                              fontSize: 17,
+                                                              color: Colors.red.withOpacity(.8)))
                                                   ,
                                               SizedBox(
                                                   height: 20,
@@ -474,9 +478,11 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                     shrinkWrap: true,
                                     itemCount: activeProposalsList.length,
                                     itemBuilder: (BuildContext context, index) {
-                                      return ProposalCardDash(
-                                          activeProposalsList.reversed
-                                              .toList()[index]);
+                                      return ProposalCardDash(activeProposalsList.reversed
+                                          .toList()[index],
+                                          widget.networkData!,
+
+                                         );
                                     })))
                         : SizedBox(
                             height: .1,
@@ -548,7 +554,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           return BlockContDash(
                                             valDesc: widget.networkData!.blocksMoniker!,
                                             blockModel: blockDashList.reversed
-                                                .toList()[index],
+                                                .toList()[index], networkList: widget.networkData!,
                                           );
                                         }),
                                   ),
@@ -627,6 +633,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return TxContDash(
+                                            networkList: widget.networkData!,
                                             txModel: txDashList.reversed
                                                 .toList()[index],
                                             heightSearchUrl: widget.networkData!.txTimestamp,
@@ -682,7 +689,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
 class BlockContDash extends StatelessWidget {
   final BlockModel? blockModel;
   final String valDesc;
-  const BlockContDash({Key? key, this.blockModel,required this.valDesc}) : super(key: key);
+  final NetworkList networkList;
+  const BlockContDash({Key? key, this.blockModel,required this.valDesc,required this.networkList}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -691,7 +699,8 @@ class BlockContDash extends StatelessWidget {
           CupertinoPageRoute(
               builder: (context) => BlockDetails(
                 valDesc:valDesc,
-                    blockModel: blockModel,
+                blockModel: blockModel,
+                networkList:networkList
                   ))),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8),
@@ -794,7 +803,8 @@ class BlockContDash extends StatelessWidget {
 class TxContDash extends StatefulWidget {
   final TxModel? txModel;
   final String? heightSearchUrl;
-  TxContDash({Key? key, this.txModel,this.heightSearchUrl}) : super(key: key);
+  NetworkList networkList;
+  TxContDash({Key? key, this.txModel,this.heightSearchUrl,required this.networkList}) : super(key: key);
 
   @override
   State<TxContDash> createState() => _TxContDashState();
@@ -806,7 +816,7 @@ class _TxContDashState extends State<TxContDash> {
 
   getData() async {
     final response = await http.get(Uri.parse(
-        '${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
+        '${widget.networkList.txTimestamp}${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
       timestampTx =
           jsonDecode(response.body)['result']['block']['header']['time'];
@@ -820,19 +830,16 @@ class _TxContDashState extends State<TxContDash> {
       });
     } else {}
   }
-
   var type = '';
-
   @override
   Widget build(BuildContext context) {
     getData();
     type = truncateBeforeLastDot(widget.txModel!.messages![0].type!);
-
     return InkWell(
       onTap: () => Navigator.push(
           context,
           CupertinoPageRoute(
-              builder: (context) => TxDetails(txModel: widget.txModel))),
+              builder: (context) => TxDetails(txModel: widget.txModel,networkList:widget.networkList, heightSearchUrl: '',))),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8),
         child: Container(
@@ -883,15 +890,19 @@ class _TxContDashState extends State<TxContDash> {
                             ),
                           ),
                         ]),
-                    txLoaded
-                        ? Text(
-                            timeDifferenceFunction(timestampTx),
-                            style: kSmallBoldTextStyle,
-                          )
-                        : SizedBox(
-                            height: 15,
-                            width: 15,
-                            child: CircularProgressIndicator())
+                    widget.networkList.uDenom!='uosmo'? Row(
+                          children: [
+                            txLoaded
+                                ? Text(
+                                timeDifferenceFunction(timestampTx),
+                                style: kSmallBoldTextStyle,
+                              ) : SizedBox(
+                                height: 15,
+                                width: 15,
+                                child: CircularProgressIndicator()),
+                          ],
+                        ):Container()
+
                   ],
                 ),
                 const SizedBox(
@@ -913,7 +924,7 @@ class _TxContDashState extends State<TxContDash> {
                 const SizedBox(
                   height: 6,
                 ),
-                Row(
+                widget.networkList.uDenom!='uosmo'? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -930,7 +941,7 @@ class _TxContDashState extends State<TxContDash> {
                             width: 15,
                             child: CircularProgressIndicator())
                   ],
-                ),
+                ):Container(),
               ],
             ),
           ),
@@ -942,7 +953,8 @@ class _TxContDashState extends State<TxContDash> {
 
 class ProposalCardDash extends StatelessWidget {
   final ProposalsModel product;
-  ProposalCardDash(this.product, {Key? key}) : super(key: key);
+  NetworkList networkList;
+  ProposalCardDash(this.product, this.networkList);
   var status = '';
   bool ispassed = true;
 
@@ -954,52 +966,50 @@ class ProposalCardDash extends StatelessWidget {
           context,
           CupertinoPageRoute(
               builder: (context) => ProposalDetails(
-                    proposalProduct: product,
+                    proposalProduct: product,networkData:networkList
                   ))),
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width / 1.2,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-          child: Container(
-              margin: EdgeInsets.all(4),
-              decoration: kBoxDecorationWithoutGradient,
-              child: Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                            height: 25,
-                            child:
-                                Image.asset('assets/images/votingPeriod.png')),
-                        Container(
-                          decoration: const BoxDecoration(
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(200.0),
-                              ),
-                              color: Color(0xFFD4F1FF)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(3.0),
-                            child:
-                                Text('#${product.id!}', style: kSmallTextStyle),
-                          ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        child: Container(
+            width: MediaQuery.of(context).size.width / 1.2,
+            margin: EdgeInsets.all(4),
+            decoration: kBoxDecorationWithoutGradient,
+            child: Padding(
+              padding: const EdgeInsets.all(18.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                          height: 15,
+                          child:
+                              Image.asset('assets/images/votingPeriod.png')),
+                      Container(
+                        decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(200.0),
+                            ),
+                            color: Color(0xFFD4F1FF)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(3.0),
+                          child:
+                              Text('#${product.id!}', style: kSmallTextStyle),
                         ),
-                      ],
-                    ),
-                    SizedBox(height: 4),
-                    Text('Voting Period'),
-                    SizedBox(height: 12),
-                    Text(
-                      '${product.title!} ',
-                      style: kMediumBoldTextStyle,
-                    )
-                  ],
-                ),
-              )),
-        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Text('Voting Period'),
+                  SizedBox(height: 12),
+                  Text(
+                    '${product.title!} ',
+                    style: kMediumBoldTextStyle,
+                  )
+                ],
+              ),
+            )),
       ),
     );
   }

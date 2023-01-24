@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/backend_files/validatorsModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
@@ -14,7 +15,8 @@ class ValidatorDetails extends StatefulWidget {
   final String? denom;
   var totalVoting;
   String? status;
-  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting,this.status,this.denom}) : super(key: key);
+  NetworkList networkList;
+  ValidatorDetails({Key? key,this.validatorModel,this.totalVoting,this.status,this.denom,required this.networkList}) : super(key: key);
   @override
   State<ValidatorDetails> createState() => _ValidatorDetailsState();
 }
@@ -45,7 +47,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
           body: SingleChildScrollView(
               child: Column(
                   children: [
-                    SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',),
+                    SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList:widget.networkList),
                     Padding(
                         padding: const EdgeInsets.all(12.0),
                         child: Container(
@@ -119,7 +121,8 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                               ScaffoldMessenger.of(context)
                                                   .showSnackBar(const SnackBar(
                                                   content: Text(
-                                                      'Moniker Address to your clipboard !')));
+                                                      'Moniker Address to your clipboard !')
+                                              ));
                                             }),
                                         child: Row(
                                           children: [
@@ -135,18 +138,18 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                     ],
                                   ),
                                   Text(widget.validatorModel!.moniker!, style: kMediumBoldTextStyle),
-
                                   const SizedBox(
                                     height: 20,
                                   ),
-                                  Text('Self Delegated Address', style: kMediumTextStyle),
+                                  Text('Self Delegated Address',
+                                      style: kMediumTextStyle),
                                   const SizedBox(
                                     height: 2,
                                   ),
                                   InkWell(
                                     onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                                       context,
-                                      screen: SearchScreen(nameController: widget.validatorModel!.selfDelegateAddress! ),
+                                      screen: SearchScreen (nameController: widget.validatorModel!.selfDelegateAddress!,networkList:widget.networkList),
                                       withNavBar: true,
                                       pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                     ),
@@ -185,14 +188,7 @@ class _ValidatorDetailsState extends State<ValidatorDetails> {
                                   const SizedBox(
                                     height: 2,
                                   ),
-                                  InkWell(
-                                    onTap:()=> PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: SearchScreen(nameController: widget.validatorModel!.operatorAddress! ),
-                                      withNavBar: true,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ),
-                                    child: Text(widget.validatorModel!.operatorAddress!, style: kMediumBlueBoldTextStyle),),
+                                  Text(widget.validatorModel!.operatorAddress!, style: kMediumBoldTextStyle),
 
                                   const SizedBox(
                                     height: 20,

@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend_files/akashproposals.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import '../controller/networklistController.dart';
-import '../widgets/searchBarWidget.dart';
 import 'network/dashboard.dart';
 
 class LandingPage extends StatefulWidget {
@@ -27,8 +25,7 @@ class _LandingPageState extends State<LandingPage> {
   var dash;
   var net;
   var supply;
-  List<NetworkList> activeNet=[];
-  List<NetworkList> inactiveNet=[];
+
 
   @override
   void initState() {
@@ -41,7 +38,7 @@ class _LandingPageState extends State<LandingPage> {
   ];
   final pngPath = [
     'assets/images/banner_zenscape.png',
-    'assets/images/banner2.png'
+    'assets/images/StakeBanner.png'
   ];
 
   netData() async {
@@ -95,13 +92,7 @@ class _LandingPageState extends State<LandingPage> {
           flag = false;
         }
       });
-      for(int i=0;i<net.length;i++){
-        if(net[i].isActive=='1'){
-          activeNet.add(net[i]);}
-          else if(net[i].isActive=='0'){
-            inactiveNet.add(net[i]);
-        }
-      }
+
     }
   }
   TextEditingController nameController = TextEditingController();
@@ -197,10 +188,7 @@ class _LandingPageState extends State<LandingPage> {
                   ?Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text('Active Chains',style: kMediumBoldTextStyle,),
-                  ),
+
                     Padding(
                             padding: const EdgeInsets.all(12.0),
                             child: StaggeredGridView.countBuilder(
@@ -210,35 +198,13 @@ class _LandingPageState extends State<LandingPage> {
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 4,
                                 crossAxisSpacing: 2,
-                                itemCount: activeNet.length,
+                                itemCount: net.length,
                                 itemBuilder: (context, index) {
-                                  return NetworkCard(activeNet[index]);
+                                  return NetworkCard(net[index]);
                                 },
                                 staggeredTileBuilder: (index) =>
                                     const StaggeredTile.fit(1)),
                           ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Text('All Chains',style: kMediumBoldTextStyle,),
-                  ),
-
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: StaggeredGridView.countBuilder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 4,
-                        crossAxisSpacing: 2,
-                        itemCount: net.length,
-                        itemBuilder: (context, index) {
-                          return NetworkCard(net[index]);
-                        },
-                        staggeredTileBuilder: (index) =>
-                        const StaggeredTile.fit(1)),
-                  )
-
                 ],
               ): Column(
                 children: const [
@@ -288,7 +254,7 @@ class _NetworkCardState extends State<NetworkCard> {
     super.initState();
       getAPR();
   }
-  double APR = 0;
+  double APR = 1;
   String image = '';
   String? supply;
   var bondedToken;
@@ -311,7 +277,7 @@ class _NetworkCardState extends State<NetworkCard> {
             100;
       });
     }
-    if(APR!=0){
+    if(APR!=1){
       setState(() {
         APRLoaded=true;
       });

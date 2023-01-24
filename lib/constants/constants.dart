@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'dart:convert';
 
 var kBigTextStyle= TextStyle(
 fontFamily: 'MontserratRegular',
@@ -171,6 +172,43 @@ String k_m_b_generator(num) {
   }
 }
 
+ getValue(String symbol, String jsonString) {
+  // remove parentheses and convert to valid JSON format
+  jsonString = jsonString.replaceAll("(", "\"").replaceAll(")", "\"").replaceAll(",", ":");
+  var parsedJson = json.decode(jsonString);
+
+  // search for symbol
+  for(var entry in parsedJson.entries) {
+    if(entry.key == symbol) {
+      return entry.value;
+    }
+  }
+  return null;
+}
+
+ getValueNextTo(String jsonString, String symbol) {
+  print(jsonString);
+  // Reformat the json string to a proper json format
+  jsonString = jsonString.replaceAll("\'", "\"");
+  print(symbol);
+
+  // Parse the json string
+  var json = jsonDecode(jsonString);
+  var coins = json[0]["coins"];
+
+  // Search for the value next to the given symbol
+  var pattern = RegExp("\\($symbol,([\\d.]+)\\)");
+  var match = pattern.firstMatch(coins);
+
+  // Return the value as a double
+  if (match != null) {
+    return double.parse(match.group(1)!);
+  } else {
+    return null;
+  }
+}
+
+
 String removeAllChar(String comm){
   List newS=[];
 
@@ -188,6 +226,20 @@ String removeAllChar(String comm){
    comm.replaceAll(RegExp(','), '');
   return newS.join("");
 }
+
+ findBracketByToken(String input, String token) {
+  RegExp regExp = RegExp("\\(" + token + ".*\\)");
+  RegExpMatch? match = regExp.firstMatch(input);
+  print(match!.group(0));
+  return match.group(0);
+}
+ getValueFromBracket(String bracket) {
+  RegExp exp = new RegExp(r'[\d.]+');
+  Iterable<RegExpMatch> matches = exp.allMatches(bracket);
+  return double.parse(matches.first.group(0)!);
+}
+
+
 int screen(int scrNo){
   return scrNo;
 }

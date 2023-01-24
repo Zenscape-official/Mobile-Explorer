@@ -5,12 +5,14 @@ import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
 import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import '../../backend_files/contractTxModel.dart';
+import '../../backend_files/networkList.dart';
 import '../../controller/txToggleController.dart';
 import '../../widgets/searchBarWidget.dart';
 
 class ContractTxDetails extends StatefulWidget {
   final ContractTxModel? contractTxModel;
-  ContractTxDetails({Key? key,this.contractTxModel}) : super(key: key);
+  final NetworkList networkList;
+  ContractTxDetails({Key? key,this.contractTxModel,required this.networkList}) : super(key: key);
   @override
   State<ContractTxDetails> createState() => _ContractTxDetailsState();
 }
@@ -76,7 +78,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           InkWell(
                             onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                               context,
-                              screen: SearchScreen(nameController: widget.contractTxModel!.height!),
+                              screen: SearchScreen(nameController: widget.contractTxModel!.height!,networkList: widget.networkList,),
                               withNavBar: true,
                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                             ),
@@ -167,12 +169,11 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           InkWell(
                             onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                               context,
-                              screen: SearchScreen(nameController: widget.contractTxModel!.tx!.body!.messages![0].sender!),
+                              screen: SearchScreen(nameController: widget.contractTxModel!.tx!.body!.messages![0].sender!,networkList: widget.networkList,),
                               withNavBar: true,
                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                             ),
                             child: Text(widget.contractTxModel!.tx!.body!.messages![0].sender!, style: kMediumBlueBoldTextStyle),),
-                          Text('${(widget.contractTxModel!.tx!.body!.messages![0].sender)}', style: kMediumBoldTextStyle),
 
                           const SizedBox(
                             height: 20,
@@ -193,7 +194,7 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                           InkWell(
                             onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                               context,
-                              screen: SearchScreen(nameController: widget.contractTxModel!.tx!.body!.messages![0].contract!),
+                              screen: SearchScreen(nameController: widget.contractTxModel!.tx!.body!.messages![0].contract!,networkList: widget.networkList,),
                               withNavBar: true,
                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                             ),

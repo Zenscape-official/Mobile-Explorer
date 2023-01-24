@@ -10,7 +10,6 @@ import '../../widgets/searchBarWidget.dart';
 import '../homeScreen.dart';
 import 'package:http/http.dart' as http;
 
-
 class Parameters extends StatefulWidget {
   final NetworkList? networkList;
   const Parameters({Key? key,this.networkList}) : super(key: key);
@@ -150,12 +149,11 @@ fetchDataMint(String input) async {
         ),
       ),
       body:
-      //isLoaded?
       ListView(
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
           SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList!,),
-          Padding(
+         widget.networkList!.uDenom=='ucmdx'? Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -179,7 +177,7 @@ fetchDataMint(String input) async {
                     staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
               ],
             ),
-          ),
+          ):Container(),
           Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(

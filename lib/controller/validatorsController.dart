@@ -22,37 +22,17 @@ class ValidatorController extends GetxController {
       var statusResponse=await client.get(Uri.parse(status));
       isLoading=false;
       switch (response.statusCode) {
-
         case 200:
         case 201:
           var jsonString = jsonDecode(response.body);
           var jsonStatusString= jsonDecode(statusResponse.body);
-          // print(jsonString);
           validatorsList = List.from(jsonString)
               .map((e) => ValidatorModel.fromJson(e))
               .toList()
               .obs;
           valStatus= List.from(jsonStatusString)
               .map((x) => ValStatusModel.fromMap(x)).toList().obs;
-
-          if(activeValidatorsList.length==0)
-          for (int i=0; i < validatorsList!.length; i++) {
-           for(int j=0; j<valStatus!.length; j++){
-             if ((validatorsList![i].validatorAddress!) == (valStatus![j].validatorAddress)) {
-              if(valStatus![j].status==3){
-                activeValidatorsList.add(validatorsList![i]);
-              }
-             else {
-               (inActiveValidatorsList.add(validatorsList![i]));
-             }
-             }
-           }
-           }
-
-          activeValidatorsList.sort((a, b) => a.votingPower.compareTo(b.votingPower));
-
           return validatorsList;
-
         case 400:
           final result = jsonDecode(response.body);
           final jsonResponse = {'success': false, 'response': result};

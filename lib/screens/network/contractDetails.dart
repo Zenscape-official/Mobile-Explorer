@@ -151,7 +151,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                         InkWell(
                           onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: SearchScreen(nameController: widget.contractModel!.contractAddress!,),
+                            screen: SearchScreen(nameController: widget.contractModel!.contractAddress!,networkList: widget.networkList,),
                             withNavBar: true,
                             pageTransitionAnimation: PageTransitionAnimation.cupertino,
                           ),
@@ -166,7 +166,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                         InkWell(
                           onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: SearchScreen(nameController: widget.contractModel!.height!),
+                            screen: SearchScreen(nameController: widget.contractModel!.height!,networkList: widget.networkList,),
                             withNavBar: true,
                             pageTransitionAnimation: PageTransitionAnimation.cupertino,
                           ),
@@ -205,7 +205,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                         InkWell(
                           onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                             context,
-                            screen: SearchScreen(nameController: widget.contractModel!.creator! ),
+                            screen: SearchScreen(nameController: widget.contractModel!.creator! ,networkList: widget.networkList,),
                             withNavBar: true,
                             pageTransitionAnimation: PageTransitionAnimation.cupertino,
                           ),
@@ -223,18 +223,18 @@ class _ContractDetailsState extends State<ContractDetails> {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text('Init Message', style: kSmallTextStyle),
-
-                        widget.contractModel!.contractStates!.config == null
-                            ? Text('No Message', style: kMediumBoldTextStyle)
-                            : Text(
-                                (widget.contractModel!.contractStates!.config!)
-                                    .toString()
-                                    .replaceAll(RegExp(r'{'), '\n')
-                                    .replaceAll(RegExp(r'}'), '')
-                                    .replaceAll(RegExp(r','), ',\n')
-                                    .replaceAll(RegExp(r':'), ' : '),
-                                style: kMediumBoldTextStyle),
+                        // Text('Init Message', style: kSmallTextStyle),
+                        //
+                        // widget.contractModel!.contractStates!.config == null
+                        //     ? Text('No Message', style: kMediumBoldTextStyle)
+                        //     : Text(
+                        //         (widget.contractModel!.contractStates!.config!)
+                        //             .toString()
+                        //             .replaceAll(RegExp(r'{'), '\n')
+                        //             .replaceAll(RegExp(r'}'), '')
+                        //             .replaceAll(RegExp(r','), ',\n')
+                        //             .replaceAll(RegExp(r':'), ' : '),
+                        //         style: kMediumBoldTextStyle),
                       ]),
                 ),
               )),
@@ -325,7 +325,7 @@ class _ContractDetailsState extends State<ContractDetails> {
                                 itemCount: txList!.length,
                                 itemBuilder: (BuildContext context, int index) {
                                   return TxCont(
-                                    contractTxModel: txList![index],
+                                    contractTxModel: txList![index], networkList: widget.networkList!,
                                   );
                                 }),
                           )
@@ -442,7 +442,8 @@ class _BalanceContState extends State<BalanceCont> {
 
 class TxCont extends StatelessWidget {
   final ContractTxModel? contractTxModel;
-  const TxCont({Key? key, this.contractTxModel}) : super(key: key);
+  NetworkList networkList;
+  TxCont({Key? key, this.contractTxModel, required this.networkList}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -450,7 +451,7 @@ class TxCont extends StatelessWidget {
           context,
           CupertinoPageRoute(
               builder: (context) =>
-                  ContractTxDetails(contractTxModel: contractTxModel))),
+                  ContractTxDetails(contractTxModel: contractTxModel,networkList: networkList,))),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8),
         child: Container(

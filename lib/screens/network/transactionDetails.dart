@@ -9,13 +9,16 @@ import 'package:zenscape_app/constants/constants.dart';
 import 'package:http/http.dart' as http;
 import 'package:zenscape_app/constants/functions.dart';
 import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
+import '../../backend_files/networkList.dart';
 import '../../controller/txToggleController.dart';
 import '../../widgets/searchBarWidget.dart';
 
 class TxDetails extends StatefulWidget {
   final TxModel? txModel;
   var txTime;
-  TxDetails({Key? key, this.txModel, this.txTime}) : super(key: key);
+  String? heightSearchUrl;
+  NetworkList networkList;
+  TxDetails({Key? key, this.txModel, this.txTime,this.heightSearchUrl,required this.networkList}) : super(key: key);
   @override
   State<TxDetails> createState() => _TxDetailsState();
 }
@@ -40,7 +43,7 @@ class _TxDetailsState extends State<TxDetails> {
 
   getData() async {
     final response = await http.get(Uri.parse(
-        'https://meteor.rpc.comdex.one/block?height=${widget.txModel!.height!.toString()}'));
+        '${widget.networkList.txTimestamp}${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
       timestampTx =
           jsonDecode(response.body)['result']['block']['header']['time'];
@@ -157,7 +160,7 @@ class _TxDetailsState extends State<TxDetails> {
                                 InkWell(
                                   onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                                     context,
-                                    screen: SearchScreen(nameController: widget.txModel!.hash! ),
+                                    screen: SearchScreen(nameController: widget.txModel!.hash!,networkList: widget.networkList, ),
                                     withNavBar: true,
                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                   ),
@@ -185,7 +188,7 @@ class _TxDetailsState extends State<TxDetails> {
                                 InkWell(
                                   onTap:()=> PersistentNavBarNavigator.pushNewScreen(
                                     context,
-                                    screen: SearchScreen(nameController: widget.txModel!.height! ),
+                                    screen: SearchScreen(nameController: widget.txModel!.height!,networkList: widget.networkList, ),
                                     withNavBar: true,
                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                   ),
@@ -193,22 +196,28 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('Time', style: kSmallTextStyle),
-                                const SizedBox(
-                                  height: 2,
-                                ),
-                                txLoaded
-                                    ? Text(
-                                    '${dateTime(DateTime.parse(timestampTx)
+                               widget.networkList.uDenom=='uosmo'?Container(): Column(
+                                 crossAxisAlignment:CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Time', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    txLoaded
+                                        ? Text(
+                                        '${dateTime(DateTime.parse(timestampTx)
                                             .toLocal())} (${timeDifferenceFunction(timestampTx)})',
                                         style: kMediumBoldTextStyle)
-                                    : SizedBox(
+                                        : SizedBox(
                                         height: 10,
                                         width: 15,
                                         child: LinearProgressIndicator()),
-                                const SizedBox(
-                                  height: 20,
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
                                 ),
+
                                 Text('Status',
                                     style:kMediumTextStyle),
                                 const SizedBox(width: 70,),
@@ -237,14 +246,14 @@ class _TxDetailsState extends State<TxDetails> {
                                   height: 3,
                                 ),
                                 Text(
-                                    '${addComma(widget.txModel!.gasUsed!)} / ${addComma(widget.txModel!.gasWanted!)}',
+                                    '${addComma(widget.txModel!.gasUsed!)} / ${addComma(widget.txModel!.gasWanted!)} ${(widget.networkList.uDenom)}',
                                     style: kMediumBoldTextStyle),
                                 const SizedBox(
                                   height: 20,
                                 ),
                                 widget.txModel!.memo!.isNotEmpty?
                                 Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Memo', style: kSmallTextStyle),
                                     const SizedBox(

@@ -15,8 +15,8 @@ import '../../controller/validatorsController.dart';
 import '../../widgets/searchBarWidget.dart';
 
 class Validators extends StatefulWidget {
-  final NetworkList? networkList;
-  const Validators({Key? key, this.networkList}) : super(key: key);
+  final NetworkList networkList;
+  const Validators({Key? key,required this.networkList}) : super(key: key);
   @override
   State<Validators> createState() => _ValidatorsState();
 }
@@ -32,6 +32,9 @@ class _ValidatorsState extends State<Validators> {
   List<ValidatorModel>? validators=[];
   List<ValidatorModel> activeVal=[];
   List<ValidatorModel> inActiveVal=[];
+  static var activeValidatorsList = [].obs;
+  ValidatorModel? activeValidatorModel;
+  static var inActiveValidatorsList = [].obs;
 
   bool isLoaded=false;
   int activeValSelected=0;
@@ -45,9 +48,8 @@ class _ValidatorsState extends State<Validators> {
     navController.updatePage(2);
   }
   void valData() async {
-
     validators =
-        await _validatorController.fetchVal(widget.networkList!.validatorsUrl!,widget.networkList!.valStatus!);
+        await _validatorController.fetchVal(widget.networkList.validatorsUrl!,widget.networkList.valStatus!);
    setState(() {
      if(validators!=null){
        isLoaded=true;
@@ -57,16 +59,33 @@ class _ValidatorsState extends State<Validators> {
      }
    }
    );
-   for (int i=0;i<validators!.length;i++){
-     totalVoting+=validators![i].votingPower!;
-   }
+
   }
-
-
+  sortList(){if(activeValidatorsList.length==0)
+    for (int i=0; i < validators!.length; i++) {
+      for(int j=0; j<_validatorController.valStatus!.length; j++){
+        if ((validators![i].validatorAddress!) == (_validatorController.valStatus![j].validatorAddress)) {
+          if(_validatorController.valStatus![j].status==3){
+            activeValidatorsList.add(validators![i]);
+          }
+          else {
+            (inActiveValidatorsList.add(validators![i]));
+          }
+        }
+      }
+    }
+  activeValidatorsList.sort((a, b) => a.votingPower.compareTo(b.votingPower));
+  for (int i=0;i<validators!.length;i++){
+    totalVoting+=validators![i].votingPower!;
+  }}
   @override
   Widget build(BuildContext context) {
-    ValidatorController.activeValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
-    ValidatorController.inActiveValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
+    activeValidatorsList=[].obs;
+    inActiveValidatorsList=[].obs;
+
+    sortList();
+    activeValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
+    inActiveValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
     return Scaffold(
         drawer: NavDraw(networkData: widget.networkList,pageIndex: pageIndex,),
         backgroundColor: Colors.grey[100],
@@ -84,13 +103,13 @@ class _ValidatorsState extends State<Validators> {
                   radius:15,
                   child: InkWell(
                      // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                      child: Image.network(widget.networkList!.logoUrl??widget.networkList!.logUrl!)),
+                      child: Image.network(widget.networkList.logoUrl??widget.networkList.logUrl!)),
                   backgroundColor: Colors.transparent),
             ],
           ),
         ),
         body: Column(children: [
-          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList!,),
+          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList,),
 
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -136,10 +155,10 @@ class _ValidatorsState extends State<Validators> {
                     physics: const AlwaysScrollableScrollPhysics(),
                     scrollDirection: Axis.vertical,
                     shrinkWrap: true,
-                    itemCount: ValidatorController.activeValidatorsList.length,
+                    itemCount: activeValidatorsList.length,
                     itemBuilder: (BuildContext context, int index) {
 
-                      return  ValidatorContainer (validatorModel: ValidatorController.activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Active',denom:widget.networkList!.denom!);
+                      return  ValidatorContainer (validatorModel: activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Active',denom:widget.networkList.denom!,networkList: widget.networkList,);
                     })),
               ):Expanded(
                 child: CupertinoScrollbar(
@@ -148,9 +167,9 @@ class _ValidatorsState extends State<Validators> {
                   physics: const AlwaysScrollableScrollPhysics(),
                   scrollDirection: Axis.vertical,
                   shrinkWrap: true,
-                  itemCount: ValidatorController.inActiveValidatorsList.length,
+                  itemCount: inActiveValidatorsList.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return  ValidatorContainer (validatorModel: ValidatorController.inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Inactive',denom:widget.networkList!.denom!);
+                    return  ValidatorContainer (validatorModel: inActiveValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Inactive',denom:widget.networkList.denom!,networkList: widget.networkList,);
                   }),
                 ),
               );
@@ -167,15 +186,16 @@ class ValidatorContainer extends StatelessWidget {
   final int? totalVoting;
   final String? status;
   final String? denom;
+  final NetworkList networkList;
   const ValidatorContainer({
-    Key? key, this.validatorModel,this.totalVoting,this.status,this.denom
+    Key? key, this.validatorModel,this.totalVoting,this.status,this.denom,required this.networkList
   }) : super(key: key);
 
   @override
 
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,denom:denom))),
+      onTap: ()=>Navigator.push(context, CupertinoPageRoute(builder: (context) => ValidatorDetails(validatorModel: validatorModel,totalVoting: totalVoting,status: status,denom:denom,networkList: networkList,))),
       child: Column(
         children: [
 

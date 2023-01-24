@@ -104,7 +104,7 @@ class _NavDrawState extends State<NavDraw> {
                   onTap: () {
 
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Validators(networkList:widget.networkData)));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> Validators(networkList:widget.networkData!)));
 
                   }),
               _createDrawerItem(

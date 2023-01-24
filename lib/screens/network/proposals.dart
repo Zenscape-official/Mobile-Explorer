@@ -152,6 +152,10 @@ class ProposalCard extends StatelessWidget {
       status='Invalid';
       ispassed=false;
     }
+    else if(product.status=='PROPOSAL_STATUS_DEPOSIT_PERIOD'){
+      status='Deposit';
+      ispassed=false;
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -192,7 +196,7 @@ class ProposalCard extends StatelessWidget {
                             width: 150,
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
-                              child: Text(product.content!.title!,
+                              child: Text(product.title!,
                                 style: const TextStyle(
                                     color: Colors.blue
                                 ),),

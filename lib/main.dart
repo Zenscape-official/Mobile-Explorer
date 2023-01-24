@@ -7,7 +7,6 @@ import 'package:zenscape_app/Screens/onboardingScreen.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
 import 'package:zenscape_app/controller/networklistController.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zenscape_app/routes/routes.dart';
 import 'package:zenscape_app/screens/explorer.dart';
 import 'package:zenscape_app/screens/landingPage.dart';
 
@@ -54,7 +53,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Zenscape',
       debugShowCheckedModeBanner: false,
       home:  initScreen == null ? OnboardingPage():const MainApp(),
-      getPages: getPages,
+
     );
   }
 }
@@ -124,7 +123,7 @@ class _MainAppState extends State<MainApp> {
               curve: Curves.ease,
             ),
 
-            navBarStyle: NavBarStyle.style1,
+            navBarStyle: NavBarStyle.style3,
           );
 
   }

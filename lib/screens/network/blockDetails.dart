@@ -1,17 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
 import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import '../../backend_files/blocksModel.dart';
 import 'package:http/http.dart' as http;
+import '../../backend_files/networkList.dart';
 
 class BlockDetails extends StatefulWidget {
   final BlockModel? blockModel;
   final String? valDesc;
-  BlockDetails({Key? key,this.blockModel,this.valDesc}) : super(key: key);
+  final NetworkList networkList;
+  BlockDetails({Key? key,this.blockModel,this.valDesc, required this.networkList}) : super(key: key);
   @override
   State<BlockDetails> createState() => _BlockDetailsState();
 }
@@ -23,21 +23,20 @@ class _BlockDetailsState extends State<BlockDetails> {
   }
   @override
   Widget build(BuildContext context) {
-
     return
-      BlockDetailScreen(blockModel: widget.blockModel,valDesc: widget.valDesc!);
+      BlockDetailScreen(blockModel: widget.blockModel,valDesc: widget.valDesc!,networkList: widget.networkList,);
   }
 }
 
 class BlockDetailScreen extends StatefulWidget {
   BlockDetailScreen({
     Key? key,
-    required this.blockModel,required this.valDesc,
-
+    required this.blockModel,required this.valDesc, required this.networkList
   }) : super(key: key);
 
   var blockModel;
   String valDesc;
+  NetworkList networkList;
 
   @override
   State<BlockDetailScreen> createState() => _BlockDetailScreenState();
@@ -53,8 +52,8 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
     getData();
   }
   getData()async{
-    final response = await http.get(Uri.parse('${widget.valDesc}${widget.blockModel!.proposerAddress}'));
-
+    final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
+    print('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}');
     if (response.statusCode == 200) {
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
       setState(() {
@@ -91,7 +90,6 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                       child: Container(
                         margin: const EdgeInsets.only(right: 10, top: 10, left: 10),
                         width: MediaQuery.of(context).size.width / 1.1,
-                        // height:MediaQuery.of(context).size.height/ 1.1,
                         decoration: kBoxDecorationWithGradient,
                         child: Padding(
                           padding: const EdgeInsets.all(18.0),
@@ -141,14 +139,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                InkWell(
-                                    onTap:()=> PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: SearchScreen(nameController: widget.blockModel!.proposerAddress!),
-                                      withNavBar: true,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    ),
-                                    child: Text(widget.blockModel!.proposerAddress!, style: kMediumBlueBoldTextStyle),),
+                                Text(widget.blockModel!.proposerAddress!, style: kMediumBoldTextStyle),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -164,7 +155,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text(addComma(widget.blockModel!.totalGas??''), style: kMediumBoldTextStyle),
+                                Text('${addComma(widget.blockModel!.totalGas)}', style: kMediumBoldTextStyle),
                               ]
                           ),
                         ),

@@ -32,23 +32,23 @@ class ContractModel {
   factory ContractModel.fromJson(Map<String, dynamic> json) => ContractModel(
     codeId: json["code_id"],
     height: json["height"],
-    instantiatePermission: json["instantiate_permission"],
+    //instantiatePermission: json["instantiate_permission"],
     creator: json["creator"],
     label: json["label"],
     contractAddress: json["contract_address"],
     instantiatedAt: DateTime.parse(json["instantiated_at"]),
-    contractStates: ContractStates.fromJson(json["contract_states"]),
+    // contractStates: ContractStates.fromJson(json["contract_states"]),
   );
 
   Map<String, dynamic> toJson() => {
     "code_id": codeId,
     "height": height,
-    "instantiate_permission": instantiatePermission,
+    //"instantiate_permission": instantiatePermission,
     "creator": creator,
     "label": label,
     "contract_address": contractAddress,
     "instantiated_at": instantiatedAt!.toIso8601String(),
-    "contract_states": contractStates!.toJson(),
+    // "contract_states": contractStates!.toJson(),
   };
 }
 

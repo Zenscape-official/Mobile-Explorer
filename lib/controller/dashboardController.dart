@@ -30,7 +30,13 @@ class DashboardController extends GetxController {
   Future<String> fetchdata(String input, String json) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
-      return await jsonDecode(response.body)[0][json];
+
+      if(response.body.length!=2) {
+        return await jsonDecode(response.body)[0][json];
+      }
+      else {
+        return '0';
+      }
     } else {
       return '';
     }

@@ -24,7 +24,6 @@ import '../../widgets/searchBarWidget.dart';
 import 'blockDetails.dart';
 import 'package:flutter/cupertino.dart';
 
-//var timestamp = DateTime.now().toLocal();
 class Blocks extends StatefulWidget {
   final NetworkList? networkData;
   final String? valDescUrl;
@@ -36,8 +35,6 @@ class _BlocksState extends State<Blocks> {
   var AppBar1='Blocks';
   var AppBar2='Transactions';
   ToggleController toggleController=Get.put(ToggleController());
-
-  //final BlocksController _blocksController= Get.put(BlocksController());
   final NetworkController networkController = Get.put(NetworkController());
   final TxController _txController=Get.put(TxController());
   Rx<List<BlockModel>> foundBlock = Rx<List<BlockModel>>([]);
@@ -106,7 +103,6 @@ class _BlocksState extends State<Blocks> {
   String txHash='';
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       drawer: NavDraw(networkData: widget.networkData,pageIndex: pageIndex,),
       appBar: AppBar(
@@ -190,7 +186,7 @@ class _BlocksState extends State<Blocks> {
                          itemCount: blocks.length,
                          itemBuilder: (BuildContext context, int index) {
                            return
-                             BlockContainer(blockModel: blocks[index],valDescUrl: widget.valDescUrl,);
+                             BlockContainer(blockModel: blocks[index],valDescUrl: widget.valDescUrl,networkList: widget.networkData!,);
                          }
                  );
                       }
@@ -205,7 +201,7 @@ class _BlocksState extends State<Blocks> {
                          itemCount: TxController.txList.length,
                          itemBuilder: (BuildContext context, int index) {
                            return
-                             TxContainer(txModel: TxController.txList[index],heightSearchUrl: widget.networkData!.txTimestamp,);
+                             TxContainer(txModel: TxController.txList[index],heightSearchUrl: widget.networkData!.txTimestamp,networkList: widget.networkData!,);
                          }
                          );
                    }
@@ -224,8 +220,9 @@ class _BlocksState extends State<Blocks> {
 class BlockContainer extends StatefulWidget {
   final BlockModel? blockModel;
   final String? valDescUrl;
+  final NetworkList networkList;
  BlockContainer({
-    Key? key, this.blockModel,this.valDescUrl
+    Key? key, this.blockModel,this.valDescUrl,required this.networkList
   }) : super(key: key);
 
   @override
@@ -261,7 +258,7 @@ class _BlockContainerState extends State<BlockContainer> {
   Widget build(BuildContext context) {
    getData();
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,valDesc: widget.valDescUrl!,))),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,valDesc: widget.valDescUrl!,networkList:widget.networkList))),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -291,7 +288,7 @@ class _BlockContainerState extends State<BlockContainer> {
                             ],
                           ),
                         ),
-                        Container(
+                     Container(
                           decoration: BoxDecoration (
                             border: Border.all(
                               color: Colors.lightBlueAccent.withOpacity(.5),
@@ -385,10 +382,12 @@ class _BlockContainerState extends State<BlockContainer> {
 class TxContainer extends StatefulWidget {
   final TxModel? txModel;
   final String? heightSearchUrl;
+  NetworkList networkList;
    TxContainer({
     Key? key,
     this.txModel,
-     this.heightSearchUrl
+     this.heightSearchUrl,
+     required this.networkList
   }) : super(key: key);
 
   @override
@@ -437,7 +436,9 @@ class _TxContainerState extends State<TxContainer> {
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: TxDetails(
+            networkList: widget.networkList,
             txModel: widget.txModel,
+            heightSearchUrl: widget.heightSearchUrl!,
           ),
           withNavBar: true,
           pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -473,7 +474,7 @@ class _TxContainerState extends State<TxContainer> {
                             ],
                           ),
                         ),
-                        Container(
+                       widget.networkList.uDenom=='uosmo'?Container(): Container(
                           decoration: BoxDecoration (
                             border: Border.all(
                               color: Colors.lightBlueAccent.withOpacity(.5),
@@ -551,7 +552,7 @@ class _TxContainerState extends State<TxContainer> {
                       ]
                   ),
                 ),
-                Padding(
+                widget.networkList.uDenom=='uosmo'?Container(): Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

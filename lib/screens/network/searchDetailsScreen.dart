@@ -17,12 +17,12 @@ import '../../backend_files/blocksModel.dart';
 import '../../constants/functions.dart';
 import '../../backend_files/delegationModel.dart';
 import '../../controller/networklistController.dart';
-
 class SearchScreen extends StatefulWidget {
   var nameController;
   final NetworkList? networkList;
   final String? blockSearch,txSearch,txFromAddress,balanceFromAddress,delegationFromAddress,rewardsFromAddress;
  SearchScreen({Key? key,
+
    this.nameController,
    this.networkList,
    this.blockSearch,
@@ -51,21 +51,22 @@ class _SearchScreenState extends State<SearchScreen> {
   var delegationList=[];
 
   List<Balance> balanceList=[];
-
   var balanceLoaded=false;
   var delegationLoaded=false;
+  ScrollController? _controller;
 
   @override
   void initState() {
     super.initState();
     getData();
+
+    _controller = ScrollController();
   }
   getData()async{
     loading=true;
     if(isNumeric(widget.nameController)) {
-
       final response = await http.get(Uri.parse(
-          '${widget.blockSearch}${widget.nameController.toString()}'));
+          '${widget.networkList!.blockSearchUrl}${widget.nameController.toString()}'));
       if (response.statusCode == 200) {
         blockDetails =
         List<BlockModel>.from(json.decode(response.body).map((x) => BlockModel.fromJson(x)));
@@ -83,7 +84,7 @@ class _SearchScreenState extends State<SearchScreen> {
     }
     else if(widget.nameController.length==64){
       final response = await http.get(Uri.parse(
-          '${widget.txSearch}${widget.nameController.toString()}'
+          '${widget.networkList!.txSearchUrl}${widget.nameController.toString()}'
       )
       );
       if (response.statusCode == 200) {
@@ -99,14 +100,15 @@ class _SearchScreenState extends State<SearchScreen> {
       }}
     else if(widget.nameController.length==52){}
      else {
+
         final tx_response = await http.get(Uri.parse(
-            '${widget.txFromAddress}${widget.nameController.toString()}'));
+            '${widget.networkList!.txFromAddress}${widget.nameController.toString()}'));
         final balance_response = await http.get(Uri.parse(
-            '${widget.balanceFromAddress}${widget.nameController.toString()}'));
+            '${widget.networkList!.contractDetailsBalances}${widget.nameController.toString()}'));
         final delegate_response = await http.get(Uri.parse(
-            '${widget.delegationFromAddress}${widget.nameController.toString()}'));
+            '${widget.networkList!.delegationFromAddress}${widget.nameController.toString()}'));
         final reward_response = await http.get(Uri.parse(
-            'https://rest.comdex.one/cosmos/distribution/v1beta1/delegators/${widget.nameController.toString()}/rewards'));
+            '${widget.networkList!.rewardFromAddress}${widget.nameController.toString()}/rewards'));
         if (tx_response.statusCode == 200) {
           txModel = List<TxModel>.from(json.decode(tx_response.body).map((x) => TxModel.fromJson(x)));
           setState(() {
@@ -177,7 +179,7 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     if(blockLoaded==1){
-      return BlockDetailScreen(blockModel:blockDetails![0],valDesc: '',);
+      return BlockDetailScreen(blockModel:blockDetails![0],valDesc: widget.networkList!.blocksMoniker!,networkList: widget.networkList!,);
     }
     else if(txLoaded==1){
       return
@@ -196,6 +198,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       body: SingleChildScrollView(
+        controller: _controller,
         child: Column(
             children: [
               Padding(
@@ -250,11 +253,6 @@ class _SearchScreenState extends State<SearchScreen> {
                               const SizedBox(
                                 height: 20,
                               ),
-                              Text('Chain Id', style: kSmallTextStyle),
-                              const SizedBox(
-                                height: 2,
-                              ),
-                              Text('comdex-1', style: kMediumBoldTextStyle),
                               const SizedBox(
                                 height: 20,
                               ),
@@ -346,7 +344,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 height: 3,
                               ),
                               Text(
-                                  '${addComma(txModel![0].gasUsed!)} / ${addComma(txModel![0].gasWanted!)}',
+                                  '${addComma(txModel![0].gasUsed!)} / ${addComma(txModel![0].gasWanted!)} ${widget.networkList!.uDenom}',
                                   style: kMediumBoldTextStyle),
                               const SizedBox(
                                 height: 20,
@@ -375,8 +373,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          txModel![0].rawLog!=null? Text(txModel![0].rawLog!.replaceAll(RegExp('/'), ''),
-                              style: kMediumTextStyle):Text('No Logs Available',style: kMediumBoldTextStyle)
+                          txModel![0].rawLog!=null? SelectableText(
+                    //jsonDecode
+                    (txModel![0].rawLog!)
+                        .toString()
+                        .replaceAll(RegExp(r'{'), '\n')
+                        .replaceAll(RegExp(r'}'), '')
+                        .replaceAll(RegExp(r','), ',\n')
+                        .replaceAll(RegExp(r':'), ' : '),
+                      style: kMediumTextStyle)
+                              :Text('No Logs Available',style: kMediumBoldTextStyle)
                         ]),
                   ),
                 );
@@ -585,6 +591,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return TxContDash(txModel: txModel![index],
+                                        networkList: widget.networkList!,
                                       );
                                     }),
                               ],
@@ -651,9 +658,7 @@ class _DelegatesContainerState extends State<DelegatesContainer> {
   getData() async {
     final String response = await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
     final data = await json.decode(response)["tokens"];
-    print(data);
     _items = data;
-
     ibcDenom=List.from((_items).map((x) => TokenTx.fromJson(x)));
     if(ibcDenom.isNotEmpty){
       setState(() {
@@ -716,7 +721,6 @@ class _DelegatesContainerState extends State<DelegatesContainer> {
               const SizedBox(
                 height: 4,
               ),
-
             ],
           ),
         ),

@@ -60,7 +60,8 @@ class SearchBar extends StatelessWidget {
                         txSearch: networkList!.txSearchUrl!,
                         txFromAddress: networkList!.txFromAddress!,
                         rewardsFromAddress: networkList!.rewardFromAddress!,
-                        delegationFromAddress:networkList!.delegationFromAddress!
+                        delegationFromAddress:networkList!.delegationFromAddress!,
+                      networkList: networkList,
                     ),
                     withNavBar: true,
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
@@ -87,7 +88,9 @@ class SearchBar extends StatelessWidget {
                txSearch: networkList!.txSearchUrl!,
                txFromAddress: networkList!.txFromAddress!,
                rewardsFromAddress: networkList!.rewardFromAddress!,
-               delegationFromAddress:networkList!.delegationFromAddress! ,),
+               delegationFromAddress:networkList!.delegationFromAddress!,
+               networkList: networkList,
+             ),
              withNavBar: true, // OPTIONAL VALUE. True by default.
              pageTransitionAnimation: PageTransitionAnimation.cupertino,
            ).then((value) {

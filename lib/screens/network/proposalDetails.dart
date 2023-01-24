@@ -83,12 +83,16 @@ class _ProposalDetailsState extends State<ProposalDetails> {
       status='Invalid';
      // ispassed=false;
     }
+    else if(widget.proposalProduct.status=='PROPOSAL_STATUS_DEPOSIT_PERIOD'){
+      status='Deposit';
+      // ispassed=false;
+    }
   }
   @override
   Widget build(BuildContext context) {
     fun();
     getData();
-    details=widget.proposalProduct.content!.description!;
+    details=widget.proposalProduct.description!;
     print(details);
     return Scaffold(
       appBar: AppBar(
@@ -156,7 +160,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                           ],
                         ),
                         const SizedBox(height: 20,),
-                        Text(widget.proposalProduct.content!.title!,
+                        Text(widget.proposalProduct.title!,
                             style:kMediumBoldTextStyle),
                         const SizedBox(height: 20,),
                         Row(
@@ -243,7 +247,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                         Text('Details ',
                             style:kSmallBoldTextStyle),
                         const SizedBox(height: 2,),
-                       SimpleRichText(formatString(widget.proposalProduct.content!.description!),
+                       SimpleRichText(formatString(widget.proposalProduct.description!),
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
                         const SizedBox(height: 20,),
