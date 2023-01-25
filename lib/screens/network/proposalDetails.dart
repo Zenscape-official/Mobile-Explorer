@@ -111,7 +111,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
       body: tallyLoaded? SingleChildScrollView(
         child: Column(
             children: [
-              SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',),
+              SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkData,),
               Container(
                 margin: const EdgeInsets.only(right: 10,left: 10),
                 width: MediaQuery.of(context).size.width/1.1,
@@ -160,7 +160,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                           ],
                         ),
                         const SizedBox(height: 20,),
-                        Text(widget.proposalProduct.title!,
+                        Text(widget.proposalProduct.title??'',
                             style:kMediumBoldTextStyle),
                         const SizedBox(height: 20,),
                         Row(
@@ -460,7 +460,19 @@ class VoterCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text('Validator Address',style: kSmallTextStyle,),
-                      Text(dotRefactorFunction(proposalVotesModel!.validatorAddress!),style: kSmallBoldTextStyle,)
+                InkWell(
+                  onTap: () =>
+                      Clipboard.setData(ClipboardData(
+                        text: (proposalVotesModel!.validatorAddress!),
+                      )).then((_) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(SnackBar(
+                            content: Text(
+                                'Validator Address Copied to your clipboard !')));
+                      }),
+                  child:  Text(dotRefactorFunction(proposalVotesModel!.validatorAddress!), style: kMediumBoldTextStyle,),
+                ),
+
                     ],
                   ),
                   const SizedBox(height: 4,)

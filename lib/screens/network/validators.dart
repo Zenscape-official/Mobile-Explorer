@@ -59,7 +59,6 @@ class _ValidatorsState extends State<Validators> {
      }
    }
    );
-
   }
   sortList(){if(activeValidatorsList.length==0)
     for (int i=0; i < validators!.length; i++) {
@@ -157,7 +156,6 @@ class _ValidatorsState extends State<Validators> {
                     shrinkWrap: true,
                     itemCount: activeValidatorsList.length,
                     itemBuilder: (BuildContext context, int index) {
-
                       return  ValidatorContainer (validatorModel: activeValidatorsList.reversed.toList()[index],totalVoting:totalVoting,status: 'Active',denom:widget.networkList.denom!,networkList: widget.networkList,);
                     })),
               ):Expanded(

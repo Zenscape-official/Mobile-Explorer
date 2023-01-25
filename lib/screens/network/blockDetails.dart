@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
 import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
+import 'package:zenscape_app/screens/network/validatorDetails.dart';
 import '../../backend_files/blocksModel.dart';
 import 'package:http/http.dart' as http;
 import '../../backend_files/networkList.dart';
+import '../../backend_files/validatorsModel.dart';
 
 class BlockDetails extends StatefulWidget {
   final BlockModel? blockModel;
@@ -45,6 +48,8 @@ class BlockDetailScreen extends StatefulWidget {
 class _BlockDetailScreenState extends State<BlockDetailScreen> {
   var valMoniker;
   var monikerLoaded=false;
+  List<ValidatorModel>? validatorModel;
+
 
   @override
   void initState() {
@@ -53,11 +58,11 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
   }
   getData()async{
     final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
-    print('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}');
     if (response.statusCode == 200) {
-      valMoniker =  jsonDecode(response.body)[0]['moniker'];
+      print(jsonDecode(response.body)[0]);
+      validatorModel = validatorModelFromJson(response.body); jsonDecode(response.body)[0];
       setState(() {
-        if (valMoniker!=null){
+        if (validatorModel!=null){
           monikerLoaded=true;
         }
         else{
@@ -146,8 +151,24 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 Text('Proposer',
                                     style:kSmallTextStyle),
                                 //const SizedBox(width:99),
-                                monikerLoaded? Text((valMoniker)
-                                    ,style:kMediumBoldTextStyle):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
+                                monikerLoaded? InkWell(
+                                  onTap:monikerLoaded?
+                                      () {
+                                    PersistentNavBarNavigator.pushNewScreen(
+                                      context,
+                                      screen: ValidatorDetails(
+                                        networkList: widget.networkList,
+                                        validatorModel: validatorModel![0],
+                                        denom: widget.networkList.uDenom,
+                                      ),
+                                      withNavBar: true,
+                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                    );
+
+                                  }: null,
+                                  child: Text((validatorModel![0].moniker!)
+                                      ,style:kMediumBlueBoldTextStyle),
+                                ):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -155,7 +176,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text('${addComma(widget.blockModel!.totalGas)}', style: kMediumBoldTextStyle),
+                                Text('${addComma(widget.blockModel!.totalGas) }${widget.networkList.uDenom}', style: kMediumBoldTextStyle),
                               ]
                           ),
                         ),

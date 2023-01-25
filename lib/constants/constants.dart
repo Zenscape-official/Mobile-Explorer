@@ -254,7 +254,7 @@ String? getRestrictedCharacters(String string){
     }
   });
   if (restricted.isEmpty){
-    return '0';
+    return '';
   } else {
     return restricted.join("");
   }

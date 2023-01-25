@@ -10,6 +10,7 @@ import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:zenscape_app/controller/txController.dart';
 import 'package:zenscape_app/controller/txToggleController.dart';
+import '../../backend_files/ValidatorsModel2.dart';
 import '../../backend_files/networkList.dart';
 import '../../constants/constants.dart';
 import '../../Screens/network/transactionDetails.dart';
@@ -97,7 +98,6 @@ class _BlocksState extends State<Blocks> {
       }
     });
   }
-
   int blockSelected=0;
   TextEditingController nameController=TextEditingController();
   String txHash='';
@@ -221,8 +221,9 @@ class BlockContainer extends StatefulWidget {
   final BlockModel? blockModel;
   final String? valDescUrl;
   final NetworkList networkList;
+
  BlockContainer({
-    Key? key, this.blockModel,this.valDescUrl,required this.networkList
+    Key? key, this.blockModel,this.valDescUrl,required this.networkList,
   }) : super(key: key);
 
   @override
@@ -232,6 +233,7 @@ class BlockContainer extends StatefulWidget {
 class _BlockContainerState extends State<BlockContainer> {
   var valMoniker;
   var monikerLoaded=false;
+  ValidatorModel? validatorModel;
 
   @override
   void initState() {
@@ -342,8 +344,12 @@ class _BlockContainerState extends State<BlockContainer> {
                             style:kSmallTextStyle),
                         //const SizedBox(width:99),
                         monikerLoaded? Text((valMoniker)
-                             ,style:kSmallTextStyle):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
-
+                             ,style:kSmallTextStyle):
+                        SizedBox(
+                            height:10,
+                            width:10,
+                            child: LinearProgressIndicator()
+                        ),
                       ]
                   ),
                 ),
@@ -409,9 +415,7 @@ class _TxContainerState extends State<TxContainer> {
   getData()async{
     final response = await http.get(Uri.parse('${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
     if (response.statusCode == 200) {
-
       timestampTx =  jsonDecode(response.body)['result']['block']['header']['time'];
-
         setState(() {
           if (timestampTx!=null){
             txLoaded=true;

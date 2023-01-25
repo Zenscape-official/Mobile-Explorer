@@ -300,13 +300,13 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                       Text('Price',style: kMediumTextStyle,),
                                       Row(
                                         children: [
-                                          Text('\$'+widget.networkData!.price!,style: kMediumBoldTextStyle,),
+                                          Text('\$'+'${widget.networkData!.price??'0'}',style: kMediumBoldTextStyle,),
                                           SizedBox(
                                             height: 20,
                                             width: 20,
                                             child: double.parse(widget
                                                 .networkData!
-                                                .percChangeInPrice!) >
+                                                .percChangeInPrice??'0') >
                                                 0
                                                 ? SvgPicture.asset(
                                                 'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
@@ -324,7 +324,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                 .toString(),
                                             style: (double.parse(widget
                                                 .networkData!
-                                                .percChangeInPrice!) >
+                                                .percChangeInPrice??'0') >
                                                 0
                                                 ? const TextStyle(
                                                 color: Color(
@@ -358,7 +358,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           ),
 
                                                Text(
-                                                  '\$${k_m_b_generator(double.parse(widget.networkData!.marketCap!))}',
+                                                  '\$${k_m_b_generator(double.parse(widget.networkData!.marketCap??'0'))}',
                                                   style: kMediumBoldTextStyle,
                                                 )
 
@@ -377,7 +377,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           ),
                                           Row(
                                             children: [
-                                              double.parse(widget.networkData!.the24HrVol!) >
+                                              double.parse(widget.networkData!.the24HrVol??'0') >
                                                           0
                                                       ? Text(
                                                           '\$${truncateToDecimalPlaces(double.parse(widget.networkData!.the24HrVol!), 2).toString().replaceAllMapped(RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},')}',
@@ -397,8 +397,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                                       .withOpacity(
                                                                           .8)))
                                                       : Text(
-                                                          '\$${addComma(truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol!) * (-1)), 2).toString())}',
-                                                          style: double.parse(widget.networkData!.the24HrVol!) > 0
+                                                          '\$${addComma(truncateToDecimalPlaces((double.parse(widget.networkData!.the24HrVol??'0') * (-1)), 2).toString())}',
+                                                          style: double.parse(widget.networkData!.the24HrVol??'0') > 0
                                                               ? const TextStyle(
                                                                   fontFamily:
                                                                       'MontserratBold',
@@ -417,7 +417,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                   width: 20,
                                                   child: double.parse(widget
                                                               .networkData!
-                                                              .the24HrVol!) >
+                                                              .the24HrVol??'0') >
                                                           0
                                                       ? SvgPicture.asset(
                                                           'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
@@ -518,7 +518,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                               CupertinoPageRoute(
                                                 builder: (context) => Blocks(
                                                     networkData:
-                                                        widget.networkData,valDescUrl:widget.networkData!.blocksMoniker!),
+                                                        widget.networkData,valDescUrl:widget.networkData!.blocksMoniker),
                                               ),
                                             );
                                             toggleController.updateData(0);
