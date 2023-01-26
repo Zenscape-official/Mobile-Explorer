@@ -10,8 +10,8 @@ import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/controller/toggleController.dart';
 import 'package:zenscape_app/controller/txController.dart';
 import 'package:zenscape_app/controller/txToggleController.dart';
-import '../../backend_files/ValidatorsModel2.dart';
 import '../../backend_files/networkList.dart';
+import '../../backend_files/validatorsModel.dart';
 import '../../constants/constants.dart';
 import '../../Screens/network/transactionDetails.dart';
 import '../../constants/functions.dart';
@@ -244,6 +244,7 @@ class _BlockContainerState extends State<BlockContainer> {
     final response = await http.get(Uri.parse('${widget.valDescUrl}${widget.blockModel!.proposerAddress}'));
 
     if (response.statusCode == 200) {
+
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
 
       setState(() {
@@ -308,12 +309,7 @@ class _BlockContainerState extends State<BlockContainer> {
                               ),],),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                            child:   Text(
-                              '${
-                                  DateTime.now().toLocal()
-                                      .difference(widget.blockModel!.timestamp!.toLocal())
-                                      .inSeconds
-                               } secs ago',
+                            child:   Text(timeDifferenceFunction(widget.blockModel!.timestamp!.toString()),
                               style: kExtraSmallTextStyle,
                             )
                           ),
@@ -335,7 +331,7 @@ class _BlockContainerState extends State<BlockContainer> {
                       ]
                   ),
                 ),
-                Padding(
+               widget.networkList.uDenom!='uatom'? Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -352,7 +348,7 @@ class _BlockContainerState extends State<BlockContainer> {
                         ),
                       ]
                   ),
-                ),
+                ):Container(),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
@@ -478,7 +474,7 @@ class _TxContainerState extends State<TxContainer> {
                             ],
                           ),
                         ),
-                       widget.networkList.uDenom=='uosmo'?Container(): Container(
+                       widget.networkList.uDenom=='uosmo'||widget.networkList.uDenom=='uatom'?Container(): Container(
                           decoration: BoxDecoration (
                             border: Border.all(
                               color: Colors.lightBlueAccent.withOpacity(.5),
@@ -556,7 +552,7 @@ class _TxContainerState extends State<TxContainer> {
                       ]
                   ),
                 ),
-                widget.networkList.uDenom=='uosmo'?Container(): Padding(
+                widget.networkList.uDenom=='uosmo'||widget.networkList.uDenom=='uatom'?Container(): Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

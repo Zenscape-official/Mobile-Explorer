@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:new_version/new_version.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/Screens/onboardingScreen.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
@@ -73,7 +75,6 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-
   }
   List<Widget> _buildScreens(){
     return [

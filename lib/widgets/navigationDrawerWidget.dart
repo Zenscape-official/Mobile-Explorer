@@ -70,7 +70,6 @@ class _NavDrawState extends State<NavDraw> {
               //     text: 'Home',
               //     isSelected: selectedIndex == 8,
               //     onTap: () {
-              //
               //       setState(() {
               //         prevIndex=selectedIndex;
               //         selectedIndex = 8;
@@ -139,7 +138,7 @@ class _NavDrawState extends State<NavDraw> {
       Navigator.push(context, CupertinoPageRoute(builder: (context)=>Proposals(networkListProposal:widget.networkData ,)));
 
                   }),
-              _createDrawerItem(
+            widget.networkData!.uDenom=='uatom'||widget.networkData!.uDenom=='uosmo'?Container():  _createDrawerItem(
                   pageIndex: widget.pageIndex,
                   fetchData: widget.networkData,
                   context: context,

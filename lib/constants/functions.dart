@@ -120,6 +120,5 @@ class TextWithCopyIcon extends StatelessWidget {
 
 String formatString(String str) {
   str = str.replaceAll("**", "*");
-  //str = str.replaceAll("\\n", "\n");
   return str;
 }

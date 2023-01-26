@@ -169,9 +169,11 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text('Proposer',
+                                widget.proposalProduct.proposerAddress!.isEmpty?Text(' ',
+                                    style:kSmallTextStyle): Text('Proposer',
                                     style:kSmallTextStyle),
-                                InkWell(
+                                widget.proposalProduct.proposerAddress!.isEmpty?Text(' ',
+                                    style:kSmallTextStyle):InkWell(
                                   onTap: () => Clipboard.setData(ClipboardData(
                                     text: widget.proposalProduct.proposerAddress!,
                                   )).then((_) {
@@ -182,7 +184,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                   }),
                                   child: Row(
                                     children: [
-                                      Text(dotRefactorFunction(widget.proposalProduct.proposerAddress!),
+                                      Text(dotRefactorFunction(widget.proposalProduct.proposerAddress??''),
                                           style: kSmallBoldTextStyle),
                                       const SizedBox(width: 4),
                                       const Icon(

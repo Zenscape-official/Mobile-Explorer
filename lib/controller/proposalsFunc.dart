@@ -17,7 +17,6 @@ class ProposalController extends GetxController {
         case 200:
         case 201:
           var jsonString = jsonDecode((response.body));
-          print((jsonString).toString());
 
           return proposalList = List.from(jsonString)
               .map((e) => ProposalsModel.fromJson(e))

@@ -156,6 +156,11 @@ class ProposalCard extends StatelessWidget {
       status='Deposit';
       ispassed=false;
     }
+    else if(product.status=='PROPOSAL_STATUS_FAILED'){
+      status='Failed';
+      ispassed=false;
+    }
+
   }
   @override
   Widget build(BuildContext context) {

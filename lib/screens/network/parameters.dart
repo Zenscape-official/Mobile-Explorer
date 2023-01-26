@@ -52,14 +52,6 @@ fetchDataMint(String input) async {
       return '';
     }
   }
-  static Future<String> fetchDataGov(String input,String json1,String json2) async {
-    final response = await http.get(Uri.parse(input));
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)[0][json1][json2].toString();
-    } else {
-      return '';
-    }
-  }
 
   void getData() async {
   final mintResult=await fetchDataMint(widget.networkList!.mintingParamssUrl!);
@@ -98,11 +90,21 @@ fetchDataMint(String input) async {
   stakeParams=[
     ' ${(double.parse(unbondTime) / (86400 * 1000000000)).toString()} days',max_val,max_entries,hist_entries];
 
-  // govParams=[k_m_b_generator(double.parse(maxDeposit)),
-  //   truncateToDecimalPlaces(double.parse(votingPeriod),2).toString(),
-  //   truncateToDecimalPlaces(double.parse(quorum),2).toString(),
-  //   truncateToDecimalPlaces(double.parse(threshold),2).toString(),
-  //   truncateToDecimalPlaces(double.parse(vetoThreshold),2).toString()];
+  final govResult=await fetchDataMint(widget.networkList!.govParamsUrl!);
+  Map<String,dynamic> govData= jsonDecode(govResult)['result'];
+
+  maxDeposit = govData["ma"];
+  minSignedPerWindow= (slashdata["min_signed_per_window"]).toString();
+  slashFractionDowntime=slashdata["slash_fraction_downtime"].toString();
+  slashFractionDoubleSign=slashdata["slash_fraction_double_sign"].toString();
+  setState(() {
+
+  });
+  govParams=[k_m_b_generator(double.parse(maxDeposit)),
+    truncateToDecimalPlaces(double.parse(votingPeriod),2).toString(),
+    truncateToDecimalPlaces(double.parse(quorum),2).toString(),
+    truncateToDecimalPlaces(double.parse(threshold),2).toString(),
+    truncateToDecimalPlaces(double.parse(vetoThreshold),2).toString()];
 
   slashingParams=[truncateToDecimalPlaces(double.parse(signedBlockWindow),2).toString(),
     truncateToDecimalPlaces(double.parse(minSignedPerWindow),2).toString(),
@@ -153,7 +155,7 @@ fetchDataMint(String input) async {
         physics: const ClampingScrollPhysics(),
         children: <Widget>[
           SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList!,),
-         widget.networkList!.uDenom=='ucmdx'? Padding(
+         widget.networkList!.uDenom!='uosmo'? Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,6 +200,31 @@ fetchDataMint(String input) async {
                     itemCount: stakeParams.length,
                     itemBuilder: (context,index){
                       return InfoCard(title1: stakeTitle[index],icon1: image[index],titleValue1: stakeParams[index]);
+                    },
+                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text('Governance Parameters',
+                      style:kMediumBoldTextStyle),
+                ),
+                StaggeredGridView.countBuilder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 20,
+                    crossAxisSpacing: 20,
+                    itemCount: govParams.length,
+                    itemBuilder: (context,index){
+                      return InfoCard(title1:govTitle[index],icon1: image[index],titleValue1: govParams[index]);
                     },
                     staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
               ],

@@ -26,7 +26,6 @@ class _LandingPageState extends State<LandingPage> {
   var net;
   var supply;
 
-
   @override
   void initState() {
     super.initState();
@@ -79,7 +78,7 @@ class _LandingPageState extends State<LandingPage> {
                 net[i].marketCap =
                     DashboardController.dashboardList[j].marketCap.toString();
                 net[i].the24HrVol = DashboardController
-                    .dashboardList[j].marketCapChange24H
+                    .dashboardList[j].totalVolume
                     .toString();
                 net[i].percChangeInPrice = DashboardController
                     .dashboardList[j].priceChangePercentage24H

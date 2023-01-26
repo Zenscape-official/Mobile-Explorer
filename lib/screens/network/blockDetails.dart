@@ -148,30 +148,36 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('Proposer',
-                                    style:kSmallTextStyle),
-                                //const SizedBox(width:99),
-                                monikerLoaded? InkWell(
-                                  onTap:monikerLoaded?
-                                      () {
-                                    PersistentNavBarNavigator.pushNewScreen(
-                                      context,
-                                      screen: ValidatorDetails(
-                                        networkList: widget.networkList,
-                                        validatorModel: validatorModel![0],
-                                        denom: widget.networkList.uDenom,
-                                      ),
-                                      withNavBar: true,
-                                      pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                                    );
+                              widget.networkList.uDenom=='uatom'?Container():  Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Proposer',
+                                        style:kSmallTextStyle),
+                                    monikerLoaded? InkWell(
+                                      onTap:monikerLoaded?
+                                          () {
+                                        PersistentNavBarNavigator.pushNewScreen(
+                                          context,
+                                          screen: ValidatorDetails(
+                                            networkList: widget.networkList,
+                                            validatorModel: validatorModel![0],
+                                            denom: widget.networkList.uDenom,
+                                          ),
+                                          withNavBar: true,
+                                          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                                        );
 
-                                  }: null,
-                                  child: Text((validatorModel![0].moniker!)
-                                      ,style:kMediumBlueBoldTextStyle),
-                                ):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
-                                const SizedBox(
-                                  height: 20,
+                                      }: null,
+                                      child: Text((validatorModel![0].moniker!)
+                                          ,style:kMediumBlueBoldTextStyle),
+                                    ):SizedBox(height:10,width:10,child: LinearProgressIndicator()),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ],
                                 ),
+                                //const SizedBox(width:99),
+
                                 Text('Total Gas', style: kSmallTextStyle),
                                 const SizedBox(
                                   height: 2,

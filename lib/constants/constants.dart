@@ -147,8 +147,22 @@ class GreenContainer extends StatelessWidget {
 }
 
 String dotRefactorFunction (String hash){
-var result=hash[0]+hash[1]+hash[2]+'...'+hash[hash.length-3]+hash[hash.length-2]+hash[hash.length-1];
-return result;
+
+ if(hash.isNotEmpty) {
+    var result = hash[0] +
+        hash[1] +
+        hash[2] +
+        '...' +
+        hash[hash.length - 3] +
+        hash[hash.length - 2] +
+        hash[hash.length - 1];
+    return result;
+  }
+ else
+ {
+   return '';
+ }
+
 }
 String dateTime(DateTime dateTime){
   var fm = DateFormat('yyyy-MM-dd hh:mm:ss');

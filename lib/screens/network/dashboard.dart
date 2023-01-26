@@ -752,8 +752,7 @@ class BlockContDash extends StatelessWidget {
                             ),
                           ),
                         ]),
-                    Text(
-                      '${new DateTime.now().toLocal().difference(blockModel!.timestamp!.toLocal()).inSeconds}secs ago',
+                    Text(timeDifferenceFunction(blockModel!.timestamp!.toString()),
                       style: kSmallBoldTextStyle,
                     )
                   ],
@@ -824,7 +823,6 @@ class _TxContDashState extends State<TxContDash> {
         if (timestampTx != null) {
           txLoaded = true;
         } else {
-          print(response.statusCode);
           txLoaded = false;
         }
       });
@@ -890,7 +888,7 @@ class _TxContDashState extends State<TxContDash> {
                             ),
                           ),
                         ]),
-                    widget.networkList.uDenom!='uosmo'? Row(
+                   widget.networkList.uDenom=='uatom'? Container():Row(
                           children: [
                             txLoaded
                                 ? Text(
@@ -901,8 +899,7 @@ class _TxContDashState extends State<TxContDash> {
                                 width: 15,
                                 child: CircularProgressIndicator()),
                           ],
-                        ):Container()
-
+                        )
                   ],
                 ),
                 const SizedBox(
@@ -924,7 +921,7 @@ class _TxContDashState extends State<TxContDash> {
                 const SizedBox(
                   height: 6,
                 ),
-                widget.networkList.uDenom!='uosmo'? Row(
+                widget.networkList.uDenom!='uatom'? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -969,7 +966,7 @@ class ProposalCardDash extends StatelessWidget {
                     proposalProduct: product,networkData:networkList
                   ))),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
+        padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Container(
             width: MediaQuery.of(context).size.width / 1.2,
             margin: EdgeInsets.all(4),

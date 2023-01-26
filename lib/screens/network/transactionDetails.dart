@@ -196,7 +196,7 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                               widget.networkList.uDenom=='uosmo'?Container(): Column(
+                               widget.networkList.uDenom=='uatom'?Container(): Column(
                                  crossAxisAlignment:CrossAxisAlignment.start,
                                   children: [
                                     Text('Time', style: kSmallTextStyle),
@@ -234,7 +234,7 @@ class _TxDetailsState extends State<TxDetails> {
                                 ),
                                 Text('Fee', style: kSmallTextStyle),
                                 const SizedBox(
-                                  height: 2,
+                                  height: 2
                                 ),
                                 widget.txModel!.fee!.amount!.length!=0? Text(
                                     '${addComma(widget.txModel!.fee!.amount![0].amount!)} ${widget.txModel!.fee!.amount![0].denom!}',
@@ -364,14 +364,14 @@ class _TxDetailsState extends State<TxDetails> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    Text('Amount', style: kSmallTextStyle),
-                                    const SizedBox(
-                                      height: 2,
-                                    ),
-                                    widget.txModel!.messages!.isNotEmpty?Text(
-                                        widget.txModel!.messages![0].amount ??
-                                            '',
-                                        style: kMediumBoldTextStyle):Text(''),
+                                    // Text('Amount', style: kSmallTextStyle),
+                                    // const SizedBox(
+                                    //   height: 2,
+                                    // ),
+                                    // widget.txModel!.messages!.isNotEmpty?Text(
+                                    //     widget.txModel!.messages![0].amount ??
+                                    //         '',
+                                    //     style: kMediumBoldTextStyle):Text(''),
                                     const SizedBox(
                                       height: 20,
                                     ),
@@ -469,14 +469,14 @@ class _TxDetailsState extends State<TxDetails> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    Text('Amount', style: kSmallTextStyle),
-                                    const SizedBox(
-                                      height: 2,
-                                    ),
-                                    widget.txModel!.messages!.isNotEmpty?Text(
-                                        widget.txModel!.messages![0].amount??
-                                            '',
-                                        style: kMediumBoldTextStyle):Text(''),
+                                    // Text('Amount', style: kSmallTextStyle),
+                                    // const SizedBox(
+                                    //   height: 2,
+                                    // ),
+                                    // widget.txModel!.messages!.isNotEmpty?Text(
+                                    //     widget.txModel!.messages![0].amount??
+                                    //         '',
+                                    //     style: kMediumBoldTextStyle):Text(''),
                                     const SizedBox(
                                       height: 20,
                                     ),
@@ -614,13 +614,13 @@ class _TxDetailsState extends State<TxDetails> {
                                                                                                                                           const SizedBox(
                                                                                                                                             height: 20,
                                                                                                                                           ),
-                                                                                                                                          Text('Amount', style: kSmallTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 2,
-                                                                                                                                          ),
-                                                                                                                                          Text(
-                                                                                                                                              widget.txModel!.messages![0].amount.toString(),
-                                                                                                                                              style: kMediumBoldTextStyle),
+                                                                                                                                          // Text('Amount', style: kSmallTextStyle),
+                                                                                                                                          // const SizedBox(
+                                                                                                                                          //   height: 2,
+                                                                                                                                          // ),
+                                                                                                                                          // Text(
+                                                                                                                                          //     widget.txModel!.messages![0].amount.toString(),
+                                                                                                                                          //     style: kMediumBoldTextStyle),
                                                                                                                                           const SizedBox(
                                                                                                                                             height: 20,
                                                                                                                                           ),
