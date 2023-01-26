@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zenscape_app/backend_files/ParameterModel.dart';
 import 'package:zenscape_app/constants/constants.dart';
+import '../../backend_files/govModel.dart';
 import '../../backend_files/networkList.dart';
 import '../../constants/constString.dart';
 import '../../widgets/navigationDrawerWidget.dart';
@@ -91,17 +92,20 @@ fetchDataMint(String input) async {
     ' ${(double.parse(unbondTime) / (86400 * 1000000000)).toString()} days',max_val,max_entries,hist_entries];
 
   final govResult=await fetchDataMint(widget.networkList!.govParamsUrl!);
-  Map<String,dynamic> govData= jsonDecode(govResult)['result'];
+  final govParamModel = govParamModelFromJson(govResult);
 
-  maxDeposit = govData["ma"];
-  minSignedPerWindow= (slashdata["min_signed_per_window"]).toString();
-  slashFractionDowntime=slashdata["slash_fraction_downtime"].toString();
-  slashFractionDoubleSign=slashdata["slash_fraction_double_sign"].toString();
+  maxDeposit = govParamModel[0].depositParams!.maxDepositPeriod!.toString();
+  votingPeriod = govParamModel[0].votingParams!.votingPeriod.toString();
+  quorum=govParamModel[0].tallyParams!.quorum.toString();
+  threshold =govParamModel[0].tallyParams!.threshold!;
+  vetoThreshold=govParamModel[0].tallyParams!.vetoThreshold!;
   setState(() {
 
   });
-  govParams=[k_m_b_generator(double.parse(maxDeposit)),
-    truncateToDecimalPlaces(double.parse(votingPeriod),2).toString(),
+  govParams=[
+
+    '${(double.parse(maxDeposit) / (86400 * 1000000000)).toString()} days',
+    '${(double.parse(votingPeriod) / (86400 * 1000000000)).toString()} days',
     truncateToDecimalPlaces(double.parse(quorum),2).toString(),
     truncateToDecimalPlaces(double.parse(threshold),2).toString(),
     truncateToDecimalPlaces(double.parse(vetoThreshold),2).toString()];

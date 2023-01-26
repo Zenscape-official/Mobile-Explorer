@@ -27,7 +27,7 @@
     "contractsUrl":"https://staging-explorer-api.zenscape.one/atom/wasmcontracts",
     "mintingParamssUrl":"https://cosmos-rest.zenscape.one/minting/parameters",
     "stakingParamsUrl":"https://cosmos-rest.zenscape.one/staking/parameters",
-    "govParamsUrl":"https://staging-explorer-api.zenscape.one/comdex/governance",
+    "govParamsUrl":"https://staging-explorer-api.zenscape.one/atom/governance",
     "distParamsUrl":"https://cosmos-rest.zenscape.one/distribution/parameters",
     "slashingParamsUrl":"https://cosmos-rest.zenscape.one/slashing/parameters",
     "txTimestamp": "https://cosmos-rpc.zenscape.one/block?height=",

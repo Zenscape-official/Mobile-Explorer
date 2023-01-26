@@ -888,7 +888,7 @@ class _TxContDashState extends State<TxContDash> {
                             ),
                           ),
                         ]),
-                   widget.networkList.uDenom=='uatom'? Container():Row(
+                   widget.networkList.uDenom==''? Container():Row(
                           children: [
                             txLoaded
                                 ? Text(
@@ -921,7 +921,7 @@ class _TxContDashState extends State<TxContDash> {
                 const SizedBox(
                   height: 6,
                 ),
-                widget.networkList.uDenom!='uatom'? Row(
+                widget.networkList.uDenom!=''? Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
-import 'package:zenscape_app/screens/network/searchDetailsScreen.dart';
 import 'package:zenscape_app/screens/network/validatorDetails.dart';
 import '../../backend_files/blocksModel.dart';
 import 'package:http/http.dart' as http;

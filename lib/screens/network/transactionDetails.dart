@@ -196,7 +196,7 @@ class _TxDetailsState extends State<TxDetails> {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                               widget.networkList.uDenom=='uatom'?Container(): Column(
+                               widget.networkList.uDenom==''?Container(): Column(
                                  crossAxisAlignment:CrossAxisAlignment.start,
                                   children: [
                                     Text('Time', style: kSmallTextStyle),
