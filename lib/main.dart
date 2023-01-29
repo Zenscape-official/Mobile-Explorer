@@ -27,7 +27,6 @@ Future<void> main() async {
   ByteData data = await PlatformAssetBundle().load('assets/ca/lets-encrypt-r3.pem');
   SecurityContext.defaultContext.setTrustedCertificatesBytes(data.buffer.asUint8List());
   HttpOverrides.global = MyHttpOverrides();
-
   SharedPreferences prefs = await SharedPreferences.getInstance();
   initScreen = (prefs.getInt("initScreen"));
   runApp(const MyApp());
@@ -44,14 +43,12 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    DashboardController.dashboardList();
 }
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
         defaultTransition: Transition.noTransition,
         transitionDuration:  Duration(seconds: 0),
-
       title: 'Zenscape',
       debugShowCheckedModeBanner: false,
       home:  initScreen == null ? OnboardingPage():const MainApp(),
@@ -75,6 +72,19 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
+    _checkVersion();
+  }
+  void _checkVersion() async{
+    final newVersion=NewVersion(
+      androidId: 'com.zenscape_app.android',
+    );
+    final status= await newVersion.getVersionStatus();
+    newVersion.showUpdateDialog(
+        context:context,
+        versionStatus: status!,
+      dialogTitle:"Update Zenscape" ,
+      updateButtonText: "Let's Update"
+    );
   }
   List<Widget> _buildScreens(){
     return [

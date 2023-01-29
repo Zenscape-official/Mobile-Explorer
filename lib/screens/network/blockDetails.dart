@@ -26,18 +26,18 @@ class _BlockDetailsState extends State<BlockDetails> {
   @override
   Widget build(BuildContext context) {
     return
-      BlockDetailScreen(blockModel: widget.blockModel,valDesc: widget.valDesc!,networkList: widget.networkList,);
+      BlockDetailScreen(blockModel: widget.blockModel,networkList: widget.networkList,);
   }
 }
 
 class BlockDetailScreen extends StatefulWidget {
   BlockDetailScreen({
     Key? key,
-    required this.blockModel,required this.valDesc, required this.networkList
+    required this.blockModel, this.valDesc, required this.networkList
   }) : super(key: key);
 
   var blockModel;
-  String valDesc;
+  String? valDesc;
   NetworkList networkList;
 
   @override

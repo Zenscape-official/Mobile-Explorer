@@ -241,7 +241,7 @@ class _BlockContainerState extends State<BlockContainer> {
     getData();
   }
   getData()async{
-    final response = await http.get(Uri.parse('${widget.valDescUrl}${widget.blockModel!.proposerAddress}'));
+    final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
 
     if (response.statusCode == 200) {
 
@@ -261,7 +261,7 @@ class _BlockContainerState extends State<BlockContainer> {
   Widget build(BuildContext context) {
    getData();
     return InkWell(
-      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,valDesc: widget.valDescUrl!,networkList:widget.networkList))),
+      onTap:()=> Navigator.push(context, CupertinoPageRoute(builder: (context) => BlockDetails(blockModel: widget.blockModel,networkList:widget.networkList))),
       child: Container(
         decoration: kBoxDecorationWithGradient,
         margin: const EdgeInsets.all(14),
@@ -309,7 +309,7 @@ class _BlockContainerState extends State<BlockContainer> {
                               ),],),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                            child:   Text(timeDifferenceFunction(widget.blockModel!.timestamp!.toString()),
+                            child:   Text(timeDifferenceFunction(widget.blockModel!.timestamp!.toString()).toString(),
                               style: kExtraSmallTextStyle,
                             )
                           ),
@@ -354,7 +354,7 @@ class _BlockContainerState extends State<BlockContainer> {
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text('Transaction',
+                        Text('No of Transactions',
                             style:kSmallTextStyle),
                         Text(widget.blockModel!.numTxs.toString(),
                             style:kSmallTextStyle)
@@ -474,7 +474,7 @@ class _TxContainerState extends State<TxContainer> {
                             ],
                           ),
                         ),
-                       widget.networkList.uDenom=='uosmo'||widget.networkList.uDenom=='uatom'?Container(): Container(
+                       Container(
                           decoration: BoxDecoration (
                             border: Border.all(
                               color: Colors.lightBlueAccent.withOpacity(.5),

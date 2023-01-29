@@ -278,11 +278,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                             ),
                                           ),
                                            Text(
-                                                  truncateToDecimalPlaces(
-                                                          double.parse(
-                                                              blockTime),
-                                                          2)
-                                                      .toString(),
+                                                  '${truncateToDecimalPlaces(
+                                            double.parse(blockTime), 2).toString()} secs',
                                                   style:
                                                       kExtraSmallBoldTextStyle)
 

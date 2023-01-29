@@ -68,13 +68,12 @@ fetchDataMint(String input) async {
   max_entries=stakedata["max_entries"].toString();
   hist_entries=stakedata["historical_entries"].toString();
 
-  final distResult=await fetchDataMint(widget.networkList!.stakingParamsUrl!);
+  final distResult=await fetchDataMint(widget.networkList!.distParamsUrl!);
   Map<String,dynamic> distdata= jsonDecode(distResult)['result'];
-  unbondTime = distdata["unbonding_time"];
-
-  max_val= (distdata["max_validators"]).toString();
-  max_entries=distdata["max_entries"].toString();
-  hist_entries=distdata["historical_entries"].toString();
+  commTax = distdata["community_tax"];
+  base_reward= (distdata["base_proposer_reward"]).toString();
+  bonus_reward=distdata["bonus_proposer_reward"].toString();
+  withdraw_enabled=distdata["withdraw_addr_enabled"].toString();
 
   final slashResult=await fetchDataMint(widget.networkList!.slashingParamsUrl!);
   Map<String,dynamic> slashdata= jsonDecode(slashResult)['result'];

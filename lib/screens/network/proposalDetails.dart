@@ -302,7 +302,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                               Text('Yes',
                               style:kSmallTextStyle),
                               Text((tallyTotal)>0?
-                              ('${tallyYes*100/tallyTotal}%').toString():'0',
+                              ('${(tallyYes*100/tallyTotal).toStringAsFixed(2)}%'):'0',
                               style:kSmallBoldTextStyle),
                               Text(tallyYes.toString(),
                               style:kSmallTextStyle)
@@ -326,7 +326,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                 Text('No',
                                     style:kSmallTextStyle),
                                 Text((tallyTotal)>0?
-                                ('${tallyNo*100/tallyTotal}%').toString():'0',
+                                ('${(tallyNo*100/tallyTotal).toStringAsFixed(2)}%'):'0',
                                     style:kSmallBoldTextStyle),
                                 Text(tallyNo.toString(),
                                 style:kSmallTextStyle)
@@ -351,7 +351,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                     style:kSmallTextStyle),
                                 Text(
                                     (tallyTotal)>0?
-                                    ('${tallyNoWithVeto*100/tallyTotal}%').toString():'0',
+                                    ('${(tallyNoWithVeto*100/tallyTotal).toStringAsFixed(2)}%'):'0',
                                     style:kSmallBoldTextStyle),
                                 Text(tallyNoWithVeto.toString(),
                                 style:kSmallTextStyle),
@@ -376,7 +376,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                                 Text('Abstain',
                                     style:kSmallTextStyle),
                                 Text((tallyTotal)>0?
-                                ('${tallyAbstain*100/tallyTotal}%').toString():'0',
+                                ('${(tallyAbstain*100/tallyTotal).toStringAsFixed(2)}%').toString():'0',
                                     style:kSmallBoldTextStyle),
                                 Text(tallyAbstain.toString(),
                                     style:kSmallTextStyle),

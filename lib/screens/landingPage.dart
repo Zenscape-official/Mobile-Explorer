@@ -36,8 +36,8 @@ class _LandingPageState extends State<LandingPage> {
     'assets/svgfiles/BANNER_2.svg'
   ];
   final pngPath = [
-    'assets/images/banner_zenscape.png',
-    'assets/images/StakeBanner.png'
+    'https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png',
+    'https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png'
   ];
 
   netData() async {
@@ -230,7 +230,7 @@ class _LandingPageState extends State<LandingPage> {
   Widget buildPngPicture(String urlImage, int index) {
     return InkWell(
       //onTap:()=>OnTap,
-      child: Image.asset(
+      child: Image.network(
         urlImage,
         height: 200,
         width: MediaQuery.of(context).size.width,
@@ -335,9 +335,9 @@ class _NetworkCardState extends State<NetworkCard> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.networkList.denom!,
+                      Text(widget.networkList.denom.toString(),
                           style: kMediumBoldTextStyle),
-                      Text(widget.networkList.name!, style: kSmallTextStyle),
+                     Container(width:90,child: Text(widget.networkList.name.toString(), style: kSmallTextStyle))
                     ],
                   ),
                 ],

@@ -512,13 +512,13 @@ class AtomValidatorContainer extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              'Uptime',
+                              'Unbonding Height',
                               style: kSmallTextStyle,
                             ),
-                            // Text(
-                            //   '${validatorModel!.missedBlocksCounter!} blocks missed',
-                            //   style: kSmallBoldTextStyle,
-                            // )
+                            Text(
+                              '${validatorModel!.unbondingHeight??''}',
+                              style: kSmallBoldTextStyle,
+                            )
                           ]
                       ),
                     ),
