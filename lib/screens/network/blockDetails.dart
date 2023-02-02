@@ -60,7 +60,8 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
   }
   getData()async{
     final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
-    final txresponse = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
+    final txresponse = await http.get(Uri.parse('https://staging-explorer-api.zenscape.one/comdex/transactionFromHt/${widget.blockModel!.height}'));
+    print('https://staging-explorer-api.zenscape.one/comdex/transactionFromHt/${widget.blockModel!.height}');
     if (response.statusCode == 200) {
       validatorModel = validatorModelFromJson(response.body); jsonDecode(response.body)[0];
       setState(() {
@@ -73,7 +74,7 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
       });
     }
     if (txresponse.statusCode == 200) {
-      txModel = List<TxModel>.from(json.decode(response.body).map((x) => TxModel.fromJson(x)));
+      txModel = List<TxModel>.from(json.decode(txresponse.body).map((x) => TxModel.fromJson(x)));
 
       setState(() {
         if (txModel.isNotEmpty) {

@@ -54,6 +54,7 @@ class NetworkList {
     this.txFromAddress,
     this.delegationFromAddress,
     this.rewardFromAddress,
+    this.transactionSearchFromHt
   });
 
   String? id;
@@ -103,6 +104,7 @@ class NetworkList {
   String? txFromAddress;
   String? delegationFromAddress;
   String? rewardFromAddress;
+  String? transactionSearchFromHt;
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
@@ -152,6 +154,7 @@ class NetworkList {
     txFromAddress: json["txFromAddress"],
     delegationFromAddress: json["delegationFromAddress"],
     rewardFromAddress: json["rewardFromAddress"],
+    transactionSearchFromHt: json["transactionSearchFromHt"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -202,6 +205,7 @@ class NetworkList {
     "txFromAddress": txFromAddress,
     "delegationFromAddress": delegationFromAddress,
     "rewardFromAddress": rewardFromAddress,
+    "transactionSearchFromHt": transactionSearchFromHt,
   };
 
 
