@@ -83,8 +83,6 @@ class _ContractTxDetailsState extends State<ContractTxDetails> {
                               pageTransitionAnimation: PageTransitionAnimation.cupertino,
                             ),
                             child: Text(addComma(widget.contractTxModel!.height!), style: kMediumBlueBoldTextStyle),),
-
-
                           const SizedBox(
                             height: 20,
                           ),

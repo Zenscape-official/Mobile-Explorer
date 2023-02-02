@@ -363,7 +363,7 @@ class _BalanceContState extends State<BalanceCont> {
     final String response =
         await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
     final data = await json.decode(response)["tokens"];
-    //print(data);
+    // print(data);
     _items = data;
 
     ibcDenom = List.from((_items).map((x) => Token.fromJson(x)));
@@ -383,11 +383,9 @@ class _BalanceContState extends State<BalanceCont> {
       }
     }
   }
-
   @override
   Widget build(BuildContext context) {
-    denom = mapDenom(widget.balance!.denom!);
-    //print(denom);
+    denom = mapDenom(widget.balance!.denom??'');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 8),
       child: Container(
@@ -423,7 +421,7 @@ class _BalanceContState extends State<BalanceCont> {
                     ),
                   ),
                   Text(
-                    addComma((double.parse(widget.balance!.amount!) / 1000000)
+                    addComma((double.parse(widget.balance!.amount??'0') / 1000000)
                         .toString()),
                     style: kSmallBoldTextStyle,
                   )

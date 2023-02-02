@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
-import '../backend_files/bankTotalModal.dart';
 import '../backend_files/dashboardModel.dart';
 
 class DashboardController extends GetxController {
@@ -38,15 +37,26 @@ class DashboardController extends GetxController {
         return '0';
       }
     } else {
-      return '';
+      return '0';
     }
   }
 
   Future<String> fetchSingleData(String input, String json) async {
     final response = await http.get(Uri.parse(input));
     if (response.statusCode == 200) {
-      return await jsonDecode(response.body)[json];
-    } else {
+      return await jsonDecode(response.body)[json].toString();
+    }
+    else {
+      return '';
+    }
+  }
+  Future<String> fetchOsmoAPR(String input) async {
+    final response = await http.get(Uri.parse(input));
+    if (response.statusCode == 200)
+    {
+      return await jsonDecode(response.body).toString();
+    }
+    else {
       return '';
     }
   }

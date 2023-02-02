@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/constants/functions.dart';
+import 'package:zenscape_app/screens/network/dashboard.dart';
 import 'package:zenscape_app/screens/network/validatorDetails.dart';
 import '../../backend_files/blocksModel.dart';
 import 'package:http/http.dart' as http;
 import '../../backend_files/networkList.dart';
+import '../../backend_files/txModel.dart';
 import '../../backend_files/validatorsModel.dart';
 
 class BlockDetails extends StatefulWidget {
@@ -48,7 +50,8 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
   var valMoniker;
   var monikerLoaded=false;
   List<ValidatorModel>? validatorModel;
-
+  List<TxModel> txModel=[];
+  int txLoaded=0;
 
   @override
   void initState() {
@@ -57,8 +60,8 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
   }
   getData()async{
     final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
+    final txresponse = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
     if (response.statusCode == 200) {
-      print(jsonDecode(response.body)[0]);
       validatorModel = validatorModelFromJson(response.body); jsonDecode(response.body)[0];
       setState(() {
         if (validatorModel!=null){
@@ -69,7 +72,17 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
         }
       });
     }
-  }
+    if (txresponse.statusCode == 200) {
+      txModel = List<TxModel>.from(json.decode(response.body).map((x) => TxModel.fromJson(x)));
+
+      setState(() {
+        if (txModel.isNotEmpty) {
+          txLoaded = 1;
+        } else {
+          txLoaded = 0;
+        }
+      });
+    }}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,12 +194,40 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                                 const SizedBox(
                                   height: 2,
                                 ),
-                                Text('${addComma(widget.blockModel!.totalGas) }${widget.networkList.uDenom}', style: kMediumBoldTextStyle),
+                                Text('${addComma(widget.blockModel!.totalGas) } ${widget.networkList.uDenom}', style: kMediumBoldTextStyle),
                               ]
                           ),
                         ),
                       ),
                   ),
+                  txModel.length!=0 ? Padding(
+                    padding:
+                    const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(12.0,6,2,6),
+                          child: Text('Transactions',
+                              style: kMediumBoldTextStyle),
+                        ),
+                        ListView.builder(
+                            padding: EdgeInsets.all(0),
+                            reverse: true,
+                            physics:
+                            const NeverScrollableScrollPhysics(),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            itemCount: txModel.length>100?100:txModel.length,
+                            itemBuilder:
+                                (BuildContext context, int index) {
+                              return TxContDash(txModel: txModel[index],
+                                networkList: widget.networkList,
+                              );
+                            }),
+                      ],
+                    ),
+                  ):Container()
                 ],
             ),
         ),

@@ -134,7 +134,7 @@ class ValidatorDetailsScreen extends StatelessWidget {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                Text('Self Delegated Address',
+                                SelectableText('Self Delegated Address',
                                     style: kMediumTextStyle),
                                 const SizedBox(
                                   height: 2,
@@ -146,7 +146,7 @@ class ValidatorDetailsScreen extends StatelessWidget {
                                     withNavBar: true,
                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                   ),
-                                  child: Text(widget.validatorModel!.selfDelegateAddress!, style: kMediumBlueBoldTextStyle),),
+                                  child:  Text(widget.validatorModel!.selfDelegateAddress!, style: kMediumBlueBoldTextStyle),),
 
 
                                 const SizedBox(
@@ -341,24 +341,22 @@ class AtomValidatorDetailsScreen extends StatelessWidget {
                         const SizedBox(
                           height: 20,
                         ),
-                        Text('Self Delegated Address',
-                            style: kMediumTextStyle),
-                        const SizedBox(
-                          height: 2,
-                        ),
-                        InkWell(
-                          onTap:()=> PersistentNavBarNavigator.pushNewScreen(
-                            context,
-                            screen: SearchScreen (nameController: widget.validatorModel!.operatorAddress!,networkList:widget.networkList),
-                            withNavBar: true,
-                            pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                          ),
-                          child: Text(widget.validatorModel!.operatorAddress!, style: kMediumBlueBoldTextStyle),),
-
-
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        // Text('Self Delegated Address',
+                        //     style: kMediumTextStyle),
+                        // const SizedBox(
+                        //   height: 2,
+                        // ),
+                        // InkWell(
+                        //   onTap:()=> PersistentNavBarNavigator.pushNewScreen(
+                        //     context,
+                        //     screen: SearchScreen (nameController: widget.validatorModel!.operatorAddress!,networkList:widget.networkList),
+                        //     withNavBar: true,
+                        //     pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                        //   ),
+                        //   child: Text(widget.validatorModel!.operatorAddress!, style: kMediumBlueBoldTextStyle),),
+                        // const SizedBox(
+                        //   height: 20,
+                        // ),
                         Text('Operator Address', style: kMediumTextStyle),
                         const SizedBox(
                           height: 2,

@@ -73,7 +73,7 @@ class _ValidatorsState extends State<Validators> {
           if(_validatorController.valStatus![j].status==3){
             activeValidatorsList.add(validators![i]);
           }
-          else {
+          else  if(_validatorController.valStatus![j].status==1){
             (inActiveValidatorsList.add(validators![i]));
           }
         }

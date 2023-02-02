@@ -145,6 +145,40 @@ class GreenContainer extends StatelessWidget {
     );
   }
 }
+class RedContainer extends StatelessWidget {
+  RedContainer(this.title);
+  String? title;
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.redAccent.withOpacity(.1),
+        borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+        border: Border.all(
+          color:  Colors.red.withOpacity(.5),
+          width: 1.0,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 9.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children:[
+             CircleAvatar(backgroundColor:  Colors.red.withOpacity(.5),
+              radius: 3,),
+            SizedBox(width: 2,),
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(title!,
+                style: kSmallTextStyle,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
 
 String dotRefactorFunction (String hash){
 
@@ -165,7 +199,7 @@ String dotRefactorFunction (String hash){
 
 }
 String dateTime(DateTime dateTime){
-  var fm = DateFormat('yyyy-MM-dd hh:mm:ss');
+  var fm = DateFormat('yyyy-MM-dd HH:mm:ss');
   return fm.format(dateTime);
 }
 

@@ -76,7 +76,7 @@ class _MainAppState extends State<MainApp> {
   }
   void _checkVersion() async{
     final newVersion=NewVersion(
-      androidId: 'com.zenscape_app.android',
+      androidId: 'com.example.zenscape_app',
     );
     final status= await newVersion.getVersionStatus();
     newVersion.showUpdateDialog(

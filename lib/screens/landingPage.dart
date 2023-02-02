@@ -90,8 +90,8 @@ class _LandingPageState extends State<LandingPage> {
         } else {
           flag = false;
         }
-      });
-
+      }
+      );
     }
   }
   TextEditingController nameController = TextEditingController();
@@ -169,13 +169,11 @@ class _LandingPageState extends State<LandingPage> {
                   CarouselSlider.builder(
                       options: CarouselOptions(
                           viewportFraction: .9,
-                          // height: 200,
                           autoPlay: true,
                           enlargeCenterPage: true,
                           enableInfiniteScroll: false),
                       itemCount: 2,
                       itemBuilder: (context, index, realIndex) {
-                        // final svgImage=svgPath[index];
                         final pngImage=pngPath[index];
                         return
                           buildPngPicture(pngImage,index);
@@ -260,22 +258,35 @@ class _NetworkCardState extends State<NetworkCard> {
   var inflation='0';
   var bankTotal;
   bool APRLoaded=false;
+  var epoch_provision;
+  var curr_supply;
 
   getAPR() async {
-    supply =
-    (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));
-
+    supply = (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
-    inflation = (await _dashboardController.fetchdata(
-    widget.networkList.inflation!,'value'));
-    if(supply!=null){
+    if(widget.networkList.uDenom!='uosmo') {
+      inflation = (await _dashboardController.fetchdata(
+          widget.networkList.inflation!, 'value'));
+    }
+    else{
+      epoch_provision=await _dashboardController.fetchSingleData('https://lcd-osmosis.whispernode.com/osmosis/mint/v1beta1/epoch_provisions', 'epoch_provisions');
+      curr_supply=await _dashboardController.fetchSingleData('https://api-osmosis.imperator.co/supply/v1/osmo', 'amount');
+      inflation=(((double.parse(epoch_provision) * 365 + double.parse(curr_supply))/double.parse(curr_supply))/1000000).toString();
+    }
+
+    if(widget.networkList.uDenom=='uosmo') {
+      APR=double.parse(await _dashboardController.fetchOsmoAPR('https://api-osmosis.imperator.co/apr/v2/staking'));
+    }
+    else{
+      if(supply!=null){
       setState(() {
-        APR = ((double.parse(inflation) * double.parse(supply!)) /
+        APR = ((double.parse(inflation) * double.parse(supply??'0')) /
             double.parse(bondedToken)) *
             100;
       });
-    }
+    }}
+
     if(APR!=1){
       setState(() {
         APRLoaded=true;
@@ -321,8 +332,6 @@ class _NetworkCardState extends State<NetworkCard> {
                           child: CachedNetworkImage(
                             imageUrl: widget.networkList.logoUrl ??
                                 widget.networkList.logUrl!,
-                            // height: 40,
-                            // width: 40,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) =>
@@ -337,7 +346,7 @@ class _NetworkCardState extends State<NetworkCard> {
                     children: [
                       Text(widget.networkList.denom.toString(),
                           style: kMediumBoldTextStyle),
-                     Container(width:90,child: Text(widget.networkList.name.toString(), style: kSmallTextStyle))
+                     Container(child: Text(widget.networkList.name.toString(), style: kSmallTextStyle))
                     ],
                   ),
                 ],
@@ -372,8 +381,8 @@ class _NetworkCardState extends State<NetworkCard> {
                               '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
                            , style: kLandingPageBoldTextStyle)
                             :SizedBox(
-                             height: 10,
-                             width: 10,
+                             height: 15,
+                             width: 15,
                              child: LinearProgressIndicator()),
                         ],
                       ),

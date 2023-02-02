@@ -146,7 +146,7 @@ class _TxDetailsState extends State<TxDetails> {
                                   height: 2,
                                 ),
                                 Text(
-                                    truncateBeforeLastDot(widget.txModel!.messages![0].type!),
+                                    truncateBeforeLastDot(widget.txModel!.messages![0].type??''),
                                     style: kMediumBoldTextStyle),
                                 const SizedBox(
                                   height: 20,
@@ -164,7 +164,7 @@ class _TxDetailsState extends State<TxDetails> {
                                     withNavBar: true,
                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                   ),
-                                  child: Text(widget.txModel!.hash!, style: kMediumBlueBoldTextStyle),),
+                                  child: Text(widget.txModel!.hash??'', style: kMediumBlueBoldTextStyle),),
 
                                 const SizedBox(
                                   height: 20,
@@ -192,7 +192,7 @@ class _TxDetailsState extends State<TxDetails> {
                                     withNavBar: true,
                                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                                   ),
-                                  child: Text(addComma(widget.txModel!.height!), style: kMediumBlueBoldTextStyle),),
+                                  child: Text(addComma(widget.txModel!.height??''), style: kMediumBlueBoldTextStyle),),
                                 const SizedBox(
                                   height: 20,
                                 ),
@@ -345,7 +345,6 @@ class _TxDetailsState extends State<TxDetails> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-
                                     Text('Type', style: kSmallTextStyle),
                                     const SizedBox(
                                       height: 2,
@@ -364,14 +363,14 @@ class _TxDetailsState extends State<TxDetails> {
                                     const SizedBox(
                                       height: 20,
                                     ),
-                                    // Text('Amount', style: kSmallTextStyle),
-                                    // const SizedBox(
-                                    //   height: 2,
-                                    // ),
-                                    // widget.txModel!.messages!.isNotEmpty?Text(
-                                    //     widget.txModel!.messages![0].amount ??
-                                    //         '',
-                                    //     style: kMediumBoldTextStyle):Text(''),
+                                    Text('Amount', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    widget.txModel!.messages!.isNotEmpty?Text(
+                                        widget.txModel!.messages![0].amount ??
+                                            '',
+                                        style: kMediumBoldTextStyle):Text(''),
                                     const SizedBox(
                                       height: 20,
                                     ),
@@ -588,67 +587,61 @@ class _TxDetailsState extends State<TxDetails> {
                         Container()
                       else if (type == 'Send')
                         widget.txModel!.messages!.isNotEmpty? Container(
-                                                                                                                                  margin: const EdgeInsets.only(
-                                                                                                                                      right: 10, top: 10, left: 10),
-                                                                                                                                  width: MediaQuery.of(context).size.width / 1.1,
-                                                                                                                                  decoration: kBoxDecorationWithGradient,
-                                                                                                                                  child: Padding(
-                                                                                                                                    padding: const EdgeInsets.all(18.0),
-                                                                                                                                    child: Column(
-                                                                                                                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                                                                                                                        children: <Widget>[
-                                                                                                                                          Text('Message',
-                                                                                                                                              style: kMediumBoldTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 20,
-                                                                                                                                          ),
-                                                                                                                                          Text('Type', style: kSmallTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 2,
-                                                                                                                                          ),
-                                                                                                                                          widget.txModel!.messages!.isNotEmpty?Text(
-                                                                                                                                              getType(widget
-                                                                                                                                                  .txModel!.messages![0].type!) ??
-                                                                                                                                                  '',
-                                                                                                                                              style: kMediumBoldTextStyle):Text(''),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 20,
-                                                                                                                                          ),
-                                                                                                                                          // Text('Amount', style: kSmallTextStyle),
-                                                                                                                                          // const SizedBox(
-                                                                                                                                          //   height: 2,
-                                                                                                                                          // ),
-                                                                                                                                          // Text(
-                                                                                                                                          //     widget.txModel!.messages![0].amount.toString(),
-                                                                                                                                          //     style: kMediumBoldTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 20,
-                                                                                                                                          ),
-                                                                                                                                          Text('To Address ', style: kSmallTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 2,
-                                                                                                                                          ),
-                                                                                                                                          Text(
-                                                                                                                                              widget.txModel!.messages![0].toAddress??
-                                                                                                                                                  '',
-                                                                                                                                              style: kMediumBoldTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 20,
-                                                                                                                                          ),
-                                                                                                                                          Text('From Address', style: kSmallTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 2,
-                                                                                                                                          ),
-                                                                                                                                          Text(
-                                                                                                                                              widget.txModel!.messages![0].fromAddress ??
-                                                                                                                                                  '',
-                                                                                                                                              style: kMediumBoldTextStyle),
-                                                                                                                                          const SizedBox(
-                                                                                                                                            height: 20,
-                                                                                                                                          ),
-
-                                                                                                                                        ]),
-                                                                                                                                  )):Container()
+                            margin: const EdgeInsets.only(
+                                right: 10, top: 10, left: 10),
+                            width: MediaQuery.of(context).size.width / 1.1,
+                            decoration: kBoxDecorationWithGradient,
+                            child: Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('Message',
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('Type', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    widget.txModel!.messages!.isNotEmpty?Text(
+                                        getType(widget.txModel!.messages![0].type!) ?? '',
+                                        style: kMediumBoldTextStyle):Text(''),
+                                    const SizedBox(
+                                      height: 20),
+                                    Text('Amount', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(
+                                        widget.txModel!.messages![0].amount.toString(),
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('To Address ', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(
+                                        widget.txModel!.messages![0].toAddress??
+                                            '',
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('From Address', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(widget.txModel!.messages![0].fromAddress ?? '',
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ]),
+                            )):Container()
                       else if (type == 'Deposit Request')
                         Container()
                       else if (type == 'Execute Contract')

@@ -26,7 +26,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
   var tallyNoWithVeto;
   var tallyTotal;
   var tallyLoaded=false;
-  var propVoters;
+  var propVoters=[];
   var Deposit='0';
   var DepositDenom='';
   var details='';
@@ -34,22 +34,25 @@ class _ProposalDetailsState extends State<ProposalDetails> {
   getData()async{
     final response = await http.get(Uri.parse('${widget.networkData!.proposalTally}${widget.proposalProduct.id}'));
     final resultVote= await http.get(Uri.parse('${widget.networkData!.proposalVote}${widget.proposalProduct.id}'));
-    final resultDeposit= await http.get(Uri.parse('${widget.networkData!.proposalVote}${widget.proposalProduct.id}'));
+    final resultDeposit= await http.get(Uri.parse('${widget.networkData!.proposalDeposit}${widget.proposalProduct.id}'));
     if (response.statusCode == 200) {
-      tallyYes =  double.parse(jsonDecode(response.body)[0]['yes']);
-      tallyNo = double.parse(jsonDecode(response.body)[0]['no']);
-      tallyAbstain = double.parse(jsonDecode(response.body)[0]['abstain']);
-      tallyNoWithVeto = double.parse(jsonDecode(response.body)[0]['no_with_veto']);
-      tallyTotal=tallyNo+tallyYes+tallyAbstain+tallyNoWithVeto;
 
-      setState(() {
-        if (tallyYes!=null){
-          tallyLoaded=true;
-        }
-        else{
-          tallyLoaded=false;
-        }
-      });
+        if (widget.networkData!.uDenom != 'uosmo'){
+          tallyYes = double.parse(jsonDecode(response.body)[0]['yes']);
+        tallyNo = double.parse(jsonDecode(response.body)[0]['no']);
+        tallyAbstain = double.parse(jsonDecode(response.body)[0]['abstain']);
+        tallyNoWithVeto =
+            double.parse(jsonDecode(response.body)[0]['no_with_veto']);
+        tallyTotal = tallyNo + tallyYes + tallyAbstain + tallyNoWithVeto;
+
+        setState(() {
+          if (tallyYes != null) {
+            tallyLoaded = true;
+          } else {
+            tallyLoaded = false;
+          }
+        });
+      }
     }
     else{
       print(response.statusCode);
@@ -58,8 +61,12 @@ class _ProposalDetailsState extends State<ProposalDetails> {
     propVoters=List<ProposalVotesModel>.from(json.decode((resultVote.body)).map((x) => ProposalVotesModel.fromJson(x)));
     }
     if (resultDeposit.statusCode==200){
-      if(jsonDecode(resultDeposit.body)[0]['amount']!=null)
-      Deposit=(jsonDecode(resultDeposit.body)[0]['amount']);
+      if (widget.networkData!.uDenom != 'uosmo'){
+      if(jsonDecode(resultDeposit.body)[0]['amount']!=null) {
+         print(jsonDecode(resultDeposit.body)[0]['amount']);
+          Deposit = (jsonDecode(resultDeposit.body)[0]['amount']);
+        }
+      }
 
     }
 
@@ -93,7 +100,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
     fun();
     getData();
     details=widget.proposalProduct.description!;
-    print(details);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.black,
@@ -108,7 +114,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
           ],
         ),
       ),
-      body: tallyLoaded? SingleChildScrollView(
+      body:  SingleChildScrollView(
         child: Column(
             children: [
               SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkData,),
@@ -206,13 +212,13 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Voting End',
                                     style:kSmallTextStyle),
-                                Text((dateTime(widget.proposalProduct.votingEndTime!)).toString(),
+                                Text((dateTime(widget.proposalProduct.votingEndTime!.toLocal())).toString(),
                                     style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
                                 Text('Submit Time',
                                     style:kSmallTextStyle),
-                                Text((dateTime(widget.proposalProduct.submitTime!)).toString(),
+                                Text((dateTime(widget.proposalProduct.submitTime!.toLocal())).toString(),
                                     style:kSmallBoldTextStyle),
                               ],
                             ),
@@ -227,7 +233,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Voting Start',
                                     style:kSmallTextStyle),
-                                Text((dateTime(widget.proposalProduct.votingStartTime!)).toString(),
+                                Text((dateTime(widget.proposalProduct.votingStartTime!.toLocal())).toString(),
                                   style:kSmallBoldTextStyle),
                                 const SizedBox(height: 20,),
 
@@ -239,7 +245,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
 
                                 Text('Deposit End Time',
                                     style:kSmallTextStyle),
-                                Text((dateTime(widget.proposalProduct.depositEndTime!)).toString(),
+                                Text((dateTime(widget.proposalProduct.depositEndTime!.toLocal())).toString(),
                                     style:kSmallBoldTextStyle),
                               ],
                             ),
@@ -253,137 +259,142 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             style:kSmallTextStyle),
                         const SizedBox(height: 20,),
                         const SizedBox(height: 20,),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        widget.networkData!.uDenom!='uosmo'?(tallyLoaded?
+                        Column(
                           children: [
-                            Text('Final Status',
-                                style:kSmallBoldTextStyle),
-                            Container(
-                              decoration: BoxDecoration(
-                                color:status=='Passed'? Colors.lightGreenAccent.withOpacity(.1):Colors.red.shade50,
-                                borderRadius: const BorderRadius.all(Radius.circular(20.0)),
-                                border: Border.all(
-                                  color: status=='Passed'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
-                                  width: 1.0,
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 9.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children:[
-                                    CircleAvatar(backgroundColor:  status=='Passed'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
-                                      radius: 3,),
-                                    Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: Text(status??'',
-                                        style: kSmallTextStyle,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('Final Status',
+                                    style:kSmallBoldTextStyle),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color:status=='Passed'? Colors.lightGreenAccent.withOpacity(.1):Colors.red.shade50,
+                                    borderRadius: const BorderRadius.all(Radius.circular(20.0)),
+                                    border: Border.all(
+                                      color: status=='Passed'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
+                                      width: 1.0,
                                     ),
-                                  ],
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 9.0),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children:[
+                                        CircleAvatar(backgroundColor:  status=='Passed'? const Color(0xFF6BD68D):Colors.red.withOpacity(.5),
+                                          radius: 3,),
+                                        Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Text(status??'',
+                                            style: kSmallTextStyle,),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 20,),
+                            Row(children: [
+                              Container(
+                                height:15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  borderRadius: BorderRadius.circular(4),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 20,),
-                        Row(children: [
-                          Container(
-                            height:15,
-                            width: 15,
-                            decoration: BoxDecoration(
-                              color: Colors.green,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(width:10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children:[
-                              Text('Yes',
-                              style:kSmallTextStyle),
-                              Text((tallyTotal)>0?
-                              ('${(tallyYes*100/tallyTotal).toStringAsFixed(2)}%'):'0',
-                              style:kSmallBoldTextStyle),
-                              Text(tallyYes.toString(),
-                              style:kSmallTextStyle)
-                            ]
-                          )
-                        ],),
-                        const SizedBox(height: 15),
-                        Row(children: [
-                          Container(
-                            height:15,
-                            width: 15,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(width:10),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:[
-                                Text('No',
-                                    style:kSmallTextStyle),
-                                Text((tallyTotal)>0?
-                                ('${(tallyNo*100/tallyTotal).toStringAsFixed(2)}%'):'0',
-                                    style:kSmallBoldTextStyle),
-                                Text(tallyNo.toString(),
-                                style:kSmallTextStyle)
-                              ]
-                          )
-                        ],),
-                        const SizedBox(height: 15),
-                        Row(children: [
-                          Container(
-                            height:15,
-                            width: 15,
-                            decoration: BoxDecoration(
-                              color: Colors.red.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(width:10),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:[
-                                Text('NoWithVeto',
-                                    style:kSmallTextStyle),
-                                Text(
-                                    (tallyTotal)>0?
-                                    ('${(tallyNoWithVeto*100/tallyTotal).toStringAsFixed(2)}%'):'0',
-                                    style:kSmallBoldTextStyle),
-                                Text(tallyNoWithVeto.toString(),
-                                style:kSmallTextStyle),
+                              const SizedBox(width:10),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children:[
+                                    Text('Yes',
+                                        style:kSmallTextStyle),
+                                    Text((tallyTotal)>0?
+                                    ('${(tallyYes*100/tallyTotal).toStringAsFixed(2)}%'):'0',
+                                        style:kSmallBoldTextStyle),
+                                    Text('${addComma(tallyYes.toString())} ${widget.networkData!.uDenom}',
+                                        style:kSmallTextStyle)
+                                  ]
+                              )
+                            ],),
+                            const SizedBox(height: 15),
+                            Row(children: [
+                              Container(
+                                height:15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  color: Colors.red,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              const SizedBox(width:10),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children:[
+                                    Text('No',
+                                        style:kSmallTextStyle),
+                                    Text((tallyTotal)>0?
+                                    ('${(tallyNo*100/tallyTotal).toStringAsFixed(2)}%'):'0',
+                                        style:kSmallBoldTextStyle),
+                                    Text('${addComma(tallyNo.toString())} ${widget.networkData!.uDenom}',
+                                        style:kSmallTextStyle)
+                                  ]
+                              )
+                            ],),
+                            const SizedBox(height: 15),
+                            Row(children: [
+                              Container(
+                                height:15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              const SizedBox(width:10),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children:[
+                                    Text('NoWithVeto',
+                                        style:kSmallTextStyle),
+                                    Text(
+                                        (tallyTotal)>0?
+                                        ('${(tallyNoWithVeto*100/tallyTotal).toStringAsFixed(2)}%'):'0',
+                                        style:kSmallBoldTextStyle),
+                                    Text('${addComma(tallyNoWithVeto.toString())} ${widget.networkData!.uDenom}',
+                                        style:kSmallTextStyle),
 
-                              ]
-                          )
-                        ],),
-                        const SizedBox(height: 15),
-                        Row(children: [
-                          Container(
-                            height:15,
-                            width: 15,
-                            decoration: BoxDecoration(
-                              color: Colors.red.withOpacity(.5),
-                              borderRadius: BorderRadius.circular(4),
-                            ),
-                          ),
-                          const SizedBox(width:10),
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children:[
-                                Text('Abstain',
-                                    style:kSmallTextStyle),
-                                Text((tallyTotal)>0?
-                                ('${(tallyAbstain*100/tallyTotal).toStringAsFixed(2)}%').toString():'0',
-                                    style:kSmallBoldTextStyle),
-                                Text(tallyAbstain.toString(),
-                                    style:kSmallTextStyle),
-                              ]
-                          )
-                        ],
-                        )
+                                  ]
+                              )
+                            ],),
+                            const SizedBox(height: 15),
+                            Row(children: [
+                              Container(
+                                height:15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  color: Colors.red.withOpacity(.5),
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              const SizedBox(width:10),
+                              Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children:[
+                                    Text('Abstain',
+                                        style:kSmallTextStyle),
+                                    Text((tallyTotal)>0?
+                                    ('${(tallyAbstain*100/tallyTotal).toStringAsFixed(2)}% ').toString():'0',
+                                        style:kSmallBoldTextStyle),
+                                    Text('${addComma(tallyAbstain.toString())} ${widget.networkData!.uDenom}',
+                                        style:kSmallTextStyle),
+                                  ]
+                              )
+                            ],
+                            )
+                          ],
+                        ):CircularProgressIndicator()):Container()
                       ]
                   ),
                 ),
@@ -405,7 +416,6 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             //const Filter(),
                           ],
                         ),
-
                         ListView.builder(
                             reverse: true,
                             physics: const NeverScrollableScrollPhysics(),
@@ -414,7 +424,9 @@ class _ProposalDetailsState extends State<ProposalDetails> {
                             itemCount: propVoters.length,
                             itemBuilder: (BuildContext context, int index)
                             {
-                            return VoterCard(proposalVotesModel: propVoters[index],);
+                            return VoterCard(
+                              proposalVotesModel: propVoters[index],
+                            );
                           }
                         ),
                       ]
@@ -426,7 +438,7 @@ class _ProposalDetailsState extends State<ProposalDetails> {
             ]
         ),
 
-      ):Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
@@ -454,7 +466,7 @@ class VoterCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:  [
                       Text(proposalVotesModel!.moniker!,style: kSmallBoldTextStyle,),
-                      GreenContainer((proposalVotesModel!.option=='VOTE_OPTION_YES')?('Yes'):('No')),
+                      proposalVotesModel!.option=='VOTE_OPTION_YES'? GreenContainer('Yes'):RedContainer('No'),
                     ],
                   ),
                   const SizedBox(height: 12,),
@@ -472,7 +484,7 @@ class VoterCard extends StatelessWidget {
                             content: Text(
                                 'Validator Address Copied to your clipboard !')));
                       }),
-                  child:  Text(dotRefactorFunction(proposalVotesModel!.validatorAddress!), style: kMediumBoldTextStyle,),
+                  child:  Text(dotRefactorFunction(proposalVotesModel!.validatorAddress!), style: kSmallBoldTextStyle,),
                 ),
 
                     ],

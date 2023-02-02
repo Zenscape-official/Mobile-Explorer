@@ -36,8 +36,8 @@ class SearchScreen extends StatefulWidget {
 }
 class _SearchScreenState extends State<SearchScreen> {
   NetworkController networkController = Get.put(NetworkController());
-  List<BlockModel>? blockDetails;
-  List<TxModel>? txModel;
+  List<BlockModel>? blockDetails=[];
+  List<TxModel>? txModel=[];
   var blockLoaded=0;
   var txLoaded=0;
   var addressLoaded=0;
@@ -49,17 +49,14 @@ class _SearchScreenState extends State<SearchScreen> {
   var rewardLoaded;
   var delegation;
   var delegationList=[];
-
   List<Balance> balanceList=[];
   var balanceLoaded=false;
   var delegationLoaded=false;
   ScrollController? _controller;
-
   @override
   void initState() {
     super.initState();
     getData();
-
     _controller = ScrollController();
   }
   getData()async{
@@ -70,7 +67,6 @@ class _SearchScreenState extends State<SearchScreen> {
       if (response.statusCode == 200) {
         blockDetails =
         List<BlockModel>.from(json.decode(response.body).map((x) => BlockModel.fromJson(x)));
-
         setState(() {
           if (blockDetails!.isNotEmpty ) {
             blockLoaded = 1;
@@ -99,7 +95,7 @@ class _SearchScreenState extends State<SearchScreen> {
         });
       }}
     else if(widget.nameController.length==52){}
-     else {
+     else  if(widget.nameController.length==43||widget.nameController.length==45){
 
         final tx_response = await http.get(Uri.parse(
             '${widget.networkList!.txFromAddress}${widget.nameController.toString()}'));
@@ -156,9 +152,8 @@ class _SearchScreenState extends State<SearchScreen> {
         else{
         }
         if(reward_response.statusCode==200){
-          reward =  jsonDecode(balance_response.body)['balances'];
-          rewardList=List<Balance>.from(balance.map((x) => Balance.fromMap(x)));
-          print(rewardList);
+          reward =  jsonDecode(reward_response.body)['rewards'];
+          rewardList=List<Balance>.from(reward.map((x) => Balance.fromMap(x)));
           setState(() {
             if (rewardList!=null){
               rewardLoaded=true;
@@ -335,9 +330,9 @@ class _SearchScreenState extends State<SearchScreen> {
                               const SizedBox(
                                 height: 2,
                               ),
-                              Text(
+                              txModel![0].fee!.amount!.isNotEmpty? Text(
                                   '${addComma(txModel![0].fee!.amount![0].amount!)} ${txModel![0].fee!.amount![0].denom!}',
-                                  style: kMediumBoldTextStyle),
+                                  style: kMediumBoldTextStyle):Container(),
                               const SizedBox(height: 20),
                               Text('Gas (used/wanted)', style: kSmallTextStyle),
                               const SizedBox(
@@ -488,7 +483,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                       itemCount: balanceList.length,
                                       itemBuilder:
                                           (BuildContext context, int index) {
-                                        return BalanceCont(balance: balanceList[index],
+                                        return BalanceCont(balance: balanceList[index]
                                         );
                                       }),
                                 ),
@@ -569,7 +564,7 @@ class _SearchScreenState extends State<SearchScreen> {
                               ])):Container(),
 
 
-                          Padding(
+                        txModel!.length!=0 ? Padding(
                             padding:
                             const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
                             child: Column(
@@ -596,7 +591,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     }),
                               ],
                             ),
-                          )
+                          ):Container()
                         ],
                       ),
                     )
@@ -658,18 +653,16 @@ class _DelegatesContainerState extends State<DelegatesContainer> {
   getData() async {
     final String response = await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
     final data = await json.decode(response)["tokens"];
+
     _items = data;
-    ibcDenom=List.from((_items).map((x) => TokenTx.fromJson(x)));
+    ibcDenom=List.from((_items).map((x) => Token.fromJson(x)));
     if(ibcDenom.isNotEmpty){
       setState(() {
-
-
       });
     }
   }
   mapDenom(String input){
     var denom='';
-
     for(int i=0;i<ibcDenom.length;i++){
       if(input==ibcDenom[i].ibcDenomHash){
         denom=ibcDenom[i].coinDenom!;
@@ -685,7 +678,7 @@ class _DelegatesContainerState extends State<DelegatesContainer> {
 
   @override
   Widget build(BuildContext context) {
-   // denom=mapDenom(widget.delegationResponse!.balance!.denom!);
+    denom=mapDenom(widget.delegationResponse!.balance!.denom??'');
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 6.0,horizontal: 8),
       child: Container(

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -244,9 +245,7 @@ class _BlockContainerState extends State<BlockContainer> {
     final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
 
     if (response.statusCode == 200) {
-
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
-
       setState(() {
         if (valMoniker!=null){
           monikerLoaded=true;
@@ -409,24 +408,100 @@ class _TxContainerState extends State<TxContainer> {
     getData();
   }
   getData()async{
-    final response = await http.get(Uri.parse('${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
-    if (response.statusCode == 200) {
-      timestampTx =  jsonDecode(response.body)['result']['block']['header']['time'];
-        setState(() {
-          if (timestampTx!=null){
-            txLoaded=true;
-          }
-          else{
-            txLoaded=false;
-          }
-        });
-  }
- else{
+ //    final response = await http.get(Uri.parse('${widget.heightSearchUrl}${widget.txModel!.height!.toString()}'));
+ //    if (response.statusCode == 200) {
+ //
+ //      timestampTx =  jsonDecode(response.body)['result']['block']['header']['time'];
+ //        setState(() {
+ //          if (timestampTx!=null){
+ //            txLoaded=true;
+ //          }
+ //          else{
+ //            txLoaded=false;
+ //          }
+ //        });
+ //  }
+ // else{
+ //    }
+    try{
+      var response = await http.get(Uri.parse(
+          '${widget.heightSearchUrl}${widget.txModel!.height!.toString()}')
+      );
+      switch(response.statusCode){
+        case 200:
+          timestampTx =  jsonDecode(response.body)['result']['block']['header']['time'];
+          setState(() {
+            if (timestampTx!=null){
+              txLoaded=true;
+            }
+            else{
+              txLoaded=false;
+            }
+          });
+          break;
+        case 201:
+          final result = jsonDecode(response.body);
+          final jsonResponse = {'success': true, 'response': result};
+          txLoaded=false;
+          print(response.statusCode);
+          return jsonResponse;
+        case 400:
+          final result = jsonDecode(response.body);
+          final jsonResponse = {'success': false, 'response': result};
+          txLoaded=false;
+          print(response.statusCode);
+          return jsonResponse;
+        case 401:
+          final jsonResponse = {'success': false, 'response': 'UNAUTHORIZED'};
+          txLoaded=false;
+          print(response.statusCode);
+          return jsonResponse;
+        case 403:
+          final jsonResponse = {'success': false, 'response': 'UNAUTHORIZED'};
+          txLoaded=false;
+          print(response.statusCode);
+          return jsonResponse;
+        case 500:
+        case 501:
+        case 502:
+          final jsonResponse = {
+            'success': false,
+            'response': 'SOMETHING WRONG ${response.statusCode}'
+          };
+          txLoaded=false;
+          print(response.statusCode);
+          return jsonResponse;
+        default:
+          final jsonResponse = {
+            'success': false,
+            'response': 'SOMETHING WRONG ${response.statusCode}'
+          };
+          txLoaded=false;
+          return jsonResponse;
+      }
+    } on SocketException {
+      final jsonResponse = {
+        'success': false,
+        'response': 'No Internet or Connection Failure '
+      };
+      txLoaded=false;
+      return jsonResponse;
+    } on FormatException {
+      final jsonResponse = {'success': false, 'response': 'Bad Response'};
+      return jsonResponse;
+    } on HttpException {
+      final jsonResponse = {
+        'success': false,
+        'response': 'SOMETHING_WRONG' //Server not responding
+      };
+      txLoaded=false;
+      return jsonResponse;
     }
     }
 
   @override
   Widget build(BuildContext context) {
+   getData();
    type=truncateBeforeLastDot(widget.txModel!.messages![0].type!);
 
     return InkWell(
@@ -474,7 +549,7 @@ class _TxContainerState extends State<TxContainer> {
                             ],
                           ),
                         ),
-                       Container(
+                        txLoaded? Container(
                           decoration: BoxDecoration (
                             border: Border.all(
                               color: Colors.lightBlueAccent.withOpacity(.5),
@@ -494,15 +569,12 @@ class _TxContainerState extends State<TxContainer> {
                           ),
                           child: Padding(
                             padding: const EdgeInsets.fromLTRB(12,2,12,2.0),
-                            child: txLoaded?Text(
-                              timeDifferenceFunction(timestampTx),
+                            child: Text(
+                              timeDifferenceFunction(timestampTx).toString(),
                               style: kExtraSmallTextStyle,
-                            ):SizedBox(
-                                height: 10,
-                                width: 15,
-                                child: LinearProgressIndicator())
+                            )
                           ),
-                        )
+                        ):Container()
                       ]
                   ),
                 ),
@@ -514,8 +586,8 @@ class _TxContainerState extends State<TxContainer> {
                       children: [
                         Text('Fee',
                             style:kSmallTextStyle),
-                        Text(widget.txModel!.fee!.amount![0].amount!+' '+widget.txModel!.fee!.amount![0].denom!,
-                            style:kSmallTextStyle)
+                        widget.txModel!.fee!.amount!.isNotEmpty?Text(widget.txModel!.fee!.amount![0].amount!+' '+widget.txModel!.fee!.amount![0].denom!,
+                            style:kSmallTextStyle):Container()
                       ]
                   ),
                 ),
@@ -552,7 +624,7 @@ class _TxContainerState extends State<TxContainer> {
                       ]
                   ),
                 ),
-                widget.networkList.uDenom=='uosmo'||widget.networkList.uDenom=='uatom'?Container(): Padding(
+                 Padding(
                   padding: const EdgeInsets.fromLTRB(8,4.0,8,8),
                   child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -569,7 +641,7 @@ class _TxContainerState extends State<TxContainer> {
                        SizedBox(
                            height:10,
                            width:15,
-                           child:LinearProgressIndicator(),
+                           child:Container(),
                        )
                       ]
                   ),

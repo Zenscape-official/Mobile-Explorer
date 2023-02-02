@@ -28,6 +28,7 @@ timeDifferenceFunction(timeDifference){
         .difference(DateTime.parse(timeDifference).toLocal())
         .inDays}days ago';
   }
+
 }
 
 getImage(String id){
@@ -73,8 +74,8 @@ String removeFirstChar(String str) {
   if (str.isNotEmpty && str[0] == 'u') {
     return str.substring(1);
   }
-  else if(str[0]=='i'){
-
+  else if(str.isNotEmpty && (str[0]=='i' && str[1]=='b' &&str[2]=='c') ){
+    return "IBC Token";
   }
   return str;
 }

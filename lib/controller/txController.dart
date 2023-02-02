@@ -13,9 +13,6 @@ class TxController extends GetxController {
     var response = await client.get(Uri.parse(ApiUri));
     if (response.statusCode==200){
       var jsonString= jsonDecode((response.body));
-     // print(jsonString);
-      // for(var prod i`n jsonString){
-      //   txList.add(TxModel.fromJson(prod));}
       txList = List.from(jsonString).map((e) => TxModel.fromJson(e)).toList().reversed.toList().obs;
       return txList;
     }

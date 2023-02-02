@@ -36,7 +36,6 @@ class NetworkDashBoard extends StatefulWidget {
   @override
   State<NetworkDashBoard> createState() => _NetworkDashBoardState();
 }
-
 class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var details = ['0', '0', '0', '0', '0', '0'];
   final BlocksController _blocksController = Get.put(BlocksController());
@@ -66,6 +65,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   bool isProposalActive = false;
   var result;
   var timer;
+  var epoch_provision;
+  var curr_supply;
   List<ProposalsModel>? activeProposal;
   List<ProposalsModel> activeProposalsList = [];
   String logoImage = '';
@@ -77,8 +78,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   getData() async {
     result =
         await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
-    height = (await _dashboardController.fetchSingleData(
-        widget.networkData!.height!, 'height'));
     txNum = (await _dashboardController.fetchdata(
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
@@ -87,10 +86,19 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         widget.networkData!.bondedTokens!, 'bonded_tokens');
     inflation = (await _dashboardController.fetchdata(
         widget.networkData!.inflation!, 'value'));
+    if(widget.networkData!.uDenom!='uosmo') {
+      inflation = (await _dashboardController.fetchdata(
+          widget.networkData!.inflation!, 'value'));
+    }
+    else{
+      epoch_provision=await _dashboardController.fetchSingleData('https://lcd-osmosis.whispernode.com/osmosis/mint/v1beta1/epoch_provisions', 'epoch_provisions');
+      curr_supply=await _dashboardController.fetchSingleData('https://api-osmosis.imperator.co/supply/v1/osmo', 'amount');
+      inflation=(((double.parse(epoch_provision) * 365 + double.parse(curr_supply))/double.parse(curr_supply))/1000000).toString();
+    }
     communityPool = await _dashboardController.fetchdata(
         widget.networkData!.communityPool!, 'coins');
     details = [
-      height,
+      BlocksController.blockList[BlocksController.blockList.length - 1].height!,
       txNum,
       k_m_b_generator(double.parse(bondedToken) / 1000000),
       k_m_b_generator((getValueFromBracket(findBracketByToken(communityPool,widget.networkData!.uDenom!)!)) / 1000000),
@@ -99,7 +107,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
      '${widget.APR!.toStringAsFixed(2)}%'
     ];
     tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
-    blocks = await networkController.fetchList(widget.networkData!.blocksUrl!);
     blockDashList = [
       BlocksController.blockList[BlocksController.blockList.length - 1],
       BlocksController.blockList[BlocksController.blockList.length - 2]
@@ -117,13 +124,11 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
         }
         activeProposalsList.sort((b, a) => b.id!.compareTo(a.id!));
       }
-
-      if (blocks != null || tx != null||communityPool!=null) {
+      if (height!=0||txNum!=null||bondedToken!=null||blocks!=null) {
         setState(() {
           isLoaded = true;
-
-        });
-
+        }
+        );
       } else {
         isLoaded = false;
       }
@@ -132,7 +137,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       } else {
         isProposalActive = false;
       }
-
   }
   getDialogue(var result) {
     if (result['success'] == false) {
@@ -282,7 +286,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                             double.parse(blockTime), 2).toString()} secs',
                                                   style:
                                                       kExtraSmallBoldTextStyle)
-
                                         ],
                                       ),
                                     ),
@@ -358,7 +361,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                   '\$${k_m_b_generator(double.parse(widget.networkData!.marketCap??'0'))}',
                                                   style: kMediumBoldTextStyle,
                                                 )
-
                                         ],
                                       ),
                                       Column(
@@ -418,8 +420,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                                           0
                                                       ? SvgPicture.asset(
                                                           'assets/svgfiles/trending_up_FILL0_wght400_GRAD0_opsz48.svg',
-                                                          color: const Color(
-                                                              0xFF15BE46))
+                                                          color: const Color(0xFF15BE46),
+                                                  )
                                                       : SvgPicture.asset(
                                                           'assets/svgfiles/trending_down_FILL0_wght400_GRAD0_opsz48.svg',
                                                           color: Colors.red
@@ -480,7 +482,9 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                           widget.networkData!,
 
                                          );
-                                    })))
+                                    })
+                            )
+                    )
                         : SizedBox(
                             height: .1,
                           ),
@@ -737,7 +741,7 @@ class BlockContDash extends StatelessWidget {
                             }),
                             child: Row(
                               children: [
-                                Text(blockModel!.height!,
+                                Text(addComma(blockModel!.height!),
                                     style: kSmallBoldTextStyle),
                                 const SizedBox(width: 4),
                                 const Icon(
@@ -889,7 +893,7 @@ class _TxContDashState extends State<TxContDash> {
                           children: [
                             txLoaded
                                 ? Text(
-                                timeDifferenceFunction(timestampTx),
+                                timeDifferenceFunction(timestampTx).toString(),
                                 style: kSmallBoldTextStyle,
                               ) : SizedBox(
                                 height: 15,
@@ -965,7 +969,7 @@ class ProposalCardDash extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 5.0),
         child: Container(
-            width: MediaQuery.of(context).size.width / 1.2,
+            width: MediaQuery.of(context).size.width / 1.1,
             margin: EdgeInsets.all(4),
             decoration: kBoxDecorationWithoutGradient,
             child: Padding(

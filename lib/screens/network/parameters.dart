@@ -105,20 +105,21 @@ fetchDataMint(String input) async {
 
     '${(double.parse(maxDeposit) / (86400 * 1000000000)).toString()} days',
     '${(double.parse(votingPeriod) / (86400 * 1000000000)).toString()} days',
-    truncateToDecimalPlaces(double.parse(quorum),2).toString(),
-    truncateToDecimalPlaces(double.parse(threshold),2).toString(),
-    truncateToDecimalPlaces(double.parse(vetoThreshold),2).toString()];
+    '${(truncateToDecimalPlaces(double.parse(quorum)*100,2)).toString()}%',
+    '${(truncateToDecimalPlaces(double.parse(threshold)*100,2)).toString()}%',
+    '${(truncateToDecimalPlaces(double.parse(vetoThreshold)*100,2)).toString()}%',];
 
   slashingParams=[truncateToDecimalPlaces(double.parse(signedBlockWindow),2).toString(),
-    truncateToDecimalPlaces(double.parse(minSignedPerWindow),2).toString(),
-    truncateToDecimalPlaces(double.parse(slashFractionDoubleSign),2).toString(),
-    truncateToDecimalPlaces(double.parse(slashFractionDowntime),2).toString()];
+    '${(truncateToDecimalPlaces(double.parse(minSignedPerWindow)*100,2)).toString()}%',
+
+    '${(truncateToDecimalPlaces(double.parse(slashFractionDoubleSign)*100,2)).toString()}%',
+    '${(truncateToDecimalPlaces(double.parse(slashFractionDowntime)*100,2)).toString()}%',];
 
   distributionParams=[
-    truncateToDecimalPlaces(double.parse(base_reward),2).toString(),
-    truncateToDecimalPlaces(double.parse(bonus_reward),2).toString(),
-    truncateToDecimalPlaces(double.parse(commTax),2).toString()
-    ,withdraw_enabled];
+    '${(truncateToDecimalPlaces(double.parse(base_reward)*100,2)).toString()}%',
+    '${(truncateToDecimalPlaces(double.parse(bonus_reward)*100,2)).toString()}%',
+    '${(truncateToDecimalPlaces(double.parse(commTax)*100,2)).toString()}%',
+    withdraw_enabled];
 
   }
 
