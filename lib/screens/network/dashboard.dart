@@ -898,7 +898,7 @@ class _TxContDashState extends State<TxContDash> {
                               ) : SizedBox(
                                 height: 15,
                                 width: 15,
-                                child: CircularProgressIndicator()),
+                                child: Container()),
                           ],
                         )
                   ],
@@ -937,7 +937,7 @@ class _TxContDashState extends State<TxContDash> {
                         : SizedBox(
                             height: 15,
                             width: 15,
-                            child: CircularProgressIndicator())
+                            child: Container())
                   ],
                 ):Container(),
               ],

@@ -245,6 +245,7 @@ class _BlockContainerState extends State<BlockContainer> {
     final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
 
     if (response.statusCode == 200) {
+      if(widget.networkList.uDenom!='uatom')
       valMoniker =  jsonDecode(response.body)[0]['moniker'];
       setState(() {
         if (valMoniker!=null){

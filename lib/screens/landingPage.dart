@@ -383,7 +383,7 @@ class _NetworkCardState extends State<NetworkCard> {
                             :SizedBox(
                              height: 15,
                              width: 15,
-                             child: LinearProgressIndicator()),
+                             child: Container()),
                         ],
                       ),
                     ),

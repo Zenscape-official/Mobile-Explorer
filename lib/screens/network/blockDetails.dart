@@ -60,10 +60,10 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
   }
   getData()async{
     final response = await http.get(Uri.parse('${widget.networkList.blocksMoniker}${widget.blockModel!.proposerAddress}'));
-    final txresponse = await http.get(Uri.parse('https://staging-explorer-api.zenscape.one/comdex/transactionFromHt/${widget.blockModel!.height}'));
-    print('https://staging-explorer-api.zenscape.one/comdex/transactionFromHt/${widget.blockModel!.height}');
+    final txresponse = await http.get(Uri.parse('${widget.networkList.transactionSearchFromHt}${widget.blockModel!.height}'));
+
     if (response.statusCode == 200) {
-      validatorModel = validatorModelFromJson(response.body); jsonDecode(response.body)[0];
+      validatorModel = validatorModelFromJson(response.body);
       setState(() {
         if (validatorModel!=null){
           monikerLoaded=true;
@@ -201,34 +201,40 @@ class _BlockDetailScreenState extends State<BlockDetailScreen> {
                         ),
                       ),
                   ),
-                  txModel.length!=0 ? Padding(
-                    padding:
-                    const EdgeInsets.fromLTRB(8.0, 8, 8, 0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(12.0,6,2,6),
-                          child: Text('Transactions',
-                              style: kMediumBoldTextStyle),
-                        ),
-                        ListView.builder(
-                            padding: EdgeInsets.all(0),
-                            reverse: true,
-                            physics:
-                            const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
-                            itemCount: txModel.length>100?100:txModel.length,
-                            itemBuilder:
-                                (BuildContext context, int index) {
-                              return TxContDash(txModel: txModel[index],
-                                networkList: widget.networkList,
-                              );
-                            }),
-                      ],
+                  txModel.length!=0 ? Container(
+                    margin: const EdgeInsets.only(right: 10, top: 10, left: 10),
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    decoration: kBoxDecorationWithGradient,
+                    child: Padding(
+                      padding:
+                      const EdgeInsets.all(18.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(12.0,6,2,6),
+                            child: Text('Transactions',
+                                style: kMediumBoldTextStyle),
+                          ),
+                          ListView.builder(
+                              padding: EdgeInsets.all(0),
+                              reverse: true,
+                              physics:
+                              const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              itemCount: txModel.length>100?100:txModel.length,
+                              itemBuilder:
+                                  (BuildContext context, int index) {
+                                return TxContDash(txModel: txModel[index],
+                                  networkList: widget.networkList,
+                                );
+                              }),
+                        ],
+                      ),
                     ),
-                  ):Container()
+                  ):Container(),
+                  SizedBox(height: 20,)
                 ],
             ),
         ),

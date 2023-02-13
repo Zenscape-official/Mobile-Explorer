@@ -5,9 +5,7 @@
 import 'dart:convert';
 
 List<TxModel> txModelFromJson(String str) => List<TxModel>.from(json.decode(str).map((x) => TxModel.fromJson(x)));
-
 String txModelToJson(List<TxModel> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
-
 class TxModel {
   TxModel({
     this.hash,
@@ -179,7 +177,63 @@ class Message {
     this.timeoutHeight,
     this.timeoutTimestamp,
     this.fromAddress,
-    this.toAddress
+    this.address,
+    this.toAddress,
+    this.voter,
+    this.option,
+    this.proposalId,
+    this.stringAmount,
+    this.unfarmingPoolCoin,
+    this.depositCoins,
+    this.poolCoins,
+    this.withDrawer,
+    this.orderId,
+    this.creator,
+    this.baseCoinDenom,
+    this.quoteCoinDenom,
+    this.lockerId,
+    this.amountIn,
+    this.amountOut,
+    this.extendedPairVaultId,
+    this.userVaultId,
+    this.stableVaultId,
+    this.lender,
+    this.lendId,
+    this.borrower,
+    this.borrowId,
+    this.startTime,
+    this.gaugeTypeId,
+    this.depositAmount,
+    this.totalTriggers,
+    this.triggerDuration,
+    this.liquidityMetaData,
+    this.grant,
+    this.grantee,
+    this.granter,
+    this.msgTypeUrl,
+    this.withdrawAddress,
+    this.delegatorAddress,
+    this.validatorAddress,
+    this.content,
+    this.proposer,
+    this.initialDeposit,
+    this.value,
+    this.pubkey,
+    this.commission,
+    this.description,
+    this.minSelfDelegation,
+    this.commissionRate,
+    this.msgs,
+    this.validatorDstAddress,
+    this.validatorSrcAddress,
+    this.routes,
+    this.tokenIn,
+    this.tokenOutMinAmount,
+    this.tokenOut,
+    this.tokenInMaxs,
+    this.shareOutAmount,
+    this.funds,
+    this.contract,
   });
 
   String? type;
@@ -191,12 +245,18 @@ class Message {
   Height? proofHeight;
   String? acknowledgement;
   String? price;
-  String? amount;
+  final dynamic amount;
+  String? stringAmount;
   String? appId;
   String? depositor;
+  String? lender;
+  String? withDrawer;
   String? assetId;
+  String? lockerId;
   String? orderer;
+  String? creator;
   String? pairId;
+  String? orderId;
   String? direction;
   Amount? offerCoin;
   String? orderLifespan;
@@ -204,6 +264,9 @@ class Message {
   String? farmer;
   String? poolId;
   Amount? farmingPoolCoin;
+  Amount? unfarmingPoolCoin;
+  List<Amount>? depositCoins;
+  Amount? poolCoins;
   TokenTx? token;
   String? sender;
   String? receiver;
@@ -213,8 +276,86 @@ class Message {
   String? timeoutTimestamp;
   String? toAddress;
   String? fromAddress;
+  String? address;
+  String? voter;
+  String? option;
+  String? proposalId;
+  String? baseCoinDenom;
+  String? quoteCoinDenom;
+  final dynamic amountIn;
+  final dynamic amountOut;
+  String? extendedPairVaultId;
+  String? userVaultId;
+  String? stableVaultId;
+  String? lendId;
+  String? borrower;
+  String? borrowId;
+  DateTime? startTime;
+  String? gaugeTypeId;
+  Amount? depositAmount;
+  String? totalTriggers;
+  String? triggerDuration;
+  LiquidityMetaData? liquidityMetaData;
+  Grant? grant;
+  String? grantee;
+  String? granter;
+  String? msgTypeUrl;
+  String? withdrawAddress;
+  String? delegatorAddress;
+  String? validatorAddress;
+  Content? content;
+  String? proposer;
+  List<dynamic>? initialDeposit;
+  Amount? value;
+  Pubkey? pubkey;
+  Commission? commission;
+  Description? description;
+  String? minSelfDelegation;
+  dynamic commissionRate;
+  List<Msg>? msgs;
+  String? validatorDstAddress;
+  String? validatorSrcAddress;
+  List<Route>? routes;
+  TokenIn? tokenIn;
+  TokenIn? tokenOut;
+  String? tokenOutMinAmount;
+  List<Amount>? tokenInMaxs;
+  String? shareOutAmount;
+  List<Amount>? funds;
+  String? contract;
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    dynamic amount;
+    dynamic amountIn;
+    dynamic amountOut;
+    if (json['amount'] is String) {
+      amount = json['amount'];
+    } else if (json['amount'] is Map<String, dynamic>) {
+      amount = Amount.fromJson(json['amount']);
+    } else if (json['amount'] is List) {
+      amount = json['amount'].map((i) => Amount.fromJson(i)).toList();
+    }
+    if (json['amount_in'] is String) {
+      amountIn = json['amount_in'];
+    } else if (json['amount_in'] is Map<String, dynamic>) {
+      amountIn = Amount.fromJson(json['amount_in']);
+    } else if (json['amount_in'] is List) {
+      amountIn = json['amount_in'].map((i) => Amount.fromJson(i)).toList();
+    }
+    if (json['amount_out'] is String) {
+      amountOut = json['amount_out'];
+    } else if (json['amount_out'] is Map<String, dynamic>) {
+      amountOut = Amount.fromJson(json['amount_out']);
+    } else if (json['amount_out'] is List) {
+      amountOut = json['amount_out'].map((i) => Amount.fromJson(i)).toList();
+    }
+
+    return Message(
+      msgs: json["msgs"] == null ? [] : List<Msg>.from(json["msgs"]!.map((x) => Msg.fromJson(x))),
+    amount:amount,
+    amountIn:amountIn,
+    amountOut:amountOut,
     type: json["@type"],
     header: json["header"] == null ? null : MessageHeader.fromJson(json["header"]),
     signer: json["signer"],
@@ -224,26 +365,86 @@ class Message {
     proofHeight: json["proof_height"] == null ? null : Height.fromJson(json["proof_height"]),
     acknowledgement: json["acknowledgement"],
     price: json["price"],
-    //amount: json["amount"],
+    //stringAmount: json["amount"] == null ? null:  json["amount"],
+    //amount: json["amount"] == null ? null: json["amount"].runtimeType != String? List<Amount>.from(json["amount"].map((x) => Amount.fromJson(x))): json["amount"],
     assetId: json["asset_id"],
     depositor: json["depositor"],
+    withDrawer: json["withdrawer"],
     appId: json["app_id"],
     orderer: json["orderer"],
+      creator: json["creator"],
     pairId: json["pair_id"],
     direction: json["direction"],
-    //offerCoin: Amount.fromJson(json["offer_coin"]),
+    farmer: json["farmer"],
+    poolId: json["pool_id"],
+    offerCoin: json["offer_coin"]==null?null: Amount.fromJson(json["offer_coin"]),
     orderLifespan: json["order_lifespan"],
     demandCoinDenom: json["demand_coin_denom"],
-    //token: Token.fromJson(json["token"]),
+    token: json["token"] == null ? null :TokenTx.fromJson(json["token"]),
     sender: json["sender"],
     receiver: json["receiver"],
     sourcePort: json["source_port"],
     sourceChannel: json["source_channel"],
-    //timeoutHeight: TimeoutHeight.fromJson(json["timeout_height"]),
+    timeoutHeight: json["timeout_height"] == null ? null :TimeoutHeight.fromJson(json["timeout_height"]),
     timeoutTimestamp: json["timeout_timestamp"],
     toAddress: json["to_address"] == null ? null : json["to_address"],
     fromAddress: json["from_address"] == null ? null : json["from_address"],
-  );
+      address: json["from"] == null ? null : json["from"],
+    voter: json["voter"],
+    option: json["option"],
+    proposalId: json["proposal_id"],
+    farmingPoolCoin: json["farming_pool_coin"] == null ? null : Amount.fromJson(json["farming_pool_coin"]),
+    unfarmingPoolCoin: json["unfarming_pool_coin"] == null ? null : Amount.fromJson(json["unfarming_pool_coin"]),
+    depositCoins: json["deposit_coins"] == null ? [] : List<Amount>.from(json["deposit_coins"]!.map((x) => Amount.fromJson(x))),
+    poolCoins: json["pool_coin"] == null ? null : Amount.fromJson(json["pool_coin"]),
+    orderId: json["order_id"],
+    baseCoinDenom: json["base_coin_denom"],
+    quoteCoinDenom: json["quote_coin_denom"],
+    lockerId: json["locker_id"],
+    //amountIn: json["amount_in"],
+    //amountOut: json["amount_out"],
+    extendedPairVaultId: json["extended_pair_vault_id"],
+    userVaultId: json["user_vault_id"],
+      stableVaultId: json["stable_vault_id"],
+    lender:json["lender"],
+      lendId:json["lend_id"],
+      borrower: json["borrower"],
+      borrowId: json["borrow_id"],
+      startTime: json["start_time"] == null ? null : DateTime.parse(json["start_time"]),
+      gaugeTypeId: json["gauge_type_id"],
+      depositAmount: json["deposit_amount"] == null ? null : Amount.fromJson(json["deposit_amount"]),
+      totalTriggers: json["total_triggers"],
+      triggerDuration: json["trigger_duration"],
+      liquidityMetaData: json["liquidity_meta_data"] == null ? null : LiquidityMetaData.fromJson(json["liquidity_meta_data"]),
+      grant: json["grant"] == null ? null : Grant.fromJson(json["grant"]),
+      grantee: json["grantee"],
+      granter: json["granter"],
+      msgTypeUrl: json["msg_type_url"],
+      withdrawAddress: json["withdraw_address"],
+      delegatorAddress: json["delegator_address"],
+      validatorAddress: json["validator_address"],
+      content: json["content"] == null ? null : Content.fromJson(json["content"]),
+      proposer: json["proposer"],
+      initialDeposit: json["initial_deposit"] == null ? [] : List<dynamic>.from(json["initial_deposit"]!.map((x) => x)),
+      value: json["value"] == null ? null : Amount.fromJson(json["value"]),
+      pubkey: json["pubkey"] == null ? null : Pubkey.fromJson(json["pubkey"]),
+      commission: json["commission"] == null ? null : Commission.fromJson(json["commission"]),
+      description: json["description"] == null ? null : Description.fromJson(json["description"]),
+      minSelfDelegation: json["min_self_delegation"],
+      commissionRate: json["commission_rate"],
+      validatorDstAddress: json["validator_dst_address"],
+      validatorSrcAddress: json["validator_src_address"],
+      routes: json["routes"] == null ? [] : List<Route>.from(json["routes"]!.map((x) => Route.fromJson(x))),
+      tokenIn: json["token_in"] == null ? null : TokenIn.fromJson(json["token_in"]),
+      tokenOut: json["token_out"] == null ? null : TokenIn.fromJson(json["token_out"]),
+      tokenOutMinAmount: json["token_out_min_amount"],
+      tokenInMaxs: json["token_in_maxs"] == null ? [] : List<Amount>.from(json["token_in_maxs"]!.map((x) => Amount.fromJson(x))),
+      shareOutAmount: json["share_out_amount"],
+      funds: json["funds"] == null ? [] : List<Amount>.from(json["funds"]!.map((x) => Amount.fromJson(x))),
+      contract: json["contract"],
+
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "@type": type,
@@ -255,10 +456,14 @@ class Message {
     "proof_height": proofHeight == null ? null : proofHeight!.toJson(),
     "acknowledgement": acknowledgement,
     "price": price,
-    "amount": amount,
+    "amount":stringAmount,
+    "amount": amount == null ? [] : List<dynamic>.from(amount!.map((x) => x.toJson())),
     "app_id": appId,
     "orderer": orderer,
+    "creator":creator,
     "pair_id": pairId,
+    "farmer":farmer,
+    "pool_id":poolId,
     "direction": direction,
     "offer_coin": offerCoin!.toJson(),
     "order_lifespan": orderLifespan,
@@ -272,7 +477,275 @@ class Message {
     "timeout_timestamp": timeoutTimestamp,
     "to_address": toAddress == null ? null : toAddress,
     "from_address": fromAddress == null ? null : fromAddress,
+    "farming_pool_coin": farmingPoolCoin == null ? null : farmingPoolCoin!.toJson(),
+    "unfarming_pool_coin": unfarmingPoolCoin == null ? null : unfarmingPoolCoin!.toJson(),
+    "deposit_coins":depositCoins==null?null:List<dynamic>.from(depositCoins!.map((x) => x.toJson())),
+    "pool_coin":poolCoins==null?null:poolCoins!.toJson(),
+    "withdrawer":withDrawer,
+    "depositor":depositor,
+    "order_id":orderId,
+    "quote_coin_denom":quoteCoinDenom,
+    "base_coin_denom":baseCoinDenom,
+    "locker_id":lockerId,
+    "from":address,
+    "amount_in": amountIn,
+    "amount_out": amountOut,
+    "extended_pair_vault_id": extendedPairVaultId,
+    "user_vault_id":userVaultId,
+    "stable_vault_id":stableVaultId,
+    "lender":lender,
+    "lend_id":lendId,
+    "borrower": borrower,
+    "borrow_id": borrowId,
+    "start_time": startTime?.toIso8601String(),
+    "gauge_type_id": gaugeTypeId,
+    "deposit_amount": depositAmount?.toJson(),
+    "total_triggers": totalTriggers,
+    "trigger_duration": triggerDuration,
+    "liquidity_meta_data": liquidityMetaData?.toJson(),
+    "grant": grant?.toJson(),
+    "grantee": grantee,
+    "granter": granter,
+    "msg_type_url": msgTypeUrl,
+    "withdraw_address":withdrawAddress,
+    "delegator_address":delegatorAddress,
+    "validator_address":validatorAddress,
+    "content": content?.toJson(),
+    "proposer": proposer,
+    "initial_deposit": initialDeposit == null ? [] : List<dynamic>.from(initialDeposit!.map((x) => x)),
+    "value": value?.toJson(),
+    "pubkey": pubkey?.toJson(),
+    "commission": commission?.toJson(),
+    "description": description?.toJson(),
+    "min_self_delegation": minSelfDelegation,
+    "commission_rate": commissionRate,
+    "msgs": msgs == null ? [] : List<dynamic>.from(msgs!.map((x) => x.toJson())),
+    "validator_dst_address": validatorDstAddress,
+    "validator_src_address": validatorSrcAddress,
+    "token_in_maxs": tokenInMaxs == null ? [] : List<dynamic>.from(tokenInMaxs!.map((x) => x.toJson())),
+    "share_out_amount": shareOutAmount,
+    "funds": funds == null ? [] : List<dynamic>.from(funds!.map((x) => x.toJson())),
+    "contract": contract,
 
+  };
+}
+class Route {
+  Route({
+    this.poolId,
+    this.tokenOutDenom,
+    this.tokenInDenom
+  });
+
+  String? poolId;
+  String? tokenOutDenom;
+  String? tokenInDenom;
+
+  factory Route.fromJson(Map<String, dynamic> json) => Route(
+    poolId: json["pool_id"],
+    tokenOutDenom: json["token_out_denom"],
+    tokenInDenom: json["token_in_denom"]
+  );
+
+  Map<String, dynamic> toJson() => {
+    "pool_id": poolId,
+    "token_out_denom": tokenOutDenom,
+    "token_in_denom": tokenInDenom
+  };
+}
+
+class TokenIn {
+  TokenIn({
+    this.denom,
+    this.amount,
+  });
+
+  String? denom;
+  String? amount;
+
+  factory TokenIn.fromJson(Map<String, dynamic> json) => TokenIn(
+    denom: json["denom"],
+    amount: json["amount"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "denom": denom,
+    "amount": amount,
+  };
+}
+
+class Msg {
+  Msg({
+    this.type,
+    this.amount,
+    this.delegatorAddress,
+    this.validatorAddress,
+  });
+
+  Type? type;
+  Amount? amount;
+  String? delegatorAddress;
+  String? validatorAddress;
+
+  factory Msg.fromJson(Map<String, dynamic> json) => Msg(
+    type: typeValues.map[json["@type"]]!,
+    amount: json["amount"] == null ? null : Amount.fromJson(json["amount"]),
+    delegatorAddress: json["delegator_address"],
+    validatorAddress:json["validator_address"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "@type": typeValues.reverse[type],
+    "amount": amount?.toJson(),
+    "delegator_address": delegatorAddress,
+    "validator_address": validatorAddressValues.reverse[validatorAddress],
+  };
+}
+enum Denom { UCMDX }
+
+final denomValues = EnumValues({
+  "ucmdx": Denom.UCMDX
+});
+
+enum Type { COSMOS_STAKING_V1_BETA1_MSG_DELEGATE }
+
+final typeValues = EnumValues({
+  "/cosmos.staking.v1beta1.MsgDelegate": Type.COSMOS_STAKING_V1_BETA1_MSG_DELEGATE
+});
+
+enum ValidatorAddress { COMDEXVALOPER195_RE7_MHWH9_UREWM3_RVAJ9_R7_VM6_J63_C4_SD78_NJD }
+
+final validatorAddressValues = EnumValues({
+  "comdexvaloper195re7mhwh9urewm3rvaj9r7vm6j63c4sd78njd": ValidatorAddress.COMDEXVALOPER195_RE7_MHWH9_UREWM3_RVAJ9_R7_VM6_J63_C4_SD78_NJD
+});
+
+class EnumValues<T> {
+  Map<String, T> map;
+  late Map<T, String> reverseMap;
+
+  EnumValues(this.map);
+
+  Map<T, String> get reverse {
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
+  }
+}
+
+class Commission {
+  Commission({
+    this.rate,
+    this.maxRate,
+    this.maxChangeRate,
+  });
+
+  String? rate;
+  String? maxRate;
+  String? maxChangeRate;
+
+  factory Commission.fromJson(Map<String, dynamic> json) => Commission(
+    rate: json["rate"],
+    maxRate: json["max_rate"],
+    maxChangeRate: json["max_change_rate"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "rate": rate,
+    "max_rate": maxRate,
+    "max_change_rate": maxChangeRate,
+  };
+}
+
+class Description {
+  Description({
+    this.details,
+    this.moniker,
+    this.website,
+    this.identity,
+    this.securityContact,
+  });
+
+  String? details;
+  String? moniker;
+  String? website;
+  String? identity;
+  String? securityContact;
+
+  factory Description.fromJson(Map<String, dynamic> json) => Description(
+    details: json["details"],
+    moniker: json["moniker"],
+    website: json["website"],
+    identity: json["identity"],
+    securityContact: json["security_contact"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "details": details,
+    "moniker": moniker,
+    "website": website,
+    "identity": identity,
+    "security_contact": securityContact,
+  };
+}
+
+class Pubkey {
+  Pubkey({
+    this.key,
+    this.type,
+  });
+
+  String? key;
+  String? type;
+
+  factory Pubkey.fromJson(Map<String, dynamic> json) => Pubkey(
+    key: json["key"],
+    type: json["@type"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "key": key,
+    "@type": type,
+  };
+}
+
+class Content {
+  Content({
+    this.type,
+    this.title,
+    this.description,
+  });
+
+  String? type;
+  String? title;
+  String? description;
+
+  factory Content.fromJson(Map<String, dynamic> json) => Content(
+    type: json["@type"],
+    title: json["title"],
+    description: json["description"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "@type": type,
+    "title": title,
+    "description": description,
+  };
+}
+class Grant {
+  Grant({
+    this.expiration,
+    this.authorization,
+  });
+
+  DateTime? expiration;
+  Authorization? authorization;
+
+  factory Grant.fromJson(Map<String, dynamic> json) => Grant(
+    expiration: json["expiration"] == null ? null : DateTime.parse(json["expiration"]),
+    authorization: json["authorization"] == null ? null : Authorization.fromJson(json["authorization"]),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "expiration": expiration?.toIso8601String(),
+    "authorization": authorization?.toJson(),
   };
 }
 class TimeoutHeight {
@@ -751,14 +1224,83 @@ class Attribute {
   };
 }
 
-class EnumValues<T> {
-  Map<String, T> map;
+class EnumValue<T> {
+  Map<String, T>? map;
   Map<T, String>? reverseMap;
 
-  EnumValues(this.map);
+  EnumValue(this.map);
 
   Map<T, String> get reverse {
-    reverseMap ??= map.map((k, v) => MapEntry(v, k));
+    reverseMap ??= map!.map((k, v) => MapEntry(v, k));
     return reverseMap!;
   }
+}
+
+class LiquidityMetaData {
+  LiquidityMetaData({
+    this.poolId,
+    this.childPoolIds,
+    this.isMasterPool,
+  });
+
+  String? poolId;
+  List<dynamic>? childPoolIds;
+  bool? isMasterPool;
+
+  factory LiquidityMetaData.fromJson(Map<String, dynamic> json) => LiquidityMetaData(
+    poolId: json["pool_id"],
+    childPoolIds: json["child_pool_ids"] == null ? [] : List<dynamic>.from(json["child_pool_ids"]!.map((x) => x)),
+    isMasterPool: json["is_master_pool"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "pool_id": poolId,
+    "child_pool_ids": childPoolIds == null ? [] : List<dynamic>.from(childPoolIds!.map((x) => x)),
+    "is_master_pool": isMasterPool,
+  };
+}
+
+
+class Authorization {
+  Authorization({
+    this.type,
+    this.allowList,
+    this.maxTokens,
+    this.authorizationType,
+  });
+
+  String? type;
+  AllowList? allowList;
+  dynamic maxTokens;
+  String? authorizationType;
+
+  factory Authorization.fromJson(Map<String, dynamic> json) => Authorization(
+    type: json["@type"],
+    allowList: json["allow_list"] == null ? null : AllowList.fromJson(json["allow_list"]),
+    maxTokens: json["max_tokens"],
+    authorizationType: json["authorization_type"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "@type": type,
+    "allow_list": allowList?.toJson(),
+    "max_tokens": maxTokens,
+    "authorization_type": authorizationType,
+  };
+}
+
+class AllowList {
+  AllowList({
+    this.address,
+  });
+
+  List<String>? address;
+
+  factory AllowList.fromJson(Map<String, dynamic> json) => AllowList(
+    address: json["address"] == null ? [] : List<String>.from(json["address"]!.map((x) => x)),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "address": address == null ? [] : List<dynamic>.from(address!.map((x) => x)),
+  };
 }

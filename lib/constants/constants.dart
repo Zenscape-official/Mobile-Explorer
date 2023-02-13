@@ -235,10 +235,8 @@ String k_m_b_generator(num) {
 }
 
  getValueNextTo(String jsonString, String symbol) {
-  print(jsonString);
   // Reformat the json string to a proper json format
   jsonString = jsonString.replaceAll("\'", "\"");
-  print(symbol);
 
   // Parse the json string
   var json = jsonDecode(jsonString);
@@ -278,8 +276,7 @@ String removeAllChar(String comm){
  findBracketByToken(String input, String token) {
   RegExp regExp = RegExp("\\(" + token + ".*\\)");
   RegExpMatch? match = regExp.firstMatch(input);
-  print(match!.group(0));
-  return match.group(0);
+  return match!.group(0);
 }
  getValueFromBracket(String bracket) {
   RegExp exp = new RegExp(r'[\d.]+');
@@ -309,27 +306,30 @@ String? getRestrictedCharacters(String string){
 }
 
 getType(String input) {
+  input=truncateBeforeLastDot(input);
   switch (input) {
+
+
     //auction
   // MsgPlaceSurplusBid(MsgPlaceSurplusBidRequest) returns (MsgPlaceSurplusBidResponse);
   // rpc MsgPlaceDebtBid(MsgPlaceDebtBidRequest) returns (MsgPlaceDebtBidResponse);
   // rpc MsgPlaceDutchBid(MsgPlaceDutchBidRequest) returns (MsgPlaceDutchBidResponse);
   // rpc MsgPlaceDutchLendBid(MsgPlaceDutchLendBidRequest) returns (MsgPlaceDutchLendBidResponse);
 
-    case '/comdex.auction.v1beta1.MsgPlaceSurplusBidRequest':
+    case 'MsgPlaceSurplusBidRequest':
       return 'Place Surplus Bid Request';
 
-    case '/comdex.auction.v1beta1.MsgPlaceDebtBidRequest':
+    case 'MsgPlaceDebtBidRequest':
       return 'Place Debt Bid Request';
 
-    case '/comdex.auction.v1beta1.MsgPlaceDutchBidRequest':
+    case 'MsgPlaceDutchBidRequest':
       return 'Place Surplus Dutch Request';
 
-    case '/comdex.auction.v1beta1.MsgPlaceDutchLendBidRequest':
+    case 'MsgPlaceDutchLendBidRequest':
       return 'Place Dutch Lend Bid Request';
 
 //bandOracles
-    case '/comdex.bandoracle.v1beta1.MsgFetchPriceDataResponse':
+    case 'MsgFetchPriceDataResponse':
       return 'Fetch Price Data Response';
 
 
@@ -340,18 +340,20 @@ getType(String input) {
   // message MsgKillResponse {}
   // message MsgCollateralRedemptionResponse{}
 
-    case '/comdex.esm.v1beta1.MsgDepositESMResponse':
+    case 'MsgDepositESMResponse':
       return 'Deposit ESM Response';
 
-    case '/comdex.esm.v1beta1.MsgExecuteESMResponse':
+    case 'MsgExecuteESMResponse':
       return 'Execute ESM Response';
 
-    case '/comdex.esm.v1beta1.MsgKillResponse':
+    case 'MsgKillResponse':
       return 'Kill Response';
 
-    case '/comdex.esm.v1beta1.MsgCollateralRedemptionResponse':
+    case 'MsgCollateralRedemptionResponse':
       return 'Collateral Redemption Response';
-//lend
+
+      //lend
+
       // message MsgLendResponse {}
       // message MsgWithdrawResponse {}
       // message MsgDepositResponse {}
@@ -365,49 +367,57 @@ getType(String input) {
       // message MsgFundModuleAccountsResponse {}
       // message MsgCalculateInterestAndRewardsResponse {}
 
-    case '/comdex.lend.v1beta1.MsgLendResponse':
+
+    case 'MsgLend':
       return 'Lend Request';
 
-    case '/comdex.lend.v1beta1.MsgWithdrawResponse':
+    case 'MsgWithdraw':
       return 'Withdraw Request';
 
-    case '/comdex.lend.v1beta1.MsgDepositResponse':
+    case 'MsgDeposit':
       return 'Deposit Request';
 
-    case '/comdex.lend.v1beta1.MsgCloseLendResponse':
+    case 'MsgCloseLend':
       return 'Close Lend Response';
-
-    case '/comdex.lend.v1beta1.MsgBorrowResponse':
+      //not done
+    case 'MsgBorrow':
       return 'Borrow Response';
 
-    case '/comdex.lend.v1beta1.MsgRepayResponse':
+    case 'MsgRepay':
       return 'Repay Response';
 
-    case '/comdex.lend.v1beta1.MsgDepositBorrowResponse':
+      //not done
+    case 'MsgDepositBorrow':
       return 'Deposit Borrow Response';
 
-      case '/comdex.lend.v1beta1.MsgDrawResponse':
+      case 'MsgDraw':
       return 'Draw Response';
-    case '/comdex.lend.v1beta1.MsgCloseBorrowResponse':
+
+        //not done
+    case 'MsgCloseBorrow':
       return 'Close Borrow Response';
 
-    case '/comdex.lend.v1beta1.MsgBorrowAlternateResponse':
+    case 'MsgBorrowAlternate':
       return 'Borrow Alternate Response';
-
-    case '/comdex.lend.v1beta1.MsgFundModuleAccountsResponse':
+        //not done
+    case 'MsgFundModuleAccounts':
       return 'Fund Module Accounts Response';
 
-    case '/comdex.lend.v1beta1.MsgFundModuleAccountsResponse':
-      return 'Calculate Interest And Rewards Response';
+    case 'MsgCalculateInterestAndRewards':
+      return 'Calculate Interest And Rewards';
 
 
       //liquidation
     //MsgLiquidateBorrowResponse{}
-    case '/comdex.liquidation.v1beta1.MsgLiquidateBorrowResponse':
+  //MsgLiquidateVaultResponse{}
+    case 'MsgLiquidateVaultResponse':
+      return 'Liquidate Vault Response';
+
+    case 'MsgLiquidateBorrowResponse':
       return 'Liquidate Borrow Response';
 
 
-      //liquidity
+      //liquidity (done except few)
   //rpc CreatePair() returns (MsgCreatePairResponse);
   //
   //   // CreatePool defines a method for creating a pool
@@ -439,37 +449,40 @@ getType(String input) {
   //
   // }
 
-    case '/comdex.liquidity.v1beta1.MsgCreatePair':
+    case 'MsgCreatePair':
       return 'Create Pair';
 
 
-    case '/comdex.liquidity.v1beta1.MsgCreatePool':
+    case 'MsgCreatePool':
       return 'Create Pool';
 
-    case '/comdex.liquidity.v1beta1.MsgDeposit':
+      //done
+    case 'MsgDeposit':
       return 'Deposit';
-
-    case '/comdex.liquidity.v1beta1.MsgWithdraw':
+    //done
+    case 'MsgWithdraw':
       return 'Withdraw';
-
-    case '/comdex.liquidity.v1beta1.MsgLimitOrder':
+    //done
+    case 'MsgLimitOrder':
       return 'Limit Order';
-
-    case '/comdex.liquidity.v1beta1.MsgMarketOrder':
+    //done
+    case 'MsgMarketOrder':
       return 'Market Order';
 
-    case '/comdex.liquidity.v1beta1.MsgCancelOrder':
+    //done
+    case 'MsgCancelOrder':
       return 'Cancel Order';
 
-    case '/comdex.liquidity.v1beta1.MsgCancelAllOrders':
+    case 'MsgCancelAllOrders':
       return 'Cancel ALl Orders';
-
-    case '/comdex.liquidity.v1beta1.MsgFarm':
+      //done
+    case 'MsgFarm':
       return 'Farm';
-
-    case '/comdex.liquidity.v1beta1.MsgUnfarm':
+    //done
+    case 'MsgUnfarm':
       return 'UnFarm';
-  //locker
+
+  //locker (all done)
   // rpc MsgCreateLocker() returns (MsgCreateLockerResponse);
   //   rpc MsgDepositAsset(MsgDepositAssetRequest) returns (MsgDepositAssetResponse);
   //   rpc MsgWithdrawAsset() returns (MsgWithdrawAssetResponse);
@@ -477,19 +490,19 @@ getType(String input) {
   //   rpc MsgLockerRewardCalc() returns (MsgLockerRewardCalcResponse);
 
 
-    case '/comdex.locker.v1beta1.MsgCreateLockerRequest':
+    case 'MsgCreateLockerRequest':
       return 'Create Locker Request';
 
-    case '/comdex.locker.v1beta1.MsgDepositAssetRequest':
+    case 'MsgDepositAssetRequest':
       return 'Deposit Asset Request';
 
-    case '/comdex.locker.v1beta1.MsgWithdrawAssetRequest':
+    case 'MsgWithdrawAssetRequest':
       return 'Withdraw Asset Request';
 
-    case '/comdex.locker.v1beta1.MsgCloseLockerRequest':
+    case 'MsgCloseLockerRequest':
       return 'Close Locker Request';
 
-    case '/comdex.locker.v1beta1.MsgLockerRewardCalcRequest':
+    case 'MsgLockerRewardCalcRequest':
       return 'Locker Reward Calc Request';
 
 //rewards
@@ -498,25 +511,25 @@ getType(String input) {
 //       rpc ExternalRewardsVault(ActivateExternalRewardsVault) returns (ActivateExternalRewardsVaultResponse);
 //       rpc ExternalRewardsLend(ActivateExternalRewardsLend) returns (ActivateExternalRewardsLendResponse);
 
-
-    case '/comdex.rewards.v1beta1.MsgCreateGauge':
+      //done only this
+    case 'MsgCreateGauge':
       return 'Create Gauge';
 
-    case '/comdex.rewards.v1beta1.ActivateExternalRewardsLockers':
+    case 'ActivateExternalRewardsLockers':
       return 'Activate External Rewards Lockers';
 
-    case '/comdex.rewards.v1beta1.ActivateExternalRewardsVault':
+    case 'ActivateExternalRewardsVault':
       return 'Activate External Rewards Vault';
 
-    case '/comdex.rewards.v1beta1.ActivateExternalRewardsLend':
+    case 'ActivateExternalRewardsLend':
       return 'Activate External Rewards Lend';
 
-//tokenmint
+//tokenmint (done)
 
-    case '/comdex.tokenmint.v1beta1.MsgMintNewTokensRequest':
+    case 'MsgMintNewTokensRequest':
       return 'Mint New Tokens Request';
 
-      //vault
+      //vault (all done)
       // rpc MsgCreate() returns (MsgCreateResponse);
       // rpc MsgDeposit() returns (MsgDepositResponse);
       // rpc MsgWithdraw() returns (MsgWithdrawResponse);
@@ -530,71 +543,205 @@ getType(String input) {
       // rpc MsgVaultInterestCalc(MsgVaultInterestCalcRequest) returns (MsgVaultInterestCalcResponse);
 
 
-    case '/comdex.vault.v1beta1.MsgCreateRequest':
+    case 'MsgCreateRequest':
       return 'Create Response';
 
-    case '/comdex.vault.v1beta1.MsgDepositRequest':
+    case 'MsgDepositRequest':
       return 'Deposit Response';
 
-    case '/comdex.vault.v1beta1.MsgWithdrawRequest':
+    case 'MsgWithdrawRequest':
       return 'Withdraw Request';
 
-    case '/comdex.vault.v1beta1.MsgDrawRequest':
+    case 'MsgDrawRequest':
       return 'Draw Request';
 
-    case '/comdex.vault.v1beta1.MsgRepayRequest':
+    case 'MsgRepayRequest':
       return 'Repay Request';
 
-    case '/comdex.vault.v1beta1.MsgCloseRequest':
+    case 'MsgCloseRequest':
       return 'Close Request';
 
-    case '/comdex.vault.v1beta1.MsgDepositAndDrawRequest':
+    case 'MsgDepositAndDrawRequest':
       return 'Deposit And Draw Request';
 
-    case '/comdex.vault.v1beta1.MsgCreateStableMintRequest':
+    case 'MsgCreateStableMintRequest':
       return 'Create Stable Mint Request';
 
-    case '/comdex.vault.v1beta1.MsgDepositStableMintRequest':
+    case 'MsgDepositStableMintRequest':
       return 'Deposit Stable Mint Request';
 
-    case '/comdex.vault.v1beta1.MsgWithdrawStableMintRequest':
+    case 'MsgWithdrawStableMintRequest':
       return 'Withdraw Stable Mint Request';
 
-    case '/comdex.vault.v1beta1.MsgVaultInterestCalcRequest':
+    case 'MsgVaultInterestCalcRequest':
       return 'Vault Interest Calc Request';
+
+
     //cosmos
-    case '/cosmos.bank.v1beta1.MsgSend':
+
+      //auth
+    case 'MsgUpdateParams':
+      return 'Update Params';
+
+      //authz
+      //done
+    case 'MsgGrant':
+      return 'Grant';
+
+    //done
+    case 'MsgRevoke':
+      return 'Revoke';
+
+      //bank
+    //done
+    case 'MsgSend':
       return 'Send';
+
+    case 'MsgMultiSend':
+      return 'Multi Send';
+
+    case 'MsgUpdateParams':
+      return 'Update Params';
+
+    case 'MsgSetSendEnabled':
+      return 'Set Send Enabled';
+
+    //circuit
+    case 'MsgAuthorizeCircuitBreaker':
+      return 'Authorized Circuit Breaker';
+
+    case 'MsgTripCircuitBreaker':
+      return 'Trip Circuit Breaker';
+
+    case 'MsgResetCircuitBreaker':
+      return 'Reset Circuit Breaker';
+
+      //distribution
+        //done
+    case 'MsgSetWithdrawAddress':
+      return 'Set Withdraw Address';
+        //done
+    case 'MsgWithdrawDelegatorReward':
+      return 'Withdraw Delegator Reward';
+        //done
+    case 'MsgWithdrawValidatorCommission':
+      return 'Withdraw Validator Commission';
+
+    case 'MsgFundCommunityPool':
+      return 'Fund Community Pool';
+
+    case 'MsgCommunityPoolSpend':
+      return 'Community Pool Spend';
+
+    case 'MsgDepositValidatorRewardsPool':
+      return 'Deposit Validator Rewards Pool';
+
+      //evidence
+    case 'MsgSubmitEvidence':
+      return 'Submit Evidence';
+
+      //freegrant
+
+    case 'MsgGrantAllowance':
+      return 'Grant Allowance';
+
+    case 'MsgRevokeAllowanceResponse':
+      return 'Revoke Allowance';
+
+      //gov
+  //done
+    case 'MsgSubmitProposal':
+      return 'Submit Proposal';
+
+      //done
+    case 'MsgVote':
+      return 'Vote';
+      //done
+    case 'MsgVoteWeighted':
+      return 'Vote Weighted';
+      //(same as in comdex module but different JSON)
+    case 'MsgDeposit':
+      return 'Deposit';
+
+      //group (not done)
+    case 'MsgCreateGroup':
+      return 'Create Group';
+
+    case 'MsgUpdateGroupMembers':
+      return 'Update Group Members';
+
+    case 'MsgUpdateGroupAdmin':
+      return 'Update Group Admin';
+
+    case 'MsgUpdateGroupMetadata':
+      return 'Update Group Metadata';
+
+    case 'MsgCreateGroupPolicy':
+      return 'Create Group Policy';
+
+    case 'MsgCreateGroupWithPolicy':
+      return 'Create Group With Policy';
+
+    case 'MsgUpdateGroupPolicyAdmin':
+      return 'Update Group Policy Admin';
+
+    case 'MsgUpdateGroupPolicyDecisionPolicy':
+      return 'Update Group Policy Decision Policy';
+
+
+
+    case 'MsgUpdateGroupPolicyMetadata':
+      return 'Update Group Policy Metadata';
+
+    case 'MsgSubmitProposal':
+      return 'Submit Proposal';
+
+    case 'MsgWithdrawProposal':
+      return 'Withdraw Proposal';
+
+    case 'MsgLeaveGroup':
+      return 'Leave Group';
+
+    case 'MsgUpdateGroupPolicyDecisionPolicy':
+      return 'Update Group Policy Decision Policy';
+
+      //mint MsgUpdateParams only
 
     case'/cosmos.tx.v1beta1.Tx':
       return 'Execute Contract';
 
       //staking
-    case'/cosmos.staking.v1beta1.MsgCreateValidator':
+    case'MsgCreateValidator':
       return 'Create Validator';
-    case'/cosmos.staking.v1beta1.MsgEditValidator':
+    case'MsgEditValidator':
       return 'Edit Validator';
-    case'/cosmos.staking.v1beta1.MsgDelegate':
-      return 'Delegate';
-    case'/cosmos.staking.v1beta1.MsgBeginRedelegate':
+    case'MsgExec':
+      return 'Execute';
+    case'MsgBeginRedelegate':
       return 'Begin Redelegate';
-    case'/cosmos.staking.v1beta1.MsgUndelegate':
+    case'MsgDelegate':
+      return 'Delegate';
+
+
+    //to be done
+    case'MsgUndelegate':
       return 'Undelegate';
-    case'/cosmos.staking.v1beta1.MsgCancelUnbondingDelegation':
+    case'MsgCancelUnbondingDelegation':
       return 'Cancel Unbonding Delegation';
-    case'/cosmos.staking.v1beta1.MsgUpdateParams':
+    case'MsgUpdateParams':
       return 'Update Params';
 
       //slashing
-    case'/cosmos.slashing.v1beta1.MsgUnjail':
+    // case'/cosmos.slashing.v1beta1.MsgUnjail':
+    case'MsgUnjail':
       return 'Unjail';
-    case'/cosmos.slashing.v1beta1.MsgUpdateParams':
+    case'MsgUpdateParams':
       return 'Update Params';
 
       //upgrade
-    case'/cosmos.upgrade.v1beta1.MsgSoftwareUpgrade':
+    case'MsgSoftwareUpgrade':
       return 'Software Upgrade';
-    case'/cosmos.upgrade.v1beta1.MsgCancelUpgrade':
+    case'MsgCancelUpgrade':
       return 'Cancel Upgrade Validator';
 
       //vesting
@@ -611,14 +758,33 @@ getType(String input) {
       return 'Execute Contract';
 
       //ibc
-    case '/ibc.applications.transfer.v1.MsgTransfer':
+    case 'MsgUpdateClient':
+      return 'Update Client';
+
+    case 'MsgTransfer':
       return 'IBC Transfer';
 
     case '/ibc.core.client.v1.MsgDepositResponse':
       return 'Deposit Request';
 
+      //osmosis
+    case 'MsgSwapExactAmountIn':
+      return 'Swap Exact Amount In';
+
+    case 'MsgSwapExactAmountOut':
+      return 'Swap Exact Amount Out';
+
+    case 'MsgJoinPool':
+      return 'Join Pool';
+
+      //contract
+
+    case 'MsgExecuteContract':
+      return 'Execute Contract';
+
+
     default:
-      return 'N/A';
+      return input;
   }
 }
 String truncateBeforeLastDot(String input) {
