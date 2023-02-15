@@ -5767,81 +5767,81 @@ class _TxDetailsState extends State<TxDetails> {
                         for (int i = 0;
                             i < widget.txModel!.messages![0].msgs!.length;
                             i++)
-                          // Padding(
-                          //   padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          //   child: Container(
-                          //       margin: const EdgeInsets.only(
-                          //           right: 10, top: 10, left: 10),
-                          //       width: MediaQuery.of(context).size.width / 1.1,
-                          //       decoration: kBoxDecorationWithGradient,
-                          //       child: Padding(
-                          //         padding: const EdgeInsets.all(18.0),
-                          //         child: Column(
-                          //             crossAxisAlignment:
-                          //                 CrossAxisAlignment.start,
-                          //             children: <Widget>[
-                          //               Text('Delegate',
-                          //                   style: kMediumBoldTextStyle),
-                          //               const SizedBox(
-                          //                 height: 20,
-                          //               ),
-                          //               Text('Type', style: kSmallTextStyle),
-                          //               const SizedBox(
-                          //                 height: 2,
-                          //               ),
-                          //               widget.txModel!.messages!.isNotEmpty
-                          //                   ? Text(
-                          //                       getType(widget.txModel!.messages![0].msgs![i].type!.toString()) ??
-                          //                           '',
-                          //                       style: kMediumBoldTextStyle)
-                          //                   : Text(''),
-                          //               const SizedBox(height: 20),
-                          //               Text('Amount', style: kSmallTextStyle),
-                          //               const SizedBox(
-                          //                 height: 2,
-                          //               ),
-                          //               Text(
-                          //                   (widget.txModel!.messages![0].msgs![i].amount!.amount ??
-                          //                           '') +
-                          //                       (' ') +
-                          //                       (widget.txModel!.messages![0].msgs![i].amount!.denom ??
-                          //                           ''),
-                          //                   style: kMediumBoldTextStyle),
-                          //               const SizedBox(
-                          //                 height: 20,
-                          //               ),
-                          //               Text('Validator Address',
-                          //                   style: kSmallTextStyle),
-                          //               const SizedBox(
-                          //                 height: 2,
-                          //               ),
-                          //               TextWithCopyIcon(
-                          //                   copyTextValue: widget
-                          //                           .txModel!
-                          //                           .messages![0]
-                          //                           .msgs![i]
-                          //                           .validatorAddress ??
-                          //                       '',
-                          //                   copyTextName: 'Validator Address'),
-                          //               const SizedBox(
-                          //                 height: 20,
-                          //               ),
-                          //               Text('Delegator Address',
-                          //                   style: kSmallTextStyle),
-                          //               const SizedBox(
-                          //                 height: 2,
-                          //               ),
-                          //               TextWithCopyIcon(
-                          //                   copyTextValue: widget
-                          //                           .txModel!
-                          //                           .messages![0]
-                          //                           .msgs![i]
-                          //                           .delegatorAddress ??
-                          //                       '',
-                          //                   copyTextName: 'Delegator Address'),
-                          //             ]),
-                          //       )),
-                          // )
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: Container(
+                                margin: const EdgeInsets.only(
+                                    right: 10, top: 10, left: 10),
+                                width: MediaQuery.of(context).size.width / 1.1,
+                                decoration: kBoxDecorationWithGradient,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: <Widget>[
+                                        Text('Delegate',
+                                            style: kMediumBoldTextStyle),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text('Type', style: kSmallTextStyle),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        widget.txModel!.messages!.isNotEmpty
+                                            ? Text(
+                                                getType(widget.txModel!.messages![0].msgs![i].type!.toString()) ??
+                                                    '',
+                                                style: kMediumBoldTextStyle)
+                                            : Text(''),
+                                        const SizedBox(height: 20),
+                                        Text('Amount', style: kSmallTextStyle),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        Text(
+                                            (widget.txModel!.messages![0].msgs![i].amount!.amount ??
+                                                    '') +
+                                                (' ') +
+                                                (widget.txModel!.messages![0].msgs![i].amount!.denom ??
+                                                    ''),
+                                            style: kMediumBoldTextStyle),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text('Validator Address',
+                                            style: kSmallTextStyle),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        TextWithCopyIcon(
+                                            copyTextValue: widget
+                                                    .txModel!
+                                                    .messages![0]
+                                                    .msgs![i]
+                                                    .validatorAddress ??
+                                                '',
+                                            copyTextName: 'Validator Address'),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        Text('Delegator Address',
+                                            style: kSmallTextStyle),
+                                        const SizedBox(
+                                          height: 2,
+                                        ),
+                                        TextWithCopyIcon(
+                                            copyTextValue: widget
+                                                    .txModel!
+                                                    .messages![0]
+                                                    .msgs![i]
+                                                    .delegatorAddress ??
+                                                '',
+                                            copyTextName: 'Delegator Address'),
+                                      ]),
+                                )),
+                          )
                       else if (type == 'IBC Transfer')
                         widget.txModel!.messages!.isNotEmpty
                             ? Container(

@@ -61,7 +61,7 @@ class _ContractsState extends State<Contracts> {
                 radius:15,
                 child: InkWell(
                    // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                    child: Image.network(widget.networkList!.logoUrl??widget.networkList!.logUrl!)),
+                    child: Image.network(widget.networkList!.logUrl??widget.networkList!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
         ),

@@ -74,7 +74,7 @@ class ValidatorController extends GetxController {
   Future<dynamic> fetchAtomVal(String ApiUri) async {
     isLoading=true;
     try {
-      var response = await client.get(Uri.parse('https://api.cosmos.bh.rocks/cosmos/staking/v1beta1/validators'));
+      var response = await client.get(Uri.parse('https://api.cosmos.network/cosmos/staking/v1beta1/validators'));
       isLoading=false;
       switch (response.statusCode) {
         case 200:

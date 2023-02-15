@@ -52,7 +52,8 @@ class _ValidatorsState extends State<Validators> {
   void valData() async {
     validators =
         await _validatorController.fetchVal(widget.networkList.validatorsUrl!,widget.networkList.valStatus!);
-    if(widget.networkList.uDenom=='uatom'){
+    if(widget.networkList.uDenom=='uatom')
+    {
       atomVal =
       await _validatorController.fetchAtomVal(widget.networkList.validatorsUrl!);
     }
@@ -62,7 +63,9 @@ class _ValidatorsState extends State<Validators> {
      }
      else {
        isLoaded=false;
-     }});
+     }
+   }
+   );
   }
   sortList()
   {
@@ -84,11 +87,13 @@ class _ValidatorsState extends State<Validators> {
     totalVoting+=validators![i].votingPower!;
   }
   if(widget.networkList.uDenom=='uatom')
-  for(int i=0;i<atomVal.length;i++){
+  for(int i=0;i<atomVal.length;i++)
+   {
     if(atomVal[i].status==Status.BOND_STATUS_BONDED){
       activeAtomVal.add(atomVal[i]);
     }
-    else if(atomVal[i].status==Status.BOND_STATUS_UNBONDED){
+    else if(atomVal[i].status==Status.BOND_STATUS_UNBONDED)
+    {
       inActiveAtomVal.add(atomVal[i]);
     }
   }
@@ -124,7 +129,7 @@ class _ValidatorsState extends State<Validators> {
                   radius:15,
                   child: InkWell(
                      // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                      child: Image.network(widget.networkList.logoUrl??widget.networkList.logUrl!)),
+                      child: Image.network(widget.networkList.logUrl!)),
                   backgroundColor: Colors.transparent),
             ],
           ),
@@ -215,7 +220,7 @@ class _ValidatorsState extends State<Validators> {
                   radius:15,
                   child: InkWell(
                     // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                      child: Image.network(widget.networkList.logoUrl??widget.networkList.logUrl!)),
+                      child: Image.network(widget.networkList.logUrl!)),
                   backgroundColor: Colors.transparent),
             ],
           ),

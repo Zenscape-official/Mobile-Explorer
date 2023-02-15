@@ -55,9 +55,9 @@ class SearchBar extends StatelessWidget {
                   PersistentNavBarNavigator.pushNewScreen(
                     context,
                     screen: SearchScreen(nameController: nameController.text,
-                        blockSearch: networkList!.blockSearchUrl!,
+                        blockSearch: networkList!.blockSearch!,
                         balanceFromAddress: networkList!.contractDetailsBalances!,
-                        txSearch: networkList!.txSearchUrl!,
+                        txSearch: networkList!.transactionSearch!,
                         txFromAddress: networkList!.txFromAddress!,
                         rewardsFromAddress: networkList!.rewardFromAddress!,
                         delegationFromAddress:networkList!.delegationFromAddress!,
@@ -83,15 +83,15 @@ class SearchBar extends StatelessWidget {
            PersistentNavBarNavigator.pushNewScreen(
              context,
              screen: SearchScreen(nameController: name,
-               blockSearch: networkList!.blockSearchUrl!,
+               blockSearch: networkList!.blockSearch!,
                balanceFromAddress: networkList!.contractDetailsBalances!,
-               txSearch: networkList!.txSearchUrl!,
+               txSearch: networkList!.transactionSearch!,
                txFromAddress: networkList!.txFromAddress!,
                rewardsFromAddress: networkList!.rewardFromAddress!,
                delegationFromAddress:networkList!.delegationFromAddress!,
                networkList: networkList,
              ),
-             withNavBar: true, // OPTIONAL VALUE. True by default.
+             withNavBar: true,
              pageTransitionAnimation: PageTransitionAnimation.cupertino,
            ).then((value) {
              nameController.clear();

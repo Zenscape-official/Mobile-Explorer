@@ -82,8 +82,7 @@ class _BlocksState extends State<Blocks> {
       );
     }
     if(result['success'] == true) {
-     blocks = List.from(result['response'])
-          .map((e) => BlockModel.fromJson(e))
+     blocks = List.from(result['response']).map((e) => BlockModel.fromJson(e))
          .toList()
          .reversed
          .toList()
@@ -124,7 +123,7 @@ class _BlocksState extends State<Blocks> {
                 radius:15,
                 child: InkWell(
                     //onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                    child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
+                    child: Image.network(widget.networkData!.logUrl??widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
         ),

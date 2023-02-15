@@ -95,7 +95,7 @@ class _ProposalsState extends State<Proposals> {
               radius:15,
               child: InkWell(
                  // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                  child: Image.network(widget.networkListProposal!.logoUrl??widget.networkListProposal!.logUrl!)),
+                  child: Image.network(widget.networkListProposal!.logUrl!)),
               backgroundColor: Colors.transparent),
         ],
       ),

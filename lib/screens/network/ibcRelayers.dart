@@ -27,7 +27,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
 
   void IBCData() async {
     ibc =
-    await _ibcController.fetchIBC(widget.networkData!.ibcUrl!);
+    await _ibcController.fetchIBC('');
     setState(() {
       if(ibc!=null){
         isLoaded=true;
@@ -57,7 +57,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                 radius:15,
                 child: InkWell(
                     onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                    child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
+                    child: Image.network(widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
         ),

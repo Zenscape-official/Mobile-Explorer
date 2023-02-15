@@ -172,7 +172,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
             drawer: NavDraw(
               networkData: widget.networkData,
               logoUrl:
-                  widget.networkData!.logoUrl ?? widget.networkData!.logUrl,
+                widget.networkData!.logUrl,
               pageIndex: pageIndex,
             ),
             backgroundColor: Colors.grey[100],
@@ -197,7 +197,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                         // onTap: () => Navigator.of(context)
                         //     .popUntil((route) => route.isFirst),
                         child: CachedNetworkImage(
-                          imageUrl: widget.networkData!.logoUrl ??
+                          imageUrl:
                               widget.networkData!.logUrl!,
                           height: 40,
                           width: 40,
@@ -239,8 +239,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         CircleAvatar(
                                             radius: 15,
                                             child: CachedNetworkImage(
-                                              imageUrl: widget
-                                                      .networkData!.logoUrl ??
+                                              imageUrl:
                                                   widget.networkData!.logUrl!,
                                               height: 40,
                                               width: 40,

@@ -140,7 +140,6 @@ class _LandingPageState extends State<LandingPage> {
                             children: [
                               ClipOval(
                                   child: Image.network(
-                                foundNetwork.value[index].logoUrl ??
                                     foundNetwork.value[index].logUrl!,
                                 fit: BoxFit.fill,
                                 height: 20,
@@ -262,7 +261,12 @@ class _NetworkCardState extends State<NetworkCard> {
   var curr_supply;
 
   getAPR() async {
-    supply = (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));
+    if(widget.networkList.uDenom=='uatom'){
+      supply = (await _dashboardController.fetch2PathData(widget.networkList.height!,'amount', 'amount'));
+    }
+    else{
+      supply = (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));}
+
     bondedToken = await _dashboardController.fetchdata(
     widget.networkList.bondedTokens!, 'bonded_tokens');
     if(widget.networkList.uDenom!='uosmo') {
@@ -330,7 +334,7 @@ class _NetworkCardState extends State<NetworkCard> {
                         child: Padding(
                           padding: widget.networkList.id=='chihuahua'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
                           child: CachedNetworkImage(
-                            imageUrl: widget.networkList.logoUrl ??
+                            imageUrl:
                                 widget.networkList.logUrl!,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),

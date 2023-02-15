@@ -1,21 +1,49 @@
 // To parse this JSON data, do
 //
-//     final networkList = networkListFromJson(jsonString);
+//     final staticJson = staticJsonFromJson(jsonString);
 
 import 'dart:convert';
-List<NetworkList?>? networkListFromJson(String str) => json.decode(str) == null ? [] : List<NetworkList?>.from(json.decode(str)!.map((x) => NetworkList.fromJson(x)));
-String networkListToJson(List<NetworkList?>? data) => json.encode(data == null ? [] : List<dynamic>.from(data.map((x) => x!.toJson())));
+
+StaticJson staticJsonFromJson(String str) => StaticJson.fromJson(json.decode(str));
+
+String staticJsonToJson(StaticJson data) => json.encode(data.toJson());
+
+class StaticJson {
+  StaticJson({
+    this.landingPageBanner,
+    this.networkList,
+  });
+
+  List<String>? landingPageBanner;
+  List<NetworkList>? networkList;
+
+  factory StaticJson.fromJson(Map<String, dynamic> json) => StaticJson(
+    landingPageBanner: json["landingPage_banner"] == null ? [] : List<String>.from(json["landingPage_banner"]!.map((x) => x)),
+    networkList: json["networkList"] == null ? [] : List<NetworkList>.from(json["networkList"]!.map((x) => NetworkList.fromJson(x))),
+  );
+
+  Map<String, dynamic> toJson() => {
+    "landingPage_banner": landingPageBanner == null ? [] : List<dynamic>.from(landingPageBanner!.map((x) => x)),
+    "networkList": networkList == null ? [] : List<dynamic>.from(networkList!.map((x) => x.toJson())),
+  };
+}
+
 class NetworkList {
   NetworkList({
     this.id,
     this.isActive,
     this.name,
-    this.logoUrl,
+    this.uDenom,
+    this.logUrl,
+    this.dashboardPageUrl,
+    this.validatorsPageUrl,
+    this.blocksPageUrl,
+    this.proposalPageUrl,
     this.denom,
     this.apy,
     this.commission,
-    this.price,
     this.percChangeInPrice,
+    this.price,
     this.blocktime,
     this.marketCap,
     this.the24HrVol,
@@ -27,46 +55,47 @@ class NetworkList {
     this.inflation,
     this.stakingApr,
     this.validatorsUrl,
+    this.valStatus,
     this.blocksUrl,
     this.transactionsUrl,
     this.proposalsUrl,
-    this.ibcUrl,
-    this.assetsUrl,
     this.contractsUrl,
     this.mintingParamssUrl,
     this.stakingParamsUrl,
     this.govParamsUrl,
     this.distParamsUrl,
     this.slashingParamsUrl,
-    this.logUrl,
     this.txTimestamp,
+    this.blockSearch,
+    this.blockSearchFromProposer,
+    this.transactionSearch,
+    this.transactionSearchFromHt,
+    this.validatorSearch,
     this.blocksMoniker,
     this.proposalTally,
     this.proposalVote,
     this.proposalDeposit,
     this.contractDetailsBalances,
-    this.contractTxs,
-    this.paramssUrl,
-    this.blockSearchUrl,
-    this.txSearchUrl,
-    this.uDenom,
-    this.valStatus,
     this.txFromAddress,
     this.delegationFromAddress,
     this.rewardFromAddress,
-    this.transactionSearchFromHt
+    this.contractTxs,
   });
 
   String? id;
   String? isActive;
   String? name;
-  String? logoUrl;
-  String? denom;
   String? uDenom;
+  String? logUrl;
+  List<String>? dashboardPageUrl;
+  List<String>? validatorsPageUrl;
+  List<String>? blocksPageUrl;
+  List<String>? proposalPageUrl;
+  String? denom;
   String? apy;
   String? commission;
-  String? price;
   String? percChangeInPrice;
+  String? price;
   String? blocktime;
   String? marketCap;
   String? the24HrVol;
@@ -78,44 +107,47 @@ class NetworkList {
   String? inflation;
   String? stakingApr;
   String? validatorsUrl;
+  String? valStatus;
   String? blocksUrl;
   String? transactionsUrl;
-  String? blockSearchUrl;
-  String? txSearchUrl;
   String? proposalsUrl;
-  String? ibcUrl;
-  String? assetsUrl;
   String? contractsUrl;
   String? mintingParamssUrl;
   String? stakingParamsUrl;
   String? govParamsUrl;
   String? distParamsUrl;
   String? slashingParamsUrl;
-  String? logUrl;
   String? txTimestamp;
+  String? blockSearch;
+  String? blockSearchFromProposer;
+  String? transactionSearch;
+  String? transactionSearchFromHt;
+  String? validatorSearch;
   String? blocksMoniker;
   String? proposalTally;
   String? proposalVote;
   String? proposalDeposit;
   String? contractDetailsBalances;
-  String? contractTxs;
-  String? paramssUrl;
-  String? valStatus;
   String? txFromAddress;
   String? delegationFromAddress;
   String? rewardFromAddress;
-  String? transactionSearchFromHt;
+  String? contractTxs;
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
     isActive: json["isActive"],
     name: json["name"],
-    logoUrl: json["logoUrl"],
+    uDenom: json["uDenom"],
+    logUrl: json["logUrl"],
+    dashboardPageUrl: json["dashboard_page_Url"] == null ? [] : List<String>.from(json["dashboard_page_Url"]!.map((x) => x)),
+    validatorsPageUrl: json["validators_page_Url"] == null ? [] : List<String>.from(json["validators_page_Url"]!.map((x) => x)),
+    blocksPageUrl: json["blocks_page_Url"] == null ? [] : List<String>.from(json["blocks_page_Url"]!.map((x) => x)),
+    proposalPageUrl: json["proposal_page_Url"] == null ? [] : List<String>.from(json["proposal_page_Url"]!.map((x) => x)),
     denom: json["denom"],
     apy: json["apy"],
     commission: json["commission"],
-    price: json["price"],
     percChangeInPrice: json["perc change in price"],
+    price: json["price"],
     blocktime: json["blocktime"],
     marketCap: json["market cap"],
     the24HrVol: json["24 hr vol"],
@@ -127,46 +159,48 @@ class NetworkList {
     inflation: json["inflation"],
     stakingApr: json["staking apr"],
     validatorsUrl: json["validatorsUrl"],
+    valStatus: json["valStatus"],
     blocksUrl: json["blocksURL"],
     transactionsUrl: json["transactionsUrl"],
     proposalsUrl: json["proposalsUrl"],
-    ibcUrl: json["ibcUrl"],
-    assetsUrl: json["assetsUrl"],
     contractsUrl: json["contractsUrl"],
     mintingParamssUrl: json["mintingParamssUrl"],
     stakingParamsUrl: json["stakingParamsUrl"],
     govParamsUrl: json["govParamsUrl"],
     distParamsUrl: json["distParamsUrl"],
     slashingParamsUrl: json["slashingParamsUrl"],
-    logUrl: json["logUrl"],
     txTimestamp: json["txTimestamp"],
+    blockSearch: json["blockSearch"],
+    blockSearchFromProposer: json["blockSearchFromProposer"],
+    transactionSearch: json["transactionSearch"],
+    transactionSearchFromHt: json["transactionSearchFromHt"],
+    validatorSearch: json["validatorSearch"],
     blocksMoniker: json["blocksMoniker"],
     proposalTally: json["proposalTally"],
     proposalVote: json["proposalVote"],
     proposalDeposit: json["proposalDeposit"],
     contractDetailsBalances: json["contractDetailsBalances"],
-    contractTxs: json["contractTxs"],
-    paramssUrl: json["paramssUrl"],
-    blockSearchUrl: json["blockSearch"],
-    txSearchUrl: json["transactionSearch"],
-    uDenom: json["uDenom"],
-    valStatus:json["valStatus"],
     txFromAddress: json["txFromAddress"],
     delegationFromAddress: json["delegationFromAddress"],
     rewardFromAddress: json["rewardFromAddress"],
-    transactionSearchFromHt: json["transactionSearchFromHt"],
+    contractTxs: json["contractTxs"],
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "isActive": isActive,
     "name": name,
-    "logoUrl": logoUrl,
+    "uDenom": uDenom,
+    "logUrl": logUrl,
+    "dashboard_page_Url": dashboardPageUrl == null ? [] : List<dynamic>.from(dashboardPageUrl!.map((x) => x)),
+    "validators_page_Url": validatorsPageUrl == null ? [] : List<dynamic>.from(validatorsPageUrl!.map((x) => x)),
+    "blocks_page_Url": blocksPageUrl == null ? [] : List<dynamic>.from(blocksPageUrl!.map((x) => x)),
+    "proposal_page_Url": proposalPageUrl == null ? [] : List<dynamic>.from(proposalPageUrl!.map((x) => x)),
     "denom": denom,
     "apy": apy,
     "commission": commission,
-    "price": price,
     "perc change in price": percChangeInPrice,
+    "price": price,
     "blocktime": blocktime,
     "market cap": marketCap,
     "24 hr vol": the24HrVol,
@@ -178,82 +212,30 @@ class NetworkList {
     "inflation": inflation,
     "staking apr": stakingApr,
     "validatorsUrl": validatorsUrl,
+    "valStatus": valStatus,
     "blocksURL": blocksUrl,
     "transactionsUrl": transactionsUrl,
     "proposalsUrl": proposalsUrl,
-    "ibcUrl": ibcUrl,
-    "assetsUrl": assetsUrl,
     "contractsUrl": contractsUrl,
     "mintingParamssUrl": mintingParamssUrl,
     "stakingParamsUrl": stakingParamsUrl,
     "govParamsUrl": govParamsUrl,
     "distParamsUrl": distParamsUrl,
     "slashingParamsUrl": slashingParamsUrl,
-    "logUrl": logUrl,
     "txTimestamp": txTimestamp,
+    "blockSearch": blockSearch,
+    "blockSearchFromProposer": blockSearchFromProposer,
+    "transactionSearch": transactionSearch,
+    "transactionSearchFromHt": transactionSearchFromHt,
+    "validatorSearch": validatorSearch,
     "blocksMoniker": blocksMoniker,
     "proposalTally": proposalTally,
     "proposalVote": proposalVote,
     "proposalDeposit": proposalDeposit,
     "contractDetailsBalances": contractDetailsBalances,
-    "contractTxs": contractTxs,
-    "paramssUrl": paramssUrl,
-    "transactionSearch":txSearchUrl,
-    "blockSearch":blockSearchUrl,
-    "uDenom":uDenom,
-    "valStatus":valStatus,
     "txFromAddress": txFromAddress,
     "delegationFromAddress": delegationFromAddress,
     "rewardFromAddress": rewardFromAddress,
-    "transactionSearchFromHt": transactionSearchFromHt,
-  };
-
-
-}
-// To parse this JSON data, do
-//
-//     final supply = supplyFromJson(jsonString);
-
-Supply supplyFromJson(String str) => Supply.fromJson(json.decode(str));
-
-String supplyToJson(Supply data) => json.encode(data.toJson());
-
-class Supply {
-  Supply({
-    this.height,
-    this.result,
-  });
-
-  String? height;
-  Result? result;
-
-  factory Supply.fromJson(Map<String, dynamic> json) => Supply(
-    height: json["height"],
-    result: json["result"] == null ? null : Result.fromJson(json["result"]),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "height": height,
-    "result": result?.toJson(),
-  };
-}
-
-class Result {
-  Result({
-    this.denom,
-     this.amount,
-  });
-
-  String? denom;
-  String? amount;
-
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
-    denom: json["denom"],
-    amount: json["amount"]??'0',
-  );
-
-  Map<String, dynamic> toJson() => {
-    "denom": denom,
-    "amount": amount,
+    "contractTxs": contractTxs,
   };
 }

@@ -61,9 +61,10 @@ class _SearchScreenState extends State<SearchScreen> {
   }
   getData()async{
     loading=true;
+    //for blockheight search
     if(isNumeric(widget.nameController)) {
       final response = await http.get(Uri.parse(
-          '${widget.networkList!.blockSearchUrl}${widget.nameController.toString()}'));
+          '${widget.networkList!.blockSearch}${widget.nameController.toString()}'));
       if (response.statusCode == 200) {
         blockDetails =
         List<BlockModel>.from(json.decode(response.body).map((x) => BlockModel.fromJson(x)));
@@ -78,9 +79,10 @@ class _SearchScreenState extends State<SearchScreen> {
       print(response.statusCode);
       }
     }
+    //for txHash Search
     else if(widget.nameController.length==64){
       final response = await http.get(Uri.parse(
-          '${widget.networkList!.txSearchUrl}${widget.nameController.toString()}'
+          '${widget.networkList!.transactionSearch}${widget.nameController.toString()}'
       )
       );
       if (response.statusCode == 200) {

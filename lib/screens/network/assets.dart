@@ -27,7 +27,7 @@ class _AssetsState extends State<Assets> {
   }
 
   assetsData() async{
-    assets= await _assetsController.fetchAssets(widget.networkData!.assetsUrl!);
+    assets= await _assetsController.fetchAssets('');
     setState(() {
       if (assets!=null){
         isLoaded=true;
@@ -55,7 +55,7 @@ class _AssetsState extends State<Assets> {
                 radius:15,
                 child: InkWell(
                  // onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                    child: Image.network(widget.networkData!.logoUrl??widget.networkData!.logUrl!)),
+                    child: Image.network(widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
         ),
