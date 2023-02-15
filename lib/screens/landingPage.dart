@@ -24,6 +24,7 @@ class _LandingPageState extends State<LandingPage> {
   var flag = false;
   var dash;
   var net;
+  List bannerUrls=[];
   var supply;
 
   @override
@@ -63,10 +64,11 @@ class _LandingPageState extends State<LandingPage> {
       );
     }
     if (result['success'] == true) {
-      net = List.from(result['response'])
+      net = List.from(result['response']['networkList'])
           .map((e) => NetworkList.fromJson(e))
           .toList()
           .obs;
+      bannerUrls=result['response']['landingPage_banner'];
       dash = await dashboardController.fetchDash();
       setState(() {
         if (dash != null) {
@@ -93,6 +95,7 @@ class _LandingPageState extends State<LandingPage> {
       }
       );
     }
+
   }
   TextEditingController nameController = TextEditingController();
   String fullName = '';

@@ -1,8 +1,7 @@
 {
   "landingPage_banner":
-  [ "",
-    "",
-    ""
+  [ "https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+    "https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png"
   ],
   "networkList":[
     {
