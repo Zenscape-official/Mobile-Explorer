@@ -1,7 +1,15 @@
 {
   "landingPage_banner":
-  [ "https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
-    "https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png"
+  [
+    {
+      "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+      "URL_for_website": ""
+    },
+    {
+      "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+      "URL_for_website": ""
+    }
+
   ],
   "networkList":[
     {
@@ -10,10 +18,50 @@
       "name" : "Comdex",
       "uDenom": "ucmdx",
       "logUrl":"https://dfcrpylw0p0vw.cloudfront.net/images/cmdx_logo_1.png",
-      "dashboard_page_Url":["","",""],
-      "validators_page_Url":["","",""],
-      "blocks_page_Url":["","",""],
-      "proposal_page_Url":["","",""],
+      "dashboard_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "validators_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "blocks_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "proposal_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
       "denom":"CMDX",
       "apy":"0",
       "commission":"0",
@@ -61,10 +109,50 @@
       "name" : "Cosmos",
       "uDenom": "uatom",
       "logUrl":"https://dfcrpylw0p0vw.cloudfront.net/images/zenscape_logos/cosmos-atom-logo.png",
-      "dashboard_page_Url":["","",""],
-      "validators_page_Url":["","",""],
-      "blocks_page_Url":["","",""],
-      "proposal_page_Url":["","",""],
+      "dashboard_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "validators_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "blocks_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "proposal_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
       "denom":"ATOM",
       "apy":"0",
       "commission":"0",
@@ -111,10 +199,50 @@
       "isActive": "1",
       "name" : "Osmosis",
       "logUrl":"https://zenscape-storage.s3.ap-south-1.amazonaws.com/logos/OSMO.png",
-      "dashboard_page_Url":["","",""],
-      "validators_page_Url":["","",""],
-      "blocks_page_Url":["","",""],
-      "proposal_page_Url":["","",""],
+      "dashboard_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "validators_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "blocks_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
+      "proposal_page_Url":[
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/banner_zenscape.png",
+          "URL_for_website": ""
+        },
+        {
+          "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
+          "URL_for_website": ""
+        }
+
+      ],
       "denom":"OSMO",
       "uDenom": "uosmo",
       "apy":"160%",

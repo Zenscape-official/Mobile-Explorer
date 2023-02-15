@@ -14,17 +14,37 @@ class StaticJson {
     this.networkList,
   });
 
-  List<String>? landingPageBanner;
+  List<LandingPageBanner>? landingPageBanner;
   List<NetworkList>? networkList;
 
   factory StaticJson.fromJson(Map<String, dynamic> json) => StaticJson(
-    landingPageBanner: json["landingPage_banner"] == null ? [] : List<String>.from(json["landingPage_banner"]!.map((x) => x)),
+    landingPageBanner: json["landingPage_banner"] == null ? [] : List<LandingPageBanner>.from(json["landingPage_banner"]!.map((x) => LandingPageBanner.fromJson(x))),
     networkList: json["networkList"] == null ? [] : List<NetworkList>.from(json["networkList"]!.map((x) => NetworkList.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "landingPage_banner": landingPageBanner == null ? [] : List<dynamic>.from(landingPageBanner!.map((x) => x)),
+    "landingPage_banner": landingPageBanner == null ? [] : List<dynamic>.from(landingPageBanner!.map((x) => x.toJson())),
     "networkList": networkList == null ? [] : List<dynamic>.from(networkList!.map((x) => x.toJson())),
+  };
+}
+
+class LandingPageBanner {
+  LandingPageBanner({
+    this.urlForBanner,
+    this.urlForWebsite,
+  });
+
+  String? urlForBanner;
+  String? urlForWebsite;
+
+  factory LandingPageBanner.fromJson(Map<String, dynamic> json) => LandingPageBanner(
+    urlForBanner: json["URL_for_banner"],
+    urlForWebsite: json["URL_for_website"],
+  );
+
+  Map<String, dynamic> toJson() => {
+    "URL_for_banner": urlForBanner,
+    "URL_for_website": urlForWebsite,
   };
 }
 
@@ -87,10 +107,10 @@ class NetworkList {
   String? name;
   String? uDenom;
   String? logUrl;
-  List<String>? dashboardPageUrl;
-  List<String>? validatorsPageUrl;
-  List<String>? blocksPageUrl;
-  List<String>? proposalPageUrl;
+  List<LandingPageBanner>? dashboardPageUrl;
+  List<LandingPageBanner>? validatorsPageUrl;
+  List<LandingPageBanner>? blocksPageUrl;
+  List<LandingPageBanner>? proposalPageUrl;
   String? denom;
   String? apy;
   String? commission;
@@ -139,10 +159,10 @@ class NetworkList {
     name: json["name"],
     uDenom: json["uDenom"],
     logUrl: json["logUrl"],
-    dashboardPageUrl: json["dashboard_page_Url"] == null ? [] : List<String>.from(json["dashboard_page_Url"]!.map((x) => x)),
-    validatorsPageUrl: json["validators_page_Url"] == null ? [] : List<String>.from(json["validators_page_Url"]!.map((x) => x)),
-    blocksPageUrl: json["blocks_page_Url"] == null ? [] : List<String>.from(json["blocks_page_Url"]!.map((x) => x)),
-    proposalPageUrl: json["proposal_page_Url"] == null ? [] : List<String>.from(json["proposal_page_Url"]!.map((x) => x)),
+    dashboardPageUrl: json["dashboard_page_Url"] == null ? [] : List<LandingPageBanner>.from(json["dashboard_page_Url"]!.map((x) => LandingPageBanner.fromJson(x))),
+    validatorsPageUrl: json["validators_page_Url"] == null ? [] : List<LandingPageBanner>.from(json["validators_page_Url"]!.map((x) => LandingPageBanner.fromJson(x))),
+    blocksPageUrl: json["blocks_page_Url"] == null ? [] : List<LandingPageBanner>.from(json["blocks_page_Url"]!.map((x) => LandingPageBanner.fromJson(x))),
+    proposalPageUrl: json["proposal_page_Url"] == null ? [] : List<LandingPageBanner>.from(json["proposal_page_Url"]!.map((x) => LandingPageBanner.fromJson(x))),
     denom: json["denom"],
     apy: json["apy"],
     commission: json["commission"],
@@ -192,10 +212,10 @@ class NetworkList {
     "name": name,
     "uDenom": uDenom,
     "logUrl": logUrl,
-    "dashboard_page_Url": dashboardPageUrl == null ? [] : List<dynamic>.from(dashboardPageUrl!.map((x) => x)),
-    "validators_page_Url": validatorsPageUrl == null ? [] : List<dynamic>.from(validatorsPageUrl!.map((x) => x)),
-    "blocks_page_Url": blocksPageUrl == null ? [] : List<dynamic>.from(blocksPageUrl!.map((x) => x)),
-    "proposal_page_Url": proposalPageUrl == null ? [] : List<dynamic>.from(proposalPageUrl!.map((x) => x)),
+    "dashboard_page_Url": dashboardPageUrl == null ? [] : List<dynamic>.from(dashboardPageUrl!.map((x) => x.toJson())),
+    "validators_page_Url": validatorsPageUrl == null ? [] : List<dynamic>.from(validatorsPageUrl!.map((x) => x.toJson())),
+    "blocks_page_Url": blocksPageUrl == null ? [] : List<dynamic>.from(blocksPageUrl!.map((x) => x.toJson())),
+    "proposal_page_Url": proposalPageUrl == null ? [] : List<dynamic>.from(proposalPageUrl!.map((x) => x.toJson())),
     "denom": denom,
     "apy": apy,
     "commission": commission,

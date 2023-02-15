@@ -16,6 +16,7 @@ class LandingPage extends StatefulWidget {
   @override
   State<LandingPage> createState() => _LandingPageState();
 }
+
 class _LandingPageState extends State<LandingPage> {
   Rx<List<NetworkList>> foundNetwork = Rx<List<NetworkList>>([]);
   final NetworkController networkController = Get.put(NetworkController());
@@ -24,7 +25,7 @@ class _LandingPageState extends State<LandingPage> {
   var flag = false;
   var dash;
   var net;
-  List bannerUrls=[];
+  List bannerUrls = [];
   var supply;
 
   @override
@@ -32,6 +33,7 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
     netData();
   }
+
   final svgPath = [
     'assets/svgfiles/ZENSCAPE_BANNER_APP.svg',
     'assets/svgfiles/BANNER_2.svg'
@@ -68,20 +70,19 @@ class _LandingPageState extends State<LandingPage> {
           .map((e) => NetworkList.fromJson(e))
           .toList()
           .obs;
-      bannerUrls=result['response']['landingPage_banner'];
+      bannerUrls = result['response']['landingPage_banner'];
       dash = await dashboardController.fetchDash();
       setState(() {
         if (dash != null) {
-          for(int i = 0; i < net.length; i++){
+          for (int i = 0; i < net.length; i++) {
             for (int j = 0; j < DashboardController.dashboardList.length; j++) {
               if (net[i].id == DashboardController.dashboardList[j].id) {
                 net[i].price = DashboardController.dashboardList[j].currentPrice
                     .toString();
                 net[i].marketCap =
                     DashboardController.dashboardList[j].marketCap.toString();
-                net[i].the24HrVol = DashboardController
-                    .dashboardList[j].totalVolume
-                    .toString();
+                net[i].the24HrVol =
+                    DashboardController.dashboardList[j].totalVolume.toString();
                 net[i].percChangeInPrice = DashboardController
                     .dashboardList[j].priceChangePercentage24H
                     .toString();
@@ -92,11 +93,10 @@ class _LandingPageState extends State<LandingPage> {
         } else {
           flag = false;
         }
-      }
-      );
+      });
     }
-
   }
+
   TextEditingController nameController = TextEditingController();
   String fullName = '';
   List<String>? image = [];
@@ -143,7 +143,7 @@ class _LandingPageState extends State<LandingPage> {
                             children: [
                               ClipOval(
                                   child: Image.network(
-                                    foundNetwork.value[index].logUrl!,
+                                foundNetwork.value[index].logUrl!,
                                 fit: BoxFit.fill,
                                 height: 20,
                                 width: 20,
@@ -168,7 +168,7 @@ class _LandingPageState extends State<LandingPage> {
                     ),
               Column(
                 children: <Widget>[
-                  CarouselSlider.builder(
+                 bannerUrls.isNotEmpty? CarouselSlider.builder(
                       options: CarouselOptions(
                           viewportFraction: .9,
                           autoPlay: true,
@@ -176,50 +176,52 @@ class _LandingPageState extends State<LandingPage> {
                           enableInfiniteScroll: false),
                       itemCount: 2,
                       itemBuilder: (context, index, realIndex) {
-                        final pngImage=pngPath[index];
-                        return
-                          buildPngPicture(pngImage,index);
-
-                      }),
+                        final pngImage = bannerUrls[index];
+                        return buildPngPicture(pngImage, index);
+                      }):Container(),
                 ],
               ),
               flag
-                  ?Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-
-                    Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: StaggeredGridView.countBuilder(
-                                physics: const NeverScrollableScrollPhysics(),
-                                scrollDirection: Axis.vertical,
-                                shrinkWrap: true,
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 4,
-                                crossAxisSpacing: 2,
-                                itemCount: net.length,
-                                itemBuilder: (context, index) {
-                                  return NetworkCard(net[index]);
-                                },
-                                staggeredTileBuilder: (index) =>
-                                    const StaggeredTile.fit(1)),
-                          ),
-                ],
-              ): Column(
-                children: const [
-                  SizedBox(
-                    height: 80,
-                  ),
-                  Center(child: CircularProgressIndicator()),
-                ],
-              ),
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: StaggeredGridView.countBuilder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              scrollDirection: Axis.vertical,
+                              shrinkWrap: true,
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 4,
+                              crossAxisSpacing: 2,
+                              itemCount: net.length,
+                              itemBuilder: (context, index) {
+                                return NetworkCard(net[index]);
+                              },
+                              staggeredTileBuilder: (index) =>
+                                  const StaggeredTile.fit(1)),
+                        ),
+                      ],
+                    )
+                  : Column(
+                      children: const [
+                        SizedBox(
+                          height: 80,
+                        ),
+                        Center(child: CircularProgressIndicator()),
+                      ],
+                    ),
             ],
           ),
         ),
       ),
     );
   }
-  Widget buildSvgPicture(String urlImage, int index,) {
+
+  Widget buildSvgPicture(
+    String urlImage,
+    int index,
+  ) {
     return SvgPicture.asset(
       urlImage,
       height: 200,
@@ -227,6 +229,7 @@ class _LandingPageState extends State<LandingPage> {
       //allowDrawingOutsideViewBox: false,
     );
   }
+
   Widget buildPngPicture(String urlImage, int index) {
     return InkWell(
       //onTap:()=>OnTap,
@@ -239,6 +242,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 }
+
 class NetworkCard extends StatefulWidget {
   final NetworkList networkList;
   const NetworkCard(this.networkList);
@@ -247,62 +251,73 @@ class NetworkCard extends StatefulWidget {
 }
 
 class _NetworkCardState extends State<NetworkCard> {
-  DashboardController _dashboardController=Get.put(DashboardController());
-  NetworkController networkController =Get.put(NetworkController());
+  DashboardController _dashboardController = Get.put(DashboardController());
+  NetworkController networkController = Get.put(NetworkController());
   void initstate() {
     super.initState();
-      getAPR();
+    getAPR();
   }
+
   double APR = 1;
   String image = '';
   String? supply;
   var bondedToken;
-  var inflation='0';
+  var inflation = '0';
   var bankTotal;
-  bool APRLoaded=false;
+  bool APRLoaded = false;
   var epoch_provision;
   var curr_supply;
 
   getAPR() async {
-    if(widget.networkList.uDenom=='uatom'){
-      supply = (await _dashboardController.fetch2PathData(widget.networkList.height!,'amount', 'amount'));
+    if (widget.networkList.uDenom == 'uatom') {
+      supply = (await _dashboardController.fetch2PathData(
+          widget.networkList.height!, 'amount', 'amount'));
+    } else {
+      supply = (await _dashboardController.fetch2PathData(
+          widget.networkList.height!, 'result', 'amount'));
     }
-    else{
-      supply = (await _dashboardController.fetch2PathData(widget.networkList.height!, 'result', 'amount'));}
 
     bondedToken = await _dashboardController.fetchdata(
-    widget.networkList.bondedTokens!, 'bonded_tokens');
-    if(widget.networkList.uDenom!='uosmo') {
+        widget.networkList.bondedTokens!, 'bonded_tokens');
+    if (widget.networkList.uDenom != 'uosmo') {
       inflation = (await _dashboardController.fetchdata(
           widget.networkList.inflation!, 'value'));
-    }
-    else{
-      epoch_provision=await _dashboardController.fetchSingleData('https://lcd-osmosis.whispernode.com/osmosis/mint/v1beta1/epoch_provisions', 'epoch_provisions');
-      curr_supply=await _dashboardController.fetchSingleData('https://api-osmosis.imperator.co/supply/v1/osmo', 'amount');
-      inflation=(((double.parse(epoch_provision) * 365 + double.parse(curr_supply))/double.parse(curr_supply))/1000000).toString();
+    } else {
+      epoch_provision = await _dashboardController.fetchSingleData(
+          'https://lcd-osmosis.whispernode.com/osmosis/mint/v1beta1/epoch_provisions',
+          'epoch_provisions');
+      curr_supply = await _dashboardController.fetchSingleData(
+          'https://api-osmosis.imperator.co/supply/v1/osmo', 'amount');
+      inflation =
+          (((double.parse(epoch_provision) * 365 + double.parse(curr_supply)) /
+                      double.parse(curr_supply)) /
+                  1000000)
+              .toString();
     }
 
-    if(widget.networkList.uDenom=='uosmo') {
-      APR=double.parse(await _dashboardController.fetchOsmoAPR('https://api-osmosis.imperator.co/apr/v2/staking'));
+    if (widget.networkList.uDenom == 'uosmo') {
+      APR = double.parse(await _dashboardController
+          .fetchOsmoAPR('https://api-osmosis.imperator.co/apr/v2/staking'));
+    } else {
+      if (supply != null) {
+        setState(() {
+          APR = ((double.parse(inflation) * double.parse(supply ?? '0')) /
+                  double.parse(bondedToken)) *
+              100;
+        });
+      }
     }
-    else{
-      if(supply!=null){
-      setState(() {
-        APR = ((double.parse(inflation) * double.parse(supply??'0')) /
-            double.parse(bondedToken)) *
-            100;
-      });
-    }}
 
-    if(APR!=1){
+    if (APR != 1) {
       setState(() {
-        APRLoaded=true;
+        APRLoaded = true;
       });
     }
   }
+
   @override
   Widget build(BuildContext context) {
-        if(widget.networkList.isActive=='1'){
+    if (widget.networkList.isActive == '1') {
       getAPR();
     }
     return InkWell(
@@ -310,10 +325,10 @@ class _NetworkCardState extends State<NetworkCard> {
         Navigator.push(
             context,
             CupertinoPageRoute(
-                builder: (context) =>
-                    NetworkDashBoard(networkData: widget.networkList,APR: APR,)
-            )
-        )
+                builder: (context) => NetworkDashBoard(
+                      networkData: widget.networkList,
+                      APR: APR,
+                    )))
       },
       child: Container(
         width: MediaQuery.of(context).size.width / 2,
@@ -331,14 +346,15 @@ class _NetworkCardState extends State<NetworkCard> {
                     padding: const EdgeInsets.fromLTRB(0, 5, 15, 5),
                     child: Container(
                       color: Colors.transparent,
-                      height:40,
-                      width:40,
+                      height: 40,
+                      width: 40,
                       child: ClipOval(
                         child: Padding(
-                          padding: widget.networkList.id=='chihuahua'? EdgeInsets.all(4.0):EdgeInsets.all(0.0),
+                          padding: widget.networkList.id == 'chihuahua'
+                              ? EdgeInsets.all(4.0)
+                              : EdgeInsets.all(0.0),
                           child: CachedNetworkImage(
-                            imageUrl:
-                                widget.networkList.logUrl!,
+                            imageUrl: widget.networkList.logUrl!,
                             placeholder: (context, url) =>
                                 CircularProgressIndicator(),
                             errorWidget: (context, url, error) =>
@@ -353,7 +369,9 @@ class _NetworkCardState extends State<NetworkCard> {
                     children: [
                       Text(widget.networkList.denom.toString(),
                           style: kMediumBoldTextStyle),
-                     Container(child: Text(widget.networkList.name.toString(), style: kSmallTextStyle))
+                      Container(
+                          child: Text(widget.networkList.name.toString(),
+                              style: kSmallTextStyle))
                     ],
                   ),
                 ],
@@ -364,45 +382,49 @@ class _NetworkCardState extends State<NetworkCard> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    widget.networkList.isActive!='1'? Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
-                      child: Row(
-                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('APR', style: kExtraSmallTextStyle),
-                          const SizedBox(height: 2),
-                          Text(
-                              '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
-                              , style: kLandingPageBoldTextStyle),
-                        ],
-                      ),
-                    ):
+                    widget.networkList.isActive != '1'
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0.0, vertical: 2.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('APR', style: kExtraSmallTextStyle),
+                                const SizedBox(height: 2),
+                                Text(
+                                    '${truncateToDecimalPlaces(APR, 2).obs.toString()}%',
+                                    style: kLandingPageBoldTextStyle),
+                              ],
+                            ),
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0.0, vertical: 2.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text('APR', style: kExtraSmallTextStyle),
+                                const SizedBox(height: 2),
+                                APRLoaded
+                                    ? Text(
+                                        '${truncateToDecimalPlaces(APR, 2).obs.toString()}%',
+                                        style: kLandingPageBoldTextStyle)
+                                    : SizedBox(
+                                        height: 15,
+                                        width: 15,
+                                        child: Container()),
+                              ],
+                            ),
+                          ),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 0.0, vertical: 2.0),
                       child: Row(
-                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text('APR', style: kExtraSmallTextStyle),
-                          const SizedBox(height: 2),
-                       APRLoaded? Text(
-                              '${truncateToDecimalPlaces(APR, 2).obs.toString()}%'
-                           , style: kLandingPageBoldTextStyle)
-                            :SizedBox(
-                             height: 15,
-                             width: 15,
-                             child: Container()),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 0.0,vertical: 2.0),
-                      child: Row(
-                        mainAxisAlignment:MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text('Price', style: kExtraSmallTextStyle),
                           const SizedBox(height: 2),
-                          Text(
-                              '\$${widget.networkList.price!}',
+                          Text('\$${widget.networkList.price!}',
                               style: kLandingPageBoldTextStyle),
                         ],
                       ),
