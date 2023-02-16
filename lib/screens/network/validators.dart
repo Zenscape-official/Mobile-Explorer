@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -42,6 +43,7 @@ class _ValidatorsState extends State<Validators> {
   int activeValSelected=0;
   var totalVoting=1;
   int pageIndex=1;
+  List<BannerObject> banner=[];
 
   @override
   void initState() {
@@ -50,6 +52,7 @@ class _ValidatorsState extends State<Validators> {
     navController.updatePage(2);
   }
   void valData() async {
+    banner=widget.networkList.blocksPageUrl!;
     validators =
         await _validatorController.fetchVal(widget.networkList.validatorsUrl!,widget.networkList.valStatus!);
     if(widget.networkList.uDenom=='uatom')
@@ -135,7 +138,12 @@ class _ValidatorsState extends State<Validators> {
           ),
         ),
         body: Column(children: [
-          SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkList,),
+          SearchBar
+            (
+              nameController:nameController,
+              hintText: 'Enter Block Height,Tx hash, Address..',
+              networkList: widget.networkList
+          ),
 
           Padding(
             padding: const EdgeInsets.all(12.0),
@@ -171,6 +179,22 @@ class _ValidatorsState extends State<Validators> {
               ],
             ),
           ),
+          // banner.isNotEmpty? CarouselSlider.builder(
+          //     options: CarouselOptions(
+          //         viewportFraction: .9,
+          //         autoPlay: true,
+          //         enlargeCenterPage: true,
+          //         enableInfiniteScroll: false),
+          //     itemCount: 2,
+          //     itemBuilder: (context, index, realIndex) {
+          //       final pngImage = banner[index].urlForBanner!;
+          //       return buildPngPicture(
+          //           pngImage,
+          //           index,
+          //           banner[index].urlForWebsite!,
+          //           context,
+          //           160);
+          //     }):Container(),
           isLoaded?
           GetBuilder<ValToggleController>(
 
@@ -261,6 +285,22 @@ class _ValidatorsState extends State<Validators> {
               ],
             ),
           ),
+          banner.isNotEmpty? CarouselSlider.builder(
+              options: CarouselOptions(
+                  viewportFraction: .9,
+                  autoPlay: true,
+                  enlargeCenterPage: true,
+                  enableInfiniteScroll: false),
+              itemCount: 2,
+              itemBuilder: (context, index, realIndex) {
+                final pngImage = banner[index].urlForBanner!;
+                return buildPngPicture(
+                    pngImage,
+                    index,
+                    banner[index].urlForWebsite!,
+                    context,
+                    160);
+              }):Container(),
           isLoaded?
           GetBuilder<ValToggleController>(
               builder: (valController) {
@@ -535,8 +575,7 @@ class AtomValidatorContainer extends StatelessWidget {
                           children: [
                             Text(
                               'Commission',
-                              style: kSmallTextStyle,
-                            ),
+                              style: kSmallTextStyle),
                             Text(
                               '${truncateToDecimalPlaces(double.parse(validatorModel!.commission!.commissionRates!.rate!)*100,2).toString()}%',
                               style: kSmallBoldTextStyle,

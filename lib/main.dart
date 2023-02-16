@@ -89,7 +89,7 @@ class _MainAppState extends State<MainApp> {
   List<Widget> _buildScreens(){
     return [
       LandingPage(),
-      Webview()
+      Webview(Url: 'https://zenscape.one/networks',)
     ];
   }
   List<PersistentBottomNavBarItem> _navBarItems(){

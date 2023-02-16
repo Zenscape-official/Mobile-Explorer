@@ -1,9 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:get/get.dart';
 import '../Constants/constants.dart';
-import 'package:simple_rich_text/simple_rich_text.dart';
+import '../screens/explorer.dart';
 timeDifferenceFunction(timeDifference){
   var finalTimeDiff= DateTime.now().toLocal()
       .difference(DateTime.parse(timeDifference).toLocal())
@@ -82,15 +81,11 @@ String removeFirstChar(String str) {
 class TextWithCopyIcon extends StatelessWidget {
   const TextWithCopyIcon({
     Key? key,
-
     required this.copyTextValue,
     required this.copyTextName
   }) : super(key: key);
-
-
   final String copyTextValue;
   final String copyTextName;
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -122,4 +117,13 @@ class TextWithCopyIcon extends StatelessWidget {
 String formatString(String str) {
   str = str.replaceAll("**", "*");
   return str;
+}
+Widget buildPngPicture(String urlImage, int index,String urlWebsite,context,double height) {
+  return InkWell(
+    onTap:(){Get.to(Webview(Url:urlWebsite));},
+    child: Image.network(
+      urlImage,
+      width: MediaQuery.of(context).size.width/1.1,
+    ),
+  );
 }

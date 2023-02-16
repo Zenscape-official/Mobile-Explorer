@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/screens/network/proposalDetails.dart';
 import '../../backend_files/proposalsModel.dart';
+import '../../constants/functions.dart';
 import '../../controller/networklistController.dart';
 import '../../controller/proposalsFunc.dart';
 import '../../widgets/navigationDrawerWidget.dart';
@@ -24,6 +26,7 @@ class _ProposalsState extends State<Proposals> {
   var prop;
   int pageIndex=3;
   List<ProposalsModel> proposals=[];
+  List<BannerObject> banner=[];
 
   @override
   void initState() {
@@ -38,6 +41,7 @@ class _ProposalsState extends State<Proposals> {
   }
 
   getData() async{
+    banner=widget.networkListProposal!.blocksPageUrl!;
     final result= await networkController.fetchList(widget.networkListProposal!.proposalsUrl!);
    proposals= await productController.fetchProducts(widget.networkListProposal!.proposalsUrl!);
     if (result['success'] == false) {
@@ -107,8 +111,23 @@ class _ProposalsState extends State<Proposals> {
         child: Column(
           children: [
             SearchBar(nameController:nameController,hintText: 'Enter Block Height,Tx hash, Address..',networkList: widget.networkListProposal!,),
-
-           isLoaded?
+            banner.isNotEmpty? CarouselSlider.builder(
+                options: CarouselOptions(
+                    viewportFraction: .9,
+                    autoPlay: true,
+                    enlargeCenterPage: true,
+                    enableInfiniteScroll: false),
+                itemCount: 2,
+                itemBuilder: (context, index, realIndex) {
+                  final pngImage = banner[index].urlForBanner!;
+                  return buildPngPicture(
+                      pngImage,
+                      index,
+                      banner[index].urlForWebsite!,
+                      context,
+                      160);
+                }):Container(),
+                 isLoaded?
            Obx(()=> CupertinoScrollbar(
              child: ListView.builder(
                physics: const NeverScrollableScrollPhysics(),

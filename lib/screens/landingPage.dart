@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/constants/constants.dart';
 import 'package:zenscape_app/controller/dashboardController.dart';
+import '../constants/functions.dart';
 import '../controller/networklistController.dart';
 import 'network/dashboard.dart';
 
@@ -25,7 +26,7 @@ class _LandingPageState extends State<LandingPage> {
   var flag = false;
   var dash;
   var net;
-  List bannerUrls = [];
+  List<BannerObject> bannerUrls = [];
   var supply;
 
   @override
@@ -44,8 +45,7 @@ class _LandingPageState extends State<LandingPage> {
   ];
 
   netData() async {
-    final result = await networkController
-        .fetchList('https://dfcrpylw0p0vw.cloudfront.net/networkList.json');
+    final result = await networkController.fetchList('https://dfcrpylw0p0vw.cloudfront.net/networkList.json');
     if (result['success'] == false) {
       showDialog(
         context: context,
@@ -70,7 +70,7 @@ class _LandingPageState extends State<LandingPage> {
           .map((e) => NetworkList.fromJson(e))
           .toList()
           .obs;
-      bannerUrls = result['response']['landingPage_banner'];
+      bannerUrls = List<BannerObject>.from(result['response']["landingPage_banner"]!.map((x) => BannerObject.fromJson(x)));
       dash = await dashboardController.fetchDash();
       setState(() {
         if (dash != null) {
@@ -176,8 +176,13 @@ class _LandingPageState extends State<LandingPage> {
                           enableInfiniteScroll: false),
                       itemCount: 2,
                       itemBuilder: (context, index, realIndex) {
-                        final pngImage = bannerUrls[index];
-                        return buildPngPicture(pngImage, index);
+                        final pngImage = bannerUrls[index].urlForBanner!;
+                        return buildPngPicture(
+                            pngImage,
+                            index,
+                            bannerUrls[index].urlForWebsite!,
+                            context,
+                            160);
                       }):Container(),
                 ],
               ),
@@ -211,6 +216,22 @@ class _LandingPageState extends State<LandingPage> {
                         Center(child: CircularProgressIndicator()),
                       ],
                     ),
+              bannerUrls.isNotEmpty? CarouselSlider.builder(
+                  options: CarouselOptions(
+                      viewportFraction: .9,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false),
+                  itemCount: 2,
+                  itemBuilder: (context, index, realIndex) {
+                    final pngImage = bannerUrls[index].urlForBanner!;
+                    return buildPngPicture(
+                        pngImage,
+                        index,
+                        bannerUrls[index].urlForWebsite!,
+                        context,
+                        90);
+                  }):Container(),
             ],
           ),
         ),
@@ -230,17 +251,7 @@ class _LandingPageState extends State<LandingPage> {
     );
   }
 
-  Widget buildPngPicture(String urlImage, int index) {
-    return InkWell(
-      //onTap:()=>OnTap,
-      child: Image.network(
-        urlImage,
-        height: 200,
-        width: MediaQuery.of(context).size.width,
-        //allowDrawingOutsideViewBox: false,
-      ),
-    );
-  }
+
 }
 
 class NetworkCard extends StatefulWidget {
@@ -271,7 +282,7 @@ class _NetworkCardState extends State<NetworkCard> {
   getAPR() async {
     if (widget.networkList.uDenom == 'uatom') {
       supply = (await _dashboardController.fetch2PathData(
-          widget.networkList.height!, 'amount', 'amount'));
+          widget.networkList.height!, 'result', 'amount'));
     } else {
       supply = (await _dashboardController.fetch2PathData(
           widget.networkList.height!, 'result', 'amount'));
@@ -300,6 +311,8 @@ class _NetworkCardState extends State<NetworkCard> {
           .fetchOsmoAPR('https://api-osmosis.imperator.co/apr/v2/staking'));
     } else {
       if (supply != null) {
+        if (widget.networkList.uDenom == 'uatom')
+        print(supply);
         setState(() {
           APR = ((double.parse(inflation) * double.parse(supply ?? '0')) /
                   double.parse(bondedToken)) *

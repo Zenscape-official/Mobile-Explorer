@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -67,6 +68,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   var timer;
   var epoch_provision;
   var curr_supply;
+  List<BannerObject> banner=[];
   List<ProposalsModel>? activeProposal;
   List<ProposalsModel> activeProposalsList = [];
   String logoImage = '';
@@ -78,6 +80,8 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
   getData() async {
     result =
         await _blocksController.fetchBlocks(widget.networkData!.blocksUrl!);
+    tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
+     banner=widget.networkData!.dashboardPageUrl!;
     txNum = (await _dashboardController.fetchdata(
         widget.networkData!.transaction!, 'count'));
     blockTime = (await _dashboardController.fetchdata(
@@ -106,7 +110,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
           .toString(),
      '${widget.APR!.toStringAsFixed(2)}%'
     ];
-    tx = await _txController.fetchTx(widget.networkData!.transactionsUrl!);
+
     blockDashList = [
       BlocksController.blockList[BlocksController.blockList.length - 1],
       BlocksController.blockList[BlocksController.blockList.length - 2]
@@ -442,7 +446,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                     Padding(
                       padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
                       child: StaggeredGridView.countBuilder(
-                          padding: EdgeInsets.all(0),
+                          padding: EdgeInsets.zero,
                           physics: const NeverScrollableScrollPhysics(),
                           scrollDirection: Axis.vertical,
                           shrinkWrap: true,
@@ -461,6 +465,22 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                           staggeredTileBuilder: (index) =>
                               const StaggeredTile.fit(1)),
                     ),
+                    banner.isNotEmpty? CarouselSlider.builder(
+                        options: CarouselOptions(
+                            viewportFraction: 1,
+                            autoPlay: true,
+                            enlargeCenterPage: true,
+                            enableInfiniteScroll: false),
+                        itemCount: 2,
+                        itemBuilder: (context, index, realIndex) {
+                          final pngImage = banner[index].urlForBanner!;
+                          return buildPngPicture(
+                              pngImage,
+                              index,
+                              banner[index].urlForWebsite!,
+                              context,
+                              90);
+                        }):Container(),
                     isProposalActive
                         ? Padding(
                             padding: const EdgeInsets.fromLTRB(10, 0, 10, 15),

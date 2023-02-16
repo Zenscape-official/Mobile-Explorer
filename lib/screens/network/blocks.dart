@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
@@ -46,6 +47,7 @@ class _BlocksState extends State<Blocks> {
   int pageIndex=2;
   bool isLoaded=false;
   Timer? timer;
+  List<BannerObject> banner=[];
   @override
   void initState() {
     super.initState();
@@ -60,6 +62,7 @@ class _BlocksState extends State<Blocks> {
     });
   }
   getData() async{
+    banner=widget.networkData!.blocksPageUrl!;
     final result = await networkController.fetchList(widget.networkData!.blocksUrl!);
     if (result ['success'] == false) {
       // show the dialog
@@ -122,7 +125,6 @@ class _BlocksState extends State<Blocks> {
             CircleAvatar(
                 radius:15,
                 child: InkWell(
-                    //onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
                     child: Image.network(widget.networkData!.logUrl??widget.networkData!.logUrl!)),
                 backgroundColor: Colors.transparent),
           ],
@@ -174,6 +176,22 @@ class _BlocksState extends State<Blocks> {
                   ]
                 ),
               ),
+              banner.isNotEmpty? CarouselSlider.builder(
+                  options: CarouselOptions(
+                      viewportFraction: .9,
+                      autoPlay: true,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: false),
+                  itemCount: 2,
+                  itemBuilder: (context, index, realIndex) {
+                    final pngImage = banner[index].urlForBanner!;
+                    return buildPngPicture(
+                        pngImage,
+                        index,
+                        banner[index].urlForWebsite!,
+                        context,
+                        90);
+                  }):Container(),
               isLoaded?
               GetBuilder<ToggleController>(builder: (blockController){
                  return blockController.isBlockSelected==0?

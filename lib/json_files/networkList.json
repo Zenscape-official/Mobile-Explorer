@@ -162,7 +162,7 @@
       "market cap":"0",
       "24 hr vol":"0",
       "voting power":"https://staging-explorer-api.zenscape.one/atom/activeproposalcount",
-      "height": "https://api.cosmos.network/cosmos/bank/v1beta1/supply/uatom",
+      "height": "https://cosmos-rest.zenscape.one/bank/total/uatom",
       "transaction": "https://staging-explorer-api.zenscape.one/atom/transactioncount",
       "bonded tokens":"https://staging-explorer-api.zenscape.one/atom/stakingpool",
       "community pool":"https://staging-explorer-api.zenscape.one/atom/communitypool",

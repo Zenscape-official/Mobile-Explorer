@@ -535,7 +535,7 @@ class _TxDetailsState extends State<TxDetails> {
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(const SnackBar(
                                                     content: Text(
-                                                        ' Lender Copied to your clipboard !')));
+                                                        ' Withdrawer Copied to your clipboard !')));
                                           }),
                                           child: Row(
                                             children: [
@@ -5764,9 +5764,6 @@ class _TxDetailsState extends State<TxDetails> {
                           ],
                         )
                       else if (type == 'Execute Contract')
-                        for (int i = 0;
-                            i < widget.txModel!.messages![0].msgs!.length;
-                            i++)
                           Padding(
                             padding: const EdgeInsets.symmetric(vertical: 8.0),
                             child: Container(
@@ -5780,7 +5777,7 @@ class _TxDetailsState extends State<TxDetails> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: <Widget>[
-                                        Text('Delegate',
+                                        Text('Message',
                                             style: kMediumBoldTextStyle),
                                         const SizedBox(
                                           height: 20,
@@ -5789,56 +5786,25 @@ class _TxDetailsState extends State<TxDetails> {
                                         const SizedBox(
                                           height: 2,
                                         ),
-                                        widget.txModel!.messages!.isNotEmpty
-                                            ? Text(
-                                                getType(widget.txModel!.messages![0].msgs![i].type!.toString()) ??
-                                                    '',
-                                                style: kMediumBoldTextStyle)
-                                            : Text(''),
+                                      Text(type,style:kMediumBoldTextStyle),
                                         const SizedBox(height: 20),
-                                        Text('Amount', style: kSmallTextStyle),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(
-                                            (widget.txModel!.messages![0].msgs![i].amount!.amount ??
-                                                    '') +
-                                                (' ') +
-                                                (widget.txModel!.messages![0].msgs![i].amount!.denom ??
-                                                    ''),
-                                            style: kMediumBoldTextStyle),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text('Validator Address',
+
+
+                                        Text('Sender',
                                             style: kSmallTextStyle),
                                         const SizedBox(
                                           height: 2,
                                         ),
-                                        TextWithCopyIcon(
-                                            copyTextValue: widget
-                                                    .txModel!
-                                                    .messages![0]
-                                                    .msgs![i]
-                                                    .validatorAddress ??
-                                                '',
-                                            copyTextName: 'Validator Address'),
+                                        Text(widget.txModel!.messages![0].sender??'',style:kMediumBoldTextStyle),
                                         const SizedBox(
                                           height: 20,
                                         ),
-                                        Text('Delegator Address',
+                                        Text('Contract',
                                             style: kSmallTextStyle),
                                         const SizedBox(
                                           height: 2,
                                         ),
-                                        TextWithCopyIcon(
-                                            copyTextValue: widget
-                                                    .txModel!
-                                                    .messages![0]
-                                                    .msgs![i]
-                                                    .delegatorAddress ??
-                                                '',
-                                            copyTextName: 'Delegator Address'),
+                                        Text(widget.txModel!.messages![0].contract??'',style:kMediumBoldTextStyle),
                                       ]),
                                 )),
                           )
