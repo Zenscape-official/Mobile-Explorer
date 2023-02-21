@@ -14,7 +14,6 @@ import 'package:http/http.dart' as http;
 class Parameters extends StatefulWidget {
   final NetworkList? networkList;
   const Parameters({Key? key,this.networkList}) : super(key: key);
-
   @override
   State<Parameters> createState() => _ParametersState();
 }
@@ -56,6 +55,7 @@ fetchDataMint(String input) async {
 
   void getData() async {
   final mintResult=await fetchDataMint(widget.networkList!.mintingParamssUrl!);
+  print(mintResult);
   Map<String,dynamic> mintdata= jsonDecode(mintResult)['result'];
   mintdenom = mintdata["mint_denom"];
 

@@ -356,8 +356,11 @@ class _TxDetailsState extends State<TxDetails> {
                                     ),
                                     widget.txModel!.messages!.isNotEmpty
                                         ? Text(
-                                            widget.txModel!.messages![0].amount
-                                                        .amount +
+                                            addComma(widget
+                                                        .txModel!
+                                                        .messages![0]
+                                                        .amount
+                                                        .amount) +
                                                     ' ' +
                                                     widget.txModel!.messages![0]
                                                         .amount.denom ??
@@ -3828,11 +3831,11 @@ class _TxDetailsState extends State<TxDetails> {
                                       height: 2,
                                     ),
                                     widget.txModel!.messages!.isNotEmpty
-                                        ? Text(
-                                            widget.txModel!.messages![0]
-                                                    .address ??
+                                        ? TextWithCopyIcon(
+                                            copyTextValue: widget.txModel!
+                                                    .messages![0].address ??
                                                 '',
-                                            style: kMediumBoldTextStyle)
+                                            copyTextName: 'Address')
                                         : Text(''),
                                     const SizedBox(
                                       height: 20,
@@ -5065,6 +5068,77 @@ class _TxDetailsState extends State<TxDetails> {
                                     ),
                                   ]),
                             ))
+                      else if (type == 'Undelegate')
+                        Container(
+                            margin: const EdgeInsets.only(
+                                right: 10, top: 10, left: 10),
+                            width: MediaQuery.of(context).size.width / 1.1,
+                            decoration: kBoxDecorationWithGradient,
+                            child: Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: <Widget>[
+                                    Text('Message',
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('Type', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    widget.txModel!.messages!.isNotEmpty
+                                        ? Text(
+                                            getType(widget.txModel!.messages![0]
+                                                    .type!) ??
+                                                '',
+                                            style: kMediumBoldTextStyle)
+                                        : Text(''),
+                                    const SizedBox(height: 20),
+                                    Text('Amount', style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    Text(
+                                        addComma(widget.txModel!.messages![0]
+                                                .amount.amount) +
+                                            " " +
+                                            widget.txModel!.messages![0].amount
+                                                .denom,
+                                        style: kMediumBoldTextStyle),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('Delegator Address',
+                                        style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    TextWithCopyIcon(
+                                        copyTextValue: widget.txModel!
+                                            .messages![0].delegatorAddress!,
+                                        copyTextName: 'Delegator Address'),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Text('Validator Address',
+                                        style: kSmallTextStyle),
+                                    const SizedBox(
+                                      height: 2,
+                                    ),
+                                    TextWithCopyIcon(
+                                        copyTextValue: (widget
+                                                .txModel!
+                                                .messages![0]
+                                                .validatorAddress ??
+                                            ''),
+                                        copyTextName: 'Validator Address'),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                  ]),
+                            ))
                       else if (type == 'Update Client')
                         widget.txModel!.messages!.isNotEmpty
                             ? Column(
@@ -5676,7 +5750,11 @@ class _TxDetailsState extends State<TxDetails> {
                                               height: 2,
                                             ),
                                             Text(
-                                                widget.txModel!.messages![1].packet!.destinationChannel ??
+                                                widget
+                                                        .txModel!
+                                                        .messages![1]
+                                                        .packet!
+                                                        .destinationChannel ??
                                                     '',
                                                 style: kMediumBoldTextStyle),
                                             const SizedBox(height: 20),
@@ -5764,50 +5842,54 @@ class _TxDetailsState extends State<TxDetails> {
                           ],
                         )
                       else if (type == 'Execute Contract')
-                          Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0),
-                            child: Container(
-                                margin: const EdgeInsets.only(
-                                    right: 10, top: 10, left: 10),
-                                width: MediaQuery.of(context).size.width / 1.1,
-                                decoration: kBoxDecorationWithGradient,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text('Message',
-                                            style: kMediumBoldTextStyle),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text('Type', style: kSmallTextStyle),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                      Text(type,style:kMediumBoldTextStyle),
-                                        const SizedBox(height: 20),
-
-
-                                        Text('Sender',
-                                            style: kSmallTextStyle),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(widget.txModel!.messages![0].sender??'',style:kMediumBoldTextStyle),
-                                        const SizedBox(
-                                          height: 20,
-                                        ),
-                                        Text('Contract',
-                                            style: kSmallTextStyle),
-                                        const SizedBox(
-                                          height: 2,
-                                        ),
-                                        Text(widget.txModel!.messages![0].contract??'',style:kMediumBoldTextStyle),
-                                      ]),
-                                )),
-                          )
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 8.0),
+                          child: Container(
+                              margin: const EdgeInsets.only(
+                                  right: 10, top: 10, left: 10),
+                              width: MediaQuery.of(context).size.width / 1.1,
+                              decoration: kBoxDecorationWithGradient,
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: <Widget>[
+                                      Text('Message',
+                                          style: kMediumBoldTextStyle),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text('Type', style: kSmallTextStyle),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      Text(type, style: kMediumBoldTextStyle),
+                                      const SizedBox(height: 20),
+                                      Text('Sender', style: kSmallTextStyle),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      TextWithCopyIcon(
+                                          copyTextValue: widget.txModel!
+                                                  .messages![0].sender ??
+                                              '',
+                                          copyTextName: 'Sender'),
+                                      const SizedBox(
+                                        height: 20,
+                                      ),
+                                      Text('Contract', style: kSmallTextStyle),
+                                      const SizedBox(
+                                        height: 2,
+                                      ),
+                                      TextWithCopyIcon(
+                                          copyTextValue: widget.txModel!
+                                                  .messages![0].contract ??
+                                              '',
+                                          copyTextName: 'Contract'),
+                                    ]),
+                              )),
+                        )
                       else if (type == 'IBC Transfer')
                         widget.txModel!.messages!.isNotEmpty
                             ? Container(

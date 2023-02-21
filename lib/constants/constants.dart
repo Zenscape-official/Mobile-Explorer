@@ -369,7 +369,7 @@ getType(String input) {
 
 
     case 'MsgLend':
-      return 'Lend Request';
+      return 'Lend';
 
     case 'MsgWithdraw':
       return 'Withdraw Request';
