@@ -178,7 +178,7 @@
       "stakingParamsUrl":"https://cosmos-rest.zenscape.one/staking/parameters",
       "govParamsUrl":"https://staging-explorer-api.zenscape.one/atom/governance",
       "distParamsUrl":"https://cosmos-rest.zenscape.one/distribution/parameters",
-      "slashingParamsUrl":"https://api.cosmos.network/slashing/parameters",
+      "slashingParamsUrl":"https://cosmos-rest.zenscape.one/slaking/parameters",
       "txTimestamp": "https://cosmos-rpc.zenscape.one/block?height=",
       "blockSearch": "https://staging-explorer-api.zenscape.one/atom/block/",
       "blockSearchFromProposer": "https://staging-explorer-api.zenscape.one/atom/blocksFromProposer/",
