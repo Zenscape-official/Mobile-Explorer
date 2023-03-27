@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:zenscape_app/backend_files/ibcRelayersModel.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/controller/ibcController.dart';
 import 'package:zenscape_app/screens/network/ibcDetails.dart';
@@ -57,7 +56,8 @@ class _IBCRelayersState extends State<IBCRelayers> {
                 radius:15,
                 child: InkWell(
                     onTap: ()=> Navigator.of(context).popUntil((route) => route.isFirst),
-                    child: Image.network(widget.networkData!.logUrl!)),
+                    //child: Image.network(widget.networkData!.logUrl!)
+                ),
                 backgroundColor: Colors.transparent),
           ],
         ),
@@ -117,9 +117,10 @@ class _IBCRelayersState extends State<IBCRelayers> {
 }
 
 class IBCContainer extends StatelessWidget {
-Sendable? data;
+Channel? data;
 IBCContainer({
-    Key? key, this.data
+    Key? key, data,
+  //this.data
   }) : super(key: key);
 
   @override
@@ -140,7 +141,7 @@ IBCContainer({
                           CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/kava.png',)),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text(data!.chainId!,
+                            child: Text("data!.chainId!",
                                   style:kMediumBoldTextStyle),
 
                           ),],
@@ -299,3 +300,4 @@ IBCContainer({
     );
   }
 }
+

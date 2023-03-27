@@ -66,7 +66,7 @@ class _ValidatorDetailsScreenState extends State<ValidatorDetailsScreen> {
   getData()async{
        final response = await http.get(Uri.parse(widget.networkData!.blockSearchFromProposer!+widget.widget.validatorModel!.consensusAddress!));
        if (response.statusCode == 200) {
-         print(response.body);
+        // print(response.body);
 
          blocks = List.from(jsonDecode(response.body)).map((e) => BlockModel.fromJson(e)).toList().reversed.toList().obs;
            setState(() {
@@ -345,7 +345,7 @@ class _AtomValidatorDetailsState extends State<AtomValidatorDetails> {
   getData()async{
     final response = await http.get(Uri.parse(widget.networkList.blockSearchFromProposer!+widget.validatorModel!.consensusPubkey!.key!));
     if (response.statusCode == 200) {
-      print(response.body);
+      //print(response.body);
 
       blocks = List.from(jsonDecode(response.body)).map((e) => BlockModel.fromJson(e)).toList().reversed.toList().obs;
       setState(() {

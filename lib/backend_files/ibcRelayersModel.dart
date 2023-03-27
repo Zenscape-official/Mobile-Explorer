@@ -10,230 +10,171 @@ String ibcModelToJson(IbcModel data) => json.encode(data.toJson());
 
 class IbcModel {
   IbcModel({
-    this.sendable,
+    this.channels,
+    this.pagination,
+    this.height,
   });
 
-  List<Sendable>? sendable;
+  List<Channel>? channels;
+  Pagination? pagination;
+  Height? height;
 
   factory IbcModel.fromJson(Map<String, dynamic> json) => IbcModel(
-    sendable: List<Sendable>.from(json["sendable"].map((x) => Sendable.fromJson(x))),
+    channels: json["channels"] == null ? [] : List<Channel>.from(json["channels"]!.map((x) => Channel.fromJson(x))),
+    pagination: json["pagination"] == null ? null : Pagination.fromJson(json["pagination"]),
+    height: json["height"] == null ? null : Height.fromJson(json["height"]),
   );
 
   Map<String, dynamic> toJson() => {
-    "sendable": List<dynamic>.from(sendable!.map((x) => x.toJson())),
+    "channels": channels == null ? [] : List<dynamic>.from(channels!.map((x) => x.toJson())),
+    "pagination": pagination?.toJson(),
+    "height": height?.toJson(),
   };
 }
 
-class Sendable {
-  Sendable({
-    this.chainId,
-    this.paths,
-  });
-
-  String? chainId;
-  List<Path>? paths;
-
-  factory Sendable.fromJson(Map<String, dynamic> json) => Sendable(
-    chainId: json["chain_id"],
-    paths: List<Path>.from(json["paths"].map((x) => Path.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "chain_id": chainId,
-    "paths": List<dynamic>.from(paths!.map((x) => x.toJson())),
-  };
-}
-
-class Path {
-  Path({
-    this.channelId,
+class Channel {
+  Channel({
+    this.state,
+    this.ordering,
+    this.counterparty,
+    this.connectionHops,
+    this.version,
     this.portId,
-    this.channelState,
-    this.counterParty,
-    this.stats,
-    this.createdAt,
-    this.auth,
-    this.relayerImg,
+    this.channelId,
   });
 
+  State? state;
+  Ordering? ordering;
+  Counterparty? counterparty;
+  List<String>? connectionHops;
+  Version? version;
+  ChannelPortId? portId;
   String? channelId;
-  PortId? portId;
-  ChannelState? channelState;
-  CounterParty? counterParty;
-  Stats? stats;
-  DateTime? createdAt;
-  bool? auth;
-  String? relayerImg;
 
-  factory Path.fromJson(Map<String, dynamic> json) => Path(
+  factory Channel.fromJson(Map<String, dynamic> json) => Channel(
+    state: stateValues.map[json["state"]]!,
+    ordering: orderingValues.map[json["ordering"]]!,
+    counterparty: json["counterparty"] == null ? null : Counterparty.fromJson(json["counterparty"]),
+    connectionHops: json["connection_hops"] == null ? [] : List<String>.from(json["connection_hops"]!.map((x) => x)),
+    version: versionValues.map[json["version"]]!,
+    portId: channelPortIdValues.map[json["port_id"]]!,
     channelId: json["channel_id"],
-    portId: portIdValues.map[json["port_id"]],
-    channelState: channelStateValues.map[json["channel_state"]],
-    counterParty: CounterParty.fromJson(json["counter_party"]),
-    stats: Stats.fromJson(json["stats"]),
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    auth: json["auth"] == null ? null : json["auth"],
-    relayerImg: json["relayer_img"] == null ? null : json["relayer_img"],
   );
 
   Map<String, dynamic> toJson() => {
+    "state": stateValues.reverse[state],
+    "ordering": orderingValues.reverse[ordering],
+    "counterparty": counterparty?.toJson(),
+    "connection_hops": connectionHops == null ? [] : List<dynamic>.from(connectionHops!.map((x) => x)),
+    "version": versionValues.reverse[version],
+    "port_id": channelPortIdValues.reverse[portId],
     "channel_id": channelId,
-    "port_id": portIdValues.reverse[portId],
-    "channel_state": channelStateValues.reverse[channelState],
-    "counter_party": counterParty!.toJson(),
-    "stats": stats!.toJson(),
-    "created_at": createdAt == null ? null : createdAt!.toIso8601String(),
-    "auth": auth == null ? null : auth,
-    "relayer_img": relayerImg == null ? null : relayerImg,
   };
 }
 
-enum ChannelState { STATE_OPEN, STATE_INIT, STATE_TRYOPEN }
-
-final channelStateValues = EnumValues({
-  "STATE_INIT": ChannelState.STATE_INIT,
-  "STATE_OPEN": ChannelState.STATE_OPEN,
-  "STATE_TRYOPEN": ChannelState.STATE_TRYOPEN
-});
-
-class CounterParty {
-  CounterParty({
-    this.channelId,
+class Counterparty {
+  Counterparty({
     this.portId,
-    this.channelState,
+    this.channelId,
   });
 
+  CounterpartyPortId? portId;
   String? channelId;
-  PortId ?portId;
-  ChannelState? channelState;
 
-  factory CounterParty.fromJson(Map<String, dynamic> json) => CounterParty(
-    channelId: json["channel_id"] == null ? null : json["channel_id"],
-    portId: portIdValues.map[json["port_id"]],
-    channelState: json["channel_state"] == null ? null : channelStateValues.map[json["channel_state"]],
+  factory Counterparty.fromJson(Map<String, dynamic> json) => Counterparty(
+    portId: counterpartyPortIdValues.map[json["port_id"]]!,
+    channelId: json["channel_id"],
   );
 
   Map<String, dynamic> toJson() => {
-    "channel_id": channelId == null ? null : channelId,
-    "port_id": portIdValues.reverse[portId],
-    "channel_state": channelState == null ? null : channelStateValues.reverse[channelState],
+    "port_id": counterpartyPortIdValues.reverse[portId],
+    "channel_id": channelId,
   };
 }
 
-enum PortId { TRANSFER }
+enum CounterpartyPortId { ORACLE, TRANSFER }
 
-final portIdValues = EnumValues({
-  "transfer": PortId.TRANSFER
+final counterpartyPortIdValues = EnumValues({
+  "oracle": CounterpartyPortId.ORACLE,
+  "transfer": CounterpartyPortId.TRANSFER
 });
 
-class Stats {
-  Stats({
-    this.current,
-    this.past,
+enum Ordering { ORDER_UNORDERED }
+
+final orderingValues = EnumValues({
+  "ORDER_UNORDERED": Ordering.ORDER_UNORDERED
+});
+
+enum ChannelPortId { BANDORACLE_V1, TRANSFER }
+
+final channelPortIdValues = EnumValues({
+  "bandoracleV1": ChannelPortId.BANDORACLE_V1,
+  "transfer": ChannelPortId.TRANSFER
+});
+
+enum State { STATE_OPEN, STATE_INIT, STATE_TRYOPEN }
+
+final stateValues = EnumValues({
+  "STATE_INIT": State.STATE_INIT,
+  "STATE_OPEN": State.STATE_OPEN,
+  "STATE_TRYOPEN": State.STATE_TRYOPEN
+});
+
+enum Version { BANDCHAIN_1, ICS20_1 }
+
+final versionValues = EnumValues({
+  "bandchain-1": Version.BANDCHAIN_1,
+  "ics20-1": Version.ICS20_1
+});
+
+class Height {
+  Height({
+    this.revisionNumber,
+    this.revisionHeight,
   });
 
-  Current? current;
-  Current? past;
+  String? revisionNumber;
+  String? revisionHeight;
 
-  factory Stats.fromJson(Map<String, dynamic> json) => Stats(
-    current: Current.fromJson(json["current"]),
-    past: Current.fromJson(json["past"]),
+  factory Height.fromJson(Map<String, dynamic> json) => Height(
+    revisionNumber: json["revision_number"],
+    revisionHeight: json["revision_height"],
   );
 
   Map<String, dynamic> toJson() => {
-    "current": current!.toJson(),
-    "past": past!.toJson(),
+    "revision_number": revisionNumber,
+    "revision_height": revisionHeight,
   };
 }
 
-class Current {
-  Current({
-    this.txNum,
-    this.vol,
+class Pagination {
+  Pagination({
+    this.nextKey,
+    this.total,
   });
 
-  TxNum? txNum;
-  Vol? vol;
+  dynamic nextKey;
+  String? total;
 
-  factory Current.fromJson(Map<String, dynamic> json) => Current(
-    txNum: TxNum.fromJson(json["tx_num"]),
-    vol: Vol.fromJson(json["vol"]),
+  factory Pagination.fromJson(Map<String, dynamic> json) => Pagination(
+    nextKey: json["next_key"],
+    total: json["total"],
   );
 
   Map<String, dynamic> toJson() => {
-    "tx_num": txNum!.toJson(),
-    "vol": vol!.toJson(),
-  };
-}
-
-class TxNum {
-  TxNum({
-    this.transfer,
-    this.receive,
-  });
-
-  dynamic transfer;
-  dynamic receive;
-
-  factory TxNum.fromJson(Map<String, dynamic> json) => TxNum(
-    transfer: json["transfer"],
-    receive: json["receive"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "transfer": transfer,
-    "receive": receive,
-  };
-}
-
-class Vol {
-  Vol({
-    this.transfer,
-    this.receive,
-  });
-
-  List<ReceiveElement>? transfer;
-  List<ReceiveElement>? receive;
-
-  factory Vol.fromJson(Map<String, dynamic> json) => Vol(
-    transfer: json["transfer"] == null ? null : List<ReceiveElement>.from(json["transfer"].map((x) => ReceiveElement.fromJson(x))),
-    receive: json["receive"] == null ? null : List<ReceiveElement>.from(json["receive"].map((x) => ReceiveElement.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "transfer": transfer == null ? null : List<dynamic>.from(transfer!.map((x) => x.toJson())),
-    "receive": receive == null ? null : List<dynamic>.from(receive!.map((x) => x.toJson())),
-  };
-}
-
-class ReceiveElement {
-  ReceiveElement({
-    this.denom,
-    this.amount,
-  });
-
-  String? denom;
-  String? amount;
-
-  factory ReceiveElement.fromJson(Map<String, dynamic> json) => ReceiveElement(
-    denom: json["denom"],
-    amount: json["amount"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "denom": denom,
-    "amount": amount,
+    "next_key": nextKey,
+    "total": total,
   };
 }
 
 class EnumValues<T> {
   Map<String, T> map;
-  Map<T, String>? reverseMap;
+  late Map<T, String> reverseMap;
 
   EnumValues(this.map);
 
   Map<T, String> get reverse {
-    reverseMap ??= map.map((k, v) => MapEntry(v, k));
-    return reverseMap!;
+    reverseMap = map.map((k, v) => MapEntry(v, k));
+    return reverseMap;
   }
 }

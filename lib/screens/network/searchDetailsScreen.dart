@@ -76,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
           }
         });
       } else {
-      print(response.statusCode);
+     // print(response.statusCode);
       }
     }
     //for txHash Search

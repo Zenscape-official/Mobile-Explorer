@@ -108,7 +108,7 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
       k_m_b_generator((getValueFromBracket(findBracketByToken(communityPool,widget.networkData!.uDenom!)!)) / 1000000),
       '${truncateToDecimalPlaces(double.parse(inflation) * 100, 2)}%'
           .toString(),
-     '${widget.APR!.toStringAsFixed(2)}%'
+     widget.APR==1?'':'${widget.APR!.toStringAsFixed(2)}%'
     ];
 
     blockDashList = [
@@ -487,7 +487,6 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                             child: SizedBox(
                                 height: MediaQuery.of(context).size.height / 5,
                                 child: ListView.builder(
-
                                     // controller: _scrollController,
                                     padding: EdgeInsets.zero,
                                     physics:
@@ -579,7 +578,10 @@ class _NetworkDashBoardState extends State<NetworkDashBoard> {
                                         }),
                                   ),
                                   SizedBox(height: 25)
-                                ])))
+                                ]
+                                )
+                            )
+                    )
                         : SizedBox(
                             height: 15,
                             width: 15,

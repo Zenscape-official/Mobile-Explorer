@@ -9,7 +9,7 @@ class RemoteServices {
       if (response.statusCode==200){
         var json =jsonDecode(response.body)["networkList"];
         var networkList=List<NetworkList>.from(json.map((x) => NetworkList.fromJson(x)));
-        print(networkList);
+       // print(networkList);
         return networkList;
       }
       else {

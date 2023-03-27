@@ -8,6 +8,7 @@ import 'package:zenscape_app/Screens/network/proposals.dart';
 import 'package:zenscape_app/controller/navController.dart';
 import 'package:zenscape_app/screens/network/blocks.dart';
 import 'package:zenscape_app/screens/network/dashboard.dart';
+import 'package:zenscape_app/screens/network/ibcRelayers.dart';
 import '../Screens/network/contracts.dart';
 import '../backend_files/networkList.dart';
 import '../controller/toggleController.dart';
@@ -152,6 +153,22 @@ class _NavDrawState extends State<NavDraw> {
                     });
                    Navigator.of(context).pop();
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=> Contracts(networkList:widget.networkData)));
+
+                  }),
+              widget.networkData!.uDenom=='uatom'||widget.networkData!.uDenom=='uosmo'?Container():  _createDrawerItem(
+                  pageIndex: widget.pageIndex,
+                  fetchData: widget.networkData,
+                  context: context,
+                  image:'assets/images/contracts.png',
+                  text: 'IBC Relayers',
+                  isSelected: widget.pageIndex==5,
+                  onTap: () {
+                    setState(() {
+                      prevIndex=selectedIndex;
+                      selectedIndex = 5;
+                    });
+                    Navigator.of(context).pop();
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> IBCRelayers()));
 
                   }),
               _createDrawerItem(

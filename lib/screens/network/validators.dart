@@ -55,11 +55,11 @@ class _ValidatorsState extends State<Validators> {
     banner=widget.networkList.blocksPageUrl!;
     validators =
         await _validatorController.fetchVal(widget.networkList.validatorsUrl!,widget.networkList.valStatus!);
-    if(widget.networkList.uDenom=='uatom')
-    {
-      atomVal =
-      await _validatorController.fetchAtomVal(widget.networkList.validatorsUrl!);
-    }
+    // if(widget.networkList.uDenom=='uatom')
+    // {
+    //   atomVal =
+    //   await _validatorController.fetchAtomVal(widget.networkList.validatorsUrl!);
+    // }
    setState(() {
      if(validators!=null) {
        isLoaded=true;
@@ -89,17 +89,17 @@ class _ValidatorsState extends State<Validators> {
   for (int i=0;i<validators!.length;i++){
     totalVoting+=validators![i].votingPower!;
   }
-  if(widget.networkList.uDenom=='uatom')
-  for(int i=0;i<atomVal.length;i++)
-   {
-    if(atomVal[i].status==Status.BOND_STATUS_BONDED){
-      activeAtomVal.add(atomVal[i]);
-    }
-    else if(atomVal[i].status==Status.BOND_STATUS_UNBONDED)
-    {
-      inActiveAtomVal.add(atomVal[i]);
-    }
-  }
+  // if(widget.networkList.uDenom=='uatom')
+  // for(int i=0;i<atomVal.length;i++)
+  //  {
+  //   if(atomVal[i].status==Status.BOND_STATUS_BONDED){
+  //     activeAtomVal.add(atomVal[i]);
+  //   }
+  //   else if(atomVal[i].status==Status.BOND_STATUS_UNBONDED)
+  //   {
+  //     inActiveAtomVal.add(atomVal[i]);
+  //   }
+  // }
   }
 
   @override
@@ -113,7 +113,7 @@ class _ValidatorsState extends State<Validators> {
     inActiveValidatorsList.sort((b, a) => b.votingPower.compareTo(a.votingPower));
     activeAtomVal.sort((b, a) => b.tokens.compareTo(a.tokens));
     inActiveAtomVal.sort((b, a) => b.tokens.compareTo(a.tokens));
-    return widget.networkList.uDenom!='uatom'?
+    return widget.networkList.uDenom!='uuatom'?
 
     Scaffold(
         drawer: NavDraw(networkData: widget.networkList,pageIndex: pageIndex,),
@@ -403,7 +403,7 @@ class ValidatorContainer extends StatelessWidget {
                                   child: SizedBox(
                                     width:180,
                                     height: 22,
-                                    child: Text(validatorModel!.moniker!,
+                                    child: Text(validatorModel!.moniker.toString(),
                                         style: kMediumBoldTextStyle),
                                   ),
                                 ),
@@ -436,7 +436,7 @@ class ValidatorContainer extends StatelessWidget {
                               style: kSmallTextStyle,
                             ),
                             Text(
-                              '${validatorModel!.missedBlocksCounter!} blocks missed',
+                              '${validatorModel!.missedBlocksCounter.toString()} blocks missed',
                               style: kSmallBoldTextStyle,
                             )
                           ]

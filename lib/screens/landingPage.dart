@@ -311,8 +311,7 @@ class _NetworkCardState extends State<NetworkCard> {
           .fetchOsmoAPR('https://api-osmosis.imperator.co/apr/v2/staking'));
     } else {
       if (supply != null) {
-        if (widget.networkList.uDenom == 'uatom')
-        print(supply);
+       // if (widget.networkList.uDenom == 'uatom')
         setState(() {
           APR = ((double.parse(inflation) * double.parse(supply ?? '0')) /
                   double.parse(bondedToken)) *
@@ -333,6 +332,7 @@ class _NetworkCardState extends State<NetworkCard> {
     if (widget.networkList.isActive == '1') {
       getAPR();
     }
+
     return InkWell(
       onTap: () => {
         Navigator.push(
