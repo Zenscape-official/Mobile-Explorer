@@ -49,3 +49,10 @@ List<String> slashTitle = [
   'Slash Fraction\n DoubleSign',
   'Slash Fraction\n Downtime'
 ];
+
+List<String> IBCdetails=[
+  'Total Transfer Value',
+  'IBC Total Txs',
+  'Last Update Time',
+  'Operating Period'
+];

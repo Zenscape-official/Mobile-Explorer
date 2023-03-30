@@ -1,9 +1,14 @@
+import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/controller/ibcController.dart';
 import 'package:zenscape_app/screens/network/ibcDetails.dart';
 import '../../Constants/constants.dart';
+import '../../backend_files/ibcDenomModel.dart';
+import '../../backend_files/ibcRelayersModel.dart' hide State;
 import '../../widgets/navigationDrawerWidget.dart';
 
 class IBCRelayers extends StatefulWidget {
@@ -17,6 +22,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
   final IBCController _ibcController = Get.put(IBCController());
 
   var ibc;
+  var pageIndex = 5;
   bool isLoaded=false;
   @override
   void initState() {
@@ -36,12 +42,16 @@ class _IBCRelayersState extends State<IBCRelayers> {
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     var nameController;
     return Scaffold(
-      drawer: NavDraw(networkData:widget.networkData),
+      drawer: NavDraw(
+        networkData: widget.networkData,
+        logoUrl:
+        widget.networkData!.logUrl,
+        pageIndex: pageIndex,
+      ),
       appBar: AppBar(
         foregroundColor: Colors.black,
         titleTextStyle: const TextStyle(color: Colors.black),
@@ -99,7 +109,8 @@ class _IBCRelayersState extends State<IBCRelayers> {
                     },
                   ),
                 )),
-            isLoaded?ListView.builder(
+            isLoaded?
+            ListView.builder(
                 reverse: true,
                 physics: const NeverScrollableScrollPhysics(),
                 scrollDirection: Axis.vertical,
@@ -107,7 +118,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
                 itemCount: IBCController.IBCList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return
-                    IBCContainer(data: IBCController.IBCList[index]);
+                    IBCContainer(channel: IBCController.IBCList[index],networkData: widget.networkData!,);
                 }):CircularProgressIndicator(),
           ],
         ),
@@ -116,15 +127,51 @@ class _IBCRelayersState extends State<IBCRelayers> {
   }
 }
 
-class IBCContainer extends StatelessWidget {
-Channel? data;
+class IBCContainer extends StatefulWidget {
+Channel? channel;
+NetworkList networkData;
 IBCContainer({
-    Key? key, data,
-  //this.data
+    Key? key, this.channel,required this.networkData
   }) : super(key: key);
 
   @override
+  State<IBCContainer> createState() => _IBCContainerState();
+}
+
+class _IBCContainerState extends State<IBCContainer> {
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  var _items;
+  List<Token> ibcDenom = [];
+  Token IBCInfo=Token();
+
+  getData() async {
+    final String response =
+    await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
+    final data = await json.decode(response)["tokens"];
+
+    _items = data;
+    ibcDenom = List.from((_items).map((x) => Token.fromJson(x)));
+    if (ibcDenom.isNotEmpty) {
+      setState(() {});
+    }
+  }
+  mapDenom(channel) {
+    for (int i = 0; i < ibcDenom.length; i++) {
+      if (channel == ibcDenom[i].channel) {
+        IBCInfo=ibcDenom[i];
+      } else {
+      }
+    }
+    return IBCInfo;
+  }
+  @override
   Widget build(BuildContext context) {
+  (mapDenom(widget.channel!.counterparty!.channelId));
     return InkWell(
       onTap:()=> Get.to(() => const IBCDetails()),
       child: Container(
@@ -134,17 +181,30 @@ IBCContainer({
             children:[
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children:[
                       Row(
                         children: [
-                          CircleAvatar(radius:15,backgroundColor: Colors.transparent,child: Image.asset('assets/images/kava.png',)),
+                          CircleAvatar(
+                            backgroundColor: Colors.transparent,
+                            child:IBCInfo.logoUri==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
+                            CachedNetworkImage(
+                              imageUrl: IBCInfo.logoUri!,
+                              height: 40,
+                              width: 40,
+                              placeholder: (context, url) =>
+                                  CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
+                            ),
+                          ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("data!.chainId!",
+                            child: Text(IBCInfo.chainName??'Unknown',
                                   style:kMediumBoldTextStyle),
-
-                          ),],
+                          ),
+                        ],
                       ),
                       Container(
                         decoration: BoxDecoration(
@@ -164,7 +224,11 @@ IBCContainer({
                                 radius: 3,),
                               Padding(
                                 padding: const EdgeInsets.all(2.0),
-                                child: Text('Opened',
+                                child:
+                                widget.channel!.state=='STATE_OPEN'?
+                                Text('Opened',
+                                  style: kSmallTextStyle,):
+                                Text('Closed',
                                   style: kSmallTextStyle,),
                               ),
                             ],
@@ -173,13 +237,11 @@ IBCContainer({
                       ),
                     ]
                 ),
-
               ),
-              const SizedBox(height: 5,),
+              const SizedBox(height: 5),
               Padding(
                 padding: const EdgeInsets.all(18.0),
                 child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,
-
                   children: [
                     Container(
                       decoration: BoxDecoration(
@@ -196,14 +258,14 @@ IBCContainer({
                           children:[
                             Row(
                               children: [
-                                CircleAvatar(child: Image.asset('assets/images/kava.png'),),
+                                CircleAvatar(child: Image.network(widget.networkData.logUrl!),),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(' Cosmos',
+                                      Text(widget.networkData.name??'',
                                         style: kMediumBoldTextStyle,),
-                                      Text(' channel-227',
+                                      Text(widget.channel!.channelId!,
                                         style: kSmallTextStyle,),
                                     ],
                                   ),
@@ -214,7 +276,11 @@ IBCContainer({
                         ),
                       ),
                     ),
-                    const Divider(color: Colors.lightBlueAccent,height: 2,thickness: 2,),
+                    const Divider(
+                      color: Colors.lightBlueAccent,
+                      height: 2,
+                      thickness: 2
+                    ),
                     Container(
                       decoration: BoxDecoration(
                         gradient: kGradientColor,
@@ -230,16 +296,27 @@ IBCContainer({
                           children:[
                             Row(
                               children: [
-                                CircleAvatar(child: Image.asset('assets/images/kava.png'),),
+                                CircleAvatar(
+                                  backgroundColor: Colors.transparent,
+                                  child:IBCInfo.logoUri==null?Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'):
+                                  CachedNetworkImage(
+                                    imageUrl: IBCInfo.logoUri!,
+                                    height: 40,
+                                    width: 40,
+                                    placeholder: (context, url) =>
+                                        CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        Image.asset('assets/images/groups_FILL0_wght400_GRAD0_opsz48.png'),
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Column(crossAxisAlignment: CrossAxisAlignment.start,
-
-
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      Text(' Cosmos',
+                                      Text(IBCInfo.chainName??'Unknown',
                                         style: kMediumBoldTextStyle,),
-                                      Text(' channel-227',
+                                      Text(widget.channel!.counterparty!.channelId!,
                                         style: kSmallTextStyle,),
                                     ],
                                   ),
@@ -300,4 +377,3 @@ IBCContainer({
     );
   }
 }
-

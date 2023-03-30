@@ -102,7 +102,9 @@
       "txFromAddress": "https://staging-explorer-api.zenscape.one/comdex/transactionFromAddress/",
       "delegationFromAddress": "https://rest.comdex.one/cosmos/staking/v1beta1/delegations/",
       "rewardFromAddress": "https://rest.comdex.one/cosmos/distribution/v1beta1/delegators/",
-      "contractTxs" : "https://rest.comdex.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz"
+      "contractTxs" : "https://rest.comdex.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz",
+      "ibcRelayers": "https://rest.comdex.one/ibc/core/channel/v1/channels",
+      "assetListLink": "https://github.com/comdex-official/comdex-assetlists/blob/main/comdex-1/ibc_assets.json"
     },
     {"id":"cosmos",
       "isActive": "1",
@@ -193,7 +195,9 @@
       "txFromAddress": "https://staging-explorer-api.zenscape.one/atom/transactionFromAddress/",
       "delegationFromAddress": "https://cosmos-rest.zenscape.one/cosmos/staking/v1beta1/delegations/",
       "rewardFromAddress": "https://cosmos-rest.zenscape.one/cosmos/distribution/v1beta1/delegators/",
-      "contractTxs" : "https://cosmos-rest.zenscape.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz"
+      "contractTxs" : "https://cosmos-rest.zenscape.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz",
+      "ibcRelayers": "",
+      "assetListLink": ""
     },
     {"id":"osmosis",
       "isActive": "1",
@@ -283,7 +287,9 @@
       "transactionSearch": "https://staging-explorer-api.zenscape.one/osmosis/transaction/",
       "delegationFromAddress": "https://lcd.osmosis.zone/cosmos/staking/v1beta1/delegations/",
       "rewardFromAddress": "https://lcd.osmosis.zone/cosmos/distribution/v1beta1/delegators/",
-      "contractTxs" : "https://lcd.osmosis.zone/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz"
+      "contractTxs" : "https://lcd.osmosis.zone/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz",
+      "ibcRelayers": "https://lcd.osmosis.zone/ibc/core/channel/v1/channels",
+      "assetListLink": "https://github.com/osmosis-labs/assetlists/blob/main/osmosis-1/osmosis-1.assetlist.json"
     }
 
   ]

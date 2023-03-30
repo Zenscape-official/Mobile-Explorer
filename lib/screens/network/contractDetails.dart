@@ -363,7 +363,6 @@ class _BalanceContState extends State<BalanceCont> {
     final String response =
         await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
     final data = await json.decode(response)["tokens"];
-    // print(data);
     _items = data;
 
     ibcDenom = List.from((_items).map((x) => Token.fromJson(x)));

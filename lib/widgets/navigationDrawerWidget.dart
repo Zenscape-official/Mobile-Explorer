@@ -168,7 +168,7 @@ class _NavDrawState extends State<NavDraw> {
                       selectedIndex = 5;
                     });
                     Navigator.of(context).pop();
-                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> IBCRelayers()));
+                    Navigator.push(context, CupertinoPageRoute(builder: (context)=> IBCRelayers(networkData:widget.networkData)));
 
                   }),
               _createDrawerItem(
@@ -177,21 +177,21 @@ class _NavDrawState extends State<NavDraw> {
                 context: context,
                   image: 'assets/images/params.png',
                   text: 'Parameters',
-                  isSelected: widget.pageIndex==5,
+                  isSelected: widget.pageIndex==6,
                   onTap: () {
 
                     setState(() {
                       prevIndex=selectedIndex;
-                      selectedIndex = 5;
+                      selectedIndex = 6;
                     });
                     Navigator.of(context).pop();
                     Navigator.push(
                         context, CupertinoPageRoute(
                         builder: (context)=>
-                            Parameters(networkList:widget.networkData)));
-
-                        }
-
+                            Parameters(networkList:widget.networkData)
+                    )
+                    );
+                  }
                   ),
             ],
           ),
@@ -200,7 +200,6 @@ class _NavDrawState extends State<NavDraw> {
     );
   }
 }
-
 Widget _createDrawerItem(
     {required BuildContext context,
       String? image,
@@ -230,8 +229,7 @@ Widget _createDrawerItem(
             )
           ],
         ),
-        onTap:
-          onTap,
+        onTap: onTap,
       ),
     ),
   );

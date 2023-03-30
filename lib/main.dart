@@ -72,19 +72,19 @@ class _MainAppState extends State<MainApp> {
   @override
   void initState() {
     super.initState();
-    _checkVersion();
+   // _checkVersion();
   }
   void _checkVersion() async{
     final newVersion=NewVersion(
       androidId: 'com.example.zenscape_app',
     );
     final status= await newVersion.getVersionStatus();
-    newVersion.showUpdateDialog(
-        context:context,
-        versionStatus: status!,
-      dialogTitle:"Update Zenscape" ,
-      updateButtonText: "Let's Update"
-    );
+    // newVersion.showUpdateDialog(
+    //     context:context,
+    //     versionStatus: status!,
+    //   dialogTitle:"Update Zenscape" ,
+    //   updateButtonText: "Let's Update"
+    // );
   }
   List<Widget> _buildScreens(){
     return [

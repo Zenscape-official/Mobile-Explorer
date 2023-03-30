@@ -43,7 +43,7 @@ class Channel {
     this.channelId,
   });
 
-  State? state;
+  String? state;
   Ordering? ordering;
   Counterparty? counterparty;
   List<String>? connectionHops;
@@ -52,7 +52,7 @@ class Channel {
   String? channelId;
 
   factory Channel.fromJson(Map<String, dynamic> json) => Channel(
-    state: stateValues.map[json["state"]]!,
+    state: json["state"]!,
     ordering: orderingValues.map[json["ordering"]]!,
     counterparty: json["counterparty"] == null ? null : Counterparty.fromJson(json["counterparty"]),
     connectionHops: json["connection_hops"] == null ? [] : List<String>.from(json["connection_hops"]!.map((x) => x)),
@@ -62,7 +62,7 @@ class Channel {
   );
 
   Map<String, dynamic> toJson() => {
-    "state": stateValues.reverse[state],
+    "state": state,
     "ordering": orderingValues.reverse[ordering],
     "counterparty": counterparty?.toJson(),
     "connection_hops": connectionHops == null ? [] : List<dynamic>.from(connectionHops!.map((x) => x)),

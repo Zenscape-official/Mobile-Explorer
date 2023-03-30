@@ -1,19 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zenscape_app/constants/constString.dart';
-
 import '../../Screens/homeScreen.dart';
 import '../../constants/constants.dart';
 import '../../widgets/navigationDrawerWidget.dart';
 
 class IBCDetails extends StatefulWidget {
   const IBCDetails({Key? key}) : super(key: key);
-
   @override
   State<IBCDetails> createState() => _IBCDetailsState();
 }
-
 class _IBCDetailsState extends State<IBCDetails> {
+  var details = ['0', '0', '0', '0'];
   TextEditingController nameController=TextEditingController();
   String fullName = '';
   @override
@@ -70,8 +68,8 @@ class _IBCDetailsState extends State<IBCDetails> {
                     });
                   },
                 ),
-              )),
-
+              )
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(15.0,15,15,0),
             child: Column(
@@ -84,11 +82,12 @@ class _IBCDetailsState extends State<IBCDetails> {
                     crossAxisCount: 2,
                     mainAxisSpacing: 20,
                     crossAxisSpacing: 20,
-                    itemCount: 4,
+                    itemCount: details.length,
                     itemBuilder: (context,index){
-                      return InfoCard(title1: 'Total Transfer Value',icon1: image[index],titleValue1: '\$8734872');
+                      return InfoCard(title1: IBCdetails[index],icon1: image[index],titleValue1: details[index]);
                     },
-                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1)),
+                    staggeredTileBuilder: (index) => const StaggeredTile.fit(1)
+                ),
               ],
             ),
           ),
@@ -151,7 +150,8 @@ class _IBCDetailsState extends State<IBCDetails> {
                                             fontSize: 10,
                                             fontWeight: FontWeight.bold,
                                             color: Color(0xFFDEA30F).withOpacity(.5),
-                                          )),
+                                          )
+                                      ),
                                     ),
                                   )
                                 ]
@@ -333,7 +333,9 @@ class _IBCDetailsState extends State<IBCDetails> {
                                             style:kSmallBoldTextStyle),
                                         Text('\$ 4,825,550.72',
                                             style:kSmallTextStyle),
-                                      ])]
+                                      ]
+                                  )
+                                ]
                             ),
                           ),
                         ]
