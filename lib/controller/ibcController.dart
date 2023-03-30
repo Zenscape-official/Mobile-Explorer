@@ -10,7 +10,7 @@ class IBCController extends GetxController {
   static var client = http.Client();
 
   Future<RxList<dynamic>> fetchIBC(String ApiUri)  async{
-    var response = await client.get(Uri.parse('https://rest.comdex.one/ibc/core/channel/v1/channels'));
+    var response = await client.get(Uri.parse(ApiUri));
 
     if (response.statusCode==200){
       var jsonString= jsonDecode((response.body))["channels"];

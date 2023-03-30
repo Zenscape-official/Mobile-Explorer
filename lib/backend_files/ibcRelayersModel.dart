@@ -53,11 +53,11 @@ class Channel {
 
   factory Channel.fromJson(Map<String, dynamic> json) => Channel(
     state: json["state"]!,
-    ordering: orderingValues.map[json["ordering"]]!,
+    ordering: orderingValues.map[json["ordering"]],
     counterparty: json["counterparty"] == null ? null : Counterparty.fromJson(json["counterparty"]),
     connectionHops: json["connection_hops"] == null ? [] : List<String>.from(json["connection_hops"]!.map((x) => x)),
-    version: versionValues.map[json["version"]]!,
-    portId: channelPortIdValues.map[json["port_id"]]!,
+    version: versionValues.map[json["version"]],
+    portId: channelPortIdValues.map[json["port_id"]],
     channelId: json["channel_id"],
   );
 
@@ -82,7 +82,7 @@ class Counterparty {
   String? channelId;
 
   factory Counterparty.fromJson(Map<String, dynamic> json) => Counterparty(
-    portId: counterpartyPortIdValues.map[json["port_id"]]!,
+    portId: counterpartyPortIdValues.map[json["port_id"]],
     channelId: json["channel_id"],
   );
 

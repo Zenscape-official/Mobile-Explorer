@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:zenscape_app/backend_files/networkList.dart';
 import 'package:zenscape_app/controller/ibcController.dart';
@@ -10,6 +9,7 @@ import '../../Constants/constants.dart';
 import '../../backend_files/ibcDenomModel.dart';
 import '../../backend_files/ibcRelayersModel.dart' hide State;
 import '../../widgets/navigationDrawerWidget.dart';
+import 'package:http/http.dart' as http;
 
 class IBCRelayers extends StatefulWidget {
   NetworkList? networkData;
@@ -32,7 +32,7 @@ class _IBCRelayersState extends State<IBCRelayers> {
 
   void IBCData() async {
     ibc =
-    await _ibcController.fetchIBC('');
+    await _ibcController.fetchIBC(widget.networkData!.ibcRelayers!);
     setState(() {
       if(ibc!=null){
         isLoaded=true;
@@ -148,11 +148,12 @@ class _IBCContainerState extends State<IBCContainer> {
   var _items;
   List<Token> ibcDenom = [];
   Token IBCInfo=Token();
+  static var client = http.Client();
 
   getData() async {
-    final String response =
-    await rootBundle.loadString('assets/jsonFiles/testnet_ibc_asset.json');
-    final data = await json.decode(response)["tokens"];
+    final response =
+    await client.get(Uri.parse(widget.networkData.assetList!));
+    final data = await json.decode(response.body)["tokens"];
 
     _items = data;
     ibcDenom = List.from((_items).map((x) => Token.fromJson(x)));

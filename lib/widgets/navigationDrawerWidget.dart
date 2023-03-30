@@ -155,7 +155,7 @@ class _NavDrawState extends State<NavDraw> {
                     Navigator.push(context, CupertinoPageRoute(builder: (context)=> Contracts(networkList:widget.networkData)));
 
                   }),
-              widget.networkData!.uDenom=='uatom'||widget.networkData!.uDenom=='uosmo'?Container():  _createDrawerItem(
+               _createDrawerItem(
                   pageIndex: widget.pageIndex,
                   fetchData: widget.networkData,
                   context: context,

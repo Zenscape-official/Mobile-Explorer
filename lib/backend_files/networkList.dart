@@ -100,6 +100,8 @@ class NetworkList {
     this.delegationFromAddress,
     this.rewardFromAddress,
     this.contractTxs,
+    this.ibcRelayers,
+    this.assetList
   });
 
   String? id;
@@ -152,6 +154,8 @@ class NetworkList {
   String? delegationFromAddress;
   String? rewardFromAddress;
   String? contractTxs;
+  String? ibcRelayers;
+  String? assetList;
 
   factory NetworkList.fromJson(Map<String, dynamic> json) => NetworkList(
     id: json["id"],
@@ -204,6 +208,8 @@ class NetworkList {
     delegationFromAddress: json["delegationFromAddress"],
     rewardFromAddress: json["rewardFromAddress"],
     contractTxs: json["contractTxs"],
+    ibcRelayers: json["ibcRelayers"],
+    assetList:json["assetList"],
   );
 
   Map<String, dynamic> toJson() => {
@@ -257,5 +263,7 @@ class NetworkList {
     "delegationFromAddress": delegationFromAddress,
     "rewardFromAddress": rewardFromAddress,
     "contractTxs": contractTxs,
+    "assetList":assetList,
+    "ibcRelayers":ibcRelayers
   };
 }

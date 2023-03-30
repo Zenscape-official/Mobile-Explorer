@@ -9,7 +9,6 @@
       "URL_for_banner":"https://dfcrpylw0p0vw.cloudfront.net/images/StakeBanner.png",
       "URL_for_website": ""
     }
-
   ],
   "networkList":[
     {
@@ -104,7 +103,7 @@
       "rewardFromAddress": "https://rest.comdex.one/cosmos/distribution/v1beta1/delegators/",
       "contractTxs" : "https://rest.comdex.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz",
       "ibcRelayers": "https://rest.comdex.one/ibc/core/channel/v1/channels",
-      "assetListLink": "https://github.com/comdex-official/comdex-assetlists/blob/main/comdex-1/ibc_assets.json"
+      "assetList": "https://github.com/comdex-official/comdex-assetlists/blob/main/comdex-1/ibc_assets.json"
     },
     {"id":"cosmos",
       "isActive": "1",
@@ -196,8 +195,8 @@
       "delegationFromAddress": "https://cosmos-rest.zenscape.one/cosmos/staking/v1beta1/delegations/",
       "rewardFromAddress": "https://cosmos-rest.zenscape.one/cosmos/distribution/v1beta1/delegators/",
       "contractTxs" : "https://cosmos-rest.zenscape.one/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz",
-      "ibcRelayers": "",
-      "assetListLink": ""
+      "ibcRelayers": "https://cosmos-rest.zenscape.one/ibc/core/channel/v1/channels",
+      "assetList": ""
     },
     {"id":"osmosis",
       "isActive": "1",
@@ -289,8 +288,7 @@
       "rewardFromAddress": "https://lcd.osmosis.zone/cosmos/distribution/v1beta1/delegators/",
       "contractTxs" : "https://lcd.osmosis.zone/cosmos/tx/v1beta1/txs?events=message.action=%27/cosmwasm.wasm.v1.MsgExecuteContract%27&execute._contract_addresss=%27comdex1nc5tatafv6eyq7llkr2gv50ff9e22mnf70qgjlv737ktmt4eswrqdfklyz",
       "ibcRelayers": "https://lcd.osmosis.zone/ibc/core/channel/v1/channels",
-      "assetListLink": "https://github.com/osmosis-labs/assetlists/blob/main/osmosis-1/osmosis-1.assetlist.json"
+      "assetList": "https://github.com/osmosis-labs/assetlists/blob/main/osmosis-1/osmosis-1.assetlist.json"
     }
-
   ]
 }
