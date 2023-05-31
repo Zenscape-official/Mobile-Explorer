@@ -1,9 +1,7 @@
 import 'package:get/get.dart';
 
 class ToggleController extends GetxController{
-
   int isBlockSelected=0;
-
   void updateData(int index){
     if(index==0){
       isBlockSelected=0;

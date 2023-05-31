@@ -55,7 +55,6 @@ fetchDataMint(String input) async {
 
   void getData() async {
   final mintResult=await fetchDataMint(widget.networkList!.mintingParamssUrl!);
-  print(mintResult);
   Map<String,dynamic> mintdata= jsonDecode(mintResult)['result'];
   mintdenom = mintdata["mint_denom"];
 
@@ -63,7 +62,6 @@ fetchDataMint(String input) async {
   final stakeResult=await fetchDataMint(widget.networkList!.stakingParamsUrl!);
   Map<String,dynamic> stakedata= jsonDecode(stakeResult)['result'];
   unbondTime = stakedata["unbonding_time"];
-
   max_val= (stakedata["max_validators"]).toString();
   max_entries=stakedata["max_entries"].toString();
   hist_entries=stakedata["historical_entries"].toString();
